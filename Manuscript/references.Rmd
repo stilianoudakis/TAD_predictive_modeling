@@ -1,0 +1,37 @@
+---
+title: "References"
+author: "Spiro Stilianoudakis"
+date: "September 4, 2018"
+output: pdf_document
+bibliography: C:/Users/Spiro Stilianoudakis/Documents/TAD_data/references/references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+[-@zuin2014cohesin]
+
+[-@van2014insulator]
+
+[-@symmons2014functional]
+
+[-@rao20143d]
+
+[-@phillips2013chromatin]
+
+[-@phillips2009ctcf]
+
+[-@mourad2016computational]
+
+[-@lieberman2009comprehensive]
+
+[-@kuhn2012caret]
+
+[-@kubat1997addressing]
+
+[-@hong2017computational]
+
+[-@dixon2012topological]
+
+[-@chawla2002smote]
