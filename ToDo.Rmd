@@ -1,0 +1,16 @@
+---
+title: "To Do List"
+author: "Spiro Stilianoudakis"
+date: "September 4, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 09/04/18
+
+* use width in base pairs as type of feature instead of counts of overlap
+   - distance and width in base pairs of overlap as features
+* finish methods
