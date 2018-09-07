@@ -139,27 +139,36 @@ saveRDS(binslist5_center, "/home/stilianoudakisc/TAD_data_analysis/model_filteri
 
 setwd("/home/stilianoudakisc/TAD_data_analysis/annotations/3D_subcompartments/")
 
-subcomp_A <- read.table("GSE63525_GM12878_subcompartments_A.bed",header = FALSE, sep="\t")
-subcomp_B <- read.table("GSE63525_GM12878_subcompartments_B.bed",header = FALSE, sep="\t")
+temp = list.files()
+
+subcomp_A <- read.table(temp[1],header = FALSE, sep="\t")
+subcomp_B <- read.table(temp[2],header = FALSE, sep="\t")
 
 A_gr <- GRanges(seqnames=subcomp_A$V1,IRanges(start=subcomp_A$V2, end=subcomp_A$V3))
 A_gr_center <- resize(A_gr, width = 1, fix = "center")
 B_gr <- GRanges(seqnames=subcomp_B$V1,IRanges(start=subcomp_B$V2, end=subcomp_B$V3))
 B_gr_center <- resize(B_gr, width = 1, fix = "center")
 
-  gm12878_10kb$A <- NA
-  gm12878_10kb$A[queryHits(findOverlaps(binslist5,A_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,A_gr))))
-  gm12878_10kb$A[-queryHits(findOverlaps(binslist5,A_gr))] <- 0
-  
-  gm12878_10kb$B <- NA
-  gm12878_10kb$B[queryHits(findOverlaps(binslist5,B_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,B_gr))))
-  gm12878_10kb$B[-queryHits(findOverlaps(binslist5,B_gr))] <- 0
+  subcomplist <- GRangesList(A_gr,B_gr)
+  subcomplist <- setNames(subcomplist,c("A_gr","B_gr"))
+  subcompmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(subcomplist)){
+	q <- unique(queryHits(findOverlaps(binslist5,subcomplist[[i]])))
+	subcompmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],subcomplist[[i]]))))
+			widthlist[[j]] <- w
+			subcompmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  subcompdf <- data.frame(subcompmat)
+  colnames(subcompdf) <- names(subcomplist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,subcompdf)
   
   gm12878_10kb$A_dist <- mcols(distanceToNearest(binslist5_center, A_gr_center))$distance
   gm12878_10kb$B_dist <- mcols(distanceToNearest(binslist5_center, B_gr_center))$distance
   
-  gm12878_10kb$Gm12878_A_count <- countOverlaps(binslist5, A_gr)
-  gm12878_10kb$Gm12878_B_count <- countOverlaps(binslist5, B_gr)
   
 ##DGV
 
@@ -196,42 +205,24 @@ novel_sequence_insertion_gr_center <- resize(novel_sequence_insertion_gr, width 
 sequence_alteration_gr <- GRanges(seqnames=sequence_alteration$V1,IRanges(start=sequence_alteration$V2,end=sequence_alteration$V3))
 sequence_alteration_gr_center <- resize(sequence_alteration_gr, width = 1, fix = "center")
 
-  gm12878_10kb$complex <- NA
-  gm12878_10kb$complex[queryHits(findOverlaps(binslist5,complex_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,complex_gr))))
-  gm12878_10kb$complex[-queryHits(findOverlaps(binslist5,complex_gr))] <- 0
-  
-  gm12878_10kb$deletion <- NA
-  gm12878_10kb$deletion[queryHits(findOverlaps(binslist5,deletion_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,deletion_gr))))
-  gm12878_10kb$deletion[-queryHits(findOverlaps(binslist5,deletion_gr))] <- 0
-  
-  gm12878_10kb$duplication <- NA
-  gm12878_10kb$duplication[queryHits(findOverlaps(binslist5,duplication_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,duplication_gr))))
-  gm12878_10kb$duplication[-queryHits(findOverlaps(binslist5,duplication_gr))] <- 0
-
-  gm12878_10kb$gain_loss <- NA
-  gm12878_10kb$gain_loss[queryHits(findOverlaps(binslist5,gain_loss_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,gain_loss_gr))))
-  gm12878_10kb$gain_loss[-queryHits(findOverlaps(binslist5,gain_loss_gr))] <- 0
-
-  gm12878_10kb$insertion <- NA
-  gm12878_10kb$insertion[queryHits(findOverlaps(binslist5,insertion_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,insertion_gr))))
-  gm12878_10kb$insertion[-queryHits(findOverlaps(binslist5,insertion_gr))] <- 0
-
-  gm12878_10kb$inversion <- NA
-  gm12878_10kb$inversion[queryHits(findOverlaps(binslist5,inversion_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,inversion_gr))))
-  gm12878_10kb$inversion[-queryHits(findOverlaps(binslist5,inversion_gr))] <- 0
-
-  gm12878_10kb$mobile_element_insertion <- NA
-  gm12878_10kb$mobile_element_insertion[queryHits(findOverlaps(binslist5,mobile_element_insertion_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,mobile_element_insertion_gr))))
-  gm12878_10kb$mobile_element_insertion[-queryHits(findOverlaps(binslist5,mobile_element_insertion_gr))] <- 0
-
-  gm12878_10kb$novel_sequence_insertion <- NA
-  gm12878_10kb$novel_sequence_insertion[queryHits(findOverlaps(binslist5,novel_sequence_insertion_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,novel_sequence_insertion_gr))))
-  gm12878_10kb$novel_sequence_insertion[-queryHits(findOverlaps(binslist5,novel_sequence_insertion_gr))] <- 0
-  
-  gm12878_10kb$sequence_alteration <- NA
-  gm12878_10kb$sequence_alteration[queryHits(findOverlaps(binslist5,sequence_alteration_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,sequence_alteration_gr))))
-  gm12878_10kb$sequence_alteration[-queryHits(findOverlaps(binslist5,sequence_alteration_gr))] <- 0
-  
+  dgvlist <- GRangesList(complex_gr,deletion_gr,duplication_gr,gain_loss_gr,insertion_gr,
+						inversion_gr,mobile_element_insertion_gr,novel_sequence_insertion_gr,
+						sequence_alteration_gr)
+  dgvlist <- setNames(dgvlist,paste(temp,"_gr",sep=""))
+  dgvmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(dgvlist)){
+	q <- unique(queryHits(findOverlaps(binslist5,dgvlist[[i]])))
+	dgvmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],dgvlist[[i]]))))
+			widthlist[[j]] <- w
+			dgvmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  dgvdf <- data.frame(dgvmat)
+  colnames(dgvdf) <- names(dgvlist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,dgvdf)
   
   gm12878_10kb$complex_dist <- mcols(distanceToNearest(binslist5_center, complex_gr_center))$distance
   gm12878_10kb$deletion_dist <- mcols(distanceToNearest(binslist5_center, deletion_gr_center))$distance
@@ -243,44 +234,37 @@ sequence_alteration_gr_center <- resize(sequence_alteration_gr, width = 1, fix =
   gm12878_10kb$novel_sequence_insertion_dist <- mcols(distanceToNearest(binslist5_center, novel_sequence_insertion_gr_center))$distance
   gm12878_10kb$sequence_alteration_dist <- mcols(distanceToNearest(binslist5_center, sequence_alteration_gr_center))$distance
   
-  gm12878_10kb$complex_count <- countOverlaps(binslist5, complex_gr)
-  gm12878_10kb$deletion_count <- countOverlaps(binslist5, deletion_gr)
-  gm12878_10kb$duplication_count <- countOverlaps(binslist5, duplication_gr)
-  gm12878_10kb$gain_loss_count <- countOverlaps(binslist5, gain_loss_gr)
-  gm12878_10kb$insertion_count <- countOverlaps(binslist5, insertion_gr)
-  gm12878_10kb$inversion_count <- countOverlaps(binslist5, inversion_gr)
-  gm12878_10kb$mobile_element_insertion_count <- countOverlaps(binslist5, mobile_element_insertion_gr)
-  gm12878_10kb$novel_sequence_insertion_count <- countOverlaps(binslist5, novel_sequence_insertion_gr)
-  gm12878_10kb$sequence_alteration_count <- countOverlaps(binslist5, sequence_alteration_gr)
-  
   
 ## GERP
 
 setwd("/home/stilianoudakisc/TAD_data_analysis/annotations/GERP/")
 
-gerp <- read.table("GERP_hg19.bed",header=FALSE,sep="\t")
+temp = list.files()
+
+gerp <- read.table(temp[1],header=FALSE,sep="\t")
 
 gerp_gr <- GRanges(seqnames=gerp$V1,IRanges(start=gerp$V2,end=gerp$V3))
-mcols(gerp_gr)$score <- gerp$V5
 gerp_gr_center <- resize(gerp_gr, width = 1, fix = "center")
 
-  gm12878_10kb$gerp <- NA
-  gm12878_10kb$gerp[queryHits(findOverlaps(binslist5,gerp_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,gerp_gr))))
-  gm12878_10kb$gerp[-queryHits(findOverlaps(binslist5,gerp_gr))] <- 0
+  gerplist <- GRangesList(gerp_gr)
+  gerplist <- setNames(gerplist, "gerp_gr")
+  gerpmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(gerplist)){
+	q <- unique(queryHits(findOverlaps(binslist5,gerplist[[i]])))
+	gerpmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],gerplist[[i]]))))
+			widthlist[[j]] <- w
+			gerpmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  gerpdf <- data.frame(gerpmat)
+  colnames(gerpdf) <- names(gerplist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,gerpdf)
   
   gm12878_10kb$gerp_dist <- mcols(distanceToNearest(binslist5_center, gerp_gr_center))$distance
   
-  gm12878_10kb$gerp_count <- countOverlaps(binslist5, gerp_gr)
-  
-#finding which flanks overlap the gerp file so that we can add a score variable
-#all other flanks will have a score of 0
-#which(gm12878_10kb$gerp==1)
-gm12878_10kb$gerp_score <- 0
-gerpoverlap <- findOverlaps(binslist5,gerp_gr)
-gerpoverlapdf <- data.frame(queryHits=queryHits(gerpoverlap), score=gerp_gr[subjectHits(gerpoverlap)]$score)
-gerpoverlapmean <- aggregate(gerpoverlapdf$score, list(gerpoverlapdf$queryHits), mean)
-gm12878_10kb$gerp_score[gerpoverlapmean$Group.1] <- gerpoverlapmean$x
-
 
 ## nestedRepeats
 
@@ -317,42 +301,24 @@ simple_repeat_gr_center <- resize(simple_repeat_gr, width = 1, fix = "center")
 SINE_gr <- GRanges(seqnames=SINE$V1,IRanges(start=SINE$V2,end=SINE$V3))
 SINE_gr_center <- resize(SINE_gr, width = 1, fix = "center")
 
-  gm12878_10kb$DNA <- NA
-  gm12878_10kb$DNA[queryHits(findOverlaps(binslist5,DNA_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,DNA_gr))))
-  gm12878_10kb$DNA[-queryHits(findOverlaps(binslist5,DNA_gr))] <- 0
-  
-  gm12878_10kb$line <- NA
-  gm12878_10kb$line[queryHits(findOverlaps(binslist5,line_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,line_gr))))
-  gm12878_10kb$line[-queryHits(findOverlaps(binslist5,line_gr))] <- 0
-  
-  gm12878_10kb$low_complexity <- NA
-  gm12878_10kb$low_complexity[queryHits(findOverlaps(binslist5,low_complexity_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,low_complexity_gr))))
-  gm12878_10kb$low_complexity[-queryHits(findOverlaps(binslist5,low_complexity_gr))] <- 0
-  
-  gm12878_10kb$LTR <- NA
-  gm12878_10kb$LTR[queryHits(findOverlaps(binslist5,LTR_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,LTR_gr))))
-  gm12878_10kb$LTR[-queryHits(findOverlaps(binslist5,LTR_gr))] <- 0
-  
-  gm12878_10kb$other <- NA
-  gm12878_10kb$other[queryHits(findOverlaps(binslist5,other_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,other_gr))))
-  gm12878_10kb$other[-queryHits(findOverlaps(binslist5,other_gr))] <- 0
-  
-  gm12878_10kb$RC <- NA
-  gm12878_10kb$RC[queryHits(findOverlaps(binslist5,RC_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,RC_gr))))
-  gm12878_10kb$RC[-queryHits(findOverlaps(binslist5,RC_gr))] <- 0
-  
-  gm12878_10kb$satellite <- NA
-  gm12878_10kb$satellite[queryHits(findOverlaps(binslist5,satellite_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,satellite_gr))))
-  gm12878_10kb$satellite[-queryHits(findOverlaps(binslist5,satellite_gr))] <- 0
-  
-  gm12878_10kb$simple_repeat <- NA
-  gm12878_10kb$simple_repeat[queryHits(findOverlaps(binslist5,simple_repeat_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,simple_repeat_gr))))
-  gm12878_10kb$simple_repeat[-queryHits(findOverlaps(binslist5,simple_repeat_gr))] <- 0
-  
-  gm12878_10kb$SINE <- NA
-  gm12878_10kb$SINE[queryHits(findOverlaps(binslist5,SINE_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,SINE_gr))))
-  gm12878_10kb$SINE[-queryHits(findOverlaps(binslist5,SINE_gr))] <- 0
-  
+  nrlist <- GRangesList(DNA_gr,line_gr,low_complexity_gr,LTR_gr,other_gr,RC_gr,
+						satellite_gr,simple_repeat_gr,SINE_gr)
+  nrlist <- setNames(nrlist,c("DNA_gr","line_gr","low_complexity_gr","LTR_gr","other_gr",
+						"RC_gr","satellite_gr","simple_repeat_gr","SINE_gr"))
+  nrmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(nrlist)){
+	q <- unique(queryHits(findOverlaps(binslist5,nrlist[[i]])))
+	nrmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],nrlist[[i]]))))
+			widthlist[[j]] <- w
+			nrmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  nrdf <- data.frame(nrmat)
+  colnames(nrdf) <- names(nrlist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,nrdf)
   
   gm12878_10kb$DNA_dist <- mcols(distanceToNearest(binslist5_center, DNA_gr_center))$distance 
   gm12878_10kb$line_dist <- mcols(distanceToNearest(binslist5_center, line_gr_center))$distance 
@@ -363,16 +329,6 @@ SINE_gr_center <- resize(SINE_gr, width = 1, fix = "center")
   gm12878_10kb$satellite_dist <- mcols(distanceToNearest(binslist5_center, satellite_gr_center))$distance 
   gm12878_10kb$simple_repeat_dist <- mcols(distanceToNearest(binslist5_center, simple_repeat_gr_center))$distance 
   gm12878_10kb$SINE_dist <- mcols(distanceToNearest(binslist5_center, SINE_gr_center))$distance 
-  
-  gm12878_10kb$DNA_count <- countOverlaps(binslist5, DNA_gr)
-  gm12878_10kb$line_count <- countOverlaps(binslist5, line_gr)
-  gm12878_10kb$low_complexity_count <- countOverlaps(binslist5, low_complexity_gr)
-  gm12878_10kb$LTR_count <- countOverlaps(binslist5, LTR_gr)
-  gm12878_10kb$other_count <- countOverlaps(binslist5, other_gr)
-  gm12878_10kb$RC_count <- countOverlaps(binslist5, RC_gr)
-  gm12878_10kb$satellite_count <- countOverlaps(binslist5, satellite_gr)
-  gm12878_10kb$simple_repeat_count <- countOverlaps(binslist5, simple_repeat_gr)
-  gm12878_10kb$SINE_count <- countOverlaps(binslist5, SINE_gr)
   
 
 ## super_enhancers
@@ -386,31 +342,55 @@ se_GM12878 <- read.table(temp[1],header=FALSE,sep="\t")
 se_GM12878_gr <- GRanges(seqnames=se_GM12878$V1,IRanges(start=se_GM12878$V2,end=se_GM12878$V3))
 se_GM12878_gr_center <- resize(se_GM12878_gr, width = 1, fix = "center")
 
-  gm12878_10kb$se_GM12878 <- NA
-  gm12878_10kb$se_GM12878[queryHits(findOverlaps(binslist5,se_GM12878_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,se_GM12878_gr))))
-  gm12878_10kb$se_GM12878[-queryHits(findOverlaps(binslist5,se_GM12878_gr))] <- 0
+  selist <- GRangesList(se_GM12878_gr)
+  selist <- setNames(selist,"se_GM12878_gr")
+  semat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(selist)){
+	q <- unique(queryHits(findOverlaps(binslist5,selist[[i]])))
+	semat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],selist[[i]]))))
+			widthlist[[j]] <- w
+			semat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  sedf <- data.frame(semat)
+  colnames(sedf) <- names(selist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,sedf)
   
   gm12878_10kb$se_GM12878_dist <- mcols(distanceToNearest(binslist5_center, se_GM12878_gr_center))$distance
-  
-  gm12878_10kb$se_GM12878_count <- countOverlaps(binslist5, se_GM12878_gr)
   
 
 ## VMR
 
 setwd("/home/stilianoudakisc/TAD_data_analysis/annotations/VMRs/")
 
-VMR <- read.table("VMR_hg19.bed",header=FALSE,sep="\t")
+temp = list.files()
+
+VMR <- read.table(temp[1],header=FALSE,sep="\t")
 
 VMR_gr <- GRanges(seqnames=VMR$V1,IRanges(start=VMR$V2,end=VMR$V3))
 VMR_gr_center <- resize(VMR_gr, width = 1, fix = "center")
 
-  gm12878_10kb$VMR <- NA
-  gm12878_10kb$VMR[queryHits(findOverlaps(binslist5,VMR_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,VMR_gr))))
-  gm12878_10kb$VMR[-queryHits(findOverlaps(binslist5,VMR_gr))] <- 0
+  vmrlist <- GRangesList(VMR_gr)
+  vmrlist <- setNames(vmrlist,"VMR_gr")
+  vmrmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(vmrlist)){
+	q <- unique(queryHits(findOverlaps(binslist5,vmrlist[[i]])))
+	vmrmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],vmrlist[[i]]))))
+			widthlist[[j]] <- w
+			vmrmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  vmrdf <- data.frame(vmrmat)
+  colnames(vmrdf) <- names(vmrlist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,vmrdf)
   
   gm12878_10kb$VMR_dist <- mcols(distanceToNearest(binslist5_center, VMR_gr_center))$distance
-  
-  gm12878_10kb$VMR_count <- countOverlaps(binslist5, VMR_gr)
 
   
 ## BroadHMM
@@ -467,66 +447,34 @@ Gm12878_Insulator_gr_center <- resize(Gm12878_Insulator_gr, width = 1, fix = "ce
 Gm12878_TxnTransition_gr <- GRanges(seqnames=Gm12878_TxnTransition$V1,IRanges(start=Gm12878_TxnTransition$V2,end=Gm12878_TxnTransition$V3)) 
 Gm12878_TxnTransition_gr_center <- resize(Gm12878_TxnTransition_gr, width = 1, fix = "center")
 
-  gm12878_10kb$Gm12878_TxnElongation <- NA
-  gm12878_10kb$Gm12878_TxnElongation[queryHits(findOverlaps(binslist5,Gm12878_TxnElongation_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_TxnElongation_gr))))
-  gm12878_10kb$Gm12878_TxnElongation[-queryHits(findOverlaps(binslist5,Gm12878_TxnElongation_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_WeakTxn <- NA
-  gm12878_10kb$Gm12878_WeakTxn[queryHits(findOverlaps(binslist5,Gm12878_WeakTxn_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_WeakTxn_gr))))
-  gm12878_10kb$Gm12878_WeakTxn[-queryHits(findOverlaps(binslist5,Gm12878_WeakTxn_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_Repressed <- NA
-  gm12878_10kb$Gm12878_Repressed[queryHits(findOverlaps(binslist5,Gm12878_Repressed_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_Repressed_gr))))
-  gm12878_10kb$Gm12878_Repressed[-queryHits(findOverlaps(binslist5,Gm12878_Repressed_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_Heterochromlo <- NA
-  gm12878_10kb$Gm12878_Heterochromlo[queryHits(findOverlaps(binslist5,Gm12878_Heterochromlo_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_Heterochromlo_gr))))
-  gm12878_10kb$Gm12878_Heterochromlo[-queryHits(findOverlaps(binslist5,Gm12878_Heterochromlo_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_RepetitiveCNV14 <- NA
-  gm12878_10kb$Gm12878_RepetitiveCNV14[queryHits(findOverlaps(binslist5,Gm12878_RepetitiveCNV14_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_RepetitiveCNV14_gr))))
-  gm12878_10kb$Gm12878_RepetitiveCNV14[-queryHits(findOverlaps(binslist5,Gm12878_RepetitiveCNV14_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_RepetitiveCNV15 <- NA
-  gm12878_10kb$Gm12878_RepetitiveCNV15[queryHits(findOverlaps(binslist5,Gm12878_RepetitiveCNV15_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_RepetitiveCNV15_gr))))
-  gm12878_10kb$Gm12878_RepetitiveCNV15[-queryHits(findOverlaps(binslist5,Gm12878_RepetitiveCNV15_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_ActivePromoter <- NA
-  gm12878_10kb$Gm12878_ActivePromoter[queryHits(findOverlaps(binslist5,Gm12878_ActivePromoter_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_ActivePromoter_gr))))
-  gm12878_10kb$Gm12878_ActivePromoter[-queryHits(findOverlaps(binslist5,Gm12878_ActivePromoter_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_WeakPromoter <- NA
-  gm12878_10kb$Gm12878_WeakPromoter[queryHits(findOverlaps(binslist5,Gm12878_WeakPromoter_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_WeakPromoter_gr))))
-  gm12878_10kb$Gm12878_WeakPromoter[-queryHits(findOverlaps(binslist5,Gm12878_WeakPromoter_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_PoisedPromoter <- NA
-  gm12878_10kb$Gm12878_PoisedPromoter[queryHits(findOverlaps(binslist5,Gm12878_PoisedPromoter_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_PoisedPromoter_gr))))
-  gm12878_10kb$Gm12878_PoisedPromoter[-queryHits(findOverlaps(binslist5,Gm12878_PoisedPromoter_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_StrongEnhancer4 <- NA
-  gm12878_10kb$Gm12878_StrongEnhancer4[queryHits(findOverlaps(binslist5,Gm12878_StrongEnhancer4_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_StrongEnhancer4_gr))))
-  gm12878_10kb$Gm12878_StrongEnhancer4[-queryHits(findOverlaps(binslist5,Gm12878_StrongEnhancer4_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_StrongEnhancer5 <- NA
-  gm12878_10kb$Gm12878_StrongEnhancer5[queryHits(findOverlaps(binslist5,Gm12878_StrongEnhancer5_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_StrongEnhancer5_gr))))
-  gm12878_10kb$Gm12878_StrongEnhancer5[-queryHits(findOverlaps(binslist5,Gm12878_StrongEnhancer5_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_WeakEnhancer6 <- NA
-  gm12878_10kb$Gm12878_WeakEnhancer6[queryHits(findOverlaps(binslist5,Gm12878_WeakEnhancer6_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_WeakEnhancer6_gr))))
-  gm12878_10kb$Gm12878_WeakEnhancer6[-queryHits(findOverlaps(binslist5,Gm12878_WeakEnhancer6_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_WeakEnhancer7 <- NA
-  gm12878_10kb$Gm12878_WeakEnhancer7[queryHits(findOverlaps(binslist5,Gm12878_WeakEnhancer7_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_WeakEnhancer7_gr))))
-  gm12878_10kb$Gm12878_WeakEnhancer7[-queryHits(findOverlaps(binslist5,Gm12878_WeakEnhancer7_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_Insulator <- NA
-  gm12878_10kb$Gm12878_Insulator[queryHits(findOverlaps(binslist5,Gm12878_Insulator_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_Insulator_gr))))
-  gm12878_10kb$Gm12878_Insulator[-queryHits(findOverlaps(binslist5,Gm12878_Insulator_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_TxnTransition <- NA
-  gm12878_10kb$Gm12878_TxnTransition[queryHits(findOverlaps(binslist5,Gm12878_TxnTransition_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_TxnTransition_gr))))
-  gm12878_10kb$Gm12878_TxnTransition[-queryHits(findOverlaps(binslist5,Gm12878_TxnTransition_gr))] <- 0
-  
+  broadlist <- GRangesList(Gm12878_TxnElongation_gr,Gm12878_WeakTxn_gr,Gm12878_Repressed_gr,
+						Gm12878_Heterochromlo_gr,Gm12878_RepetitiveCNV14_gr,
+						Gm12878_RepetitiveCNV15_gr,Gm12878_ActivePromoter_gr,
+						Gm12878_WeakPromoter_gr,Gm12878_PoisedPromoter_gr,
+						Gm12878_StrongEnhancer4_gr,Gm12878_StrongEnhancer5_gr,
+						Gm12878_WeakEnhancer6_gr,Gm12878_WeakEnhancer7_gr,
+						Gm12878_Insulator_gr,Gm12878_TxnTransition_gr)
+  broadlist <- setNames(broadlist,c("Gm12878_TxnElongation_gr","Gm12878_WeakTxn_gr","Gm12878_Repressed_gr",
+						"Gm12878_Heterochromlo_gr","Gm12878_RepetitiveCNV14_gr",
+						"Gm12878_RepetitiveCNV15_gr","Gm12878_ActivePromoter_gr",
+						"Gm12878_WeakPromoter_gr","Gm12878_PoisedPromoter_gr",
+						"Gm12878_StrongEnhancer4_gr","Gm12878_StrongEnhancer5_gr",
+						"Gm12878_WeakEnhancer6_gr","Gm12878_WeakEnhancer7_gr",
+						"Gm12878_Insulator_gr","Gm12878_TxnTransition_gr"))
+  broadmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(broadlist)){
+	names(broadmat)[i] <- names(broadlist)[i]
+	q <- unique(queryHits(findOverlaps(binslist5,broadlist[[i]])))
+	broadmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],broadlist[[i]]))))
+			widthlist[[j]] <- w
+			broadmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  broaddf <- data.frame(broadmat)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,broaddf)
 
   gm12878_10kb$Gm12878_TxnElongation_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_TxnElongation_gr_center))$distance
   gm12878_10kb$Gm12878_WeakTxn_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_WeakTxn_gr_center))$distance
@@ -543,22 +491,6 @@ Gm12878_TxnTransition_gr_center <- resize(Gm12878_TxnTransition_gr, width = 1, f
   gm12878_10kb$Gm12878_WeakEnhancer7_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_WeakEnhancer7_gr_center))$distance
   gm12878_10kb$Gm12878_Insulator_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_Insulator_gr_center))$distance
   gm12878_10kb$Gm12878_TxnTransition_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_TxnTransition_gr_center))$distance
-  
-  gm12878_10kb$Gm12878_TxnElongation_count <- countOverlaps(binslist5, Gm12878_TxnElongation_gr)
-  gm12878_10kb$Gm12878_WeakTxn_count <- countOverlaps(binslist5, Gm12878_WeakTxn_gr)
-  gm12878_10kb$Gm12878_Repressed_count <- countOverlaps(binslist5, Gm12878_Repressed_gr)
-  gm12878_10kb$Gm12878_Heterochromlo_count <- countOverlaps(binslist5, Gm12878_Heterochromlo_gr)
-  gm12878_10kb$Gm12878_RepetitiveCNV14_count <- countOverlaps(binslist5, Gm12878_RepetitiveCNV14_gr)
-  gm12878_10kb$Gm12878_RepetitiveCNV15_count <- countOverlaps(binslist5, Gm12878_RepetitiveCNV15_gr)
-  gm12878_10kb$Gm12878_ActivePromoter_count <- countOverlaps(binslist5, Gm12878_ActivePromoter_gr)
-  gm12878_10kb$Gm12878_WeakPromoter_count <- countOverlaps(binslist5, Gm12878_WeakPromoter_gr)
-  gm12878_10kb$Gm12878_PoisedPromoter_count <- countOverlaps(binslist5, Gm12878_PoisedPromoter_gr)
-  gm12878_10kb$Gm12878_StrongEnhancer4_count <- countOverlaps(binslist5, Gm12878_StrongEnhancer4_gr)
-  gm12878_10kb$Gm12878_StrongEnhancer5_count <- countOverlaps(binslist5, Gm12878_StrongEnhancer5_gr)
-  gm12878_10kb$Gm12878_WeakEnhancer6_count <- countOverlaps(binslist5, Gm12878_WeakEnhancer6_gr)
-  gm12878_10kb$Gm12878_WeakEnhancer7_count <- countOverlaps(binslist5, Gm12878_WeakEnhancer7_gr)
-  gm12878_10kb$Gm12878_Insulator_count <- countOverlaps(binslist5, Gm12878_Insulator_gr)
-  gm12878_10kb$Gm12878_TxnTransition_count <- countOverlaps(binslist5, Gm12878_TxnTransition_gr)
 
   
 ## Combined
@@ -591,34 +523,24 @@ Gm12878_TSS_gr_center <- resize(Gm12878_TSS_gr, width = 1, fix = "center")
 Gm12878_WE_gr <- GRanges(seqnames=Gm12878_WE$V1,IRanges(start=Gm12878_WE$V2,end=Gm12878_WE$V3))
 Gm12878_WE_gr_center <- resize(Gm12878_WE_gr, width = 1, fix = "center")
 
-  gm12878_10kb$Gm12878_CTCF <- NA
-  gm12878_10kb$Gm12878_CTCF[queryHits(findOverlaps(binslist5,Gm12878_CTCF_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_CTCF_gr))))
-  gm12878_10kb$Gm12878_CTCF[-queryHits(findOverlaps(binslist5,Gm12878_CTCF_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_E <- NA
-  gm12878_10kb$Gm12878_E[queryHits(findOverlaps(binslist5,Gm12878_E_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_E_gr))))
-  gm12878_10kb$Gm12878_E[-queryHits(findOverlaps(binslist5,Gm12878_E_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_PF <- NA
-  gm12878_10kb$Gm12878_PF[queryHits(findOverlaps(binslist5,Gm12878_PF_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_PF_gr))))
-  gm12878_10kb$Gm12878_PF[-queryHits(findOverlaps(binslist5,Gm12878_PF_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_R <- NA
-  gm12878_10kb$Gm12878_R[queryHits(findOverlaps(binslist5,Gm12878_R_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_R_gr))))
-  gm12878_10kb$Gm12878_R[-queryHits(findOverlaps(binslist5,Gm12878_R_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_T <- NA
-  gm12878_10kb$Gm12878_T[queryHits(findOverlaps(binslist5,Gm12878_T_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_T_gr))))
-  gm12878_10kb$Gm12878_T[-queryHits(findOverlaps(binslist5,Gm12878_T_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_TSS <- NA
-  gm12878_10kb$Gm12878_TSS[queryHits(findOverlaps(binslist5,Gm12878_TSS_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_TSS_gr))))
-  gm12878_10kb$Gm12878_TSS[-queryHits(findOverlaps(binslist5,Gm12878_TSS_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_WE <- NA
-  gm12878_10kb$Gm12878_WE[queryHits(findOverlaps(binslist5,Gm12878_WE_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_WE_gr))))
-  gm12878_10kb$Gm12878_WE[-queryHits(findOverlaps(binslist5,Gm12878_WE_gr))] <- 0
-  
+  combinedlist <- GRangesList(Gm12878_CTCF_gr,Gm12878_E_gr,Gm12878_PF_gr,
+							Gm12878_R_gr,Gm12878_T_gr,Gm12878_TSS_gr,Gm12878_WE_gr)
+  combinedlist <- setNames(combinedlist,c("Gm12878_CTCF_gr","Gm12878_E_gr,Gm12878_PF_gr",
+							"Gm12878_R_gr","Gm12878_T_gr","Gm12878_TSS_gr","Gm12878_WE_gr"))
+  combinedmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(combinedlist)){
+	q <- unique(queryHits(findOverlaps(binslist5,combinedlist[[i]])))
+	combinedmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],combinedlist[[i]]))))
+			widthlist[[j]] <- w
+			combinedmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  combineddf <- data.frame(combinedmat)
+  colnames(combineddf) <- names(combinedlist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,combineddf)
   
   gm12878_10kb$Gm12878_CTCF_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_CTCF_gr_center))$distance
   gm12878_10kb$Gm12878_E_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_E_gr_center))$distance
@@ -627,15 +549,7 @@ Gm12878_WE_gr_center <- resize(Gm12878_WE_gr, width = 1, fix = "center")
   gm12878_10kb$Gm12878_T_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_T_gr_center))$distance
   gm12878_10kb$Gm12878_TSS_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_TSS_gr_center))$distance
   gm12878_10kb$Gm12878_WE_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_WE_gr_center))$distance
-  
-  gm12878_10kb$Gm12878_CTCF_count <- countOverlaps(binslist5, Gm12878_CTCF_gr)
-  gm12878_10kb$Gm12878_E_count <- countOverlaps(binslist5, Gm12878_E_gr)
-  gm12878_10kb$Gm12878_PF_count <- countOverlaps(binslist5, Gm12878_PF_gr)
-  gm12878_10kb$Gm12878_R_count <- countOverlaps(binslist5, Gm12878_R_gr)
-  gm12878_10kb$Gm12878_T_count <- countOverlaps(binslist5, Gm12878_T_gr)
-  gm12878_10kb$Gm12878_TSS_count <- countOverlaps(binslist5, Gm12878_TSS_gr)
-  gm12878_10kb$Gm12878_WE_count <- countOverlaps(binslist5, Gm12878_WE_gr)
-  
+    
 
 ## DNase I
 
@@ -649,14 +563,25 @@ Gm12878_DNaseI <- read.table(temp[1],header=FALSE,sep="\t")
 Gm12878_DNaseI_gr <- GRanges(seqnames=Gm12878_DNaseI$V1,IRanges(start=Gm12878_DNaseI$V2,end=Gm12878_DNaseI$V3))
 Gm12878_DNaseI_gr_center <- resize(Gm12878_DNaseI_gr, width = 1, fix = "center")
 
-  gm12878_10kb$Gm12878_DNaseI <- NA
-  gm12878_10kb$Gm12878_DNaseI[queryHits(findOverlaps(binslist5,Gm12878_DNaseI_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_DNaseI_gr))))
-  gm12878_10kb$Gm12878_DNaseI[-queryHits(findOverlaps(binslist5,Gm12878_DNaseI_gr))] <- 0
-
+  dnaselist <- GRangesList(Gm12878_DNaseI_gr)
+  dnaselist <- setNames(dnaselist,"Gm12878_DNaseI_gr")
+  dnasemat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(dnaselist)){
+	q <- unique(queryHits(findOverlaps(binslist5,dnaselist[[i]])))
+	dnasemat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],dnaselist[[i]]))))
+			widthlist[[j]] <- w
+			dnasemat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  dnasedf <- data.frame(dnasemat)
+  colnames(dnasedf) <- names(dnaselist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,dnasedf)
+  
   gm12878_10kb$Gm12878_DNaseI_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_DNaseI_gr_center))$distance
   
-  gm12878_10kb$Gm12878_DNaseI_count <- countOverlaps(binslist5, Gm12878_DNaseI_gr)
-
 
 ## Histone Modifications
 
@@ -699,50 +624,28 @@ Gm12878_H3k9me3_gr_center <- resize(Gm12878_H3k9me3_gr, width = 1, fix = "center
 Gm12878_H4k20me1_gr <- GRanges(seqnames=Gm12878_H4k20me1$V1,IRanges(start=Gm12878_H4k20me1$V2,end=Gm12878_H4k20me1$V3))
 Gm12878_H4k20me1_gr_center <- resize(Gm12878_H4k20me1_gr, width = 1, fix = "center")
 
-  gm12878_10kb$Gm12878_H2az <- NA
-  gm12878_10kb$Gm12878_H2az[queryHits(findOverlaps(binslist5,Gm12878_H2az_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H2az_gr))))
-  gm12878_10kb$Gm12878_H2az[-queryHits(findOverlaps(binslist5,Gm12878_H2az_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k27ac <- NA
-  gm12878_10kb$Gm12878_H3k27ac[queryHits(findOverlaps(binslist5,Gm12878_H3k27ac_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k27ac_gr))))
-  gm12878_10kb$Gm12878_H3k27ac[-queryHits(findOverlaps(binslist5,Gm12878_H3k27ac_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k27me3 <- NA
-  gm12878_10kb$Gm12878_H3k27me3[queryHits(findOverlaps(binslist5,Gm12878_H3k27me3_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k27me3_gr))))
-  gm12878_10kb$Gm12878_H3k27me3[-queryHits(findOverlaps(binslist5,Gm12878_H3k27me3_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k36me3 <- NA
-  gm12878_10kb$Gm12878_H3k36me3[queryHits(findOverlaps(binslist5,Gm12878_H3k36me3_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k36me3_gr))))
-  gm12878_10kb$Gm12878_H3k36me3[-queryHits(findOverlaps(binslist5,Gm12878_H3k36me3_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k4me1 <- NA
-  gm12878_10kb$Gm12878_H3k4me1[queryHits(findOverlaps(binslist5,Gm12878_H3k4me1_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k4me1_gr))))
-  gm12878_10kb$Gm12878_H3k4me1[-queryHits(findOverlaps(binslist5,Gm12878_H3k4me1_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k4me2 <- NA
-  gm12878_10kb$Gm12878_H3k4me2[queryHits(findOverlaps(binslist5,Gm12878_H3k4me2_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k4me2_gr))))
-  gm12878_10kb$Gm12878_H3k4me2[-queryHits(findOverlaps(binslist5,Gm12878_H3k4me2_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k4me3 <- NA
-  gm12878_10kb$Gm12878_H3k4me3[queryHits(findOverlaps(binslist5,Gm12878_H3k4me3_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k4me3_gr))))
-  gm12878_10kb$Gm12878_H3k4me3[-queryHits(findOverlaps(binslist5,Gm12878_H3k4me3_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k79me2 <- NA
-  gm12878_10kb$Gm12878_H3k79me2[queryHits(findOverlaps(binslist5,Gm12878_H3k79me2_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k79me2_gr))))
-  gm12878_10kb$Gm12878_H3k79me2[-queryHits(findOverlaps(binslist5,Gm12878_H3k79me2_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k9ac <- NA
-  gm12878_10kb$Gm12878_H3k9ac[queryHits(findOverlaps(binslist5,Gm12878_H3k9ac_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k9ac_gr))))
-  gm12878_10kb$Gm12878_H3k9ac[-queryHits(findOverlaps(binslist5,Gm12878_H3k9ac_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H3k9me3 <- NA
-  gm12878_10kb$Gm12878_H3k9me3[queryHits(findOverlaps(binslist5,Gm12878_H3k9me3_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H3k9me3_gr))))
-  gm12878_10kb$Gm12878_H3k9me3[-queryHits(findOverlaps(binslist5,Gm12878_H3k9me3_gr))] <- 0
-  
-  gm12878_10kb$Gm12878_H4k20me1 <- NA
-  gm12878_10kb$Gm12878_H4k20me1[queryHits(findOverlaps(binslist5,Gm12878_H4k20me1_gr))] <- width(ranges(pintersect(findOverlapPairs(binslist5,Gm12878_H4k20me1_gr))))
-  gm12878_10kb$Gm12878_H4k20me1[-queryHits(findOverlaps(binslist5,Gm12878_H4k20me1_gr))] <- 0
-
+  histlist <- GRangesList(Gm12878_H2az_gr,Gm12878_H3k27ac_gr,Gm12878_H3k27me3_gr,
+							Gm12878_H3k36me3_gr,Gm12878_H3k4me1_gr,Gm12878_H3k4me2_gr,
+							Gm12878_H3k4me3_gr,Gm12878_H3k79me2_gr,Gm12878_H3k9ac_gr,
+							Gm12878_H3k9me3_gr,Gm12878_H4k20me1_gr)
+  histlist <- setNames(histlist,c("Gm12878_H2az_gr","Gm12878_H3k27ac_gr","Gm12878_H3k27me3_gr",
+							"Gm12878_H3k36me3_gr","Gm12878_H3k4me1_gr","Gm12878_H3k4me2_gr",
+							"Gm12878_H3k4me3_gr","Gm12878_H3k79me2_gr","Gm12878_H3k9ac_gr",
+							"Gm12878_H3k9me3_gr","Gm12878_H4k20me1_gr"))
+  histmat <- matrix(nrow=length(binslist5), ncol=length(temp))
+  for(i in 1:length(histlist)){
+	q <- unique(queryHits(findOverlaps(binslist5,histlist[[i]])))
+	histmat[-q,i] <- 0
+	widthlist <- list()
+		for(j in 1:length(q)){
+			w <- width(ranges(pintersect(findOverlapPairs(binslist5[q[j]],histlist[[i]]))))
+			widthlist[[j]] <- w
+			histmat[,i][q[j]] <- sum(widthlist[[j]])
+		}
+  }
+  histdf <- data.frame(histmat)
+  colnames(histdf) <- names(histlist)
+  gm12878_10kb <- cbind.data.frame(gm12878_10kb,histdf)
 
   gm12878_10kb$Gm12878_H2az_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_H2az_gr_center))$distance
   gm12878_10kb$Gm12878_H3k27ac_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_H3k27ac_gr_center))$distance
@@ -756,18 +659,6 @@ Gm12878_H4k20me1_gr_center <- resize(Gm12878_H4k20me1_gr, width = 1, fix = "cent
   gm12878_10kb$Gm12878_H3k9me3_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_H3k9me3_gr_center))$distance
   gm12878_10kb$Gm12878_H4k20me1_dist <- mcols(distanceToNearest(binslist5_center, Gm12878_H4k20me1_gr_center))$distance
   
-  gm12878_10kb$Gm12878_H2az_count <- countOverlaps(binslist5, Gm12878_H2az_gr)
-  gm12878_10kb$Gm12878_H3k27ac_count <- countOverlaps(binslist5, Gm12878_H3k27ac_gr)
-  gm12878_10kb$Gm12878_H3k27me3_count <- countOverlaps(binslist5, Gm12878_H3k27me3_gr)
-  gm12878_10kb$Gm12878_H3k36me3_count <- countOverlaps(binslist5, Gm12878_H3k36me3_gr)
-  gm12878_10kb$Gm12878_H3k4me1_count <- countOverlaps(binslist5, Gm12878_H3k4me1_gr)
-  gm12878_10kb$Gm12878_H3k4me2_count <- countOverlaps(binslist5, Gm12878_H3k4me2_gr)
-  gm12878_10kb$Gm12878_H3k4me3_count <- countOverlaps(binslist5, Gm12878_H3k4me3_gr)
-  gm12878_10kb$Gm12878_H3k79me2_count <- countOverlaps(binslist5, Gm12878_H3k79me2_gr)
-  gm12878_10kb$Gm12878_H3k9ac_count <- countOverlaps(binslist5, Gm12878_H3k9ac_gr)
-  gm12878_10kb$Gm12878_H3k9me3_count <- countOverlaps(binslist5, Gm12878_H3k9me3_gr)
-  gm12878_10kb$Gm12878_H4k20me1_count <- countOverlaps(binslist5, Gm12878_H4k20me1_gr)
-
 
 ## Adding Chromosome information to the data
 
