@@ -9,8 +9,24 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## 09/04/18
+## 09/07/18
 
-* use width in base pairs as type of feature instead of counts of overlap
+####To-Do
++ use width in base pairs as type of feature instead of counts of overlap
    - distance and width in base pairs of overlap as features
-* finish methods
++ finish introduction, start on methods
+
+## 09/10/18
+
+####Questions 
+
+* Should we use elastic-net and RF as final models or just one or the other?
+* In results section should we compare between mourad models visually or verbally or none at all?
+* I've mentioned other methods in intro, it will be hard to compare to the others; how to handle this?
+* Hong et al uses TFBS should I also include them?
+
+####To-Do
+
+*Finish Methods
+*Finish running code applied to 100 iterations of undersampling
+*Apply pipeline to K562 cell line
