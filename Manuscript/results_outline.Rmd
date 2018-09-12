@@ -1,0 +1,71 @@
+---
+title: "Manuscript Outline"
+author: "Spiro Stilianoudakis"
+date: "September 11, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+   + Paragraph 1:
+      - What are TADs and what role do they play in the human genome?
+      - Why do we care about TADs?
+      
+   + Paragraph 2:
+      - What is in the current literature?
+      
+   + Paragraph 3:
+      - What are the issues?
+      - Why are they issues?
+      
+   + Paragraph 4:
+      - What are the current methods out there?
+      - What drawbacks do they have?
+    
+   + Paragraph 5:
+      - Defined the problem
+      - What have we done?
+      - Why have we done it?
+      
+# Methods 
+
+* The Data
+   + Paragraph 1:
+      - Where was the data obtained?
+   + Paragraph 2:
+      - How it was used?
+      - How was the response vector created
+      
+* Genomic Annotations
+   + Paragraph 1: 
+      - Where was the annotation data obtained?
+      - How were they used?
+
+* Data Pipeline:
+   + What was the pipeline used for?
+   + Set up structure of pipeline
+   + How were techniques evaluated?
+   
+* Normalization:
+   + What techniques were used/compared?
+   + How were they used/how do they worked?
+   
+* Class Imbalance:
+   + What techniques were used/compared?
+   + How were they used/how do they worked?
+   
+* Variable Selection:
+   + What techniques were used/compared?
+   + How were they used/how do they worked?
+
+* Final Model:
+   + What model(s) we used to evaluat the pipeline processed data
+   + How the model(s) were performed
+   + What we compared our models to
+   
+# Results
+   
