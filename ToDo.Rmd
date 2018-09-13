@@ -33,10 +33,22 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ####To-Do
 
-*Make a bullet pointed list for manuscript
-*Apply RF, GBM, SVM (later), MLR using our features
-*Finish Methods
-*Finish running code applied to 100 iterations of undersampling
-*Apply pipeline to K562 cell line
++ Make a bullet pointed list for manuscript
+* Apply RF, GBM, SVM (later), MLR using our features
++ Finish Methods
++ Finish running code applied to 100 iterations of undersampling
+* Apply pipeline to K562 cell line
 
 
+## 09/10/18
+
+####Questions 
+
+* Should figures be placed in back of paper (in Appendix section)?
+* Line 60 of manuscript: Check for accuracy?
+
+####To-Do
+
+* in table with total features put (*) for removed then state why
+* Finish results outline
+* Finish results manuscript
