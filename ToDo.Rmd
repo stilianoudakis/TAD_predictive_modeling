@@ -65,14 +65,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ####To-Do
 
 * Finish TFBS models
-* Include column for feature table for why a feature was excluded
-* Use tables instead of barplots for performance metrics
-* class imbalance barplot unnecessary, put in words
++ Include column for feature table for why a feature was excluded
++ Use tables instead of barplots for performance metrics
++ class imbalance barplot unnecessary, put in words
 * clean up class imbalance plot put bar underneath to categorize each technique; put x axis diagonally
 * put tad in boundary before tad not in boundary for class imbalance table
 * include venn diagram of selected features
 * create a heat map for AIC values from commonly selected features
-* look at chromosome specific models and compare
++ look at chromosome specific models and compare
 * look at different resolutions (talk with john)
-* look at other type of transformation (inverse sine transformation)
++ look at other type of transformation (inverse sine transformation)
 
