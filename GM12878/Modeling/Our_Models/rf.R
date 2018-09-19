@@ -25,9 +25,9 @@ library(leaps)
 
 setwd("/home/stilianoudakisc/TAD_data_analysis/final_models/")
 
-#chromosome 1 filtered/log transformed/no standardization/forward selection
 
-gm12878_10kb_reduced <- readRDS("gm12878_10kb_reduced.rds")
+
+gm12878_5kb_reduced <- readRDS("gm12878_5kb_reduced.rds")
 
 
 
@@ -43,9 +43,8 @@ bootsamps = 5
 ### set tuning parameters
 
 
-fitControl <- trainControl(method = "repeatedcv",
-                           number = 5,
-                           repeats = 3,
+fitControl <- trainControl(method = "cv",
+                           number = 10,
                            ## Estimate class probabilities
                            classProbs = TRUE,
                            ## Evaluate performance using 
@@ -65,15 +64,15 @@ simple_roc <- function(labels, scores){
 ##the number of columns match the number of bootstrap samples
 
 sampids <- matrix(ncol=bootsamps, 
-                  nrow=length(gm12878_10kb_reduced$y[which(gm12878_10kb_reduced$y=="Yes")]))
+                  nrow=length(gm12878_5kb_reduced$y[which(gm12878_5kb_reduced$y=="Yes")]))
 
 
 ###filling in the sample ids matrix
 
 set.seed(123)
 for(j in 1:bootsamps){
-  sampids[,j] <- sample(which(gm12878_10kb_reduced$y=="No"),
-                        length(which(gm12878_10kb_reduced$y=="Yes")),
+  sampids[,j] <- sample(which(gm12878_5kb_reduced$y=="No"),
+                        length(which(gm12878_5kb_reduced$y=="Yes")),
                         replace = TRUE)
 }
 
@@ -82,13 +81,13 @@ for(j in 1:bootsamps){
 
 #set length of list objects that will be filled in with specificities
 #and sensitivities and aucs and variable importance
-rflst <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_10kb_reduced$y=="Yes"))*2)*.3), 
+rflst <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_5kb_reduced$y=="Yes"))*2)*.3), 
                               ncol=bootsamps),
-                fpr <- matrix(nrow=ceiling((length(which(gm12878_10kb_reduced$y=="Yes"))*2)*.3), 
+                fpr <- matrix(nrow=ceiling((length(which(gm12878_5kb_reduced$y=="Yes"))*2)*.3), 
                               ncol=bootsamps),
-                varimp <- matrix(nrow=dim(gm12878_10kb_reduced)[2]-1,
+                varimp <- matrix(nrow=dim(gm12878_5kb_reduced)[2]-1,
                                  ncol=bootsamps))
-rownames(rflst[[3]]) <- colnames(gm12878_10kb_reduced)[-1]
+rownames(rflst[[3]]) <- colnames(gm12878_5kb_reduced)[-1]
 
 rfperf <- matrix(nrow = 17, ncol=bootsamps)
 rownames(rfperf) <- c("TN",
@@ -114,8 +113,8 @@ rownames(rfperf) <- c("TN",
 for(i in 1:bootsamps){
 
   #combining the two classes to create balanced data
-  data <- rbind.data.frame(gm12878_10kb_reduced[which(gm12878_10kb_reduced$y=="Yes"),],
-                           gm12878_10kb_reduced[sampids[,i],])
+  data <- rbind.data.frame(gm12878_5kb_reduced[which(gm12878_5kb_reduced$y=="Yes"),],
+                           gm12878_5kb_reduced[sampids[,i],])
   
   #determining the best number of variables randomly sampled as candidates at each split
   set.seed(5430)

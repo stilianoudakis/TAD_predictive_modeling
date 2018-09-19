@@ -69,3 +69,34 @@ knitr::opts_chunk$set(echo = TRUE)
    
 # Results
    
+* GM12878 Resuts
+   + How many total genomic bins
+   + How many total TADs
+      - Summary stats for lengths of TADs
+   + Total number of features 
+      - Summary stats for both counts and distance features
+      - Which features were removed for near zero variance
+   + Normalization Techniques
+   + Class balancing techniques
+   + Variable selection techniques
+   + Final Models
+      - Mourad Models (MLR & LASSO)
+      - Models using distance/counts features with out pipeline (MLR & LASSO)
+      - Elastic-Net using processed data
+      - Comparisons
+* Validate results using K562 cell line
+* Validate results using TFBS cell line
+
+# Discussion
+
+* State the results that were interesting 
+   - Specific to each cell line/tfbs
+   - Then results all together
+* State how much better models using our pipeline performed compared to Mourad
+   - Was it due to the model choice or the use of distance features?
+* Limitations/Future
+   - Mention the need for HiC experiments using higher resolutions
+   - Experimenting with TAD data using other methods
+   - Exploring other cell lines
+
+

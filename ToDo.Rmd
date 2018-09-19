@@ -34,10 +34,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ####To-Do
 
 + Make a bullet pointed list for manuscript
-* Apply RF, GBM, SVM (later), MLR using our features
++ Apply RF, GBM, SVM (later), MLR using our features
 + Finish Methods
 + Finish running code applied to 100 iterations of undersampling
-* Apply pipeline to K562 cell line
++ Apply pipeline to K562 cell line
 
 
 ## 09/10/18
@@ -49,6 +49,30 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ####To-Do
 
-* in table with total features put (*) for removed then state why
++ in table with total features put (*) for removed then state why
++ order figures and create legends
 * Finish results outline
 * Finish results manuscript
+
+
+## 09/17/18
+
+####Questions 
+
+* clustered vs cell type specific tfbs
+   +/home/sequencing/data/ExtData/db_5.00_07-22-2015/grsnp_db/hg19/ENCODE/
+
+####To-Do
+
+* Finish TFBS models
+* Include column for feature table for why a feature was excluded
+* Use tables instead of barplots for performance metrics
+* class imbalance barplot unnecessary, put in words
+* clean up class imbalance plot put bar underneath to categorize each technique; put x axis diagonally
+* put tad in boundary before tad not in boundary for class imbalance table
+* include venn diagram of selected features
+* create a heat map for AIC values from commonly selected features
+* look at chromosome specific models and compare
+* look at different resolutions (talk with john)
+* look at other type of transformation (inverse sine transformation)
+

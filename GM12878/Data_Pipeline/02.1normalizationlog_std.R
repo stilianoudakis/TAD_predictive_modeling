@@ -27,13 +27,13 @@ simple_roc <- function(labels, scores){
 
 #set length of list objects that will be filled in with specificities
 #and sensitivities and aucs and variable importance
-enetlst_lns <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_5kb_f$y=="Yes"))*2)*.3), 
+enetlst_ls <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_5kb_f$y=="Yes"))*2)*.3), 
                                  ncol=1),
                    fpr <- matrix(nrow=ceiling((length(which(gm12878_5kb_f$y=="Yes"))*2)*.3), 
                                  ncol=1),
                    varimp <- matrix(nrow=dim(gm12878_5kb_f)[2]-1,
                                     ncol=1))
-rownames(enetlst_lns[[3]]) <- colnames(gm12878_5kb_f)[-1]
+rownames(enetlst_ls[[3]]) <- colnames(gm12878_5kb_f)[-1]
 
 enetperf_ls <- matrix(nrow = 17, ncol=1)
 rownames(enetperf_ls) <- c("TN",
@@ -87,9 +87,9 @@ srchGrid <- expand.grid(.alpha=alpha.grid, .lambda=lambda.grid)
   pred.eNetModel <- as.vector(predict(eNetModel, 
                                       newdata=test, 
                                       type="prob")[,"Yes"])
-  enetlst_lns[[1]]<- simple_roc(ifelse(test$y=="Yes",1,0),pred.eNetModel)[,1]
-  enetlst_lns[[2]] <- simple_roc(ifelse(test$y=="Yes",1,0),pred.eNetModel)[,2]
-  enetlst_lns[[3]] <- varImp(eNetModel)$importance[,1]
+  enetlst_ls[[1]]<- simple_roc(ifelse(test$y=="Yes",1,0),pred.eNetModel)[,1]
+  enetlst_ls[[2]] <- simple_roc(ifelse(test$y=="Yes",1,0),pred.eNetModel)[,2]
+  enetlst_ls[[3]] <- varImp(eNetModel)$importance[,1]
   
 #Prediction vector for other performance metrics
   pred.enetModel2 <- predict(eNetModel,
@@ -120,7 +120,7 @@ srchGrid <- expand.grid(.alpha=alpha.grid, .lambda=lambda.grid)
   
 
 
-saveRDS(enetlst_lns, "enetlst_lns.rds")
+saveRDS(enetlst_ls, "enetlst_ls.rds")
 saveRDS(enetperf_ls, "enetperf_ls.rds")
 
 

@@ -21,16 +21,16 @@ library(leaps)
 setwd("/home/stilianoudakisc/TAD_data_analysis/final_models/")
 
 
-gm12878_10kb <- readRDS("gm12878_10kb.rds")
+gm12878_5kb <- readRDS("gm12878_5kb.rds")
 
 #set tuning parameters
-fitControl <- trainControl(method = "repeatedcv",
-                           number = 10,
-                           ## Estimate class probabilities
-                           classProbs = TRUE,
-                           ## Evaluate performance using 
-                           ## the following function
-                           summaryFunction = twoClassSummary)
+#fitControl <- trainControl(method = "cv",
+#                           number = 10,
+#                           ## Estimate class probabilities
+#                           classProbs = TRUE,
+#                           ## Evaluate performance using 
+#                           ## the following function
+#                           summaryFunction = twoClassSummary)
 						   
 #function for roc curves
 simple_roc <- function(labels, scores){
@@ -42,16 +42,16 @@ simple_roc <- function(labels, scores){
 						   
 #set length of list objects that will be filled in with specificities
 #and sensitivities and aucs and variable importance
-glmlst <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_10kb$y=="Yes"))*2)*.3), 
+glmlst <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_5kb$y=="Yes"))*2)*.3), 
                               ncol=1),
-                fpr <- matrix(nrow=ceiling((length(which(gm12878_10kb$y=="Yes"))*2)*.3), 
+                fpr <- matrix(nrow=ceiling((length(which(gm12878_5kb$y=="Yes"))*2)*.3), 
                               ncol=1),
-                varimp <- matrix(nrow=dim(gm12878_10kb)[2]-1,
+                varimp <- matrix(nrow=dim(gm12878_5kb)[2]-1,
                                  ncol=1),
-				coefs <- matrix(nrow=dim(gm12878_10kb)[2]-1,
+				coefs <- matrix(nrow=dim(gm12878_5kb)[2]-1,
 									ncol=1))
-rownames(glmlst[[3]]) <- colnames(gm12878_10kb)[-1]
-rownames(glmlst[[4]]) <- colnames(gm12878_10kb)[-1]				 
+rownames(glmlst[[3]]) <- colnames(gm12878_5kb)[-1]
+rownames(glmlst[[4]]) <- colnames(gm12878_5kb)[-1]				 
 								 
 glmperf <- matrix(nrow = 17, ncol=1)
 rownames(glmperf) <- c("TN",
@@ -75,7 +75,7 @@ rownames(glmperf) <- c("TN",
 
 #Performing MLR
 
-data <- gm12878_10kb
+data <- gm12878_5kb
   
   set.seed(123)
   #splitting the data

@@ -24,26 +24,27 @@ library(leaps)
 
 setwd("/home/stilianoudakisc/TAD_data_analysis/final_models/")
 
-#chromosome 1 filtered/log transformed/no standardization/forward selection
 
-gm12878_10kb_reduced <- readRDS("gm12878_10kb_reduced.rds")
+gm12878_5kb_reduced <- readRDS("gm12878_5kb_reduced.rds")
 
 ### set number of bootstrap samples
 
 
 bootsamps = 5
 
-### set tuning parameters
-
-
-fitControl <- trainControl(method = "repeatedcv",
-                           number = 10,
+#set tuning parameters
+fitControl <- trainControl(method = "cv",
                            ## Estimate class probabilities
                            classProbs = TRUE,
                            ## Evaluate performance using 
                            ## the following function
                            summaryFunction = twoClassSummary)
 						   
+#set up grid of alpha and lambda values
+lambda.grid = 10^seq(2,-2,length=100)
+alpha.grid = seq(0,1,length=10)
+srchGrid <- expand.grid(.alpha=alpha.grid, .lambda=lambda.grid)
+					   
 #### function for roc curves
 
 simple_roc <- function(labels, scores){
@@ -57,15 +58,15 @@ simple_roc <- function(labels, scores){
 ##the number of columns match the number of bootstrap samples
 
 sampids <- matrix(ncol=bootsamps, 
-                  nrow=length(gm12878_10kb_reduced$y[which(gm12878_10kb_reduced$y=="Yes")]))
+                  nrow=length(gm12878_5kb_reduced$y[which(gm12878_5kb_reduced$y=="Yes")]))
 
 
 ###filling in the sample ids matrix
 
 set.seed(123)
 for(j in 1:bootsamps){
-  sampids[,j] <- sample(which(gm12878_10kb_reduced$y=="No"),
-                        length(which(gm12878_10kb_reduced$y=="Yes")),
+  sampids[,j] <- sample(which(gm12878_5kb_reduced$y=="No"),
+                        length(which(gm12878_5kb_reduced$y=="Yes")),
                         replace = TRUE)
 }
 
@@ -77,16 +78,16 @@ for(j in 1:bootsamps){
 
 #set length of list objects that will be filled in with specificities
 #and sensitivities and aucs and variable importance
-enetlst <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_10kb_reduced$y=="Yes"))*2)*.3), 
+enetlst <- list(tpr <- matrix(nrow=ceiling((length(which(gm12878_5kb_reduced$y=="Yes"))*2)*.3), 
                                   ncol=bootsamps),
-                    fpr <- matrix(nrow=ceiling((length(which(gm12878_10kb_reduced$y=="Yes"))*2)*.3), 
+                    fpr <- matrix(nrow=ceiling((length(which(gm12878_5kb_reduced$y=="Yes"))*2)*.3), 
                                   ncol=bootsamps),
-                    varimp <- matrix(nrow=dim(gm12878_10kb_reduced)[2]-1,
+                    varimp <- matrix(nrow=dim(gm12878_5kb_reduced)[2]-1,
                                      ncol=bootsamps),
-					coefs <- matrix(nrow=dim(gm12878_10kb_reduced)[2]-1,
+					coefs <- matrix(nrow=dim(gm12878_5kb_reduced)[2]-1,
 									ncol=bootsamps))
-rownames(enetlst[[3]]) <- colnames(gm12878_10kb_reduced)[-1]
-rownames(enetlst[[4]]) <- colnames(gm12878_10kb_reduced)[-1]
+rownames(enetlst[[3]]) <- colnames(gm12878_5kb_reduced)[-1]
+rownames(enetlst[[4]]) <- colnames(gm12878_5kb_reduced)[-1]
 
 enetperf <- matrix(nrow = 17, ncol=bootsamps)
 rownames(enetperf) <- c("TN",
@@ -110,8 +111,8 @@ rownames(enetperf) <- c("TN",
 for(i in 1:bootsamps){
   set.seed(7215)
   #combining the two classes to create balanced data
-  data <- rbind.data.frame(gm12878_10kb_reduced[which(gm12878_10kb_reduced$y=="Yes"),],
-                           gm12878_10kb_reduced[sampids[,i],])
+  data <- rbind.data.frame(gm12878_5kb_reduced[which(gm12878_5kb_reduced$y=="Yes"),],
+                           gm12878_5kb_reduced[sampids[,i],])
   
   
   inTrainingSet <- sample(length(data$y),floor(length(data$y)*.7))
@@ -125,8 +126,8 @@ for(i in 1:bootsamps){
                      metric="ROC", 
                      trControl = fitControl, 
                      family="binomial", 
-                     tuneLength=5,
-                     standardize=FALSE)
+                     tuneGrid=srchGrid,
+                     standardize=TRUE)
   
   #Prediction vector for ROC and AUC					  
   pred.enetModel <- as.vector(predict(eNetModel, 
