@@ -70,9 +70,20 @@ knitr::opts_chunk$set(echo = TRUE)
 + class imbalance barplot unnecessary, put in words
 * clean up class imbalance plot put bar underneath to categorize each technique; put x axis diagonally
 * put tad in boundary before tad not in boundary for class imbalance table
-* include venn diagram of selected features
++ include venn diagram of selected features
 * create a heat map for AIC values from commonly selected features
 + look at chromosome specific models and compare
 * look at different resolutions (talk with john)
 + look at other type of transformation (inverse sine transformation)
+
+
+## 09/19/18
+
++ split feature list into distance then counts
+* run mlr/lasso without distances to compare with mourad
+* find out how to obtain consensus tree from random forest
++ do we need distance?
++ look at models with just counts vs just distance; compare
+
+
 
