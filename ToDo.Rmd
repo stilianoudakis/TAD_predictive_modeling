@@ -86,4 +86,8 @@ knitr::opts_chunk$set(echo = TRUE)
 + look at models with just counts vs just distance; compare
 
 
+## 09/19/18
 
++ compare between mourad model and our pipeline at each step (full data vs balanced; distance vs no distance features)
+   - lasso to lasso
+   - mlr to mlr
