@@ -80,7 +80,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## 09/19/18
 
 + split feature list into distance then counts
-* run mlr/lasso without distances to compare with mourad
++ run mlr/lasso without distances to compare with mourad
 * find out how to obtain consensus tree from random forest
 + do we need distance?
 + look at models with just counts vs just distance; compare
