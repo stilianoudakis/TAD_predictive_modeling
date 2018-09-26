@@ -1,7 +1,7 @@
 What balancing technique performs best?,,,,,,,,,,,,
 ,MLR,,,,,,LASSO,,,,,
-,,SMOTE,,,,Random Undersampling,,SMOTE,,,,Random Undersampling
-,Unbalanced,100/200,200/200,300/200,400/200,25 Iterations,Unbalanced,100/200,200/200,300/200,400/200,25 Iterations
+,Unbalanced,SMOTE,,,,Random Undersampling (25 Iterations),Unbalanced,SMOTE,,,,Random Undersampling (25 Iterations)
+Metric,,100/200,200/200,300/200,400/200,,,100/200,200/200,300/200,400/200,
 TN,151203,98661,113257,118858,121304,6278.44,151235,87068,102536,109149,112429,5452.24
 FN,9647,1856,2908,3429,3677,1878.16,9664,1443,2230,2714,3006,1411.2
 FP,47,52711,38115,32514,30068,3252.56,15,64304,48836,42223,38943,4078.76
