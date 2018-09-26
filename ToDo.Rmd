@@ -91,3 +91,9 @@ knitr::opts_chunk$set(echo = TRUE)
 + compare between mourad model and our pipeline at each step (full data vs balanced; distance vs no distance features)
    - lasso to lasso
    - mlr to mlr
+   
+## 09/24/18
+
++ consider inverse normal distribution as another normalization technique
+   - understand conceptually what is happening
+
