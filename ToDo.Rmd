@@ -103,8 +103,8 @@ knitr::opts_chunk$set(echo = TRUE)
 + reformat table1 into asking question how bad in unbalanced data
  + question 1 should be how severe is unbalanced data?
     - distance not needed here
-* consider standardizing data prior to modeling
-* is scaling important
++ consider standardizing data prior to modeling
++ is scaling important
  +just percent
  +just dist
  +both unscaled
