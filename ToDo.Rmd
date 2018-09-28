@@ -97,3 +97,17 @@ knitr::opts_chunk$set(echo = TRUE)
 + consider inverse normal distribution as another normalization technique
    - understand conceptually what is happening
 
+## 09/24/18
+
++ disregard count overlaps and use binary overlap with percent overlap if partial
++ reformat table1 into asking question how bad in unbalanced data
+ + question 1 should be how severe is unbalanced data?
+    - distance not needed here
+* consider standardizing data prior to modeling
+* is scaling important
+ +just percent
+ +just dist
+ +both unscaled
+ +both scaled
+
+
