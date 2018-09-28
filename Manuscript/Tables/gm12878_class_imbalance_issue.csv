@@ -1,4 +1,4 @@
-Is class imbalance an issue?,,,,,,,,,,,,
+Question 1: Is class imbalance an issue?,,,,,,,,,,,,
 ,Unbalanced & Unfiltered,,,,Unbalanced & Filtered,,,,Balanced (random under-sampling) & Filtered,,,
 ,MLR,,LASSO,,MLR,,LASSO,,MLR,,LASSO,
 Metric,Mourad,Ours,Mourad,Ours,Mourad,Ours,Mourad,Ours,Mourad,Ours,Mourad,Ours
