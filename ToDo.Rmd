@@ -109,5 +109,14 @@ knitr::opts_chunk$set(echo = TRUE)
  +just dist
  +both unscaled
  +both scaled
+ 
+ 
+## 09/24/18
+
++ add standardization part to question 4 table
++ question 6: which variable selection technique?
++ perform scaling with transformation
+
+
 
 
