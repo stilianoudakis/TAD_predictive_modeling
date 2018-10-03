@@ -119,4 +119,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
+## 10/01/18
+
+* read up on random forest 
+   - investigate how to get final decision tree
+   - how variable importance is calculated
++ write about answers not questions; make headers as answers not questions
++ investigate how many iterations are necessary for under sampling
+   - plot it
+* investigate svm & neural networks & naiive bayes
+
+
 
