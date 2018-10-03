@@ -129,5 +129,9 @@ knitr::opts_chunk$set(echo = TRUE)
    - plot it
 * investigate svm & neural networks & naiive bayes
 
+## 10/03/18
+
+* pose additional question, does doing multiple iterations of sampling improve model performance
+* can we prove that the performance (f1 score & variables selected) is stable over multiple iterations
 
 

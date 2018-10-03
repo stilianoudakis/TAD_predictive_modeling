@@ -91,12 +91,12 @@ A total of 9048 topologically associating domains and their genomic locations we
 
 ## Balancing Classes Improves Performance
 
-It was found that the multiple logistic regression models utilizing random over and under-sampling out-performed the other techniques and were comparatively similar with F1 scores of 0.636 and 0.637 respectively. The under-technique was evaluated over 13 iterations, while the over-sampling technique took far more iterations for the cumulative mean F1 score to converge, X to be exact. Given that and the fact that the under-sampling technique uses significantly less data than the over-sampling, while still performing at the same level, it was concluded that this was the best balancing technique and used in further analyses.
+It was found that the multiple logistic regression models utilizing random over and under-sampling out-performed the other techniques and were comparatively similar with F1 scores of 0.636 and 0.637 respectively. The under- sampling technique was evaluated over 13 iterations, while the over-sampling technique took far more iterations for the cumulative mean F1 score to converge, 26 to be exact. Given that and the fact that the under-sampling technique uses significantly less data than the over-sampling, while still performing at the same level, it was concluded that this was the best balancing technique and used in further analyses.
 
 ## Incorporating Distance Predictors Improves Performance
 
 The multiple logistic regression model with only distance predictors, evaluated on multiple iterations of random under-sampling was found to improve model performance from 0.637 (using only overlap predictors) to 0.747. Furthermore, the multiple logistic regression model with both types of predictors further improved model performance by raising the F1 score to 0.753. This suggested that the distance predictors were more representative of the association between the genomic elements and TAD boundaries. However, on a genomic scale, distances from the bins to the nearest region defined by a respective genomic element were highly right skewed. We evaluated three tranformations in order to normalize the distance predictors and improve model performance. Out of the three normalization techniques, the multiple logistic regression model with an inverse normal transformation on the distance predictors was found to perform the best with an F1 score of 0.747. 
 
-## 
+## X Classification Algorithm Provides Best Performance
 
 # DISCUSSION
