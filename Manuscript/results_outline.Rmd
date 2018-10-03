@@ -68,24 +68,30 @@ knitr::opts_chunk$set(echo = TRUE)
    + What we compared our models to
    
 # Results
+
+* Summary of data
+   + How many TADs
+   + How many genomic bins
+   + What genomic elements were used
+
+* Results of class imbalance
+   + which technique performed best?
    
-* GM12878 Resuts
-   + How many total genomic bins
-   + How many total TADs
-      - Summary stats for lengths of TADs
-   + Total number of features 
-      - Summary stats for both counts and distance features
-      - Which features were removed for near zero variance
-   + Normalization Techniques
-   + Class balancing techniques
-   + Variable selection techniques
-   + Final Models
-      - Mourad Models (MLR & LASSO)
-      - Models using distance/counts features with out pipeline (MLR & LASSO)
-      - Elastic-Net using processed data
-      - Comparisons
-* Validate results using K562 cell line
-* Validate results using TFBS cell line
+* Results for including distance predictors?
+   + results for model with just distance
+   + results for model with both types
+   + compare 
+   + results from normalization techniques
+
+* Results from classification algorithms
+   + MLR
+   + LASSO
+   + ENET
+   + RF
+   + GBM
+   + SVM 
+   + Naiive Bayes
+   + Compare
 
 # Discussion
 
