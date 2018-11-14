@@ -112,11 +112,11 @@ Once a system was defined, a random forest algorithm was performed. Letting |X| 
 
 #RESULTS
 
+##ENSEMBLE COMPARISONS
+
 In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets obtained using the arrowhead algorithm for the Juicer toolbox developed by Rao et al, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4x3x2x4) separate models.
 
 After binning the genome at 5kb, 25kb, 50kb, and 10kb intervals there were a total of 44948, 9042, 4541, and 2279 genomic bins created respectively. Figure 4 illustrates the class imbalance problem present in each data resolution. Likewise, we see the apparent decrease in data points (bins) as resolution increases. Furthermore, Table 1 shows that for each class balancing technique, perfectly balanced classes were created.
-
-##ENSEMBLE COMPARISONS
 
 ###DISTANCE PREDICTORS IMPROVE MODEL PERFORMANCE IN ALL RESOLUTIONS
 
@@ -124,10 +124,13 @@ Figures 4-7 present the results across all of the ensemble systems for each reso
 
 ###CLASS BALANCING IMPROVES MODEL PERFORMANCE IN ALL RESOLUTIONS
 
-Moving down the rows in each of Figures 4-7 we see that model performance was markedly improved among the F1-scores and MCCs after creating balanced classes compared to the results using no re-sampling. For each of the resolutions, we see that random under-sampling and SMOTE re-sampling techniques performed very similarly, while random over-sampling performed poorly in comparison. Furthermore, we see that the elastic-net reduction technique outperformed the LASSO. Although, the disparity became less evident as the resolution increased.
+Moving down the rows in each of Figures 4-7 we see that model performance was markedly improved among the F1-scores and MCCs after creating balanced classes compared to the results using no re-sampling. For each of the resolutions, we see that random under-sampling and SMOTE re-sampling techniques performed very similarly, while random over-sampling performed poorly in comparison. Furthermore, we see that the elastic-net reduction technique outperformed the LASSO. Although, the disparity became less evident as the resolution increased. Specific ensemble results can be found in Supplement Tables X-X.
 
 ###PERFORMANCES BECOME INVARIANT AS RESOLUTION INCREASES
 
+Figure 8 compares the results of random forest models using distance-type predictors, with elastic-net regularization, over 50 iterations of random under-sampling, across each domain data resolution. We see that the results for F1-scores are relatively stable between 5kb, 25kb, and 50kb resolutions with a sharp decrease for the 100kb resolution. Furthermore, the decrease in performance is more evident and steady across accuracy, AUC, and MCC metrics.
+
+To identify the functional genomic elements that were most predictive of TAD boundaries, we analyzed the variable importance produced by each random forest algorithm. Figure 9 presents the scaled importance plots of the top 15 most predictive genomic elements for each resolution. We see that for the 5kb resolution, the most predictive elements include insulator proteins, DNase hypersensitive sites, the transcription factor CTCF, as well as histone modifications H3k9ac, H2az, and H3k4me2. These results align with what is seen in the literature. Although, the insulator protein is featured as a top predictor in 2 of the other 3 resolutions, the rest of the predictors are less consistent among each other and less in agreement with the literature. The results from Figure 8 and 9 confirm that the model results appear to degrade as resolution increases with respect to both prediction and the identification of genomic elements associated with TAD boundaries.
 
 
 
