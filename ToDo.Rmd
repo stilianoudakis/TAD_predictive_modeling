@@ -134,4 +134,18 @@ knitr::opts_chunk$set(echo = TRUE)
 * pose additional question, does doing multiple iterations of sampling improve model performance
 * can we prove that the performance (f1 score & variables selected) is stable over multiple iterations
 
+## 10/05/18
 
+* does random forest sufffer on imbalanced data?
+* use maximum instead of mean when determining cutoff of iterations
+* find out if there is a convergence algorthim to decide point of convergence
+   + look at 0.001 or 0.0001 for now
+* look at AIC/BIC for potential cutoff
+* run anova test to determine if two models are different at different iterations
+* look into using c-index as performance metric
+* create heatmap of variable importance from different models
+
+## 11/09/18
+
+*stick with elastic net (compare with all others)
+*look at correlations
