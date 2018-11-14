@@ -33,6 +33,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Prediction, general
 
+- Dubey, Rashmi, Jiayu Zhou, Yalin Wang, Paul M. Thompson, Jieping Ye, and Alzheimer’s Disease Neuroimaging Initiative. “Analysis of Sampling Techniques for Imbalanced Data: An n = 648 ADNI Study.” NeuroImage 87 (February 15, 2014): 220–41. https://doi.org/10.1016/j.neuroimage.2013.10.005. - Class imbalance testing. Various sampling techniques (over-/undersampling, SMOTE), six feature selection algorithms, ensemble feature selection using RF and SVM. K-medoids undersampling is optimal. Description of existing approaches. Systematic framework to evaluate various combinations of F (feature selections algorithms) x S (set of class-imbalance handling approaches) x C ( classifiers). k-fold cross-validation to avoid bias due to random sampling.
+
 - Lunardon, Nicola, Giovanna Menardi, and Nicola Torelli. “ROSE: A Package for Binary Imbalanced Learning.” R Journal 6, no. 1 (2014). - ROSE - R package for over-/undersampling. Menardi and Torelli reference to read. https://cran.r-project.org/web/packages/ROSE/index.html
 
 - Zhang, Ruochi, Yuchuan Wang, Yang Yang, Yang Zhang, and Jian Ma. “Predicting CTCF-Mediated Chromatin Loops Using CTCF-MP.” Bioinformatics 34, no. 13 (July 1, 2018): i133–41. https://doi.org/10.1093/bioinformatics/bty248. - CTCF-MP - boosted tree classifier for loop prediction from sequence-level features (word2vec, deep autoencoder to compress the 200-dimensional space to 32 dimensions, then tSNE mapping to 2D), CTCF ChIP-seq and DNAse-seq data. Convergent CTCF sites are important. Best prediction of common loops, little worse cell-type-specific. Imbalanced dataset performed well. https://github.com/ma-compbio/CTCF-MP
