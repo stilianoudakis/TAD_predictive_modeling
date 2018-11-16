@@ -1,151 +1,34 @@
----
-title: "To Do List"
-author: "Spiro Stilianoudakis"
-date: "September 4, 2018"
-output: pdf_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# 11/15/18
 
-## 09/07/18
-
-####To-Do
-+ use width in base pairs as type of feature instead of counts of overlap
-   - distance and width in base pairs of overlap as features
-+ finish introduction, start on methods
-
-## 09/10/18
-
-####Questions 
-
-* Should we use elastic-net and RF as final models or just one or the other?
-* In results section should we compare between mourad models visually or verbally or none at all?
-   + visually and verbally
-   + AUROCs, F1 and MCC
-* I've mentioned other methods in intro, it will be hard to compare to the others; how to handle this?
-* Hong et al uses TFBS should I also include them?
-   + use tfbs encode clustered (in separate model)
-* How to handle k562
-   +1 unit bin, 1unit flank (10 kb; 20kb)
+- perform models without variable reduction and compare
+- investigate whether or not variable reduction should occur before or after balancing 
+- use tfbs encode clustered in separate model (/home/sequencing/data/ExtData/db_5.00_07-22-2015/grsnp_db/hg19/ENCODE/)
+- revisit comparing results with mourad
+- Apply ensemble to other cell lines cell line
+- GBM
+- SVM
+- Naive Bayes
+- neural network
+- MLR
+- Elastic-Net (if decide not to use variable reduction)
+- look at chromosome specific models and compare
+- find out how to obtain consensus tree from random forest
+- look at distributions of overlap counts and percents predictors
+- understand how variable importance is calculated for any and all algorithms
+- look at correlations amoung predictors for each type
 
 
-####To-Do
-
-+ Make a bullet pointed list for manuscript
-+ Apply RF, GBM, SVM (later), MLR using our features
-+ Finish Methods
-+ Finish running code applied to 100 iterations of undersampling
-+ Apply pipeline to K562 cell line
 
 
-## 09/10/18
-
-####Questions 
-
-* Should figures be placed in back of paper (in Appendix section)?
-* Line 60 of manuscript: Check for accuracy?
-
-####To-Do
-
-+ in table with total features put (*) for removed then state why
-+ order figures and create legends
-* Finish results outline
-* Finish results manuscript
 
 
-## 09/17/18
-
-####Questions 
-
-* clustered vs cell type specific tfbs
-   +/home/sequencing/data/ExtData/db_5.00_07-22-2015/grsnp_db/hg19/ENCODE/
-
-####To-Do
-
-* Finish TFBS models
-+ Include column for feature table for why a feature was excluded
-+ Use tables instead of barplots for performance metrics
-+ class imbalance barplot unnecessary, put in words
-* clean up class imbalance plot put bar underneath to categorize each technique; put x axis diagonally
-* put tad in boundary before tad not in boundary for class imbalance table
-+ include venn diagram of selected features
-* create a heat map for AIC values from commonly selected features
-+ look at chromosome specific models and compare
-* look at different resolutions (talk with john)
-+ look at other type of transformation (inverse sine transformation)
 
 
-## 09/19/18
-
-+ split feature list into distance then counts
-+ run mlr/lasso without distances to compare with mourad
-* find out how to obtain consensus tree from random forest
-+ do we need distance?
-+ look at models with just counts vs just distance; compare
-
-
-## 09/19/18
-
-+ compare between mourad model and our pipeline at each step (full data vs balanced; distance vs no distance features)
-   - lasso to lasso
-   - mlr to mlr
-   
-## 09/24/18
-
-+ consider inverse normal distribution as another normalization technique
-   - understand conceptually what is happening
-
-## 09/24/18
-
-+ disregard count overlaps and use binary overlap with percent overlap if partial
-+ reformat table1 into asking question how bad in unbalanced data
- + question 1 should be how severe is unbalanced data?
-    - distance not needed here
-+ consider standardizing data prior to modeling
-+ is scaling important
- +just percent
- +just dist
- +both unscaled
- +both scaled
  
- 
-## 09/24/18
-
-+ add standardization part to question 4 table
-+ question 6: which variable selection technique?
-+ perform scaling with transformation
 
 
 
-## 10/01/18
 
-* read up on random forest 
-   - investigate how to get final decision tree
-   - how variable importance is calculated
-+ write about answers not questions; make headers as answers not questions
-+ investigate how many iterations are necessary for under sampling
-   - plot it
-* investigate svm & neural networks & naiive bayes
 
-## 10/03/18
 
-* pose additional question, does doing multiple iterations of sampling improve model performance
-* can we prove that the performance (f1 score & variables selected) is stable over multiple iterations
-
-## 10/05/18
-
-* does random forest sufffer on imbalanced data?
-* use maximum instead of mean when determining cutoff of iterations
-* find out if there is a convergence algorthim to decide point of convergence
-   + look at 0.001 or 0.0001 for now
-* look at AIC/BIC for potential cutoff
-* run anova test to determine if two models are different at different iterations
-* look into using c-index as performance metric
-* create heatmap of variable importance from different models
-
-## 11/09/18
-
-*stick with elastic net (compare with all others)
-*look at correlations
