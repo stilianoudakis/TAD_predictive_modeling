@@ -51,4 +51,5 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 - Turki, Turki, and Zhi Wei. “Boosting Support Vector Machines for Cancer Discrimination Tasks.” Computers in Biology and Medicine 101 (October 1, 2018): 236–49. https://doi.org/10.1016/j.compbiomed.2018.08.006. - Boosting SVM outperforms regular SVM and xgboost. Three versions of the algorithm. Tested on cancer datasets. An example which metrics to use for classifier performance evaluation, and how to describe and present the results in tables (figures are bad).
 
+- Drummond, Chris, Robert C Holte, and others. “C4. 5, Class Imbalance, and Cost Sensitivity: Why under-Sampling Beats over-Sampling.” In Workshop on Learning from Imbalanced Datasets II, 11:1–8, 2003. - a reference demonstrating that undersampling is better than oversampling in class imbalance problem
 
