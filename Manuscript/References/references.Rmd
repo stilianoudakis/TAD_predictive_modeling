@@ -3,7 +3,7 @@ title: "References"
 author: "Spiro Stilianoudakis"
 date: "September 4, 2018"
 output: pdf_document
-bibliography: C:/Users/Spiro Stilianoudakis/Documents/TAD_data/references/references.bib
+bibliography: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/References
 ---
 
 ```{r setup, include=FALSE}
