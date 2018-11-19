@@ -1,0 +1,4 @@
+,Complete,Training,Testing,No Balancing,Random Under-Sampling,Random Over-Sampling,SMOTE
+With TAD boundary,621,431,190,431,431,2747,862
+Without TAD boundary,3920,2747,1173,2747,431,2747,862
+Total,4541,3178,1363,3178,862,5494,1724

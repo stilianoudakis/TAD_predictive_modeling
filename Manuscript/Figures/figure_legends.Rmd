@@ -1,0 +1,19 @@
+---
+title: "Legends for Figures"
+author: "Spiro Stilianoudakis"
+date: "November 19, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Figure 1: Model Construction
+
+Diagram of the model construction used for downstream analysis. The linear genome was binned according to the resolution of the respective HiC experiment (either 5kb, 25kb, 50kb, or 100kb intervals). TAD boundaries were then flanked by 1-unit on either side of the boundary point. The unit flanking was indicative of the resolution that the domain data was obtained from (i.e. for 5kb resolution, 1 unit represents 5kb for a total flanking region of 10kb). The response vector Y used for classification was determined by whether or not a genomic bin overlapped with a flanked region. The positional coordinates of each functional genomic element, obtained from ENCODE, were then used to define the feature space of the models.
+
+# Figure 2: Predictor Types 
+
+Diagram of the 3 predictor types considered when assessing the relationship between TAD boundaries and functional genomic elements. Each predictor type was used as the feature space in downstream analyses for predicting which functional genomic elements were associated with the formation of TAD boundaries. Featured above are bin-specific examples of the construction of each predictor type. (Left) The overlap count (OC) predictors were calculated by considering the total number of elemental regions that overlapped with each genomic bin. (Middle) The overlap percent (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin and dividing by the total bin width (either 5, 25, 50, or 100 kilobases given resolution of boundary data). (Right) The distance predictors were calculated by measuring the distance (in base pairs) from the center of each genomic bin to the center of the nearest elemental region of interest. The two green segments directly below the rightmost enlarged figure represent the center of the overlapping regions defining the respective functional genomic element.
+

@@ -1,0 +1,66 @@
+List of Genomic Elements,,,
+Genomic Class,Genomic Element,,Source
+3D Subcompartments,A,,ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_GM12878_subcompartments.bed.gz
+,B,,ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_GM12878_subcompartments.bed.gz
+Genomic Variants,Complex,,http://dgv.tcag.ca/dgv/app/home
+,Deletion,,http://dgv.tcag.ca/dgv/app/home
+,Duplication,,http://dgv.tcag.ca/dgv/app/home
+,Gain Loss,,http://dgv.tcag.ca/dgv/app/home
+,Insertion,,http://dgv.tcag.ca/dgv/app/home
+,Inversion,,http://dgv.tcag.ca/dgv/app/home
+,Mobile Element Insertion,,http://dgv.tcag.ca/dgv/app/home
+,Novel Sequence Insertion,,http://dgv.tcag.ca/dgv/app/home
+,Sequence Alteration,,http://dgv.tcag.ca/dgv/app/home
+,Tandem Duplication,,http://dgv.tcag.ca/dgv/app/home
+Evolutionary Constrained Sites,GERP,,http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html
+Ultra-Conserved Non-coding Elements,UCNE,,https://ccg.vital-it.ch/
+Variably Methylated Regions,VMR,,https://epigenome.wustl.edu/methylomes/vmr.php
+Super Enhancers,SE,,http://asntech.org/dbsuper/
+Nested Repeats,DNA,,http://genome.ucsc.edu/ENCODE/
+,LINE,,http://genome.ucsc.edu/ENCODE/
+,Low Complexity,,http://genome.ucsc.edu/ENCODE/
+,LTR,,http://genome.ucsc.edu/ENCODE/
+,Other,,http://genome.ucsc.edu/ENCODE/
+,RC,,http://genome.ucsc.edu/ENCODE/
+,RNA,,http://genome.ucsc.edu/ENCODE/
+,rRNA,,http://genome.ucsc.edu/ENCODE/
+,Satellite,,http://genome.ucsc.edu/ENCODE/
+,scRNA,,http://genome.ucsc.edu/ENCODE/
+,Simple Repeat,,http://genome.ucsc.edu/ENCODE/
+,SINE,,http://genome.ucsc.edu/ENCODE/
+,snRNA,,http://genome.ucsc.edu/ENCODE/
+,srpRNA,,http://genome.ucsc.edu/ENCODE/
+,tRNA,,http://genome.ucsc.edu/ENCODE/
+,Unknown,,http://genome.ucsc.edu/ENCODE/
+Chromatin State Segmentation ,Active Promotor,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Heterochromatin,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Insulator,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Poised Promotor,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Repetative CNV,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Repressed,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Strong Enhancer,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,TXN Elongation,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,TXN Transition,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Weak Enhancer,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Weak Promotor,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,Weak TXN,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,CTCF,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,E,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,PF,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,R,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,T,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,TSS,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+,WE,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
+Dnase I Hypersensitive Sites,Dnase,,http://genome.ucsc.edu/ENCODE/
+Histone Modifications,H3kaz,,http://genome.ucsc.edu/ENCODE/
+,H3k27ac,,http://genome.ucsc.edu/ENCODE/
+,H3k27me3,,http://genome.ucsc.edu/ENCODE/
+,H3k36me3,,http://genome.ucsc.edu/ENCODE/
+,H3k4me1,,http://genome.ucsc.edu/ENCODE/
+,H3k4me2,,http://genome.ucsc.edu/ENCODE/
+,H3k4me3,,http://genome.ucsc.edu/ENCODE/
+,H3k79me2,,http://genome.ucsc.edu/ENCODE/
+,H3k9ac,,http://genome.ucsc.edu/ENCODE/
+,H3k9me1,,http://genome.ucsc.edu/ENCODE/
+,H3k9me3,,http://genome.ucsc.edu/ENCODE/
+,H4k20me1,,http://genome.ucsc.edu/ENCODE/
