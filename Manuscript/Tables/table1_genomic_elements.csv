@@ -1,66 +1,50 @@
 List of Genomic Elements,,,
-Genomic Class,Genomic Element,,Source
-3D Subcompartments,A,,ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_GM12878_subcompartments.bed.gz
-,B,,ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_GM12878_subcompartments.bed.gz
-Genomic Variants,Complex,,http://dgv.tcag.ca/dgv/app/home
-,Deletion,,http://dgv.tcag.ca/dgv/app/home
-,Duplication,,http://dgv.tcag.ca/dgv/app/home
-,Gain Loss,,http://dgv.tcag.ca/dgv/app/home
-,Insertion,,http://dgv.tcag.ca/dgv/app/home
-,Inversion,,http://dgv.tcag.ca/dgv/app/home
-,Mobile Element Insertion,,http://dgv.tcag.ca/dgv/app/home
-,Novel Sequence Insertion,,http://dgv.tcag.ca/dgv/app/home
-,Sequence Alteration,,http://dgv.tcag.ca/dgv/app/home
-,Tandem Duplication,,http://dgv.tcag.ca/dgv/app/home
-Evolutionary Constrained Sites,GERP,,http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html
-Ultra-Conserved Non-coding Elements,UCNE,,https://ccg.vital-it.ch/
-Variably Methylated Regions,VMR,,https://epigenome.wustl.edu/methylomes/vmr.php
-Super Enhancers,SE,,http://asntech.org/dbsuper/
-Nested Repeats,DNA,,http://genome.ucsc.edu/ENCODE/
-,LINE,,http://genome.ucsc.edu/ENCODE/
-,Low Complexity,,http://genome.ucsc.edu/ENCODE/
-,LTR,,http://genome.ucsc.edu/ENCODE/
-,Other,,http://genome.ucsc.edu/ENCODE/
-,RC,,http://genome.ucsc.edu/ENCODE/
-,RNA,,http://genome.ucsc.edu/ENCODE/
-,rRNA,,http://genome.ucsc.edu/ENCODE/
-,Satellite,,http://genome.ucsc.edu/ENCODE/
-,scRNA,,http://genome.ucsc.edu/ENCODE/
-,Simple Repeat,,http://genome.ucsc.edu/ENCODE/
-,SINE,,http://genome.ucsc.edu/ENCODE/
-,snRNA,,http://genome.ucsc.edu/ENCODE/
-,srpRNA,,http://genome.ucsc.edu/ENCODE/
-,tRNA,,http://genome.ucsc.edu/ENCODE/
-,Unknown,,http://genome.ucsc.edu/ENCODE/
-Chromatin State Segmentation ,Active Promotor,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Heterochromatin,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Insulator,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Poised Promotor,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Repetative CNV,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Repressed,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Strong Enhancer,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,TXN Elongation,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,TXN Transition,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Weak Enhancer,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Weak Promotor,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,Weak TXN,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,CTCF,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,E,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,PF,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,R,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,T,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,TSS,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-,WE,,http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/
-Dnase I Hypersensitive Sites,Dnase,,http://genome.ucsc.edu/ENCODE/
-Histone Modifications,H3kaz,,http://genome.ucsc.edu/ENCODE/
-,H3k27ac,,http://genome.ucsc.edu/ENCODE/
-,H3k27me3,,http://genome.ucsc.edu/ENCODE/
-,H3k36me3,,http://genome.ucsc.edu/ENCODE/
-,H3k4me1,,http://genome.ucsc.edu/ENCODE/
-,H3k4me2,,http://genome.ucsc.edu/ENCODE/
-,H3k4me3,,http://genome.ucsc.edu/ENCODE/
-,H3k79me2,,http://genome.ucsc.edu/ENCODE/
-,H3k9ac,,http://genome.ucsc.edu/ENCODE/
-,H3k9me1,,http://genome.ucsc.edu/ENCODE/
-,H3k9me3,,http://genome.ucsc.edu/ENCODE/
-,H4k20me1,,http://genome.ucsc.edu/ENCODE/
+Genomic Class,Element,Description,Source
+Genomic Variants,Complex,Regions that are highly non-repetitive,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg19
+,Deletion,Regions that are missing nucleotides relative to the reference genome ,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg20
+,Duplication,Regions that are duplicated relative to the reference genome,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg21
+,Gain Loss,Regions that have experienced either gains or losses of genetic material relative to the reference genome,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg22
+,Insertion,Regions in which a segment of a chromosome is reversed end to end,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg23
+,Inversion,"Regions where additional nucleotides have been inserted in a DNA sequence, relative to the reference genome",http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg24
+,Mobile Element Insertion,"Regions that can change its position within a genome, sometimes creating or reversing mutations",http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg25
+,Novel Sequence Insertion,,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg26
+,Sequence Alteration,Regions where an insertion of a sequence into the donor genome where no subsequence with high similarity to the inserted sequence exists in the reference genome,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg27
+,Tandem Duplication,Regions where duplication of exons within the same gene to give rise to the subsequent exon,http://dgv.tcag.ca/dgv/app/downloads?ref=GRCh37/hg28
+Evolutionary Constrained Sites,GERP,Regions of constrained elements where there exists a deficit of substitution events,http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html
+Ultra-Conserved Non-coding Elements,UCNE,Regions of ultra-conserved non-coding elements,https://ccg.vital-it.ch/
+Variably Methylated Regions,VMR,Regions with different DNA methylation status relative to a reference genome ,https://epigenome.wustl.edu/methylomes/vmr.php
+Nested Repeats,LINE,identical sequences of DNA that repeat hundreds or thousands of times found at either end of retrotransposons or proviral DNA formed by reverse transcription of retroviral RNA,http://genome.ucsc.edu/ENCODE/
+,LTR,Long terminal repetitive regions,http://genome.ucsc.edu/ENCODE/
+,SINE,Short interspersed nuclear elements,http://genome.ucsc.edu/ENCODE/
+Chromatin State Segmentation ,Active Promotor,region of DNA that initiates transcription of a particular gene,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Heterochromatin,"Regions of DNA of different density from normal (usually greater), in which the activity of the genes is modified or suppressed.",hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Insulator,Regions of DNA that prevent distal enhancers from acting on the promoter of neighbouring genes,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Poised Promotor,Promoters of transcriptionally silent developmental regulatory genes,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Repetative CNV,Regions of repetitive copy number variations,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Repressed,Regions of DNA that inhibit the expression of one or more genes by binding to the operator or associated silencers,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Strong Enhancer,Enhancers associated with highly transribed genes,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,TXN Elongation,Regions of RNA that have additional nucleotides during transcription,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,TXN Transition,Points in the DNA where a mutation has occurred that changes nucleotides between purines or pyrimidines.,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Weak Enhancer,Enhancers associated with weakly transribed genes,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Weak Promotor,Promotors associated with highly transribed genes,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,Weak TXN,Genes that are not highly transcribed,hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz
+,CTCF,CTCF enriched element,https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/
+,E,Predicted enhancer,https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/
+,PF,Predicted promoter flanking region,https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/
+,R,Predicted Repressed or Low Activity region,https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/
+,T,Predicted transcribed region,https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/
+,TSS,Predicted promoter region including TSS,https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/
+,WE,Predicted promoter region including TSS,https://hgdownload-test.gi.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeAwgSegmentation/
+Dnase I Hypersensitive Sites,Dnase,regions of chromatin that are sensitive to cleavage by the DNase Ienzyme,http://genome.ucsc.edu/ENCODE/
+Histone Modifications,H2az,"H2A.Z is a sequence variant of Histone H2A. H2AZ appears to alter nucleosome stability, is partially redundant with nucleosome remodeling complexes, and is involved in transcriptional control",http://genome.ucsc.edu/ENCODE/
+,H3k27ac,"Histone H3 (acetyl K27). As with H3K9ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.",http://genome.ucsc.edu/ENCODE/
+,H3k27me3,Histone H3 (tri-methyl K27). Marks promoters that are silenced by Polycomb proteins in a given lineage; large domains are found at inactive developmental loci.,http://genome.ucsc.edu/ENCODE/
+,H3k36me3,"Histone H3 (tri-methyl K36). Marks regions of RNAPII elongation, including coding and non-coding transcripts.",http://genome.ucsc.edu/ENCODE/
+,H3k4me1,"Histone H3 (mono methyl K4). Is associated with enhancers, and downstream of transcription starts.",http://genome.ucsc.edu/ENCODE/
+,H3k4me2,Histone H3 (di methyl K4). Marks promoters and enhancers. Most CpG islands are marked by H3K4me2 in primary cells. May be associated also with poised promoters.,http://genome.ucsc.edu/ENCODE/
+,H3k4me3,Histone H3 (tri methyl K4). Marks promoters that are active or poised to be activated.,http://genome.ucsc.edu/ENCODE/
+,H3k79me2,"H3K79me2 is a mark of the transcriptional transition region - the region between the initiation marks (K4me3, etc) and the elongation marks (K36me3).",http://genome.ucsc.edu/ENCODE/
+,H3k9ac,"Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.",http://genome.ucsc.edu/ENCODE/
+,H3k9me1,Histone H3 (mono-methyl K9). Is associated with active and accessible regions. NOTE CONTRAST to H3K9me3 which is associated with repressive heterochromatic state.,http://genome.ucsc.edu/ENCODE/
+,H3k9me3,Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.,http://genome.ucsc.edu/ENCODE/
+,H4k20me1,"Histone H4 (mono-methyl K20). Is associated with active and accessible regions. In mammals, PR-Set7 specifically catalyzes H4K20 monomethylation. NOTE CONTRAST to H3K20me3 which is associated with heterochromatin and DNA repair.",http://genome.ucsc.edu/ENCODE/
