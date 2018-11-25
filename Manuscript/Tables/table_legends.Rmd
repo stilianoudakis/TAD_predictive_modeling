@@ -13,21 +13,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The full list of genomic annotations used in downstream analyses. These annotations were the functional genomic elements used to predict the formation of TAD boundaries. They were obtained via ChIP-Seq experiments, mapped to human genome assembly hg19, and made available by the ENCODE Consortium.
 
-# Table 2: 5kb Class Distributions
+# Table 2: Class Distributions
 
-The class distributions for different re-sampling techniques from domain data obtained from 5kb resolution contact matrices.
+Summary of the class distributions for each re-sampling technique, across each resolution. All re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
 
-# Table 3: 25kb Class Distributions
+# Table 3: 5kb Model Performances
 
-The class distributions for different re-sampling techniques from domain data obtained from 25kb resolution contact matrices.
+Performance metrics comparing models using different sampling approaches for the 5kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
 
-# Table 4: 50kb Class Distributions
+# Table 4: 25kb Model Performances
 
-The class distributions for different re-sampling techniques from domain data obtained from 50kb resolution contact matrices.
+Performance metrics comparing models using different sampling approaches for the 25kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
 
-# Table 5: 100kb Class Distributions
+# Table 5: 50kb Model Performances
 
-The class distributions for different re-sampling techniques from domain data obtained from 100kb resolution contact matrices.
+Performance metrics comparing models using different sampling approaches for the 50kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
 
+# Table 6: 100kb Model Performances
 
+Performance metrics comparing models using different sampling approaches for the 100kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
 

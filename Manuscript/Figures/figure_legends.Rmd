@@ -17,3 +17,36 @@ Diagram of the model construction used for downstream analysis. The linear genom
 
 Diagram of the 3 predictor types considered when assessing the relationship between TAD boundaries and functional genomic elements. Each predictor type was used as the feature space in downstream analyses for predicting which functional genomic elements were associated with the formation of TAD boundaries. Featured above are bin-specific examples of the construction of each predictor type. (Left) The overlap count (OC) predictors were calculated by considering the total number of elemental regions that overlapped with each genomic bin. (Middle) The overlap percent (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin and dividing by the total bin width (either 5, 25, 50, or 100 kilobases given resolution of boundary data). (Right) The distance predictors were calculated by measuring the distance (in base pairs) from the center of each genomic bin to the center of the nearest elemental region of interest. The two green segments directly below the rightmost enlarged figure represent the center of the overlapping regions defining the respective functional genomic element.
 
+# Figure 3: Ensemble Framework/Model Building Pipeline
+
+A diagram of the model building pipeline given an a combination of inputs from the ensemble framework. The data was split into a 7:3 training set to testing set ratio, the variable reduction technique of choice was implemented, and a random forest classification algorithm was performed. Each model was then validated on the same testing set. 
+
+# Figure 4: Class Imbalance
+
+Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
+
+# Figure 5: 5kb Model Performances
+
+Comparing model performances for TAD boundary data at 5kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 5kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
+
+# Figure 6: 25kb Model Performances
+
+Comparing model performances for TAD boundary data at 25kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 25kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
+
+# Figure 7: 50kb Model Performances
+
+Comparing model performances for TAD boundary data at 50kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 50kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
+
+# Figure 8: 100kb Model Performances
+
+Comparing model performances for TAD boundary data at 100kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 10
++0kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
+
+# Figure 9: Comparing Performances
+
+Comparing performances of random forest classification algorithms, across TAD boundary data at each resolution for models using distance-type predictors, with elastic-net regularization and random under-sampling. Performances were aggregated by taking the average of each metric across 50 iterations of random under-sampling.
+
+# Figure 10: Comparing Variable Importance
+
+Comparing variable importance for the top 15 most predictive functional genomic elements for each of the 4 different resolutions. The x-axis represents the standardized difference between the out-of-bag prediction accuracy after permuting each predictor variable, averaged across all trees. The greater the mean standardized difference, the more importance the predictor is to the model.
+
