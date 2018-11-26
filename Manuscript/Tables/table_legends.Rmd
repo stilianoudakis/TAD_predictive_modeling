@@ -33,3 +33,6 @@ Performance metrics comparing models using different sampling approaches for the
 
 Performance metrics comparing models using different sampling approaches for the 100kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
 
+# Table 7: Model Performances at all Resolutions
+
+Performance metrics comparing models using different sampling approaches for each of the 4 resolutions. Withing each resolution, the best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 

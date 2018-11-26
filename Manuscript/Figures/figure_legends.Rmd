@@ -50,3 +50,11 @@ Comparing performances of random forest classification algorithms, across TAD bo
 
 Comparing variable importance for the top 15 most predictive functional genomic elements for each of the 4 different resolutions. The x-axis represents the standardized difference between the out-of-bag prediction accuracy after permuting each predictor variable, averaged across all trees. The greater the mean standardized difference, the more importance the predictor is to the model.
 
+# Figure 11: Model Performances for all Resolutions
+
+Comparing model performances for TAD boundary data for all 4 resolutions. The four regions represent (from left to right; top to bottom) data at 5kb, 25kb, 50kb, and 100kb resolutions. Within each region, the rows represent the set of re-sampling techniques, while the columns represent the set of performance metrics that the models were evaluated on. Each plot compares 2 sets of models; one using LASSO regularization and one using Elastic-Net regularization. Within each set, each bar represents the performance of a model with a specific predictor type; either overlap counts (OC) in red, overlap percent (OP) in green, or distance in blue. 
+
+
+
+
+

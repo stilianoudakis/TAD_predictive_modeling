@@ -154,24 +154,69 @@ Here, TP refers to the number of bins correctly identified as containing a TAD b
 
 ##ENSEMBLE COMPARISONS
 
-In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets obtained using the arrowhead algorithm for the Juicer toolbox developed by Rao et al, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4x3x2x4) separate models.
+In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4x3x2x4) separate models.
 
-After binning the genome at 5kb, 25kb, 50kb, and 10kb intervals there were a total of 44948, 9042, 4541, and 2279 genomic bins created respectively. Figure 4 illustrates the class imbalance problem present in each data resolution. Likewise, we see the apparent decrease in data points (bins) as resolution increases. Furthermore, Table 1 shows that for each class balancing technique, perfectly balanced classes were created.
+###CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
-###DISTANCE PREDICTORS IMPROVE MODEL PERFORMANCE IN ALL RESOLUTIONS
+After binning the genome at 5kb, 25kb, 50kb, and 10kb intervals there were a total of 44948, 9042, 4541, and 2279 genomic bins created respectively. Figure 4 illustrates the class imbalance problem present in each data resolution. Likewise, we see the apparent decrease in data points (bins) as resolution increases. Furthermore, Table 1 specifically shows the class distribution for each resolution. The overall average perentage of minority classes across all data resolutions was 13.2%, with the most severe case present in the 5kb resolution (6.9%). 
 
-Figures 4-7 present the results across all of the ensemble systems for each resolution of domain data. Focusing on the top row in each of Figure 4-7, indicating no balancing, we see that the model using distance predictors, represented by the blue bars, outperformed models using the other two predictor types. However, the disparity become less evident as the resolution increased. In each of the 4 figures we see that the F1-score and MCC metrics were noticeably lower than the accuracy and AUC. This highlights the problems associated with applying predictive models to unbalanced data.
+###CLASS IMBALANCE HINDERS PERFORMANCE ACROSS RESOLUTIONS
+
+Figure 11 present the results across all of the ensemble systems for each resolution of domain data. The first row in each of the 4 regions shows the performances for models without resampling. The average accuracy and AUC were marginally high across each of the resolutions with values of W%, X%, Y%, and Z% respectively. However, the severity of the model performances were much more apparant when comparing F1-scores and MCCs. The average F1-scores across resolutions for models without resampling were found to be W%, X%, Y%, and Z% respectively, while the MCCs were W%, X%, Y%, and Z% (Supplementary Table 6). We thus see the necessity for implementing a class balancing technique prior to modeling. 
 
 ###CLASS BALANCING IMPROVES MODEL PERFORMANCE IN ALL RESOLUTIONS
 
-Moving down the rows in each of Figures 4-7 we see that model performance was markedly improved among the F1-scores and MCCs after creating balanced classes compared to the results using no re-sampling. For each of the resolutions, we see that random under-sampling and SMOTE re-sampling techniques performed very similarly, while random over-sampling performed poorly in comparison. Furthermore, we see that the elastic-net reduction technique outperformed the LASSO. Although, the disparity became less evident as the resolution increased. Specific ensemble results can be found in Supplement Tables X-X.
+Moving down the rows in each of the 4 regions of Figure 11 we see that model performance was markedly improved among the F1-scores and MCCs after creating balanced classes compared to the results using no re-sampling. For each of the resolutions, we see that random under-sampling out performed the other class balancing techniques. While SMOTE performed very similarly to RUS, ROS performed poorly in comparison, especially as the resolution of the data increased. Furthermore, we see that the elastic-net reduction technique outperformed the LASSO. Although, the disparity became less evident as the resolution increased. 
 
-###PERFORMANCES BECOME INVARIANT AS RESOLUTION INCREASES
+###DISTANCE TYPE PREDICTORS OUT-PERFORM OTHER PREDICTOR TYPES
 
-Figure 8 compares the results of random forest models using distance-type predictors, with elastic-net regularization, over 50 iterations of random under-sampling, across each domain data resolution. We see that the results for F1-scores are relatively stable between 5kb, 25kb, and 50kb resolutions with a sharp decrease for the 100kb resolution. Furthermore, the decrease in performance is more evident and steady across accuracy, AUC, and MCC metrics.
+Again referencing Figure 11, focusing on the rows corresponding to models using randomly under-sampled data, it was found that models with distance type predictors out performed models with the two other overlap types (counts and percents). The disparity between predictor types was steady across resolutions (Supplementary Table 6). The greatest difference was seen in the 5kb data. For models with Elastic-Net regularization, the F1-scores were X, Y, and Z, while the MCCs were X, Y, and Z for each predictor type respectively.
 
-To identify the functional genomic elements that were most predictive of TAD boundaries, we analyzed the variable importance produced by each random forest algorithm. Figure 9 presents the scaled importance plots of the top 15 most predictive genomic elements for each resolution. We see that for the 5kb resolution, the most predictive elements include insulator proteins, DNase hypersensitive sites, the transcription factor CTCF, as well as histone modifications H3k9ac, H2az, and H3k4me2. These results align with what is seen in the literature. Although, the insulator protein is featured as a top predictor in 2 of the other 3 resolutions, the rest of the predictors are less consistent among each other and less in agreement with the literature. The results from Figure 8 and 9 confirm that the model results appear to degrade as resolution increases with respect to both prediction and the identification of genomic elements associated with TAD boundaries.
+###PERFORMANCES WORSEN AS RESOLUTION INCREASES
+
+Figure 9 compares the results of random forest models using distance-type predictors, with elastic-net regularization, and random under-sampling, across each domain data resolution. We see that the results for F1-scores are relatively stable between 5kb, 25kb, and 50kb resolutions with a sharp decrease for the 100kb resolution. Furthermore, the decrease in performance is more evident and steady across accuracy, AUC, and MCC metrics.
+
+###5kb RESOULTION DATA PROVIDES MOST ACCURATE ACCURATE RESULTS
+
+To identify the functional genomic elements that were most predictive of TAD boundaries, we analyzed the variable importance produced by each random forest algorithm. Figure 10 presents the subsequent scaled importance plots of the top 15 most predictive genomic elements for each model presented in Figure 9. We see that for the 5kb resolution, the most predictive elements include insulator proteins, DNase hypersensitive sites, the transcription factor CTCF, as well as histone modifications H3k9ac, H2az, and H3k4me2. These results align with what is seen in the literature. Although, the insulator protein is featured as a top predictor in 2 of the other 3 resolutions, the rest of the predictors are less consistent among each other and less in agreement with the literature. The results from Figure 9 and 10 confirm that the model results appear to degrade as resolution increases with respect to both prediction and the identification of genomic elements associated with TAD boundaries.
 
 
+#Discussion
+
+
+
+# Abbreviations
+
+
+
+# Acknowledgements
+
+_Conflict of Interest._ None.
+
+# Funding
+
+
+
+# Tables
+
+
+
+# Figures
+
+
+
+# Table Legends
+
+
+
+# Figure legends
+
+
+
+# Supplementary material
+
+
+
+# References
 
 
