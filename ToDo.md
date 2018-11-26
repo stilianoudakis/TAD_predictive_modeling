@@ -1,4 +1,6 @@
 
+##11/26/18
+- implement jaccard index as performance metric
 
 
 + make sure what kb resolution Mourad model uses; where/how was it obtained
