@@ -35,3 +35,9 @@ knitr::opts_chunk$set(echo = TRUE)
 [-@dixon2012topological]
 
 [-@chawla2002smote]
+
+[-@estabrooks2004multiple]
+
+[-@zou2005regularization]
+
+[-@dali2017critical]
