@@ -1,15 +1,25 @@
 
 ##11/26/18
+- look into straw tool to get resolutions from different cell lines
 - implement jaccard index as performance metric
+- remove figures/tables from manuscript.rmd
+- fix figure 4
+- fix figure 11, label each region; extend legend
+- transform other predictor types
+- add discussion; discuss literature: previous results, recommendations
+- fix figure 10; make 4 panels specifying resolution
+- make figure 10 into a table
+- fix link for gerp 
++ remove ucne; vmr
+- add multiple elemental versions (i.e. _14/_15) to table 1
+- keep underscores in element name in table 1
++ remove "combined" features
+- provide real url for histones and dnase features in table 1
+- look at models with all predictor types 
 
 
-+ make sure what kb resolution Mourad model uses; where/how was it obtained
 - read "A few useful things to know about machine learning" Pedro Domingos
-+ discuss "feature engineering" 
-+ Make tables/figures for all the current results, describe them in manuscript
-+ Add formatted references in manuscript
 - look at distributions of overlap counts and percents predictors
-+ understand how variable importance is calculated for any and all algorithms
 - look at correlations amoung predictors for each type
 
 

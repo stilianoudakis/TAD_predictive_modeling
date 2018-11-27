@@ -206,41 +206,6 @@ _Conflict of Interest._ None.
 
 # Figures
 
-+-------+
-| ![](C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/Figures/figure1_model_construction.png)      |
-| **Figure 1.**     |
-+-------+
-
-+-------+
-| ![](C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/Figures/figure2_predictor_types.png)      |
-| **Figure 2.**     |
-+-------+
-
-+-------+
-| ![](C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/Figures/figure3_ensemble_framework.png)      |
-| **Figure 3.**     |
-+-------+
-
-+-------+
-| ![](C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/Figures/figure4_class_imbalance_plots.png)      |
-| **Figure 4.**     |
-+-------+
-
-+-------+
-| ![](C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/Figures/figure11_allresolutions_performances.png)      |
-| **Figure 11.**     |
-+-------+
-
-+-------+
-| ![](C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/Figures/figure9_comparing_resolutions_barplot.png)      |
-| **Figure 9.**     |
-+-------+
-
-+-------+
-| ![](C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/Figures/figure10_allresolutions_varimps.png)      |
-| **Figure 10.**     |
-+-------+
-
 # Table Legends
 
 ## Table 1: List of Genomic Annoations. 
