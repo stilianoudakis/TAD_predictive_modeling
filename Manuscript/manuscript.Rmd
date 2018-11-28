@@ -1,26 +1,11 @@
 ---
-title: "Predictive modeling using genomic annotations"
-subtitle: "Pitfalls and Recommendations"
-author: "Spiro Stilianoudakis"
-date: "August 9, 2018"
-header-includes:
-    - \usepackage{setspace}\doublespacing
-    - \usepackage{amsmath}
+title: "Manuscript title"
+csl: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.ref/genomebiology.csl
 output: 
   word_document:
-    fig_caption: yes
-    fig_height: 3
-    fig_width: 2
-    toc: yes
-  pdf_document:
-    toc: yes
+    reference_docx: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.doc/NIH_grant_style.docx
 bibliography: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/References/references.bib
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-```
 
 # ABSTRACT
 
@@ -60,10 +45,12 @@ In this study we have developed an ensemble framework that aims to address and c
 
 ##DOMAIN DATA
 
+[???provide urls to download domain data]
 Topologically associating domain data for the GM12878 cell line was obtained using the arrowhead algorithm from the Juicer toolbox (https://github.com/aidenlab/juicer). Publically available domain data was obtained from in situ Hi-C contact matrices at 5kb resolution [@rao20143d]. Additional domain data was obtained from Dali et al. at 25kb, 50kb, and 100kb resolutions [@dali2017critical]. 
 
 Identified TAD boundaries were represented by their location in the genome (hg19 human genome assembly), including chromosome, start and end coordinates for chromosomes 1 through 22. The start and end coordinates were concatenated, sorted, and unique coordinates representing the borders demarcating TADs were obtained.
 
+[??? Don't explicitly descript figure in paper; only results]
 Figure 1 presents a diagram of how the data was established for modeling purposes. First, the genome was binned into equally sized intervals. This was performed at the same resolution of the contact matrix that the domain data was obtained from. For example, for the domain data obtained from a 5kb resolution contact matrix, the genome was subsequently binned into 5kb intervals. The same processes was repeated for each of the other three resolutions. Next, the boundary coordinates were flanked on either side by a unit corresponding to the resolution of the particular domain data. Again, siting the domain data obtained from a 5kb resolution contact matrix, each uniquely identified TAD boundary was flanked on either side by 5kb for a total width around each boundary point of 10kb. The same process was repeated for the other three resolutions. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
 
 ##GENOMIC ANNOTATIONS
@@ -198,12 +185,6 @@ _Conflict of Interest._ None.
 
 # Tables
 
-## Table 1.
-
-## Table 2.
-
-## Table 7. 
-
 # Figures
 
 # Table Legends
@@ -243,11 +224,11 @@ Barplots illustrating the class imbalance problem featured across each of the fo
 
 Comparing model performances for TAD boundary data for all 4 resolutions. The four regions represent (from left to right; top to bottom) data at 5kb, 25kb, 50kb, and 100kb resolutions. Within each region, the rows represent the set of re-sampling techniques, while the columns represent the set of performance metrics that the models were evaluated on. Each plot compares 2 sets of models; one using LASSO regularization and one using Elastic-Net regularization. Within each set, each bar represents the performance of a model with a specific predictor type; either overlap counts (OC) in red, overlap percent (OP) in green, or distance in blue. 
 
-# Figure 9: Comparing Performances
+## Figure 9: Comparing Performances
 
 Comparing performances of random forest classification algorithms, across TAD boundary data at each resolution for models using distance-type predictors, with elastic-net regularization and random under-sampling. Performances were aggregated by taking the average of each metric across 50 iterations of random under-sampling.
 
-# Figure 10: Comparing Variable Importances
+## Figure 10: Comparing Variable Importances
 
 Variable importance plots for the top 15 most predictive functional genomic elements for each of the 4 different resolutions. The x-axis represents the standardized difference between the out-of-bag prediction accuracy after permuting each predictor variable, averaged across all trees. The greater the mean standardized difference, the more importance the predictor is to the model.
 
