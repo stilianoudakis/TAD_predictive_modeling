@@ -33,6 +33,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Prediction, general
 
+- Bekkar, Mohamed, Hassiba Kheliouane Djemaa, and Taklit Akrouf Alitouche. "Evaluation measures for models assessment over imbalanced datasets." Iournal Of Information Engineering and Applications 3.10 (2013).  - List of various prediction metrics to use for imbalanced data and descriptions of each
+
 - Whalen, Sean, Rebecca M. Truty, and Katherine S. Pollard. “Enhancer-Promoter Interactions Are Encoded by Complex Genomic Signatures on Looping Chromatin.” Nature Genetics 48, no. 5 (May 2016): 488–96. https://doi.org/10.1038/ng.3539.  -TargetFinder - ensemble learning of enhancer-promoter interactions within TADs using epigenomic data (DNAse hypersensitive sites, methylation, gene expression, TFBSs, conservation). Multiple machine learning techniques, applied to multiple cell types to learn shared and unique characteristics, as well to the combined cell line data modeled by epigenomic data common to the combined cell lines. Methylation, elongation histone modifications, AP-1 binding are best predictive features, not genes or conservation. Near optimal performance using 16 features. Importance of proximal features (distance). Introduction and discussion about previous use of epigenomic machine learning. https://github.com/shwhalen/targetfinder
 - Xi, Wang, and Michael A Beer. “Local Epigenomic State Cannot Discriminate Interacting and Non-Interacting Enhancer-Promoter Pairs with High Accuracy,” October 25, 2018. https://doi.org/10.1101/420372. - Overfitting in epigenomics machine learning due to class imbalance. TargetFinder reanalysis. Gradient boosting, but not SVM, achieved good performance.
 
