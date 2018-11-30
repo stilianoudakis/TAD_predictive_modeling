@@ -1,17 +1,15 @@
 
 ##11/28/18
 
-- copy manuscript template
 - Read papers!
 - look into straw tool to get resolutions from different cell lines
-- implement jaccard index as performance metric
-- transform other predictor types
++ implement youden index as performance metric
++ transform other predictor types
 - add discussion; discuss literature: previous results, recommendations
 - fix figure 10; make 4 panels specifying resolution
 - make figure 10 into a table
-- fix link for gerp 
 - look at models with all predictor types 
-- look at distributions of overlap counts and percents predictors
++ look at distributions of overlap counts and percents predictors
 - look at correlations amoung predictors for each type
 
 
