@@ -2,7 +2,7 @@
 ##11/28/18
 
 - Read papers!
-- look into straw tool to get resolutions from different cell lines
++ look into straw tool to get resolutions from different cell lines
 + implement youden index as performance metric
 + transform other predictor types
 - add discussion; discuss literature: previous results, recommendations
