@@ -1,9 +1,9 @@
 ---
 title: "Manuscript title"
-csl: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.ref/genomebiology.csl
+#csl: styles.ref/genomebiology.csl
 output: 
   word_document:
-    reference_docx: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.doc/NIH_grant_style.docx
+    #reference_docx: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.doc/NIH_grant_style.docx
 bibliography: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/References/references.bib
 ---
 
@@ -140,11 +140,11 @@ Here, TP refers to the number of bins correctly identified as containing a TAD b
 
 ##ENSEMBLE COMPARISONS
 
-In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4x3x2x4) separate models.
+In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models.
 
 ###CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
-Table 2 presents the class distributions across each resolution. After binning the genome at 5kb, 25kb, 50kb, and 10kb intervals there were a total of 44948, 9042, 4541, and 2279 genomic bins created respectively. Figure 4 illustrates the class imbalance problem present in each data resolution. Likewise, we see the apparent decrease in data points (bins) as resolution increases. Furthermore, Table 1 specifically shows the class distribution for each resolution. The overall average perentage of minority classes across all data resolutions was 13.2%, with the most severe case present in the 5kb resolution (6.9%). 
+The coordinates of the corresponding 5kb resolution contact maps resulted in a total of 44948 genomic bins (Table 2). There were only 3083 bins that overlapped with a flanked TAD boundary (6.9%). An increase in resolution resulted in less genomic bins and a slighly less degree of class imbalance (Supplementaty Table 8). The overall average perentage of class imbalance across all data resolutions was 13.2%.  After applying each resampling technique to the training sets for each data resolution, we obtained perfectly balanced classes (Figure 4). That is, the ratio of bins that overlapped with flanked TAD boundaries to bins that did not was 1:1.
 
 ###CLASS IMBALANCE HINDERS PERFORMANCE ACROSS RESOLUTIONS
 
