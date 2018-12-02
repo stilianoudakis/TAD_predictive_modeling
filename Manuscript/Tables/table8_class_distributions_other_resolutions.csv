@@ -1,8 +1,3 @@
-Genomic Bin,Complete,Training,Testing,No Balancing,Random Under-Sampling,Random Over-Sampling,SMOTE
-5 kb,,,,,,,
-With TAD boundary,3083,2140,943,2140,2140,29323,4280
-Without TAD boundary,41865,29323,12542,29323,2140,29323,4280
-Total,44948,31463,13485,31463,4280,58646,8560
 25 kb,,,,,,,
 With TAD boundary,1266,895,371,895,895,5434,1790
 Without TAD boundary,7776,5434,2342,5434,895,5434,1790
