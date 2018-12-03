@@ -3,7 +3,7 @@ title: "Computational Prediction of Boundaries of 3D Genomic Domains in Class Im
 csl: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.ref/genomebiology.csl
 output: 
   word_document:
-    reference_docx: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.doc/NIH_grant_style.docx
+    #reference_docx: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.doc/NIH_grant_style.docx
 bibliography: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/References/references.bib
 ---
 
@@ -145,17 +145,17 @@ Here, TP refers to the number of bins correctly identified as containing a TAD b
 
 ##ENSEMBLE COMPARISONS
 
-In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4x3x2x4) separate models.
+In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models.
 
 ###CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
-Table 2 presents the class distributions across each resolution. After binning the genome at 5kb, 25kb, 50kb, and 10kb intervals there were a total of 44948, 9042, 4541, and 2279 genomic bins created respectively. Figure 4 illustrates the class imbalance problem present in each data resolution. Likewise, we see the apparent decrease in data points (bins) as resolution increases. Furthermore, Table 1 specifically shows the class distribution for each resolution. The overall average perentage of minority classes across all data resolutions was 13.2%, with the most severe case present in the 5kb resolution (6.9%). 
+The coordinates of the corresponding 5kb resolution contact maps resulted in a total of 44948 genomic bins (Table 2). There were only 3083 bins that overlapped with a flanked TAD boundary (6.9%). An increase in resolution resulted in less genomic bins and a slighly less degree of class imbalance (Supplementaty Table 8). The overall average perentage of class imbalance across all data resolutions was 13.2%.  After applying each resampling technique to the training sets for each data resolution, we obtained perfectly balanced classes (Figure 4). That is, the ratio of bins that overlapped with flanked TAD boundaries to bins that did not was 1:1.
 
-###CLASS IMBALANCE HINDERS PERFORMANCE ACROSS RESOLUTIONS
+###CLASS IMBALANCE HINDERS PERFORMANCE
 
-Figure 11 present the results across all of the ensemble systems for each resolution of domain data. The first row in each of the 4 regions shows the performances for models without resampling. The average accuracy and AUC were marginally high across each of the resolutions with values of W%, X%, Y%, and Z% respectively. However, the severity of the model performances were much more apparant when comparing F1-scores and MCCs. The average F1-scores across resolutions for models without resampling were found to be W%, X%, Y%, and Z% respectively, while the MCCs were W%, X%, Y%, and Z% (Table 7). We thus see the necessity for implementing a class balancing technique prior to modeling. 
+We first compared models with either overlap counts or overlap percent predictor types, from the 5kb resolution data (Figure 12). These results were from random forest models fit to data without any re-sampling, using either LASSO or Elastic-Net regulariations. We found that differences in performances across variable reduction technique were marginal. However, when evaluating model performance using accuracy or AUC, the model appeared to perform relatively well. At second glance, though, when considering both the F1-score and MCC of the model, we were able to assess just how poorly the model was indeed performing (Supplementary Table 9). The low, and sometimes missing, values indicate that the model is unable to identify many, if any, true positive outcomes. That is, given an imbalanced data, the model is unable to predict which genomic bins truly contain a flanked TAD boundary. The performance results were found to be consistently poor for models with no re-sampling across the other resolutions (Supplementary Figure 13).
 
-###CLASS BALANCING IMPROVES MODEL PERFORMANCE IN ALL RESOLUTIONS
+###Random UNDER-SAMPLING IMPROVES MODEL PERFORMANCE IN ALL RESOLUTIONS
 
 Moving down the rows in each of the 4 regions of Figure 11 we see that model performance was markedly improved among the F1-scores and MCCs after creating balanced classes compared to the results using no re-sampling. For each of the resolutions, we see that random under-sampling out performed the other class balancing techniques. While SMOTE performed very similarly to RUS, ROS performed poorly in comparison, especially as the resolution of the data increased. Furthermore, we see that the elastic-net reduction technique outperformed the LASSO. Although, the disparity became less evident as the resolution increased. 
 
