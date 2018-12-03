@@ -1,16 +1,13 @@
 
 ##11/28/18
 
-- Read papers!
-+ look into straw tool to get resolutions from different cell lines
-+ implement youden index as performance metric
-+ transform other predictor types
+
 - add discussion; discuss literature: previous results, recommendations
-- fix figure 10; make 4 panels specifying resolution
-- make figure 10 into a table
++ fix figure 10; make 4 panels specifying resolution
++ make figure 10 into a table
 - look at models with all predictor types 
-+ look at distributions of overlap counts and percents predictors
 - look at correlations amoung predictors for each type
+- Read papers!
 
 
 Backburner: 
