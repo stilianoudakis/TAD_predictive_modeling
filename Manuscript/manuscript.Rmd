@@ -134,13 +134,13 @@ MCC &= \dfrac{TP \times TN - FP \times FN}{\sqrt{ (TP + FP)(TP+FN)(TN+FP)(TN+FN)
 \end{aligned}
 \end{equation}
 $$
-Here, TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary. Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. Accuracy measures the percentage of correct classifications by the model. However, in the case of heavily imbalanced class, as can be seen by the numerator, the metric is biased toward correcly identified majority classes. The F1-score and MCC are more balanced measures. We also considered the AUC for each model, by computing the average trapezoidal approximations for the curve created by the true positive rates (TPR) and false positive rates (FPR)
+Here, TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary. Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. Accuracy measures the percentage of correct classifications by the model. However, in the case of heavily imbalanced class, as can be seen by the numerator, the metric is biased toward correcly identified majority classes. The F1-score and MCC are more balanced measures. We also considered the AUC for each model, by computing the average trapezoidal approximations for the curve created by the true positive rates (TPR) and false positive rates (FPR).
 
 #RESULTS
 
 ##ENSEMBLE COMPARISONS
 
-In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models.
+In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. For the task of predicting TAD boundaries using functional genomic elements, we evaluated 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. We evaluated each ensemble system using 10-fold cross-validated random forest models. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models. For simplicity, we have only presented the most significant results. Results of the complete ensemble are available in the Supplementary Materials.
 
 ###CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
@@ -154,9 +154,13 @@ The performances were found to be consistently poor for models with no re-sampli
 
 ###RANDOM UNDER-SAMPLING IMPROVES MODEL PERFORMANCE
 
-When evaluatating the 5kb resolution data for a randomly under-sampled training set, it was found that models obtained better classification performance for F1 and MCC metrics (Figure 14). The increase in performance was present across both overlap predictor types. Models also featured a decrease in both accuracy and AUC, which was attributed to less inflated false negative rates (Supplementary Table 11). Differences in performances were again marginal across the two variable reduction techniques. Performances were also improved among the models using the other data resolutions. However, model improvement dissipated as resolution increased (Supplementary Figure 15; Supplementary Table 12).
+When evaluatating the 5kb resolution data for a randomly under-sampled training set, it was found that models obtained better classification performance for F1 and MCC metrics (Figure 14). The increase in performance was present across both overlap predictor types. Models also featured a decrease in both accuracy and AUC, which was attributed to less inflated false negative rates (Supplementary Table 11). Variable reduction was found not to have an affect on resampling, and subsequent performance as any differences were again marginal. Performances were also improved among the models using the other data resolutions as well. However, model improvement dissipated as resolution increased (Supplementary Figure 15; Supplementary Table 12).
 
 ###DISTANCE TYPE PREDICTORS OUT-PERFORM OTHER PREDICTOR TYPES
+
+Lastly, we evaluated models when using distance type predictors for the feature space. For the 5kb resolution data, tt was found that models with distance type predictors out performed models with count overlaps types across resolutions (Figure ). 
+
+This result was also observed when compared to models with percent overlap type predictors, regardless of the variable reduction technique used (Supplementary Table). The differences in performances was found to be most severe when looking at the F1-score and MCC (Supplementary Table). 
 
 Again referencing Figure 11, focusing on the rows corresponding to models using randomly under-sampled data, it was found that models with distance type predictors out performed models with the two other overlap types (counts and percents). The disparity between predictor types was steady across resolutions (Table 7). The greatest difference was seen in the 5kb data. For models with Elastic-Net regularization, the F1-scores were X, Y, and Z, while the MCCs were X, Y, and Z for each predictor type respectively.
 
