@@ -41,3 +41,5 @@ knitr::opts_chunk$set(echo = TRUE)
 [-@zou2005regularization]
 
 [-@dali2017critical]
+
+[-@durand2016juicebox]
