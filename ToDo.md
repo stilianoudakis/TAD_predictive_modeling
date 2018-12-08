@@ -8,7 +8,10 @@
 - look at models with all predictor types 
 - look at correlations amoung predictors for each type
 - Read papers!
-
+- Plot ROC curves
+- Select features using Boruta
+- Predict new TAD boundaries and investigate (visually, analytically)
+- We should investigate these observations: Blagus and Lusa, “Class Prediction for High-Dimensional Class-Imbalanced Data.” - Variable selection introduces additional bias towards classification into the majority class. Undersampling helps, oversampling does not. Variable normalization (centering) can worsen the performance.
 
 Backburner: 
 - use tfbs encode clustered in separate model (/home/sequencing/data/ExtData/db_5.00_07-22-2015/grsnp_db/hg19/ENCODE/). Goal - to compare the results with Hong et. al 2017 paper, https://doi.org/10.1093/nar/gkx738
