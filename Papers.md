@@ -40,6 +40,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Prediction, general
 
+- https://shiring.github.io/machine_learning/2017/04/02/unbalanced - Dealing with unbalanced data in machine learning
+
 - Blagus, Rok, and Lara Lusa. “Class Prediction for High-Dimensional Class-Imbalanced Data.” BMC Bioinformatics 11 (October 20, 2010): 523. https://doi.org/10.1186/1471-2105-11-523. - Class imbalance empirical testing. Variable selection introduces additional bias towards classification into the majority class. Undersampling helps, oversampling does not. Variable normalization (centering) can worsen the performance.
 
 - Bekkar, Mohamed, Hassiba Kheliouane Djemaa, and Taklit Akrouf Alitouche. "Evaluation measures for models assessment over imbalanced datasets." Iournal Of Information Engineering and Applications 3.10 (2013).  - List of various prediction metrics to use for imbalanced data and descriptions of each
