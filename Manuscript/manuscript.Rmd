@@ -1,10 +1,10 @@
 ---
 title: "Computational Prediction of Boundaries of 3D Genomic Domains in Class Imbalance Settings"
-#csl: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.ref/genomebiology.csl
+#csl: styles.ref/genomebiology.csl
 output: 
   word_document:
-    #reference_docx: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/styles.doc/NIH_grant_style.docx
-bibliography: C:/Users/Spiro Stilianoudakis/Documents/TAD_predictive_modeling/Manuscript/References/references.bib
+    #reference_docx: NIH_grant_style.docx
+bibliography: Manuscript/References/references.bib
 ---
 
 Spiro C. Stilianoudakis^1^ (stilianoudasc@mymail.vcu.edu), Mikhail G. Dozmorov^1\*^ (mikhail.dozmorov@vcuhealth.org)
@@ -184,48 +184,10 @@ _Conflict of Interest._ None.
 
 # Table Legends
 
-## Table 1: List of Genomic Annoations. 
-
-The full list of genomic annotations used in downstream analyses. These annotations were the functional genomic elements used to predict the formation of TAD boundaries. They were obtained via ChIP-Seq experiments, mapped to human genome assembly hg19, and made available by the ENCODE Consortium.
-
-## Table 2: Class Distributions
-
-Summary of the class distributions for each re-sampling technique, across each resolution. All re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
-
-## Table 7: Model Performances at all Resolutions
-
-Performance metrics comparing models using different sampling approaches for each of the 4 resolutions. Withing each resolution, the best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
 
 
 # Figure legends
 
-## Figure 1: Model Construction
-
-Diagram of the model construction used for downstream analysis. The linear genome was binned according to the resolution of the respective HiC experiment (either 5kb, 25kb, 50kb, or 100kb intervals). TAD boundaries were then flanked by 1-unit on either side of the boundary point. The unit flanking was indicative of the resolution that the domain data was obtained from (i.e. for 5kb resolution, 1 unit represents 5kb for a total flanking region of 10kb). The response vector Y used for classification was determined by whether or not a genomic bin overlapped with a flanked region. The positional coordinates of each functional genomic element, obtained from ENCODE, were then used to define the feature space of the models.
-
-## Figure 2: Predictor Types 
-
-Diagram of the 3 predictor types considered when assessing the relationship between TAD boundaries and functional genomic elements. Each predictor type was used as the feature space in downstream analyses for predicting which functional genomic elements were associated with the formation of TAD boundaries. Featured above are bin-specific examples of the construction of each predictor type. (Left) The overlap count (OC) predictors were calculated by considering the total number of elemental regions that overlapped with each genomic bin. (Middle) The overlap percent (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin and dividing by the total bin width (either 5, 25, 50, or 100 kilobases given resolution of boundary data). (Right) The distance predictors were calculated by measuring the distance (in base pairs) from the center of each genomic bin to the center of the nearest elemental region of interest. The two green segments directly below the rightmost enlarged figure represent the center of the overlapping regions defining the respective functional genomic element.
-
-## Figure 3: Ensemble Framework/Model Building Pipeline
-
-A diagram of the model building pipeline given an a combination of inputs from the ensemble framework. The data was split into a 7:3 training set to testing set ratio, the variable reduction technique of choice was implemented, and a random forest classification algorithm was performed. Each model was then validated on the same testing set. 
-
-## Figure 4: Class Imbalance
-
-Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
-
-## Figure 11: Model Performances for all Resolutions
-
-Comparing model performances for TAD boundary data for all 4 resolutions. The four regions represent (from left to right; top to bottom) data at 5kb, 25kb, 50kb, and 100kb resolutions. Within each region, the rows represent the set of re-sampling techniques, while the columns represent the set of performance metrics that the models were evaluated on. Each plot compares 2 sets of models; one using LASSO regularization and one using Elastic-Net regularization. Within each set, each bar represents the performance of a model with a specific predictor type; either overlap counts (OC) in red, overlap percent (OP) in green, or distance in blue. 
-
-## Figure 9: Comparing Performances
-
-Comparing performances of random forest classification algorithms, across TAD boundary data at each resolution for models using distance-type predictors, with elastic-net regularization and random under-sampling. Performances were aggregated by taking the average of each metric across 50 iterations of random under-sampling.
-
-## Figure 10: Comparing Variable Importances
-
-Variable importance plots for the top 15 most predictive functional genomic elements for each of the 4 different resolutions. The x-axis represents the standardized difference between the out-of-bag prediction accuracy after permuting each predictor variable, averaged across all trees. The greater the mean standardized difference, the more importance the predictor is to the model.
 
 
 # Supplementary Tables and Figures
