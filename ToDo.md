@@ -1,18 +1,12 @@
 
-- fix figure 18 y axis
-- clearly specify binning process; mention that we use contact matrix coordinates to obtain bins
++ fix figure 18 y axis
++ clearly specify binning process; mention that we use contact matrix coordinates to obtain bins
 - don't break up figures 18, 3 into parts
 - for class imbalance make figure that tells story about how severe class imbalance is; currently figure 12 is evaluating predictors; comparisons need to be re-sampling 
 - update table and figure legends
 - fix csl path
 - look at varimps for oc and op predictor types
-
-##11/28/18
-
-
 - add discussion; discuss literature: previous results, recommendations
-+ fix figure 10; make 4 panels specifying resolution
-+ make figure 10 into a table
 - look at models with all predictor types 
 - look at correlations amoung predictors for each type
 - Read papers!
