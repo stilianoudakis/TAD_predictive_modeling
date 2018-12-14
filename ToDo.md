@@ -10,7 +10,7 @@
 - look at models with all predictor types 
 - look at correlations amoung predictors for each type
 - Read papers!
-- Plot ROC curves
+- Plot ROC curves - justify in text why not using ROC curves
 - Select features using Boruta
 - Predict new TAD boundaries and investigate (visually, analytically)
 - We should investigate these observations: Blagus and Lusa, “Class Prediction for High-Dimensional Class-Imbalanced Data.” - Variable selection introduces additional bias towards classification into the majority class. Undersampling helps, oversampling does not. Variable normalization (centering) can worsen the performance.
