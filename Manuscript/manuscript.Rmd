@@ -28,9 +28,9 @@ Existing methods for predicting associations between genomic elements tend to ig
 
 The advent of various genome-wide sequencing technologies, such as high-throughput conformation capture (notably Hi-C), have revealed how the spatial organization of the human genome may affect several epigenetic functions [@lieberman2009comprehensive]. Analyses have shown that the genome is tightly compacted into distinct compartments.  There exist regions within these compartments that have been shown to be highly conserved and self-interacting, and termed topologically associating domains (TADs) [@dixon2012topological]. Evidence suggests that regulatory elements and genes tend to interact more frequently within the same TAD [@symmons2014functional]. This suggests that the boundaries of TADs may play a role in restricting the function of certain genomic elements such as enhancers, thereby impacting the transcription of genes. Furthermore, changing the 3D structure of the DNA, causing disruptions in these domains, can lead to adverse outcomes and diseases like cancer. Therefore, it has become increasingly important to be able to identify the key molecular drivers of the formation of TAD boundaries in order to further our understanding of the human genome.
 
-The mechanisms underlying the formation of TADs are a complex and active area of research. Recently, it has been discovered that insulator sequences have a primary role in orchestrating the topological arrangements of higher-order chromatin architecture [@phillips2013chromatin]. Insulators are multi-faceted regulatory sequences that moderate a variety of genomic processes including activation, repression, and enhancer blocking. Specifically, the insulator binding protein CTCF has been found to be enriched at the boundary sequences of topologically associating domains in human cells and may therefore act as a mediator of long-range chromatin contacts [@zuin2014cohesin]. Other regulatory elements like particular histone modifications such as H3k36 and H3K27 trimethylation, and transcription factors such as ZNF274 and YY1 have been more frequently observed at TAD boundaries than in other regions [@rao20143d]. These have been found to be associated with more open chromatin which alter the accessibility of genes for transcription. The distinct patterns of different proteins and functional elements point toward the opportunity of using computational approaches in identifying which epigenomic features are most predictive of the development of TAD boundaries, allowing us to better understand what leads to their formation.
+The mechanisms underlying the formation of TADs are a complex and active area of research. Recently, it has been discovered that insulator sequences have a primary role in orchestrating the topological arrangements of higher-order chromatin architecture [@phillips2013chromatin]. Insulators are multi-faceted regulatory sequences that moderate a variety of genomic processes including activation, repression, and enhancer blocking. Specifically, the insulator binding protein CTCF has been found to be enriched at the boundary sequences of topologically associating domains in human cells and may therefore act as a mediator of long-range chromatin contacts [@zuin2014cohesin]. Other regulatory elements like particular histone modifications such as H3K36 and H3K27 trimethylation, and transcription factors such as ZNF274 and YY1 have been more frequently observed at TAD boundaries than in other regions [@rao20143d]. These have been found to be associated with more open chromatin which alter the accessibility of genes for transcription. The distinct patterns of different proteins and functional elements point toward the opportunity of using computational approaches in identifying which epigenomic features are most predictive of the development of TAD boundaries, allowing us to better understand what leads to their formation.
 
-A study published by Mourad et al. used multiple logistic regression with LASSO regularization to predict TAD boundaries [@mourad2016computational]. They considered binning the genome at both 50 base and 1kb intervals and flanking TAD boundaries by 1kb and 20kb regions. The outcome Y was determined by whether or not a genomic bin overlapped with a flanked boundary. The feature space was obtained by considering the percent overlap between a bin and coordinates defining ChIP-seq peak data. Models were then evaluated using AUROC. However, a pervasive issue here becomes the introduction of highly imbalanced classes. Due to the sparcity of TADs throughout the genome, most bins will not overlap with a flanked TAD boundary. It is commonly agreed upon in the machine learning community that imbalanced datasets adversely impact the performance of the classifiers as the learned model is biased towards the majority class to minimize the overall error rate [@estabrooks2004multiple]. Similarly, careful consideration must also be taken when deciding which performance metric(s) to present when evaluating predictive models, especially in the case of imbalanced data. The popularity surrounding the use of ROC curves is that they do not depend on a threshold. However, when the prevalence of an event is low--that is, a genomic bin overlapping with a TAD boundary region--mean probabilities are biased towards the majority class. Likewise, metrics like accuracy and sensitivity and specificity do not incorporate the entirety of the confusion matrix created when validating predictive models on a test data set. Therefore, each of these metrics are likely to be inflated when evaluating model performance. 
+A study published by Mourad et al. used multiple logistic regression with LASSO regularization to predict TAD boundaries [@mourad2016computational]. They considered binning the genome at both 50 base and 1kb intervals and flanking TAD boundaries by 1kb and 20kb regions. The outcome Y was determined by whether or not a genomic bin overlapped with a flanked boundary. The feature space was obtained by considering the percent overlap between a bin and coordinates defining ChIP-seq peak data. Models were then evaluated using AUROC. However, a pervasive issue here becomes the introduction of highly imbalanced classes. Due to the sparcity of TADs throughout the genome, most bins will not overlap with a flanked TAD boundary. It is commonly agreed upon in the machine learning community that imbalanced datasets adversely impact the performance of the classifiers as the learned model is biased towards the majority class to minimize the overall error rate [@estabrooks2004multiple]. Similarly, careful consideration must also be taken when deciding which performance metric(s) to present when evaluating predictive models, especially in the case of imbalanced data. The popularity surrounding the use of ROC curves is that they do not depend on a threshold. However, when the prevalence of an event is low--that is, a genomic bin overlapping with a TAD boundary region--mean probabilities are biased towards the majority class. Likewise, metrics like accuracy and sensitivity and specificity do not incorporate the entirety of the confusion matrix created when validating predictive models on a test data set. Therefore, each of these metrics are likely to be inflated when evaluating model performance. [??? Make paragraphs contain one meaning. Split this paragraph into two, one describes the class imbalance problem, another is Mourad paper and how they didn't address it.]
 
 In a similar study, Hong et al. used domain data from an hESC cell line to build a linear model and predict which genomic elements were associated with TAD boundaries [@hong2017computational]. They defined boundary segments as genomic regions before and after 150 kilobases of the boundary. To solve the imbalance problem, they randomly sampled from regions outside of the 150kb flank.  For their model, the feature space was determined by the number of counts of ChIP-seq peaks defining functional genomic elements that overlapped with the two segments. Individual models were then performed until the best model which included the concensus CTCF signal feature, followed by 10 additional elements was obtained. Here, however, it is likely that 1 iteration of random under-sampling will yield biased results, depending on how representative the under-sampled data is. Likewise, it is unclear how the performances of other balancing techniques compare (i.e. over-sampling or a combination of both under and over-sampling).
 
@@ -38,21 +38,21 @@ Furthermore, there are other aspects of TAD boundary modelling that current meth
 
 In this study we have developed an ensemble framework that aims to address and compare a variety of data irregularities and characteristics that are associated with the prediction of TAD boundaries. We evaluated domain data obtained from four different resolution contact matrices for the GM12878 cell line including 5kb, 25kb, 50kb, and 100kb. For each resolution, we examined the inclusion of three different predictor types as the feature space for downstream modeling. We coupled each predictor type with two separate variable reduction techniques. Lastly, we performed a series of three different re-sampling techniques aimed at creating balanced classes. Random forest classification algorithms were performed to both compare each combination of the above ensemble, and investigate which functional genomic features were most associated with the formation of TAD boundaries.  Model performance was evaluated based on a total of four metrics which included test accuracy, area under the ROC curve (AUC), F1 score, and Matthew's Correlation Coefficient (MCC). 
 
-#METHODS
+# METHODS
 
-##DOMAIN DATA
+## DOMAIN DATA
 
-Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC029) [@rao20143d]. The chromosomal coordinates of topologically associating domains throughout the genome were obtained using the arrowhead algorithm from the Juicer toolbox provided by the Aiden Laboratory (https://github.com/aidenlab/juicer) [@durand2016juicebox]. Using the juicer toolbox, we were able to call TADs on 4 different contact matrix resolutions, which included 5 kb, 25 kb, 50 kb, and 100 kb. Identified TAD boundaries were represented by their location on the linear genome (hg19 human genome assembly), including start and end coordinates for chromosomes 1 through 22 (Figure 18 A). The start and end coordinates of all hierarchical TADs were concatenated, sorted, and unique boundary points representing the borders demarcating TADs were obtained (Figure 18 B). 
+Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC029) [@rao20143d]. The chromosomal coordinates of topologically associating domains throughout the genome were obtained using the arrowhead algorithm from the Juicer toolbox provided by the Aiden Laboratory (https://github.com/aidenlab/juicer) [@durand2016juicebox]. Using the juicer toolbox, we were able to call TADs [??? You called TADs yourself, correct?] on 4 different contact matrix resolutions, which included 5 kb, 25 kb, 50 kb, and 100 kb. Identified TAD boundaries were represented by their location on the linear genome (hg19 human genome assembly), including start and end coordinates for chromosomes 1 through 22 (Figure 18 A). The start and end coordinates of all hierarchical TADs were concatenated, sorted, and unique boundary points representing the borders demarcating TADs were obtained (Figure 18 B). 
 
-##MODEL CONSTRUCTION
+## MODEL CONSTRUCTION
 
-To establish the data for modeling, the genome was binned into equally sized intervals (Figure 18 C). For a more systematic approach, the binning process was performed using the coordinates of the sparse contact matrix of the corresponding resolution. For example, for the domain data obtained from a 5kb resolution contact matrix, the genome was subsequently binned into 5kb intervals using the coordinates of a 5kb resolution contact matrix. The same processes was repeated for each of the other three resolutions. Again, operating systematically, we flanked the boundary coordinates on either side by a unit corresponding to the resolution of the particular domain data. For example, for the domain data obtained from a 5kb resolution contact matrix, each uniquely identified TAD boundary was flanked on either side by 5kb for a total width around each boundary point of 10kb. The same process was repeated for the other three resolutions. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
+To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution (Figure 18 C). For example, for a 5kb resolution contact matrix, the genome was subsequently binned into 5kb intervals using the coordinates of a 5kb resolution contact matrix. The same processes was repeated for each of the other three resolutions. To accommodate for the uncertainty in exact boundary location, the boundary coordinates were flanked on either side by a unit corresponding to the resolution of the corresponding contact matrix. For example, for the domain data obtained from a 5kb resolution contact matrix, each uniquely identified TAD boundary was flanked on either side by 5kb for a total width around each boundary point of 10kb. The same process was repeated for the other three resolutions. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
 
-##GENOMIC ANNOTATIONS
+## GENOMIC ANNOTATIONS
 
 Annotation data, in the form of functional genomic elements from ChIP-seq experiments were obtained from the Encyclopedia of DNA Elements (ENCODE) Consortium (Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and DNase I hypersensitive sites. Each annotation was represented by their location throughout the genome via chromosomal coordinates.  
 
-###FEATURE ENGINEERING USING GENOMIC ANNOTATIONS
+### FEATURE ENGINEERING USING GENOMIC ANNOTATIONS
 
 Using the genomic elements, we created three types of predictors that were used as features to analyze their relationships with TAD boundaries in downstream modelling. The predictors consisted of two different types of overlaps, and a distance type. They are described in detail below:
 
@@ -62,19 +62,19 @@ Using the genomic elements, we created three types of predictors that were used 
 
    3.	Distance: For each genomic bin, the distance (in base pairs) from the center of the bin to the center of the nearest region of a respective functional element was calculated (Figure 2 C).
 
-##ENSEMBLE FRAMEWORK
+## ENSEMBLE FRAMEWORK
 
 An ensemble of models was established for the purposes of directly comparing the performances of different parameters in the framework. Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type as the feature space. Details of each step in the framework are provided below. 
 
-###TRAINING & TESTING SETS
+### TRAINING & TESTING SETS
 
 The data set used for modeling was composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the majority and minority sets (Figure 3 A). The data was then split into a 7:3 ratio of training to testing sets (Figure 3 B). Each training and testing set was composed of a similar majority to minority class ratio as the full data set (Figure 3 C). The training set was then used to perform all downstream modeling.
 
-###VARIABLE REDUCTION
+### VARIABLE REDUCTION [??? To be modified for using LASSO only]
 
 We evaluated the use of two variable reduction algorithms, the LASSO and Elastic-Net regularizations (Figure 3 D). Each algorithm was performed prior to re-sampling. For the LASSO, the $\lambda$ penalization term was tuned over a grid of 10 values on an exponential scale ranging from 0.01 to 10. The additional $\alpha$ term for the Elastic-Net was tuned over 10 equa-distant values from 0 to 1.
 
-###RE-SAMPLING TECHNIQUES
+### RE-SAMPLING TECHNIQUES
 
 We then evaluated three re-sampling techniques (in addition to no re-sampling) used to create balanced classes (Figure 3 E). They are detailed below:
 
@@ -86,7 +86,7 @@ We then evaluated three re-sampling techniques (in addition to no re-sampling) u
 
    4.	SMOTE (Synthetic Minority Over-Sampling Technique): This method incorporated both random under- and over-sampling. Under-sampling is performed without replacement from the majority class, while over-sampling is performed by creating new synthetic observations using the minority class. The SMOTE algorithm is stored in the DMwR package, available in R [@chawla2002smote]. The user is able to specify the parameters denoting the percent of over- and under-sampling from the two classes. This allows the user to control the proportion of disbalance in the data. For the purposes of this paper, we used SMOTE to create perfectly balanced data. 
 
-###CLASSIFICATION
+### CLASSIFICATION
 
 A classification algorithm in the form of a random forest was performed and validated using the same test set for all models in the ensemble (Figure 3 F). 10-fold cross validation was used to reduced bias due to random dataset generation. The default number of features to consider at each node of the random forest algorithm was set as the square root of the number of features in the model. Likewise, the number of ensemble trees to aggregate was set at 500. Once the model was implemented, it was assessed using the test set, and performance metrics were then recorded. 
 
@@ -112,50 +112,45 @@ Therefore, a system produced from the ensemble framework is defined as follows:
 
 E = {r, p, v, c}, where r $\in$ R, p $\in$ P, v $\in$ V, and c $\in$ C.
 
-Once a system was defined, a random forest algorithm was performed. Letting |X| denote the cardinality of each set, then we evaluated |R| x |P| x |V| x |C| different ensemble systems in this paper.
+Once a system was defined, a random forest algorithm was performed. Letting |X| denote the cardinality of each set, then we evaluated |R| x |P| x |V| x |C| different ensemble systems.
 
-###MODEL EVALUATION & PREDICTION
+### MODEL EVALUATION & PREDICTION
 
 The efficacy of different ensemble systems was compared using various performance metrics including accuracy, AUC, F1-score, and MCC. These metrics are defined as follows:
 
-$$
-\begin{equation}
-\begin{aligned}
-Accuracy &= \dfrac{TP + TN}{TP + TN + FP + FN} \\
-F1 - Score &= \dfrac{2TP}{2TP + FP + FN} \\
-MCC &= \dfrac{TP \times TN - FP \times FN}{\sqrt{ (TP + FP)(TP+FN)(TN+FP)(TN+FN) }}
-\end{aligned}
-\end{equation}
-$$
+$$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$
+$$F1 - Score = \frac{2TP}{2TP + FP + FN}$$
+$$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{ (TP + FP)(TP+FN)(TN+FP)(TN+FN) }}$$
+
 Here, TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary. Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set.  We also considered the AUC for each model by computing the average trapezoidal approximations for the curve created by the true positive rates (TPR) and false positive rates (FPR).
 
 For the task of identifying the functional genomic elements that were most predictive of the formation of TAD boundaries, we evaluated the variable importances associated with each predictor of the random forest model. For each tree, the prediction accuracy on the out-of-bag portion of the data is recorded. Then the same is done after permuting each predictor variable. The difference between the two accuracies are then averaged over all trees, and normalized by the standard error [@kuhn2012caret]. 
 
-#RESULTS
+# RESULTS
 
-##ENSEMBLE COMPARISONS
+## ENSEMBLE COMPARISONS
 
 In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. We evaluated and compared 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models. For simplicity, we have only presented the most significant results. Results of the complete ensemble are available in the Supplementary Materials.
 
-###CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
+### CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
 The coordinates of the corresponding 5kb resolution contact maps resulted in a total of 44948 genomic bins (Table 2). There were only 3083 bins that overlapped with a flanked TAD boundary (6.9%). An increase in resolution resulted in less genomic bins and a slighly less degree of class imbalance (Supplementaty Table 8). The overall average perentage of class imbalance across all data resolutions was 13.2%.  After applying each resampling technique to the training sets for each data resolution, we obtained perfectly balanced classes (Figure 4). That is, the ratio of bins that overlapped with flanked TAD boundaries to bins that did not was 1:1.
 
-###CLASS IMBALANCE HINDERS PERFORMANCE
+### CLASS IMBALANCE HINDERS PERFORMANCE
 
 We first compared models with either overlap counts or overlap percent predictor types, from the 5kb resolution data (Figure 12). These results were from random forest models fit to data without any re-sampling, using either LASSO or Elastic-Net regulariations. We found that differences in performances across variable reduction techniques were marginal. More importantly, when evaluating model performance using accuracy or AUC, the model appeared to perform relatively well. At second glance, however, when considering both the F1-score and MCC, we were able to assess just how poorly the model was performing (Supplementary Table 9). 
 
 The performances were found to be consistently poor for models with no re-sampling across the other resolutions (Supplementary Figure 13; Supplementary Table 10). The low, and sometimes missing, values indicated that the model was unable to identify many, if any, true positive outcomes. That is, given imbalanced data, the model was unable to predict which genomic bins truly overlapped with a flanked TAD boundary.
 
-###RANDOM UNDER-SAMPLING IMPROVES MODEL PERFORMANCE
+### RANDOM UNDER-SAMPLING IMPROVES MODEL PERFORMANCE
 
 When evaluatating the 5kb resolution data for a randomly under-sampled training set, it was found that models obtained better classification performance for F1 and MCC metrics (Figure 14). The increase in performance was present across both overlap predictor types. Models also featured a decrease in both accuracy and AUC, which was attributed to less inflated false negative rates (Supplementary Table 11). Variable reduction was found not to have an affect on resampling, and subsequent performances, as any differences were again marginal. Performances were also improved among the models using the other data resolutions as well. However, we found that model improvement dissipated as resolution increased (Supplementary Figure 15; Supplementary Table 12).
 
-###DISTANCE TYPE PREDICTORS OUT-PERFORM OTHER PREDICTOR TYPES
+### DISTANCE TYPE PREDICTORS OUT-PERFORM OTHER PREDICTOR TYPES
 
 We then used the ensemble to compare models with distance type predictors for the feature space. For the 5kb resolution data, it was found that models with distance type predictors out performed models with either of the two overlap types, regardless of the regularization technique performed (Figure 16). The improvement was observed across all 4 performance metrics that were considered (Supplementary Table 13). Likewise, improved performances were seen in the other 3 resolutions as well. Although overall performance decreased as resolution increased, models with distance type predictors still were able to maintain a profound improvement (Supplementary Figure 14; Supplementary Table 14).
 
-###PERFORMANCES DEGRADE AS RESOLUTION INCREASES
+### PERFORMANCES DEGRADE AS RESOLUTION INCREASES [??? Terminology: 5kb - high resolution. 100kb - low resolution. Adjust the text]
 
 Finally, we directly compared the performances of models across the different resolutions. The comparisons consisted of random forest models using distance type predictors, elastic-net regularization, and 50 iterations of random under-sampling. The model using 5kb resolution domain data was found to perform slightly better compared to the 25kb and 50kb resolutions (Figure 9). A sharp decrease in performance was seen in the 100kb resolution. 
 
