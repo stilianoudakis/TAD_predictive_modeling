@@ -1,11 +1,11 @@
 ---
 title: "Computational Prediction of Boundaries of 3D Genomic Domains in Class Imbalance Settings"
-#csl: styles.ref/genomebiology.csl
-output: 
+csl: styles.ref/genomebiology.csl
+output:
   word_document:
-    #reference_docx: NIH_grant_style.docx
-bibliography: Manuscript/References/references.bib
----
+    reference_docx: styles.doc/NIH_grant_style.docx
+bibliography: References/references.bib
+--- 
 
 Spiro C. Stilianoudakis^1^ (stilianoudasc@mymail.vcu.edu), Mikhail G. Dozmorov^1\*^ (mikhail.dozmorov@vcuhealth.org)
 
@@ -42,49 +42,47 @@ In this study we have developed an ensemble framework that aims to address and c
 
 ## DOMAIN DATA
 
-Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC029) [@rao20143d]. The chromosomal coordinates of topologically associating domains throughout the genome were obtained using the arrowhead algorithm from the Juicer toolbox provided by the Aiden Laboratory (https://github.com/aidenlab/juicer) [@durand2016juicebox]. Using the juicer toolbox, we were able to call TADs [??? You called TADs yourself, correct?] on 4 different contact matrix resolutions, which included 5 kb, 25 kb, 50 kb, and 100 kb. Identified TAD boundaries were represented by their location on the linear genome (hg19 human genome assembly), including start and end coordinates for chromosomes 1 through 22 (Figure 18 A). The start and end coordinates of all hierarchical TADs were concatenated, sorted, and unique boundary points representing the borders demarcating TADs were obtained (Figure 18 B). 
+Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC029) [@rao20143d]. The chromosomal coordinates of topologically associating domains throughout the genome were obtained using the arrowhead algorithm from the Juicer toolbox provided by the Aiden Laboratory (https://github.com/aidenlab/juicer) [@durand2016juicebox]. Using the juicer toolbox, we were able to call TADs [??? You called TADs yourself, correct?] on [??? how many] contact matrices at 5 kb, 25 kb, 50 kb, and 100 kb resolutions. Identified TAD boundaries were represented by their location on the linear genome (GRCh37/hg19 human genome assembly), including start and end coordinates for chromosomes 1 through 22 (Figure 18 A). The start and end coordinates of all hierarchical TADs were concatenated, sorted, and unique TAD boundary points were obtained (Figure 18 B). 
 
 ## MODEL CONSTRUCTION
 
-To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution (Figure 18 C). For example, for a 5kb resolution contact matrix, the genome was subsequently binned into 5kb intervals using the coordinates of a 5kb resolution contact matrix. The same processes was repeated for each of the other three resolutions. To accommodate for the uncertainty in exact boundary location, the boundary coordinates were flanked on either side by a unit corresponding to the resolution of the corresponding contact matrix. For example, for the domain data obtained from a 5kb resolution contact matrix, each uniquely identified TAD boundary was flanked on either side by 5kb for a total width around each boundary point of 10kb. The same process was repeated for the other three resolutions. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
+To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution (Figure 18 C). For example, for a 5kb resolution contact matrix, the genome was binned into 5kb intervals. To accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sized by regions of size of the resolution of the corresponding contact matrix. For example, for the domain data obtained from a 5kb resolution contact matrix, each uniquely identified TAD boundary was flanked on either side by 5kb for a total width around each boundary point of 10kb. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
 
-## GENOMIC ANNOTATIONS
+## GENOMIC ANNOTATION DATA
 
-Annotation data, in the form of functional genomic elements from ChIP-seq experiments were obtained from the Encyclopedia of DNA Elements (ENCODE) Consortium (Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and DNase I hypersensitive sites. Each annotation was represented by their location throughout the genome via chromosomal coordinates.  
+Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and DNase I hypersensitive sites.  
 
 ### FEATURE ENGINEERING USING GENOMIC ANNOTATIONS
 
-Using the genomic elements, we created three types of predictors that were used as features to analyze their relationships with TAD boundaries in downstream modelling. The predictors consisted of two different types of overlaps, and a distance type. They are described in detail below:
+Each genomic annotation is typically represented by a set of regions (their genomic coordinates) annotated as having a functional property or biological annotation. Using these sets of genomic annotations, we created three types of predictors that were used as features to analyze their relationships with TAD boundaries (Figure 2):
 
-   1.	Overlap Counts (OC): For each genomic bin, the total number of instances where a bin overlapped with regions representing a functional genomic element was calculated (Figure 2 A). In the case of no overlaps the value is given as 0.
+1. **Overlap Counts (OC)**: For each genomic bin, the total number of instances where a bin overlapped with genomic annotation regions (features) was calculated. In the case of no overlaps the value is set as 0.
    
-   2.	Overlap Percent (OP): For each genomic bin, the percent overlap between the feature width and the total width of the bin was calculated (Figure 2 B). We defined the feature width as the number of base pairs that overlapped with the genomic bin. The percent was then calculated by dividing the feature width by the bin width. If multiple overlaps existed, the feature width was defined as the sum of the total number of base pairs that overlapped with a particular bin. Note that the bin width remained constant for a given resolution (either 5kb, 25kb, 50kb, or 100kb). Bins with no overlaps were given to be 0.
+2. **Overlap Percent (OP)**: For each genomic bin, the percent overlap between the feature width and the total width of the bin was calculated. We defined the feature width as the number of bases that overlapped with the genomic bin. The percent was then calculated by dividing the feature width by the bin width. If multiple overlaps existed, the feature width was defined as the sum of the total number of bases that overlapped with a particular bin. Note that the bin width remained constant for a given resolution (either 5kb, 25kb, 50kb, or 100kb). Values for bins with no overlaps were set to be 0.
 
-   3.	Distance: For each genomic bin, the distance (in base pairs) from the center of the bin to the center of the nearest region of a respective functional element was calculated (Figure 2 C).
+3. **Distance**: For each genomic bin, the distance (in bases) from the center of the bin to the center of the nearest region of a respective genomic annotation region was calculated.
 
 ## ENSEMBLE FRAMEWORK
 
-An ensemble of models was established for the purposes of directly comparing the performances of different parameters in the framework. Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type as the feature space. Details of each step in the framework are provided below. 
+An ensemble of models was established for the purposes of systematically comparing the performances of different parameters in the framework. Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type as the feature space, as follows.
 
-### TRAINING & TESTING SETS
-
-The data set used for modeling was composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the majority and minority sets (Figure 3 A). The data was then split into a 7:3 ratio of training to testing sets (Figure 3 B). Each training and testing set was composed of a similar majority to minority class ratio as the full data set (Figure 3 C). The training set was then used to perform all downstream modeling.
+The data set used for modeling was composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the majority and minority sets. The data was then split into a 7:3 ratio of training to testing sets. Each training and testing set was composed of a similar majority to minority class ratio as the full data set. The training set was then used to perform all downstream modeling (Figure 3). [??? Where is the resampling techniques come?]
 
 ### VARIABLE REDUCTION [??? To be modified for using LASSO only]
 
-We evaluated the use of two variable reduction algorithms, the LASSO and Elastic-Net regularizations (Figure 3 D). Each algorithm was performed prior to re-sampling. For the LASSO, the $\lambda$ penalization term was tuned over a grid of 10 values on an exponential scale ranging from 0.01 to 10. The additional $\alpha$ term for the Elastic-Net was tuned over 10 equa-distant values from 0 to 1.
+We evaluated the use of two variable reduction algorithms, the LASSO and Elastic-Net regularizations. Each algorithm was performed prior to re-sampling. For the LASSO, the $\lambda$ penalization term was tuned over a grid of 10 values on an exponential scale ranging from 0.01 to 10. The additional $\alpha$ term for the Elastic-Net was tuned over 10 equa-distant values from 0 to 1.
 
 ### RE-SAMPLING TECHNIQUES
 
-We then evaluated three re-sampling techniques (in addition to no re-sampling) used to create balanced classes (Figure 3 E). They are detailed below:
+We then evaluated three re-sampling techniques (in addition to no re-sampling) used to create balanced classes. They are detailed below:
 
-   1.	No Sampling: All of the data points from the majority and minority class of the training set were used.
+1. **No Sampling**: All of the data points from the majority and minority class of the training set were used.
 
-   2.	Random Under-Sampling (RUS): All of the minority classes from the training set were used. A random set without replacement from the majority classes of the training set were used to match the number of minority samples. In this paper we performed 50 iterations of random under-sampling. At each iteration a random forest classification algorithm was performed. Performance metrics were aggregated by taking the average across all of the iterations.
+2. **Random Under-Sampling (RUS)**: All of the minority classes from the training set were used. Sampling without replacement was used to obtain the same number of the majority classes. We performed 50 iterations of random under-sampling. At each iteration a random forest classification algorithm was performed. Performance metrics were aggregated by taking the average across all of the iterations.
 
-   3.	Random Over-Sampling (ROS): All of the majority classes from the training set were used. A random set with replacement from the minority classes of the training set were used to match the number of majority samples. Similar to the under-sampling technique, 50 iterations were performed and results were aggregated by taking the average across iterations.
+3. **Random Over-Sampling (ROS)**: All of the majority classes from the training set were used. Sampling with replacement was used to obtain the same number of the minority classes. Similar to the under-sampling technique, 50 iterations were performed and results were aggregated by taking the average across iterations.
 
-   4.	SMOTE (Synthetic Minority Over-Sampling Technique): This method incorporated both random under- and over-sampling. Under-sampling is performed without replacement from the majority class, while over-sampling is performed by creating new synthetic observations using the minority class. The SMOTE algorithm is stored in the DMwR package, available in R [@chawla2002smote]. The user is able to specify the parameters denoting the percent of over- and under-sampling from the two classes. This allows the user to control the proportion of disbalance in the data. For the purposes of this paper, we used SMOTE to create perfectly balanced data. 
+4. **SMOTE** (Synthetic Minority Over-Sampling Technique) [@chawla2002smote]: This method incorporated both random under- and over-sampling. Under-sampling is performed without replacement from the majority class, while over-sampling is performed by creating new synthetic observations using the minority class. The user is able to specify the parameters denoting the percent of over- and under-sampling from the two classes. We used SMOTE to create perfectly balanced data. The `DMwR` R package v. [??? Add version number] was used to perform SMOTE. 
 
 ### CLASSIFICATION
 
@@ -130,11 +128,11 @@ For the task of identifying the functional genomic elements that were most predi
 
 ## ENSEMBLE COMPARISONS
 
-In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. We evaluated and compared 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models. For simplicity, we have only presented the most significant results. Results of the complete ensemble are available in the Supplementary Materials.
+In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. We evaluated and compared 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables.
 
 ### CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
-The coordinates of the corresponding 5kb resolution contact maps resulted in a total of 44948 genomic bins (Table 2). There were only 3083 bins that overlapped with a flanked TAD boundary (6.9%). An increase in resolution resulted in less genomic bins and a slighly less degree of class imbalance (Supplementaty Table 8). The overall average perentage of class imbalance across all data resolutions was 13.2%.  After applying each resampling technique to the training sets for each data resolution, we obtained perfectly balanced classes (Figure 4). That is, the ratio of bins that overlapped with flanked TAD boundaries to bins that did not was 1:1.
+The coordinates of the corresponding 5kb resolution contact maps resulted in a total of 44948 genomic bins [??? across all chromosomes? If I do 44948*5000, I get 224740000, which is 1 billion bases less than the size of the genome. What is going on?] (Table 2). There were only 3083 (6.9%) bins that overlapped with a flanked TAD boundary [??? What is flanked TAD boundary? Why do we care?]. An increase in resolution resulted in the overall less number of genomic bins and a slighly less degree of class imbalance [??? Add exact numbers of class imbalance for each resolution] (Supplementaty Table 8). The overall average perentage of class imbalance across all data resolutions was 13.2% [??? Do not understand. I understand the ratio of #minority/#majority, but what % tells?].  After applying each resampling technique to the training sets for each data resolution, we obtained perfectly balanced classes (Figure 4). That is, the ratio of bins that overlapped with flanked TAD boundaries to bins that did not was 1:1.
 
 ### CLASS IMBALANCE HINDERS PERFORMANCE
 

@@ -1,3 +1,13 @@
+- `table1_genomic_elements.csv` - Make supplemental. Make up-to-date (some features you don't use). Add column "Cell type". Add column description to the legend.
+- `figure2_predictor_types.png` - Good.
+- `figure3_ensemble_framework.png` - Where is resampling shown?
+- 50 iterations were done for ROS and RUS. Wasn't it done for SMOTE?
+- TBD - how iterations and cross-validation play together?
+
+- `figure18_model_construction_V2.png` - Write legend
+- `table2_class_distributions_5kb.csv` - Add column description to the legend.
+- `table8_class_distributions_other_resolutions.csv` - Add column header. Add legend.
+
 - Make Figures and Tables in order
     - Rename files. 
     - Combine some figures into one, with A, B, C panels

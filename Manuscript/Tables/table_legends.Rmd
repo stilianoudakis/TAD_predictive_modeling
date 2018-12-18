@@ -11,8 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Table 1: List of Genomic Annoations. 
 
-The full list of genomic annotations used in downstream analyses. These annotations were the functional genomic elements used to predict the formation of TAD boundaries. They were obtained via ChIP-Seq experiments, mapped to human genome assembly hg19, and made available by the ENCODE Consortium.
-
 # Table 2: Class Distributions
 
 Summary of the class distributions for each re-sampling technique, across each resolution. All re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
