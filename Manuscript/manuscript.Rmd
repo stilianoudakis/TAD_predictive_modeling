@@ -88,30 +88,6 @@ We then evaluated three re-sampling techniques (in addition to no re-sampling) u
 
 A classification algorithm in the form of a random forest was performed and validated using the same test set for all models in the ensemble (Figure 3 F). 10-fold cross validation was used to reduced bias due to random dataset generation. The default number of features to consider at each node of the random forest algorithm was set as the square root of the number of features in the model. Likewise, the number of ensemble trees to aggregate was set at 500. Once the model was implemented, it was assessed using the test set, and performance metrics were then recorded. 
 
-Using set notation the formulation of the ensemble framework can be defined as follows:
-
-Set of different resolutions:
-
-R = {5kb, 25kb, 50kb, 100kb}
-
-Set of Predictor Types:
-
-P = {OC, OP, Distance}
-
-Set of Variable Reduction Techniques:
-
-V = {LASSO, Elastic-Net}
-
-Set of Class-Balancing Methods:
-
-C = {None, RUS, ROS, SMOTE}
-
-Therefore, a system produced from the ensemble framework is defined as follows:
-
-E = {r, p, v, c}, where r $\in$ R, p $\in$ P, v $\in$ V, and c $\in$ C.
-
-Once a system was defined, a random forest algorithm was performed. Letting |X| denote the cardinality of each set, then we evaluated |R| x |P| x |V| x |C| different ensemble systems.
-
 ### MODEL EVALUATION & PREDICTION
 
 The efficacy of different ensemble systems was compared using various performance metrics including accuracy, AUC, F1-score, and MCC. These metrics are defined as follows:
@@ -128,7 +104,7 @@ For the task of identifying the functional genomic elements that were most predi
 
 ## ENSEMBLE COMPARISONS
 
-In this section we provide the details of the comprehensive experiments performed in order to assess each ensemble system. We evaluated and compared 4 domain data sets, 3 predictor types, 2 variable reduction techniques, and 4 class balancing techniques. Thus, we generated 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables.
+We evaluated and compared Hi-C datasets at four different resolutions R = {5kb, 25kb, 50kb, 100kb}, used three predictor types P = {OC, OP, Distance}, two variable reduction techniques V = {LASSO, Elastic-Net}, and four class balancing techniques C = {None, RUS, ROS, SMOTE}. Therefore, a system produced from the ensemble framework is defined as: E = {r, p, v, c}, where r $\in$ R, p $\in$ P, v $\in$ V, and c $\in$ C. Letting |X| denote the cardinality of each set, we evaluated |R| x |P| x |V| x |C| different ensemble systems, totaling 96 (=4 $\times$ 3 $\times$ 2 $\times$ 4) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables.
 
 ### CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
