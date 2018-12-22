@@ -17,9 +17,7 @@ Diagram of the model construction used for downstream analysis. The linear genom
 
 **Figure 3: Ensemble Framework/Model Building Pipeline.** A diagram of the model building pipeline given an a combination of inputs from the ensemble framework. The data was split into a 7:3 training set to testing set ratio, the variable reduction technique of choice was used to minimize the number of uninformative predictors, and a random forest classification algorithm was performed. Each model was then validated on the same testing set. 
 
-# Figure 4: Class Imbalance
-
-Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
+**Figure 4: Techniques for addressing class imbalance.** Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
 
 # Figure 5: 5kb Model Performances
 
@@ -38,13 +36,9 @@ Comparing model performances for TAD boundary data at 50kb resolution across eac
 Comparing model performances for TAD boundary data at 100kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 10
 +0kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
 
-# Figure 9: Comparing Performances
+**Figure 9: Comparing Performances** Comparing performances of random forest classification algorithms, across TAD boundary data at each resolution for models using distance-type predictors, with elastic-net regularization and random under-sampling. Performances were aggregated by taking the average of each metric across 50 iterations of random under-sampling. [??? Poor legend]
 
-Comparing performances of random forest classification algorithms, across TAD boundary data at each resolution for models using distance-type predictors, with elastic-net regularization and random under-sampling. Performances were aggregated by taking the average of each metric across 50 iterations of random under-sampling.
-
-# Figure 10: Comparing Variable Importance
-
-Comparing variable importance for the top 15 most predictive functional genomic elements for each of the 4 different resolutions. The x-axis represents the standardized difference between the out-of-bag prediction accuracy after permuting each predictor variable, averaged across all trees. The greater the mean standardized difference, the more importance the predictor is to the model.
+**Figure 10: Comparing Variable Importance.** Comparing variable importance for the top 15 most predictive functional genomic elements for each of the 4 different resolutions. The x-axis represents the standardized difference between the out-of-bag prediction accuracy after permutting each predictor variable, averaged across all trees. The greater the mean standardized difference, the more importance the predictor is to the model. [??? What are A/B/C/D panels?]
 
 # Figure 11: Model Performances for all Resolutions
 

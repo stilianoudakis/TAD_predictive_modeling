@@ -3,10 +3,22 @@
 - `figure3_ensemble_framework.png` - Where is resampling shown?
 - 50 iterations were done for ROS and RUS. Wasn't it done for SMOTE?
 - TBD - how iterations and cross-validation play together?
+- `figure4_class_imbalance_plots.png` - in "Over-Sampling", is the majority class the same as in "Complete" case? Looks smaller.
+- `figure18_model_construction_V2.png` - Add legend
+- `figure13_other_resolutions_none_results.png` - Add legend
+- `figure14_5kb_rus_results.png` - Add legend
+- `figure15_other_resolutions_rus_results.png` - Add legend
+- `figure16_5kb_dist_results.png` - Add legend
+- `figure10_allresolutions_varimps.png` - To be redone with the correct reatures.
 
-- `figure18_model_construction_V2.png` - Write legend
 - `table2_class_distributions_5kb.csv` - Add column description to the legend.
 - `table8_class_distributions_other_resolutions.csv` - Add column header. Add legend.
+- `table9_5kb_none_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
+- `table10_other_resolutions_none_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
+- `table11_5kb_rus_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
+- `table12_other_resolutions_rus_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
+- `table13_5kb_dist_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
+
 
 - Make Figures and Tables in order
     - Rename files. 
