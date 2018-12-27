@@ -71,3 +71,5 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 - Drummond, Chris, Robert C Holte, and others. “C4. 5, Class Imbalance, and Cost Sensitivity: Why under-Sampling Beats over-Sampling.” In Workshop on Learning from Imbalanced Datasets II, 11:1–8, 2003. - a reference demonstrating that undersampling is better than oversampling in class imbalance problem
 
+- Bekkar, Mohamed, Hassiba Kheliouane Djemaa, and Taklit Akrouf Alitouche. “Evaluation Measures for Models Assessment over Imbalanced Datasets.” Iournal Of Information Engineering and Applications 3, no. 10 (2013). - Classifier performance metrics (G-means, likelihood ratios, Discriminant power, F-measure, Youden index, MCC, ROC, (P/W)AUC and more), and their behavior in class imbalance settings. MCC is considered the best metric for imbalanced data learning.
+
