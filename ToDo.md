@@ -26,6 +26,7 @@
     - Adjust figure/table legends
     - Adjust the text
 
+- Use the numerical quantity "imbalance ratio" (IR), when first using, cite A. Orriols-Puig, E. Bernad-Mansilla, "Evolutionary rule-based systems for imbalanced data sets", Soft Comp., vol. 13, pp. 213-225, 2009.
 - Add ROSE R package to the class-balance techniques
 - Make supplementary figures of varimps for OC and OP predictor types
 - Justify in text why not using ROC curves
