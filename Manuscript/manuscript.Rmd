@@ -85,7 +85,7 @@ We then evaluated three re-sampling techniques (in addition to no re-sampling) o
 
 3. **Random Over-Sampling (ROS)**: All of the majority classes from the training set were used. Sampling with replacement was used to obtain the same number of the minority classes. Similar to the under-sampling technique, 50 iterations were performed and results were aggregated by taking the average across iterations.
 
-4. **SMOTE** (Synthetic Minority Over-Sampling Technique) [@chawla2002smote]: This method incorporated both random under- and over-sampling. Under-sampling is performed without replacement from the majority class, while over-sampling is performed by creating new synthetic observations using the minority class. The user is able to specify the parameters denoting the percent of over- and under-sampling from the two classes. We used SMOTE to create perfectly balanced data. The `DMwR` R package v. [??? Add version number] was used to perform SMOTE. 
+4. **SMOTE** (Synthetic Minority Over-Sampling Technique) [@chawla2002smote]: This method incorporated both random under- and over-sampling. Under-sampling is performed without replacement from the majority class, while over-sampling is performed by creating new synthetic observations using the minority class. The user is able to specify the parameters denoting the percent of over- and under-sampling from the two classes. We used SMOTE to create perfectly balanced data. The `DMwR` R package (version 3.4.2) [??? Add version number; !!!added version] was used to perform SMOTE. 
 
 ### CLASSIFICATION
 
@@ -111,7 +111,7 @@ We evaluated and compared Hi-C datasets at four different resolutions R = {5kb, 
 
 ### CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
-The coordinates of the corresponding 5kb resolution contact maps resulted in a total of 44948 genomic bins [??? across all chromosomes? If I do 44948*5000, I get 224740000, which is 1 billion bases less than the size of the genome. What is going on?] (Table 2). There were only 3083 (6.9%) bins that overlapped with a flanked TAD boundary [??? What is flanked TAD boundary? Why do we care?]. An increase in resolution resulted in the overall less number of genomic bins and a slighly less degree of class imbalance [??? Add exact numbers of class imbalance for each resolution] (Supplementaty Table 8). The overall average perentage of class imbalance across all data resolutions was 13.2% [??? Do not understand. I understand the ratio of #minority/#majority, but what % tells?].  After applying each resampling technique to the training sets for each data resolution, we obtained perfectly balanced classes (Figure 4). That is, the ratio of bins that overlapped with flanked TAD boundaries to bins that did not was 1:1.
+The coordinates of the corresponding 5kb resolution contact maps resulted in a total of 44948 genomic bins [??? across all chromosomes? If I do 44948*5000, I get 224740000, which is 1 billion bases less than the size of the genome. What is going on?; !!!This is only CHR1 for right now] (Table 2). There were only 3083 (6.9%) bins that overlapped with a flanked TAD boundary [??? What is flanked TAD boundary? Why do we care?]. An increase in resolution resulted in an overall decrease in the number of genomic bins, as well as a slighly less degree of class imbalance. The percentage of imbalance for each of the other resolutions were found to be  14.0%, 13.7%, and 12.2% for 25 kb, 50kb, and 100kb resolutions respectively. [??? Add exact numbers of class imbalance for each resolution; !!! added exact numbers] (Supplementaty Table 8). The overall average perentage of class imbalance across all data resolutions was 13.2% [??? Do not understand. I understand the ratio of #minority/#majority, but what % tells?].  After applying each resampling technique to the training sets for each data resolution, we obtained perfectly balanced classes (Figure 4). That is, the ratio of bins that overlapped with flanked TAD boundaries to bins that did not was 1:1.
 
 ### CLASS IMBALANCE HINDERS PERFORMANCE
 
@@ -158,7 +158,9 @@ _Conflict of Interest._ None.
 
 # Table Legends
 
+## Table 1: Class Distributions
 
+Summary of the class distributions for the 5 kb resolution domain data, across each re-sampling technique. All re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
 
 # Figure legends
 
@@ -179,6 +181,10 @@ Diagram of the 3 predictor types considered when assessing the relationship betw
 ## Table 1: List of Genomic Annoations. 
 
 The full list of genomic annotations used in downstream analyses. These annotations were the functional genomic elements used to predict the formation of TAD boundaries. They were obtained via ChIP-Seq experiments, mapped to human genome assembly hg19, and made available by the ENCODE Consortium. Each element is denoted by its genomic class, and which cell type it is applied to. The elements that are invariant to a specific cell type are denoted by "Invariant". Additionally, a breif description and specific paths for downloads are also provided.
+
+## Table 2: Class Distributions for Other Resolutions
+
+Summary of the class distributions for each of the other resolution domain data sets (25 kb, 50 kb, and 100 kb), across each re-sampling technique. As with the 5 kb data, all re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
 
 
 # References
