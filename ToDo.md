@@ -1,4 +1,4 @@
-- `table1_genomic_elements.csv` - Make supplemental. Make up-to-date (some features you don't use). Add column "Cell type". Add column description to the legend.
++ `table1_genomic_elements.csv` - Make supplemental. Make up-to-date (some features you don't use). Add column "Cell type". Add column description to the legend.
 - `figure2_predictor_types.png` - Good.
 - `figure3_ensemble_framework.png` - Where is resampling shown?
 - 50 iterations were done for ROS and RUS. Wasn't it done for SMOTE?
