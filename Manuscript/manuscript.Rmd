@@ -114,9 +114,11 @@ We first assessed performances on random forest models built on fully unbalanced
 
 ### RANDOM UNDER-SAMPLING IMPROVES MODEL PERFORMANCE
 
+When comparing re-sampling techniques it was found that performing 50 iterations of random under-sampling yielded significantly higher results for both F1-Scores and MCC metrics (Figure 6). 
 
+Random under-sampling substantially improved classification performance as quantified by F1 and MCC metrics (Figure 14). The increase in performance was present across both overlap count and overlap percent predictor types [??? Again, where is distance?]. Models also featured a decrease in both accuracy and AUC, which was attributed to less inflated false negative rates (Supplementary Table 11). 
 
-Random under-sampling substantially improved classification performance as quantified by F1 and MCC metrics (Figure 14). The increase in performance was present across both overlap count and overlap percent predictor types [??? Again, where is distance?]. Models also featured a decrease in both accuracy and AUC, which was attributed to less inflated false negative rates (Supplementary Table 11). Variable reduction was found not to have an affect on resampling, and subsequent performances, as any differences were again marginal [??? Where is the proof?]. Notably, random under-sampling improved performance when using data at the other resolutions; however, at lower resolutions the performances were lower (Supplementary Figure 15; Supplementary Table 12). These results demonstrate that random under-sampling effectively alleviates class imbalance problem, especially for TAD boundaries detected from high-resolution Hi-C data.
+Variable reduction was found not to have an affect on resampling, and subsequent performances, as any differences were again marginal [??? Where is the proof?]. Notably, random under-sampling improved performance when using data at the other resolutions; however, at lower resolutions the performances were lower (Supplementary Figure 15; Supplementary Table 12). These results demonstrate that random under-sampling effectively alleviates class imbalance problem, especially for TAD boundaries detected from high-resolution Hi-C data.
 
 ### DISTANCE TYPE PREDICTORS OUT-PERFORM OTHER PREDICTOR TYPES
 
@@ -166,6 +168,19 @@ Diagram of the model construction used for downstream analysis. The linear genom
 ## Figure 2: Predictor Types 
 
 Diagram of the 3 predictor types considered when assessing the relationship between TAD boundaries and functional genomic elements. Each predictor type was used as the feature space in downstream analyses for predicting which functional genomic elements were associated with the formation of TAD boundaries. Featured above are bin-specific examples of the construction of each predictor type. (Left) The overlap count (OC) predictors were calculated by considering the total number of elemental regions that overlapped with each genomic bin. (Middle) The overlap percent (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin and dividing by the total bin width (either 5, 25, 50, or 100 kilobases given resolution of boundary data). (Right) The distance predictors were calculated by measuring the distance (in base pairs) from the center of each genomic bin to the center of the nearest elemental region of interest. The two green segments directly below the rightmost enlarged figure represent the center of the overlapping regions defining the respective functional genomic element.
+
+## Figure 3: Ensemble Framework/Model Building Pipeline
+
+A diagram of the model building pipeline given a combination of inputs from the ensemble framework. The data was split into a 7:3 training set to testing set ratio, an $l_{1}$ norm regularization (LASSO) was implemented, and a random forest classification algorithm was performed. Each model was then validated on the same testing set. 
+
+# Figure 4: Class Imbalance
+
+Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
+
+# Figure 5: Performances of Models with No Class-Balancing
+
+Barplots measuring the predictive performance of models built on imbalanced datasets. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
+
 
 
 # Supplementary Tables and Figures
