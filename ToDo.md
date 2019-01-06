@@ -1,7 +1,7 @@
 + `table1_genomic_elements.csv` - Make supplemental. Make up-to-date (some features you don't use). Add column "Cell type". Add column description to the legend.
-- `figure2_predictor_types.png` - Good.
++ `figure2_predictor_types.png` - Good.
 - `figure3_ensemble_framework.png` - Where is resampling shown?
-- 50 iterations were done for ROS and RUS. Wasn't it done for SMOTE?
++ 50 iterations were done for ROS and RUS. Wasn't it done for SMOTE?
 - TBD - how iterations and cross-validation play together?
 - `figure4_class_imbalance_plots.png` - in "Over-Sampling", is the majority class the same as in "Complete" case? Looks smaller.
 - `figure18_model_construction_V2.png` - Add legend
@@ -30,9 +30,9 @@
 - Add ROSE R package to the class-balance techniques
 - Make supplementary figures of varimps for OC and OP predictor types
 - Justify in text why not using ROC curves
-- Understand the paper and Figure 5C (justification of the number of features kept in the model) from https://www.nature.com/articles/ng.3539 - can (should) we generate similar?
-- Understand Figure 6 and 7 from https://www.nature.com/articles/ng.3539 - predictive importance of features, will be OC, OP, and distance in our case
-- We should investigate these observations: Blagus and Lusa, “Class Prediction for High-Dimensional Class-Imbalanced Data.” - Variable selection introduces additional bias towards classification into the majority class. Undersampling helps, oversampling does not. Variable normalization (centering) can worsen the performance.
++ Understand the paper and Figure 5C (justification of the number of features kept in the model) from https://www.nature.com/articles/ng.3539 - can (should) we generate similar?
++ Understand Figure 6 and 7 from https://www.nature.com/articles/ng.3539 - predictive importance of features, will be OC, OP, and distance in our case
++ We should investigate these observations: Blagus and Lusa, “Class Prediction for High-Dimensional Class-Imbalanced Data.” - Variable selection introduces additional bias towards classification into the majority class. Undersampling helps, oversampling does not. Variable normalization (centering) can worsen the performance.
 - Most important features - are they the same at different resolutions?
 - Revisit comparing results with mourad (take his finding and compare; in discussion discuss differences)
 - Add discussion; discuss literature: previous results, recommendations
