@@ -184,6 +184,9 @@ The full list of genomic annotations used in downstream analyses. These annotati
 
 Summary of the class distributions for each of the other resolution domain data sets (25 kb, 50 kb, and 100 kb), across each re-sampling technique. As with the 5 kb data, all re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
 
+## Table 3: Model Performances When Not Accounting for Class Imbalance
+
+A list of various metrics used to assess predictive performances for models that were built on fully imbalanced datasets. 
 
 # References
 
