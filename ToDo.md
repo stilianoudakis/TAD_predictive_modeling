@@ -37,7 +37,7 @@
 - Most important features - are they the same at different resolutions?
 - Revisit comparing results with mourad (take his finding and compare; in discussion discuss differences)
 - Add discussion; discuss literature: previous results, recommendations
-
+- Explore https://github.com/scikit-learn-contrib/imbalanced-learn - A Python Package to Tackle the Curse of Imbalanced Datasets in Machine Learning http://imbalanced-learn.org
 
 Backburner: 
 
