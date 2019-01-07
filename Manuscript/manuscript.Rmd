@@ -169,17 +169,17 @@ Diagram of the 3 predictor types considered when assessing the relationship betw
 
 A diagram of the model building pipeline given a combination of inputs from the ensemble framework. The data was split into a 7:3 training set to testing set ratio, an $l_{1}$ norm regularization (LASSO) was implemented, and a random forest classification algorithm was performed. Each model was then validated on the same testing set. 
 
-# Figure 4: Class Imbalance
+## Figure 4: Class Imbalance
 
 Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
 
-# Figure 5: Performances of Models with No Class-Balancing
+## Figure 5: Performances of Models with No Class-Balancing
 
 Barplots measuring the predictive performance of models built on imbalanced datasets. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
 
-# Figure 6: 
+## Figure 6: Performances of Models with Randomly Under-sampled Data.
 
-
+Barplots measuring the predictive performance of models built on datasets using 50 iterations of random under-sampling. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
 
 # Supplementary Tables and Figures
 
@@ -196,7 +196,19 @@ Summary of the class distributions for each of the other resolution domain data 
 
 ## Table 3: Model Performances When Not Accounting for Class Imbalance
 
-A list of various metrics used to assess predictive performances for models that were built on fully imbalanced datasets. 
+Results of various metrics used to assess predictive performances for models that were built on fully imbalanced datasets. 
+
+## Figure 1: Performances of Models with Both SMOTE-Balanced and Randomly Over-sampled Data.
+
+Barplots measuring the predictive performance of models built on datasets using 50 iterations of both the SMOTE algorithm (A) and random over-sampling (B).  The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
+
+## Table 4:
+
+Results of various metrics used to assess predictive performances for models that were built on random under-sampled datasets. 
+
+## Table 5: 
+
+Results of various metrics used to assess predictive performances for models that were built on both SMOTE-balanced and random over-sampled datasets. 
 
 # References
 
