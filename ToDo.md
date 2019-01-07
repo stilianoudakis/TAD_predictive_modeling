@@ -6,7 +6,7 @@
 - `figure4_class_imbalance_plots.png` - in "Over-Sampling", is the majority class the same as in "Complete" case? Looks smaller.
   * it is the same as the majority class for the training set
 + `figure18_model_construction_V2.png` - Add legend
-- `figure13_other_resolutions_none_results.png` - Add legend
++ `figure13_other_resolutions_none_results.png` - Add legend
 - `figure14_5kb_rus_results.png` - Add legend
 - `figure15_other_resolutions_rus_results.png` - Add legend
 - `figure16_5kb_dist_results.png` - Add legend
