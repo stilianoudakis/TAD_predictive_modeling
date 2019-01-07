@@ -1,3 +1,8 @@
+- how to select testing set in class balance papers when validating models; do they balance test set also?
+- investigate further why using HIC001-HIC029
+- figure or table to validate log2 transform distances
+- include all predictor types, use lasso and report which type is best
+- include feature engineering step in model flowchart figure
 + `table1_genomic_elements.csv` - Make supplemental. Make up-to-date (some features you don't use). Add column "Cell type". Add column description to the legend.
 + `figure2_predictor_types.png` - Good.
 - `figure3_ensemble_framework.png` - Where is resampling shown?
