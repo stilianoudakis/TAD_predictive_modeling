@@ -118,9 +118,9 @@ When comparing re-sampling techniques it was found that performing 50 iterations
 
 ### DISTANCE TYPE PREDICTORS OUT-PERFORM OTHER PREDICTOR TYPES
 
-[??? Why not using all predictors together? Combine it together with the previous steps, testing no sampling, RUS, and the effect of distance]
+[??? Why not using all predictors together? Combine it together with the previous steps, testing no sampling, RUS, and the effect of distance; !!!running on cluster]
 
-We then used the ensemble to compare models with distance type predictors for the feature space. For the 5kb resolution data, it was found that models with distance type predictors out performed models with either of the two overlap types, regardless of the regularization technique performed (Figure 16). The improvement was observed across all 4 performance metrics that were considered (Supplementary Table 13). Likewise, improved performances were seen in the other 3 resolutions as well. Although overall performance decreased as resolution increased, models with distance type predictors still were able to maintain a profound improvement (Supplementary Figure 14; Supplementary Table 14).
+In order to more efficiently assess the impact of feature engineering on predictive performance, we directly compared models using each of the three predictor types, across all resolutions, while using 50 iterations of random under-sampling to account for the class imbalance. It was observed that the models built using distance-type features performed substanially better than the other two (Figure 7). This improvement in performance was observed across each of the 4 performance metrics considered. Interestingly, we found that models with overlap percent (OP) type predictors performed worse than those with simple overlap counts (OC), regardless of data resolution. This is notable because, OP predictors can be thought of as a more refined version of OC predictor. Likewise, there have been established methods from previous research that have used OP predictors when attempting to determine which genomic features are most predictive of TAD boundary formation [@mourad2016computational].
 
 ### PERFORMANCES DEGRADE AS RESOLUTION INCREASES [??? Terminology: 5kb - high resolution. 100kb - low resolution. Adjust the text]
 
