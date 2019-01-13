@@ -1,7 +1,16 @@
 
++ investigate baseline vales of pr curves
++ remove non chromstates features
++ include tfbs features 
++ investigate multiple tfbs from different institutions
++ plot PR curves as feature engineering step
++ include ROSE as balancing step
+- download and install jabref on new computer
++ include feature engineering step in model flowchart figure
+- update table of genomic elements
+
 - figure or table to validate log2 transform distances
-+ include all predictor types, use lasso and report which type is best
-- include feature engineering step in model flowchart figure
+
 - TBD - how iterations and cross-validation play together?
 
 - `figure14_5kb_rus_results.png` - Add legend
