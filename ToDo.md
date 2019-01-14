@@ -1,14 +1,27 @@
 
 + investigate baseline vales of pr curves
+   * https://stats.stackexchange.com/questions/251175/what-is-baseline-in-precision-recall-curve
+   * https://classeval.wordpress.com/introduction/introduction-to-the-precision-recall-plot/
 + remove non chromstates features
 + include tfbs features 
 + investigate multiple tfbs from different institutions
 + plot PR curves as feature engineering step
 + include ROSE as balancing step
-- download and install jabref on new computer
++ download and install jabref on new computer
++ download and install latex on new computer
 + include feature engineering step in model flowchart figure
-- update table of genomic elements
-
++ update table of genomic elements
++ investigate what features mourad used
+   * We simulated data that were similar to real ChIP-seq data (see Subsection Materials and
+     Methods, Data simulation, first paragraph). Both genomic coordinate data (e.g., ChIP-seq peak
+     coordinates) and quantitative data (e.g., ChIP-seq signal intensity log ChIP
+     Input) were generated.
+   * We first simulated 100 genomic coordinate and 100 quantitative datasets
+     that comprised 6 proteins and learned models without considering any interaction terms.
+   * We also compared MLR with ET and RF using real data in human. For this purpose, we analyzed new 3D domains detected from recent high           resolution Hi-C data at 1 kb for GM12878 cells for which 69 ChIP-seq data were available
+   * For human analysis, we used publicly available ChIP-seq peaks of 69 chromatin proteins (ATF2, ATF3, BATF, BCL11A, BCL3, BCLAF1, BHLHE40,       BRCA1, CEBPB, CHD1, CHD2, CTCF, E2F4, EBF1, EGR1, ELF1, ELK1, ETS1, EZH2, FOS, FOXM1, IKZF1, IRF3, IRF4, JUND, MAFK, MAX, MAZ, MEF2A,          MEF2C, MTA3, MXI1, MYC, NFATC1, NFE2, NFIC, NFYA, NFYB, NRF1, P300, PAX5, PBX3, PIGG, PML, POU2F2, RAD21, REST, RFX5, RUNX3, RXRA, SIN3A,      SIX5, SP1, SRF, STAT1, STAT3, STAT5A, TAF1, TCF12, TCF3, USF1, USF2, YY1, ZBTB33, ZEB1, ZNF143, ZNF274, ZNF384 and ZZZ3) of GM12878 cells      from ENCODE 
+   
+- remove H3k9me1 from features since it is not available from gm12878
 - figure or table to validate log2 transform distances
 
 - TBD - how iterations and cross-validation play together?
@@ -28,7 +41,6 @@
 
 
 - Use the numerical quantity "imbalance ratio" (IR), when first using, cite A. Orriols-Puig, E. Bernad-Mansilla, "Evolutionary rule-based systems for imbalanced data sets", Soft Comp., vol. 13, pp. 213-225, 2009.
-- Add ROSE R package to the class-balance techniques
 - Make supplementary figures of varimps for OC and OP predictor types
 - Justify in text why not using ROC curves
 - Understand Figure 6 and 7 from https://www.nature.com/articles/ng.3539 - predictive importance of features, will be OC, OP, and distance in our case
