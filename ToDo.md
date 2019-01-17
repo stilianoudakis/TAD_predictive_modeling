@@ -1,11 +1,11 @@
 
-- clearly define framework
++ clearly define framework
 - redo figures/tables 
 - directly compare mourad using percent predictor types
 - directly compare hong using count predictor types
 - Use the numerical quantity "imbalance ratio" (IR), when first using, cite A. Orriols-Puig, E. Bernad-Mansilla, "Evolutionary rule-based systems for imbalanced data sets", Soft Comp., vol. 13, pp. 213-225, 2009.
 - Compare proteins used by Mourad with our tfbs 
-- figure or table to validate log2 transform distances 
++ figure or table to validate log2 transform distances 
    * have figure; is figure enough? what type of table to include? supplementary?
 - investigate what features mourad used
    * We simulated data that were similar to real ChIP-seq data (see Subsection Materials and
