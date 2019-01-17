@@ -1,3 +1,9 @@
+-supp figure1: label plots with resolutions and format in gimp
+-figure 4: use ratio (one number) above CB bars
+-supp figure 2: make horizontal; label A-C
+-figure5 change order of colors to reflect curves; remove numbers
+
+
 
 + clearly define framework
 - redo figures/tables 
