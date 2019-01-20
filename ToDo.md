@@ -1,3 +1,7 @@
+- Check ??? in `figure_legends.Rmd`, `table_legends.Rmd`, `supplementary_legends.Rmd`
+- Add legend for `Supplementary/figure1_distance_densities.png`
+- Variable reduction not described in Methods
+
 -supp figure1: label plots with resolutions and format in gimp
 -figure 4: use ratio (one number) above CB bars
 -supp figure 2: make horizontal; label A-C
