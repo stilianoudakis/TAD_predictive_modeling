@@ -1,6 +1,0 @@
-,,LASSO,,Elastic-Net,
-,Balancing Technique,OC,OP ,OC,OP 
-Accuracy,None,0.929,0.927,0.93,0.93
-AUC,None,0.669,0.577,0.734,0.737
-F1-Score,None,0.018,0.03,0.004,0.002
-MCC,None,0.038,0.04,0.044,0.01
