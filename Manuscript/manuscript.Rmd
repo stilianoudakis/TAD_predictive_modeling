@@ -46,35 +46,30 @@ In this study we have developed an ensemble framework for predicting TAD boundar
 
 ## DOMAIN DATA
 
-Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC018; produced using the MbolI restriction enzyme) [@rao20143d]. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. The start and end coordinates of all TADs were concatenated, sorted, and unique TAD boundary points were obtained. 
+Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC018; produced using the MbolI restriction enzyme) [@rao20143d]. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. The start and end coordinates of all TADs were concatenated, sorted, and unique TAD boundary points were obtained. Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table S1).
 
 ## MODEL CONSTRUCTION
 
 To accommodate for the uncertainty in the location of TAD boundary points, they were flanked on both sides by regions of the size of the resolution of the data (Figure 1). For example, returning to the 10 kb resolution example, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. 
 
-The response vector $Y$ was formed by genomic regions defined by the resolution of the data. Genomic regions flanking TAD boundaries were labeled as $Y=1$; otherwise, the regions were labeled as not containing a boundary ($Y=0$).
+The response vector $Y$ was formed by genomic regions (bins) defined by the resolution of the data. Genomic regions flanking TAD boundaries were labeled as $Y=1$; otherwise, the regions were labeled as not containing a boundary ($Y=0$).
 
-## GENOMIC ANNOTATION DATA
+Using the sets of genomic features, we created three types of predictors (Figure 2):
 
-Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and transcription factor binding sites using ChIP-seq peak experiments. Each genomic annotation was represented by a set of regions (their genomic coordinates) annotated as having a functional property or biological significance.
+1. **Overlap Counts (OC)**: For each genomic bin, the total number of overlaps with genomic features was calculated. In the case of no overlaps the value is set as 0.
+   
+2. **Overlap Percent (OP)**: For each genomic bin, the percent overlap was defined as the total width of features overlapping a bin divided by the bin width. Values for bins with no overlaps were set to be 0.
+
+3. **Distance**: For each genomic bin, the log [??? didn't you test raw distance first?] [??? log10?] of the distance (in bases) from the center of the bin to the center of the nearest genomic feature region was calculated. The log transformation was used as a normalization technique in order to account for the skewness of the data (Supplementary Figure 1)
+
+To assess the predictive performance for each predictor type, we performed individual random forest classification algorithms utilizing each set predictor types as the feature space, in addition to a model with all combined types. Precision-Recall (PR) Curves, and subsequent area under the PR curves (AUPRC), were used to evaluate which predictor type contributed to the best model performance. Recursive feature elimination (RFE) was then used to determine the optimal number of features for models within each set of predictor types. Here, random forest models were used to assign weights to a set features of a given size. The optimal number of features was determined by the AUPRC of the corresponding model.
+
 
 ## ENSEMBLE FRAMEWORK
 
 An ensemble of models was established for the purposes of systematically comparing the performances of different parameters in the framework. Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type for the feature space (Figure 2).
 
 The data sets used for modeling were composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the minority and majority sets respectively. The data was then split into a 7:3 ratio of training to testing sets. Each training and testing set was composed of a similar majority to minority class ratio as the full data set. That is, for the task of prediction, the test set remained constant for all ensemble systems in order to account for a fair and unbiased comparison.
-
-### FEATURE ENGINEERING AND REDUCTION USING GENOMIC ANNOTATIONS
-
-Using the sets of genomic annotations, we created three types of predictors that were used as features to analyze their relationships with TAD boundaries (Figure 3):
-
-1. **Overlap Counts (OC)**: For each genomic bin, the total number of instances where a bin overlapped with genomic annotation regions (features) was calculated. In the case of no overlaps the value is set as 0.
-   
-2. **Overlap Percent (OP)**: For each genomic bin, the percent overlap between the feature width and the total width of the bin was calculated. We defined the feature width as the number of bases that overlapped with the genomic bin. The percent was then calculated by dividing the feature width by the bin width. If multiple overlaps existed, the feature width was defined as the sum of the total number of bases that overlapped with a particular bin. Note that the bin width remained constant for a given resolution (either 10 kb, 25 kb, 50 kb, or 100 kb). Values for bins with no overlaps were set to be 0.
-
-3. **Log Distance**: For each genomic bin, the log of the distance (in bases) from the center of the bin to the center of the nearest region of a respective genomic annotation region was calculated. The log transformation was used as a normalization technique in order to account for the skewness of the data (Supplementary Figure 1)
-
-To assess the predictive performance for each predictor type, we performed individual random forest classification algorithms utilizing each set predictor types as the feature space, in addition to a model with all combined types. Precision-Recall (PR) Curves, and subsequent area under the PR curves (AUPRC), were used to evaluate which predictor type contributed to the best model performance. Recursive feature elimination (RFE) was then used to determine the optimal number of features for models within each set of predictor types. Here, random forest models were used to assign weights to a set features of a given size. The optimal number of features was determined by the AUPRC of the corresponding model.
 
 ### RE-SAMPLING TECHNIQUES
 
