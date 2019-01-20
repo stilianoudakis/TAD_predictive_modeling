@@ -3,9 +3,7 @@ title: "Legends for supplementary material"
 output: pdf_document
 ---
 
-## Table 1: List of Genomic Annoations. 
-
-The full list of genomic annotations used in downstream analyses. These annotations were the functional genomic elements used to predict the formation of TAD boundaries. They were obtained via ChIP-Seq experiments, mapped to human genome assembly hg19, and made available by the ENCODE Consortium. Each element is denoted by its genomic class, and which cell type it is applied to. The elements that are invariant to a specific cell type are denoted by "Invariant". Additionally, a breif description and specific paths for downloads are also provided.
+**Supplementary Table S1. List of Genomic Annotations.** The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Cell Type" - cell type, "Source" - download URL. [??? Did you use only features common to both cell lines?]
 
 ## Table 2: Class Distributions for Other Resolutions
 
