@@ -46,11 +46,13 @@ In this study we have developed an ensemble framework for predicting TAD boundar
 
 ## DOMAIN DATA
 
-Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC018; produced using the MbolI restriction enzyme) [@rao20143d]. The chromosomal coordinates of topologically associating domains throughout the genome were obtained using the Arrowhead algorithm from the Juicer toolbox provided by the Aiden Laboratory (https://github.com/aidenlab/juicer) [@durand2016juicebox]. Domain data was extracted at 4 different kilobase (kb) resolutions including 10 kb, 25 kb, 50 kb, and 100 kb. Identified TAD boundaries were represented by their location on the linear genome (GRCh37/hg19 human genome assembly), including start and end coordinates for chromosomes 1 through 22. The start and end coordinates of all hierarchical TADs were concatenated, sorted, and unique TAD boundary points were obtained. 
+Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 (Experiments HIC001 to HIC018; produced using the MbolI restriction enzyme) [@rao20143d]. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. The start and end coordinates of all TADs were concatenated, sorted, and unique TAD boundary points were obtained. 
 
 ## MODEL CONSTRUCTION
 
-To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution (Figure 1). For example, fordomain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. To accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. For example, returning to the 10 kb resolution example, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
+To accommodate for the uncertainty in the location of TAD boundary points, they were flanked on both sides by regions of the size of the resolution of the data (Figure 1). For example, returning to the 10 kb resolution example, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. 
+
+The response vector $Y$ was formed by genomic regions defined by the resolution of the data. Genomic regions flanking TAD boundaries were labeled as $Y=1$; otherwise, the regions were labeled as not containing a boundary ($Y=0$).
 
 ## GENOMIC ANNOTATION DATA
 
