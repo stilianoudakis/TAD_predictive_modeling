@@ -9,9 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Figure 1: Model Construction
-
-Diagram of the model construction used for downstream analysis. The linear genome was binned according to the resolution of the respective HiC experiment (either 5kb, 25kb, 50kb, or 100kb intervals). TAD boundaries were then flanked by 1-unit on either side of the boundary point. The unit flanking was indicative of the resolution that the domain data was obtained from (i.e. for 5kb resolution, 1 unit represents 5kb for a total flanking region of 10kb). The response vector Y used for classification was determined by whether or not a genomic bin overlapped with a flanked region. The positional coordinates of each functional genomic element, obtained from ENCODE, were then used to define the feature space of the models.
+**Figure 1: Model Construction.** The linear genome was binned according to the resolution of the Hi-C data. TAD boundaries were then flanked by 1 resolution-unit on both sides of the boundary point. [??? The following is unclear. Show Y on the figure. Are you talking about overlap only?] The response vector Y used for classification was determined by whether or not a genomic bin overlapped with a flanked region. The positional coordinates of each functional genomic element, obtained from ENCODE, were then used to define the feature space of the models.
 
 **Figure 2. Diagram of the three predictor types considered when assessing the relationship between TAD boundaries and genomic annotations.** The _overlap count_ (OC) predictors were calculated by considering the total number of elemental regions that overlapped with each genomic bin. The _overlap percent_ (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin and dividing by the total bin width. The _distance_ predictors were calculated by measuring the distance (in bases) from the center of each genomic bin to the center of the nearest elemental region of interest. The two green segments directly below the rightmost enlarged figure represent the center of the overlapping regions defining the respective genomic annotations.
 
