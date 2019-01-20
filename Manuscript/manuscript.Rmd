@@ -174,34 +174,6 @@ Barplots measuring the predictive performance of models built on imbalanced data
 
 Barplots measuring the predictive performance of models built on datasets using 50 iterations of random under-sampling. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
 
-# Supplementary Tables and Figures
-
-
-# Supplementary Legends
-
-## Table 1: List of Genomic Annoations. 
-
-The full list of genomic annotations used in downstream analyses. These annotations were the functional genomic elements used to predict the formation of TAD boundaries. They were obtained via ChIP-Seq experiments, mapped to human genome assembly hg19, and made available by the ENCODE Consortium. Each element is denoted by its genomic class, and which cell type it is applied to. The elements that are invariant to a specific cell type are denoted by "Invariant". Additionally, a breif description and specific paths for downloads are also provided.
-
-## Table 2: Class Distributions for Other Resolutions
-
-Summary of the class distributions for each of the other resolution domain data sets (25 kb, 50 kb, and 100 kb), across each re-sampling technique. As with the 5 kb data, all re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
-
-## Table 3: Model Performances When Not Accounting for Class Imbalance
-
-Results of various metrics used to assess predictive performances for models that were built on fully imbalanced datasets. 
-
-## Figure 1: Performances of Models with Both SMOTE-Balanced and Randomly Over-sampled Data.
-
-Barplots measuring the predictive performance of models built on datasets using 50 iterations of both the SMOTE algorithm (A) and random over-sampling (B).  The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
-
-## Table 4:
-
-Results of various metrics used to assess predictive performances for models that were built on random under-sampled datasets. 
-
-## Table 5: 
-
-Results of various metrics used to assess predictive performances for models that were built on both SMOTE-balanced and random over-sampled datasets. 
 
 # References
 
