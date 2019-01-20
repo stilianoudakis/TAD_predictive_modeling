@@ -98,7 +98,7 @@ For the task of identifying the functional genomic elements that were most predi
 
 ## ENSEMBLE COMPARISONS
 
-We created an ensemble framework to systematically evaluate the performance of of TAD boundary prediction under different conditions and resampling approaches (Figure 3). We evaluated and compared Hi-C datasets at four different resolutions R = {10 kb, 25 kb, 50 kb, 100 kb}, used three predictor types P = {OC, OP, Distance}, two variable reduction techniques V = {LASSO, Elastic-Net} [??? Is that so?], and five class balancing techniques C = {None, RUS, ROS, SMOTE, ROSE}. A system produced from the ensemble framework was defined as: E = {r, p, v, c}, where r $\in$ R, p $\in$ P, v $\in$ V, and c $\in$ C. Letting |X| denote the cardinality of each set, we evaluated |R| x |P| x |V| x |C| different ensemble systems, totaling 120 (=4 $\times$ 3 $\times$ 2 $\times$ 5) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables.
+We created an ensemble framework to systematically evaluate the performance of of TAD boundary prediction under different conditions and resampling approaches (Figure 3). Briefly, we used Hi-C datasets at four different resolutions $R = \{ 10 kb, 25 kb, 50 kb, 100 kb \}$, used three predictor types $P = \{ OC, OP, Distance \}$, two variable reduction techniques $V = \{ LASSO, Elastic-Net \}$ [??? Is that so?], and five class balancing techniques $C = \{ None, RUS, ROS, SMOTE, ROSE \}$. A system produced from the ensemble framework was defined as: $E = \{ r, p, v, c \}$, where $r \in R$, $p \in P$, $v \in V$, and $c \in C$. Letting $|X|$ denote the cardinality of each set, we evaluated $|R| \times |P| \times |V| \times |C|$ different ensemble systems, totaling $120 (=4 \times 3 \times 2 \times 5)$ [??? Check if you use Lasso only] separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables.
 
 ### CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
 
@@ -109,13 +109,10 @@ An increase in resolution resulted in an overall decrease in the number of genom
 ### DISTANCE-TYPE PREDICTORS PERFORM BEST
 
 
-
-#Discussion
-
+# Discussion
 
 
 # Abbreviations
-
 
 
 # Acknowledgements
@@ -124,45 +121,4 @@ _Conflict of Interest._ None.
 
 # Funding
 
-
-
-# Tables
-
-# Figures
-
-# Table Legends
-
-## Table 1: Class Distributions
-
-Summary of the class distributions for the 5 kb resolution domain data, across each re-sampling technique. All re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
-
-# Figure legends
-
-## Figure 1: Model Construction
-
-Diagram of the model construction used for downstream analysis. The linear genome was binned according to the resolution of the respective HiC experiment (either 10 kb, 25 kb, 50 kb, or 100 kb intervals). TAD boundaries were then flanked by 1-unit on either side of the boundary point. The unit flanking was indicative of the resolution that the domain data was obtained from (i.e. for 10 kb resolution, 1 unit represents 10 kb for a total flanking region of 20 kb). The response vector Y used for classification was determined by whether or not a genomic bin overlapped with a flanked region. The positional coordinates of each functional genomic element, obtained from ENCODE, were then used to define the feature space of the models.
-
-## Figure 2: Ensemble Framework/Model Building Pipeline
-
-A diagram of the model building pipeline given a combination of inputs from the ensemble framework. The data was split into a 7:3 training set to testing set ratio, an $l_{1}$ norm regularization (LASSO) was implemented, and a random forest classification algorithm was performed. Each model was then validated on the same testing set. 
-
-## Figure 3: Predictor Types 
-
-Diagram of the 3 predictor types considered when assessing the relationship between TAD boundaries and functional genomic elements. Each predictor type was used as the feature space in downstream analyses for predicting which functional genomic elements were associated with the formation of TAD boundaries. Featured above are bin-specific examples of the construction of each predictor type. (Left) The overlap count (OC) predictors were calculated by considering the total number of elemental regions that overlapped with each genomic bin. (Middle) The overlap percent (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin and dividing by the total bin width (either 5, 25, 50, or 100 kilobases given resolution of boundary data). (Right) The distance predictors were calculated by measuring the distance (in base pairs) from the center of each genomic bin to the center of the nearest elemental region of interest. The two green segments directly below the rightmost enlarged figure represent the center of the overlapping regions defining the respective functional genomic element.
-
-## Figure 4: Class Imbalance
-
-Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
-
-## Figure 5: Performances of Models with No Class-Balancing
-
-Barplots measuring the predictive performance of models built on imbalanced datasets. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
-
-## Figure 6: Performances of Models with Randomly Under-sampled Data.
-
-Barplots measuring the predictive performance of models built on datasets using 50 iterations of random under-sampling. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
-
-
 # References
-
-
