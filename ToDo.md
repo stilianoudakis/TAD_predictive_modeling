@@ -29,23 +29,6 @@
 
 - TBD - how iterations and cross-validation play together?
 
-- `figure14_5kb_rus_results.png` - Add legend
-- `figure15_other_resolutions_rus_results.png` - Add legend
-- `figure16_5kb_dist_results.png` - Add legend
-- `figure10_allresolutions_varimps.png` - To be redone with the correct reatures.
-
-- `table2_class_distributions_5kb.csv` - Add column description to the legend.
-- `table8_class_distributions_other_resolutions.csv` - Add column header. Add legend.
-- `table9_5kb_none_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
-- `table10_other_resolutions_none_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
-- `table11_5kb_rus_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
-- `table12_other_resolutions_rus_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
-- `table13_5kb_dist_performances.csv` - Add legend. Add other metrics (TP, FP etc.)
-
-
-
-- Make supplementary figures of varimps for OC and OP predictor types
-- Justify in text why not using ROC curves
 - Understand Figure 6 and 7 from https://www.nature.com/articles/ng.3539 - predictive importance of features, will be OC, OP, and distance in our case
 - Most important features - are they the same at different resolutions?
 - Revisit comparing results with mourad (take his finding and compare; in discussion discuss differences)

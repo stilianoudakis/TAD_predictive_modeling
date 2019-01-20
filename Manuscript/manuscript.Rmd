@@ -50,7 +50,7 @@ Replicate Hi-C data for the GM12878 cell line were downloaded from GEO GSE63525 
 
 ## MODEL CONSTRUCTION
 
-To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution (Figure 1). For example, fordomain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. To accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. For example, returning to the 10 kb resolution example, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
+To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution (Figure 1). For example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. To accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. Returning to the 10 kb resolution example, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
 
 ## GENOMIC ANNOTATION DATA
 
@@ -94,13 +94,13 @@ A classification algorithm in the form of a random forest was performed and vali
 
 ### MODEL EVALUATION & PREDICTION
 
-The efficacy of different ensemble systems was compared using various performance metrics including accuracy, AUC, F1-score, and MCC. These metrics are defined as follows:
+The efficacy of different ensemble systems was compared using various performance metrics including accuracy, F1-score, and MCC. These metrics are defined as follows:
 
 $$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$
 $$F1 - Score = \frac{2TP}{2TP + FP + FN}$$
 $$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{ (TP + FP)(TP+FN)(TN+FP)(TN+FN) }}$$
 
-Here, TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary. Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. The evaluation metrics listed above are all considered single threshold measures. That is, they are defined for individual thresholds that separated class prediction. Thererfore they are unable to give an overview of the potential range of performance as thresholds vary. A full list of the single threshold measures used (including additional metrics not reported), along with their respective formulas, are provided in Supplementary Table 6. In order to evaluate the trade-off between precision and recall, we also considered a threshold free measure in form of the area under the precision recall curve (AUPRC).
+Here, TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary. Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. The evaluation metrics listed above are all considered single threshold measures. That is, they are defined for individual thresholds that separated class prediction. Thererfore they are unable to give an overview of the potential range of performance as thresholds vary. A full list of the single threshold measures used (including additional metrics not reported), along with their respective formulas, are provided in Supplementary Table 2. In order to evaluate the trade-off between precision and recall, we also considered a threshold-free measure in form of the area under the precision recall curve (AUPRC).
 
 For the task of identifying the functional genomic elements that were most predictive of the formation of TAD boundaries, we evaluated the variable importances associated with each predictor of the random forest model. For each tree, the prediction accuracy on the out-of-bag portion of the data is recorded. Then the same was done after permuting each predictor variable. The difference between the two accuracies were then averaged over all trees, and normalized by the standard error [@kuhn2012caret]. 
 
@@ -108,15 +108,9 @@ For the task of identifying the functional genomic elements that were most predi
 
 ## ENSEMBLE COMPARISONS
 
-We evaluated and compared Hi-C datasets at four different resolutions R = {10 kb, 25 kb, 50 kb, 100 kb}, used three predictor types P = {OC, OP, Distance}, two variable reduction techniques V = {LASSO, Elastic-Net}, and five class balancing techniques C = {None, RUS, ROS, SMOTE, ROSE}. A system produced from the ensemble framework was defined as: E = {r, p, v, c}, where r $\in$ R, p $\in$ P, v $\in$ V, and c $\in$ C. Letting |X| denote the cardinality of each set, we evaluated |R| x |P| x |V| x |C| different ensemble systems, totaling 120 (=4 $\times$ 3 $\times$ 2 $\times$ 5) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables.
+We evaluated and compared multilpe random forest classification algorithms built of domain data extracted from Hi-C datasets at four different resolutions R = {10 kb, 25 kb, 50 kb, 100 kb}. For each classifier, we compared 3 predictor types P = {OC, OP, Distance} and 5 class balancing techniques C = {None, RUS, ROS, SMOTE, ROSE}. A system produced from the ensemble framework was defined as: E = {r, p, v, c}, where r $\in$ R, p $\in$ P, v $\in$ V, and c $\in$ C. Letting |X| denote the cardinality of each set, we evaluated |R| x |P| x |V| x |C| different ensemble systems, totaling 120 (=4 $\times$ 3 $\times$ 2 $\times$ 5) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables and Figures.
 
-### CLASS DISTRIBUTIONS ACROSS RESOLUTIONS
-
-The coordinates of the corresponding 10 kb resolution contact maps resulted in a total of X genomic bins [??? To be modified for the whole genome]. There were only Y bins that overlapped with a flanked TAD boundary representing the minority class, for an imbalance ratio of (X-Y):Y [??? To be modified for the whole genome]. After applying each resampling technique to the training set, we obtained perfectly balanced classes for all except the ROSE technique (Figure 4). 
-
-An increase in resolution resulted in an overall decrease in the number of genomic bins, as well as a slight decrease in the imbalance ratio (Supplementary Figure 2). After performing the resampling techniques, the resulting imbalance ratios remained similar across the other 3 data resolutions (Supplementary Figure 2).
-
-### DISTANCE-TYPE PREDICTORS PERFORM BEST
+## IMBALANCE RATIOS ACROSS RESOLUTIONS & CELL LINES
 
 
 
