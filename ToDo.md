@@ -1,6 +1,6 @@
 - Check ??? in `figure_legends.Rmd`, `table_legends.Rmd`, `supplementary_legends.Rmd`
 - Add legend for `Supplementary/figure1_distance_densities.png`
-- Variable reduction not described in Methods
++ Variable reduction not described in Methods
 
 -supp figure1: label plots with resolutions and format in gimp
 -figure 4: use ratio (one number) above CB bars
@@ -9,14 +9,10 @@
 
 
 
-+ clearly define framework
-- redo figures/tables 
 - directly compare mourad using percent predictor types
 - directly compare hong using count predictor types
 - Use the numerical quantity "imbalance ratio" (IR), when first using, cite A. Orriols-Puig, E. Bernad-Mansilla, "Evolutionary rule-based systems for imbalanced data sets", Soft Comp., vol. 13, pp. 213-225, 2009.
 - Compare proteins used by Mourad with our tfbs 
-+ figure or table to validate log2 transform distances 
-   * have figure; is figure enough? what type of table to include? supplementary?
 - investigate what features mourad used
    * We simulated data that were similar to real ChIP-seq data (see Subsection Materials and
      Methods, Data simulation, first paragraph). Both genomic coordinate data (e.g., ChIP-seq peak
