@@ -44,19 +44,20 @@ In this study we have developed an ensemble framework for predicting TAD boundar
 
 ## DOMAIN DATA
 
-Replicate Hi-C data for the GM12878, K562, ... cell lines were downloaded from GEO GSE63525 (Experiments HIC001 to HIC018, HIC069 to HIC 074, ... respectively; produced using the MbolI restriction enzyme) [@rao20143d]. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. The start and end coordinates of all TADs were concatenated, sorted, and unique TAD boundary points were obtained. Genomic annotation data consisting of various chromatin segmentation states, histone modifications, and transcription factor binding sites (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table S1).
-
-## MODEL CONSTRUCTION
-
-To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution for the corresponding contact matrix (Figure 1). For example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. To accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. Returning to the 10 kb resolution example, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
+Replicate Hi-C data for the GM12878, K562, ... cell lines were downloaded from GEO GSE63525 (Experiments HIC001 to HIC018, HIC069 to HIC 074, ... respectively; produced using the MbolI restriction enzyme) [@rao20143d]. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. The start and end coordinates of all TADs were concatenated, sorted, and unique TAD boundary points were obtained. 
 
 ## GENOMIC ANNOTATION DATA
 
 Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and transcription factor binding sites using ChIP-seq peak experiments. Each genomic annotation was represented by a set of regions (their genomic coordinates) annotated as having a functional property or biological significance.
 
+
+## MODEL CONSTRUCTION
+
+To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution for the corresponding contact matrix (Figure 1). For example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. To accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. Returning to the 10 kb resolution example, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
+
 ## ENSEMBLE FRAMEWORK
 
-An ensemble of models was established for the purposes of systematically comparing the performances of different parameters in the framework. Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type for the feature space (Figure 2).
+An ensemble of models was established for the purposes of systematically comparing the performances of different parameters in the framework (Figure 2). Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type for the feature space.
 
 The data sets used for modeling were composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the minority and majority sets respectively. The data was then split into a 7:3 ratio of training to testing sets. Each training and testing set was composed of a similar majority to minority class ratio as the full data set. That is, for the task of prediction, the test set remained constant for all ensemble systems in order to account for a fair and unbiased comparison.
 
@@ -109,8 +110,18 @@ For the task of identifying the functional genomic elements that were most predi
 
 We evaluated and compared multilpe random forest classification algorithms built on domain data extracted from Hi-C datasets for X cell lines C = {GM12878, K562, ...}, at four different resolutions R = {10 kb, 25 kb, 50 kb, 100 kb}. For each classifier, we compared 3 predictor types P = {OC, OP, Distance} and 5 class balancing techniques B = {None, RUS, ROS, SMOTE, ROSE}. A system produced from the ensemble framework was defined as: E = {c, r, p, b}, where c $\in$ C, R $\in$ R, p $\in$ P, and b $\in$ B. Letting |X| denote the cardinality of each set, we evaluated |C| x |R| x |P| x |B| different ensemble systems, totaling X (=x $\times$ 4 $\times$ 3 $\times$ 5) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables and Figures.
 
+## DISTANCE TYPE PREDICTORS OUTPERFORM OTHER PREDICTOR-TYPES
+
+We first evaluated which predictor types were best able to discriminate between genomic bins that either flanked or did not flank TAD boundaries. To do so we performed a series of random forest classification algorithms on the full features space (all combined predictor types), as well as on type-specific feature spaces (overlap counts, overlap predictors, and log2 distances). It was found that models with distance type predictors had higher AUPRC values compared to other predictor types (Figure 4). This result was observed across both data resolution and cell line, with the largest AUPRC obtained from the 10 kb resolutions for all [gm12878, k562, ???update as more cell lines included] cell lines (0.431 and 0.456 respectively). There was a gradual decline in AUPRC values as resolution increased with models built on 100 kb resolution domain data having the lowest AUPRC curves, regardless of predictor type (Supplementary Table 3).
+
+Recursive feature elimination was used to establish the optimal number of distance-type features to include in downstream analyses. It was determined that performances according to AUPRC values were asymptotically similiar for random forest models with sets of predictors greater than 32 (Figure 5). Therefore, we reduced the feature space for subsequent models to the top 32 predictors, respective to resolution and cell line. The sets of top predictors chosen varied across resolution and cell line due to differences in the parameters provided in the TAD calling algorithm. 
 
 ## IMBALANCE RATIOS ACROSS RESOLUTIONS & CELL LINES
+
+The low baseline AUPRC values, denoted by the dashed lines in the above PR curves, indicate the severity of 
+
+After classifying each genomic bin as either being flanked by a TAD boundary or not, it was found that the subsequent imbalance ratios across resolutions and cell lines were extremely low. Ideally a manageable dataset will have an imbalance ratio hovering near 1. At their heights, the imbalance ratios were 0.179, 0.152, ... for cell lines GM12878, K562, ... respectively (Figure 4). 
+
 
 
 # Discussion
