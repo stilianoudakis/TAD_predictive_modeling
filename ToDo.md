@@ -1,3 +1,6 @@
+- Clean up todo - after figure renaming, all comments are off
+- When adding, removing, or renaming any figure or table, adjust the legends
+
 -put figure 6 as supplemental; describe in results
 - remove supplemental table of performance formulas
 
