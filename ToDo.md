@@ -1,18 +1,8 @@
 - Clean up todo - after figure renaming, all comments are off
 - When adding, removing, or renaming any figure or table, adjust the legends
 
--put figure 6 as supplemental; describe in results
-- remove supplemental table of performance formulas
-
 - Check ??? in `figure_legends.Rmd`, `table_legends.Rmd`, `supplementary_legends.Rmd`
 - Add legend for `Supplementary/figure1_distance_densities.png`
-
-
--supp figure1: label plots with resolutions and format in gimp
--figure 4: use ratio (one number) above CB bars
--supp figure 2: make horizontal; label A-C
--figure5 change order of colors to reflect curves; remove numbers
-
 
 
 - directly compare mourad using percent predictor types
