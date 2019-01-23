@@ -108,7 +108,7 @@ For the task of identifying the functional genomic elements that were most predi
 
 ## ENSEMBLE COMPARISONS
 
-We evaluated and compared multilpe random forest classification algorithms built on domain data extracted from Hi-C datasets for X cell lines C = {GM12878, K562, ...}, at four different resolutions R = {10 kb, 25 kb, 50 kb, 100 kb}. For each classifier, we compared 3 predictor types P = {OC, OP, Distance} and 5 class balancing techniques B = {None, RUS, ROS, SMOTE, ROSE}. A system produced from the ensemble framework was defined as: E = {c, r, p, b}, where c $\in$ C, R $\in$ R, p $\in$ P, and b $\in$ B. Letting |X| denote the cardinality of each set, we evaluated |C| x |R| x |P| x |B| different ensemble systems, totaling X (=x $\times$ 4 $\times$ 3 $\times$ 5) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables and Figures.
+We evaluated and compared multilpe random forest classification algorithms built on domain data extracted from Hi-C datasets for X cell lines C = {GM12878, K562, ...}, at four different resolutions R = {10 kb, 25 kb, 50 kb, 100 kb}. For each classifier, we compared 3 predictor types P = {OC, OP, Distance} and 5 class balancing techniques B = {None, RUS, ROS, SMOTE, ROSE}. A system produced from the ensemble framework was defined as: E = {c, r, p, b}, where $c \in C, \quad R \in R, \quad p \in P,$ and $b \in$ B. Letting |X| denote the cardinality of each set, we evaluated $|C| \times |R| \times |P| \times |B|$ different ensemble systems, totaling X (=$x \times 4 \times 3 \times 5$) separate models. For simplicity, we present the most significant results, with the complete results available as Supplementary Tables and Figures.
 
 ## DISTANCE TYPE PREDICTORS OUTPERFORM OTHER PREDICTOR-TYPES
 
@@ -118,7 +118,7 @@ Recursive feature elimination was used to establish the optimal number of distan
 
 ## DATA RESAMPLING IMPROVES MODEL PREDICTION
 
-The low baseline thresholds represented by the dashed line in the precision-recall curves (Figure 4 and Supplementary Figure2) indicate the wide disparity between majority and minority classes. Ideally a manageable dataset will have an imbalance ratio hovering near 1. However, in our study we found that there was an average imbalance ratio of 0.154 (SD=0.022) and 0.137 (SD=0.0181) for cell lines GM12878 and K562 respectively (Supplementary Figure 5).  This highlights the need for suitable resampling techniques. 
+The low baseline thresholds represented by the dashed line in the precision-recall curves (Figure 4 and Supplementary Figure 2) indicate the wide disparity between majority and minority classes. Ideally a manageable dataset will have an imbalance ratio hovering near 1. However, in our study we found that there was an average imbalance ratio of 0.154 (SD=0.022) and 0.137 (SD=0.0181) for cell lines GM12878 and K562 respectively (Supplementary Figure 5).  This highlights the need for suitable resampling techniques. 
 
 
 
