@@ -9,64 +9,16 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Figure 1: Model Construction.** The linear genome was binned according to the resolution of the Hi-C data. TAD boundaries were then flanked by 1 resolution-unit on both sides of the boundary point. [??? The following is unclear. Show Y on the figure. Are you talking about overlap only?] The response vector Y used for classification was determined by whether or not a genomic bin overlapped with a flanked region. The positional coordinates of each functional genomic element, obtained from ENCODE, were then used to define the feature space of the models.
+**Figure 1: Model Construction.** Cell line specific Hi-C matices were obtained from [@rao20143d].  The linear genome was then binned according to the intervals of the square-symmetric contact matrices at given resolutions (10 kb, 25 kb, 50 kb, and 100 kb). The coordinates of subsequent topologically associating domains were identified using the Arrowhead TAD-calling algorithm [@durand2016juicebox]. Each TAD coordinate was then flanked by a unit-specific amount (in basepairs) respective to the resolution of the corresponding contact matrix. The response vector Y used for classification was determined by whether a genomic bin overlapped with a flanked boundary region (Y=1) or not (Y=0). The spatial relationship between positional coordinates of various functional genomic elements, obtained from ENCODE, and the genomic bins were then used to define the feature space of the models.
 
-**Figure 2. The three predictor types considered when quantifying the association between TAD boundaries and genomic annotations.** The _overlap count_ (OC) predictors consider the total number of genomic features that overlapped with each genomic bin. The _overlap percent_ (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin by the total bin width. The _distance_ predictors were calculated by measuring the distance (in bases) from the center of each genomic bin to the center of the nearest genomic feature.
+**Figure 2: Ensemble Framework/Model Building Pipeline.** A diagram of the model building pipeline given a combination of inputs from the ensemble framework. For a particular cell line, contact matrix resolution, and set of features, the data was split into a 7:3 training:testing set ratio.  For the training set, recursive feature elimination was used to reduce the feature space and minimize the influence of uninformative predictors. A particular resampling technique was applied to the reduced training set to create balanced classes. A random forest classification algorithm was then performed and validated using the testing set.
 
-**Figure 3: Ensemble Framework/Model Building Pipeline.** A diagram of the model building pipeline given an a combination of inputs from the ensemble framework. The data was split into a 7:3 training:testing set ratio, the variable reduction technique of choice [??? Which one?] was used to minimize the number of uninformative predictors, and, following a resampling techinque, a random forest classification algorithm was performed on the training set. Each model was then validated on the same testing set. 
+**Figure 3. The three predictor types considered when quantifying the association between TAD boundaries and genomic annotations.** The _overlap count_ (OC) predictors consider the total number of genomic features that overlapped with each genomic bin. The _overlap percent_ (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin by the total bin width. The _distance_ predictors were calculated by measuring the distance (in bases) from the center of each genomic bin to the center of the nearest genomic feature.
 
-**Figure 4: Techniques for addressing class imbalance.** Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
+**Figure 4. Precision-Recall curves for unbalanced 10 kb data.** Precision-recall curves were used to initially compare performance of random forest models with different predictor types on unbalanced data at 10 kb resolution. GM12878 (solid line) and K562 (dashed line) cell lines were compared with predictor type-specific models which included overlap counts (blue), overlap percents (purple), log distance (green), and all three combined (red). For both cell lines, random forest models with log distance-type predictors were found to have higher AUPRC values.
 
-# Figure 5: 5kb Model Performances
+**Figure 5. Model Performances on 10kb data using distance-type predictors for different number of features** Using RFE, performances of a series of random forest models with different numbers of the most predictive features for each cell line was compared using AUPRC. For convenience and computational efficiency, only specific subsets of features were considered (increasing powers of 2). For the 10 kb data, near optimal performance was achieved for both the GM12878 (red) and K562 cell lines (blue).
 
-Comparing model performances for TAD boundary data at 5kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 5kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
-
-# Figure 6: 25kb Model Performances
-
-Comparing model performances for TAD boundary data at 25kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 25kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
-
-# Figure 7: 50kb Model Performances
-
-Comparing model performances for TAD boundary data at 50kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 50kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
-
-# Figure 8: 100kb Model Performances
-
-Comparing model performances for TAD boundary data at 100kb resolution across each re-sampling technique. Each square plot represents a random forest classifier performed on 10
-+0kb resolution binned boundary data using a particular predictor type, variable reduction algorithm, and re-sampling technique evaluated across 4 different performance metrics.
-
-**Figure 9: Comparing Performances** Comparing performances of random forest classification algorithms, across TAD boundary data at each resolution for models using distance-type predictors, with elastic-net regularization and random under-sampling. Performances were aggregated by taking the average of each metric across 50 iterations of random under-sampling. [??? Poor legend]
-
-**Figure 10: Comparing Variable Importance.** Comparing variable importance for the top 15 most predictive functional genomic elements for each of the 4 different resolutions. The x-axis represents the standardized difference between the out-of-bag prediction accuracy after permutting each predictor variable, averaged across all trees. The greater the mean standardized difference, the more importance the predictor is to the model. [??? What are A/B/C/D panels?]
-
-# Figure 11: Model Performances for all Resolutions
-
-Comparing model performances for TAD boundary data for all 4 resolutions. The four regions represent (from left to right; top to bottom) data at 5kb, 25kb, 50kb, and 100kb resolutions. Within each region, the rows represent the set of re-sampling techniques, while the columns represent the set of performance metrics that the models were evaluated on. Each plot compares 2 sets of models; one using LASSO regularization and one using Elastic-Net regularization. Within each set, each bar represents the performance of a model with a specific predictor type; either overlap counts (OC) in red, overlap percent (OP) in green, or distance in blue. 
-
-
-# OLD Figure legends
-
-## Figure 1: Model Construction
-
-Diagram of the model construction used for downstream analysis. The linear genome was binned according to the resolution of the respective HiC experiment (either 10 kb, 25 kb, 50 kb, or 100 kb intervals). TAD boundaries were then flanked by 1-unit on either side of the boundary point. The unit flanking was indicative of the resolution that the domain data was obtained from (i.e. for 10 kb resolution, 1 unit represents 10 kb for a total flanking region of 20 kb). The response vector Y used for classification was determined by whether or not a genomic bin overlapped with a flanked region. The positional coordinates of each functional genomic element, obtained from ENCODE, were then used to define the feature space of the models.
-
-## Figure 2: Ensemble Framework/Model Building Pipeline
-
-A diagram of the model building pipeline given a combination of inputs from the ensemble framework. The data was split into a 7:3 training set to testing set ratio, an $l_{1}$ norm regularization (LASSO) was implemented, and a random forest classification algorithm was performed. Each model was then validated on the same testing set. 
-
-## Figure 3: Predictor Types 
-
-Diagram of the 3 predictor types considered when assessing the relationship between TAD boundaries and functional genomic elements. Each predictor type was used as the feature space in downstream analyses for predicting which functional genomic elements were associated with the formation of TAD boundaries. Featured above are bin-specific examples of the construction of each predictor type. (Left) The overlap count (OC) predictors were calculated by considering the total number of elemental regions that overlapped with each genomic bin. (Middle) The overlap percent (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin and dividing by the total bin width (either 5, 25, 50, or 100 kilobases given resolution of boundary data). (Right) The distance predictors were calculated by measuring the distance (in base pairs) from the center of each genomic bin to the center of the nearest elemental region of interest. The two green segments directly below the rightmost enlarged figure represent the center of the overlapping regions defining the respective functional genomic element.
-
-## Figure 4: Class Imbalance
-
-Barplots illustrating the class imbalance problem featured across each of the four different resolutions that were analyzed. Minority classes represent the number of genomic bins that contain a TAD boundary, while the majority classes represent the number of genomic bins that do not contain a TAD boundary. 
-
-## Figure 5: Performances of Models with No Class-Balancing
-
-Barplots measuring the predictive performance of models built on imbalanced datasets. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
-
-## Figure 6: Performances of Models with Randomly Under-sampled Data.
-
-Barplots measuring the predictive performance of models built on datasets using 50 iterations of random under-sampling. The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
+**Figure 6. Variable importance heatmap for 10 kb data across cell lines.** Predictive importance of the top 32 genomic features across cell lines for 10 kb data. Importance was discretized into quantiles, with features that were not congruent between cell lines filled in grey. 
 
 

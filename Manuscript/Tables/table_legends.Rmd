@@ -9,28 +9,3 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Table 1: List of Genomic Annoations. 
-
-# Table 2: Class Distributions
-
-Summary of the class distributions for each re-sampling technique, across each resolution. All re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
-
-# Table 3: 5kb Model Performances
-
-Performance metrics comparing models using different sampling approaches for the 5kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
-
-# Table 4: 25kb Model Performances
-
-Performance metrics comparing models using different sampling approaches for the 25kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
-
-# Table 5: 50kb Model Performances
-
-Performance metrics comparing models using different sampling approaches for the 50kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
-
-# Table 6: 100kb Model Performances
-
-Performance metrics comparing models using different sampling approaches for the 100kb resolution TAD boundary data. The best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 
-
-# Table 7: Model Performances at all Resolutions
-
-Performance metrics comparing models using different sampling approaches for each of the 4 resolutions. Withing each resolution, the best value in each column for each performance metric is underlined to compare different sampling approaches, while the highest value in each row is highlighted in bold to compare different predictor types. 

@@ -3,24 +3,16 @@ title: "Legends for supplementary material"
 output: pdf_document
 ---
 
+**Figure 1. Distance Densities across cell lines and resolutions**
+Density curves of distances (in millions of base pairs) from genomic bins to flanked TAD boundaries for GM12878 (left column) and K562 (right column) cell lines. The untransformed distances (red) are highly right skewed. After performing a $log_{2}$ tranformation (blue), the distances exhibit more normalized densities. The normalized distances were exhibited across all data resolution (rows).
+
+**Figure 2. Precision-Recall curves for unbalanced 25 kb, 50kb, and 100kb data.** Precision-recall curves were used to initially compare performance of random forest models with different predictor types on unbalanced data at 25 kb, 50kb, and 100kb resolution. GM12878 (solid line) and K562 (dashed line) cell lines were compared with predictor type-specific models which included overlap counts (blue), overlap percents (purple), log distance (green), and all three combined (red). For both cell lines, and among all resolutions, random forest models with log distance-type predictors were found to have higher AUPRC values.
+
+**Figure 3. Model Performances on 25 kb, 50kb, and 100kb data using distance-type predictors for different number of features** Using RFE, performances of a series of random forest models with different numbers of the most predictive features for each cell line was compared using AUPRC. For convenience and computational efficiency, only specific subsets of features were considered (increasing powers of 2). For each resolution, near optimal performance was achieved for both the GM12878 (red) and K562 cell lines (blue).
+
+**Figure 4. Variable importance heatmap for 25 kb, 50kb, and 100kb data across cell lines.** Predictive importance of the top 32 genomic features across cell lines for 25 kb, 50kb, and 100kb resolutions. Importance was discretized into quantiles, with features that were not congruent between cell lines filled in grey. 
+
+**Figure 5: Imbalance ratios across resolutions and cell lines.** Imbalance ratios, defined as the ratio of minority class samples to majority class samples, were plotted across resolutions for cell lines GM12878 (red) and K562 (blue). The mean imbalance ratios across resolutions were found to be X1 (SD=Y2) and X2 (SD=Y2) for the GM12878 and K562 cell lines respectively.
+
 **Supplementary Table S1. List of Genomic Annotations.** The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Cell Type" - cell type, "Source" - download URL. [??? Did you use only features common to both cell lines?]
 
-## Table 2: Class Distributions for Other Resolutions
-
-Summary of the class distributions for each of the other resolution domain data sets (25 kb, 50 kb, and 100 kb), across each re-sampling technique. As with the 5 kb data, all re-sampling techniques yielded completely balanced classes. That is, there was a 1:1 relationship between the majority and minority classes after sampling took place.
-
-## Table 3: Model Performances When Not Accounting for Class Imbalance
-
-Results of various metrics used to assess predictive performances for models that were built on fully imbalanced datasets. 
-
-## Figure 1: Performances of Models with Both SMOTE-Balanced and Randomly Over-sampled Data.
-
-Barplots measuring the predictive performance of models built on datasets using 50 iterations of both the SMOTE algorithm (A) and random over-sampling (B).  The performance metrics considered were accuracy, AUC, F1-Score, and MCC. Performances were compared across 4 resolutions (10 kb, 25kb, 50kb, and 100 kb), for each predictor type (OC, OP, and Distances).
-
-## Table 4:
-
-Results of various metrics used to assess predictive performances for models that were built on random under-sampled datasets. 
-
-## Table 5: 
-
-Results of various metrics used to assess predictive performances for models that were built on both SMOTE-balanced and random over-sampled datasets. 
