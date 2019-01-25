@@ -1,8 +1,12 @@
-- Clean up todo - after figure renaming, all comments are off
-- When adding, removing, or renaming any figure or table, adjust the legends
-
-- Check ??? in `figure_legends.Rmd`, `table_legends.Rmd`, `supplementary_legends.Rmd`
-- Add legend for `Supplementary/figure1_distance_densities.png`
+- specify how same tfbs from different institutions was handled
+- discuss area under precision recall curve more: how it should look, how to interpret, etc
+- update supp table 1 with cell line specific tfbs
+- but tfbs specific urls
+- describe error bars for rfe plots in legend
+- extend rfe plots to full feature space
+- perform variable reduction after balancing
+- cluster heatmaps by row
+- change color of heatmaps (make lighter red)
 
 
 - directly compare mourad using percent predictor types
