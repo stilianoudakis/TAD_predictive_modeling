@@ -1,0 +1,4075 @@
+---
+title: "Performances Code"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+
+```
+
+# Evaluating Distance Densities
+##GM12878
+###10kb
+
+```{r}
+gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+gm12878_10kb_ld <- gm12878_10kb[,c(1,grep("_dist", names(gm12878_10kb)))]
+
+###############
+#gm12878_10kb_ld <- gm12878_10kb_ld[,c(1:5)]
+###############
+
+gm12878_10kb_d <- gm12878_10kb_ld
+gm12878_10kb_d[,-1] <- exp(gm12878_10kb_ld[,-1]) - 1
+gm12878_10kb_d$Average_dist <- rowMeans(gm12878_10kb_d[,-1])
+
+gm12878_10kb_ld$Average_dist <- rowMeans(gm12878_10kb_ld[,-1])
+names(gm12878_10kb_ld)[-1] <- paste(substr(names(gm12878_10kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_10kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_10kb_alldist <- cbind.data.frame(gm12878_10kb_d[,-1], gm12878_10kb_ld[,-1])
+
+long10kb <- melt(gm12878_10kb_alldist)
+long10kb$variable <- as.character(long10kb$variable)
+long10kb$Transformation <- NA
+long10kb$Transformation[grep("_logdist", long10kb$variable)] <- rep("Log Distance", length(long10kb$variable[grep("_logdist", long10kb$variable)]))
+long10kb$Transformation[grep("_logdist", long10kb$variable, invert = TRUE)] <- rep("Distance", length(long10kb$variable[grep("_logdist", long10kb$variable, invert = TRUE)]))
+
+table(long10kb$Transformation)
+
+
+distdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("_dist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_dist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("logdist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_logdist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long10kb$value[long10kb$Transformation=="Distance"] <- long10kb$value[long10kb$Transformation=="Distance"]/1000000
+long10kb <- long10kb[grep("Average", long10kb$variable, invert = TRUE),]
+long10kb$variable <- factor(long10kb$variable)
+long10kb$Transformation <- factor(long10kb$Transformation)
+
+alldensity10kb <- ggplot(long10kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("10 kb")+ 
+  ylim(0,.8)+
+  ggtitle("GM12878") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+```
+
+
+###25kb
+
+```{r}
+gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+gm12878_25kb_ld <- gm12878_25kb[,c(1,grep("_dist", names(gm12878_25kb)))]
+
+###############
+#gm12878_25kb_ld <- gm12878_25kb_ld[,c(1:5)]
+###############
+
+gm12878_25kb_d <- gm12878_25kb_ld
+gm12878_25kb_d[,-1] <- exp(gm12878_25kb_ld[,-1]) - 1
+gm12878_25kb_d$Average_dist <- rowMeans(gm12878_25kb_d[,-1])
+
+gm12878_25kb_ld$Average_dist <- rowMeans(gm12878_25kb_ld[,-1])
+names(gm12878_25kb_ld)[-1] <- paste(substr(names(gm12878_25kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_25kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_25kb_alldist <- cbind.data.frame(gm12878_25kb_d[,-1], gm12878_25kb_ld[,-1])
+
+long25kb <- melt(gm12878_25kb_alldist)
+long25kb$variable <- as.character(long25kb$variable)
+long25kb$Transformation <- NA
+long25kb$Transformation[grep("_logdist", long25kb$variable)] <- rep("Log Distance", length(long25kb$variable[grep("_logdist", long25kb$variable)]))
+long25kb$Transformation[grep("_logdist", long25kb$variable, invert = TRUE)] <- rep("Distance", length(long25kb$variable[grep("_logdist", long25kb$variable, invert = TRUE)]))
+
+table(long25kb$Transformation)
+
+
+distdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("_dist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_dist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("logdist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_logdist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) +  
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long25kb$value[long25kb$Transformation=="Distance"] <- long25kb$value[long25kb$Transformation=="Distance"]/1000000
+long25kb <- long25kb[grep("Average", long25kb$variable, invert = TRUE),]
+long25kb$variable <- factor(long25kb$variable)
+long25kb$Transformation <- factor(long25kb$Transformation)
+
+alldensity25kb <- ggplot(long25kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("25 kb")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+###50kb
+
+```{r}
+gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+
+gm12878_50kb_ld <- gm12878_50kb[,c(1,grep("_dist", names(gm12878_50kb)))]
+
+###############
+#gm12878_50kb_ld <- gm12878_50kb_ld[,c(1:5)]
+###############
+
+gm12878_50kb_d <- gm12878_50kb_ld
+gm12878_50kb_d[,-1] <- exp(gm12878_50kb_ld[,-1]) - 1
+gm12878_50kb_d$Average_dist <- rowMeans(gm12878_50kb_d[,-1])
+
+gm12878_50kb_ld$Average_dist <- rowMeans(gm12878_50kb_ld[,-1])
+names(gm12878_50kb_ld)[-1] <- paste(substr(names(gm12878_50kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_50kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_50kb_alldist <- cbind.data.frame(gm12878_50kb_d[,-1], gm12878_50kb_ld[,-1])
+
+long50kb <- melt(gm12878_50kb_alldist)
+long50kb$variable <- as.character(long50kb$variable)
+long50kb$Transformation <- NA
+long50kb$Transformation[grep("_logdist", long50kb$variable)] <- rep("Log Distance", length(long50kb$variable[grep("_logdist", long50kb$variable)]))
+long50kb$Transformation[grep("_logdist", long50kb$variable, invert = TRUE)] <- rep("Distance", length(long50kb$variable[grep("_logdist", long50kb$variable, invert = TRUE)]))
+
+table(long50kb$Transformation)
+
+
+distdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("_dist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_dist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("logdist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_logdist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long50kb$value[long50kb$Transformation=="Distance"] <- long50kb$value[long50kb$Transformation=="Distance"]/1000000
+long50kb <- long50kb[grep("Average", long50kb$variable, invert = TRUE),]
+long50kb$variable <- factor(long50kb$variable)
+long50kb$Transformation <- factor(long50kb$Transformation)
+
+alldensity50kb <- ggplot(long50kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("50 kb")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+###100kb
+
+```{r}
+gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+
+gm12878_100kb_ld <- gm12878_100kb[,c(1,grep("_dist", names(gm12878_100kb)))]
+
+###############
+#gm12878_100kb_ld <- gm12878_100kb_ld[,c(1:5)]
+###############
+
+gm12878_100kb_d <- gm12878_100kb_ld
+gm12878_100kb_d[,-1] <- exp(gm12878_100kb_ld[,-1]) - 1
+gm12878_100kb_d$Average_dist <- rowMeans(gm12878_100kb_d[,-1])
+
+gm12878_100kb_ld$Average_dist <- rowMeans(gm12878_100kb_ld[,-1])
+names(gm12878_100kb_ld)[-1] <- paste(substr(names(gm12878_100kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_100kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_100kb_alldist <- cbind.data.frame(gm12878_100kb_d[,-1], gm12878_100kb_ld[,-1])
+
+long100kb <- melt(gm12878_100kb_alldist)
+long100kb$variable <- as.character(long100kb$variable)
+long100kb$Transformation <- NA
+long100kb$Transformation[grep("_logdist", long100kb$variable)] <- rep("Log Distance", length(long100kb$variable[grep("_logdist", long100kb$variable)]))
+long100kb$Transformation[grep("_logdist", long100kb$variable, invert = TRUE)] <- rep("Distance", length(long100kb$variable[grep("_logdist", long100kb$variable, invert = TRUE)]))
+
+table(long100kb$Transformation)
+
+
+distdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("_dist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_dist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("No Transformation") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("logdist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_logdist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("Log Tranformation") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long100kb$value[long100kb$Transformation=="Distance"] <- long100kb$value[long100kb$Transformation=="Distance"]/1000000
+long100kb <- long100kb[grep("Average", long100kb$variable, invert = TRUE),]
+long100kb$variable <- factor(long100kb$variable)
+long100kb$Transformation <- factor(long100kb$Transformation)
+
+alldensity100kb <- ggplot(long100kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("100 kb")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+##K562
+###10kb
+
+```{r}
+K562_10kb <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+
+K562_10kb_ld <- K562_10kb[,c(1,grep("_dist", names(K562_10kb)))]
+
+###############
+#K562_10kb_ld <- K562_10kb_ld[,c(1:5)]
+###############
+
+K562_10kb_d <- K562_10kb_ld
+K562_10kb_d[,-1] <- exp(K562_10kb_ld[,-1]) - 1
+K562_10kb_d$Average_dist <- rowMeans(K562_10kb_d[,-1])
+
+K562_10kb_ld$Average_dist <- rowMeans(K562_10kb_ld[,-1])
+names(K562_10kb_ld)[-1] <- paste(substr(names(K562_10kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_10kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_10kb_alldist <- cbind.data.frame(K562_10kb_d[,-1], K562_10kb_ld[,-1])
+
+long10kb <- melt(K562_10kb_alldist)
+long10kb$variable <- as.character(long10kb$variable)
+long10kb$Transformation <- NA
+long10kb$Transformation[grep("_logdist", long10kb$variable)] <- rep("Log Distance", length(long10kb$variable[grep("_logdist", long10kb$variable)]))
+long10kb$Transformation[grep("_logdist", long10kb$variable, invert = TRUE)] <- rep("Distance", length(long10kb$variable[grep("_logdist", long10kb$variable, invert = TRUE)]))
+
+table(long10kb$Transformation)
+
+
+distdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("_dist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_dist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("logdist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_logdist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long10kb$value[long10kb$Transformation=="Distance"] <- long10kb$value[long10kb$Transformation=="Distance"]/1000000
+long10kb <- long10kb[grep("Average", long10kb$variable, invert = TRUE),]
+long10kb$variable <- factor(long10kb$variable)
+long10kb$Transformation <- factor(long10kb$Transformation)
+
+alldensity10kb_k562 <- ggplot(long10kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	#ylab("10 kb")+ 
+  ylim(0,.8)+
+  ggtitle("K562") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+
+###25kb
+
+```{r}
+K562_25kb <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+
+K562_25kb_ld <- K562_25kb[,c(1,grep("_dist", names(K562_25kb)))]
+
+###############
+#K562_25kb_ld <- K562_25kb_ld[,c(1:5)]
+###############
+
+K562_25kb_d <- K562_25kb_ld
+K562_25kb_d[,-1] <- exp(K562_25kb_ld[,-1]) - 1
+K562_25kb_d$Average_dist <- rowMeans(K562_25kb_d[,-1])
+
+K562_25kb_ld$Average_dist <- rowMeans(K562_25kb_ld[,-1])
+names(K562_25kb_ld)[-1] <- paste(substr(names(K562_25kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_25kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_25kb_alldist <- cbind.data.frame(K562_25kb_d[,-1], K562_25kb_ld[,-1])
+
+long25kb <- melt(K562_25kb_alldist)
+long25kb$variable <- as.character(long25kb$variable)
+long25kb$Transformation <- NA
+long25kb$Transformation[grep("_logdist", long25kb$variable)] <- rep("Log Distance", length(long25kb$variable[grep("_logdist", long25kb$variable)]))
+long25kb$Transformation[grep("_logdist", long25kb$variable, invert = TRUE)] <- rep("Distance", length(long25kb$variable[grep("_logdist", long25kb$variable, invert = TRUE)]))
+
+table(long25kb$Transformation)
+
+
+distdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("_dist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_dist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("logdist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_logdist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long25kb$value[long25kb$Transformation=="Distance"] <- long25kb$value[long25kb$Transformation=="Distance"]/1000000
+long25kb <- long25kb[grep("Average", long25kb$variable, invert = TRUE),]
+long25kb$variable <- factor(long25kb$variable)
+long25kb$Transformation <- factor(long25kb$Transformation)
+
+alldensity25kb_k562 <- ggplot(long25kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	#ylab("25 kb")+ 
+  ylim(0,.8)+
+  #ggtitle("K562") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+
+###50kb
+
+```{r}
+K562_50kb <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+
+K562_50kb_ld <- K562_50kb[,c(1,grep("_dist", names(K562_50kb)))]
+
+###############
+#K562_50kb_ld <- K562_50kb_ld[,c(1:5)]
+###############
+
+K562_50kb_d <- K562_50kb_ld
+K562_50kb_d[,-1] <- exp(K562_50kb_ld[,-1]) - 1
+K562_50kb_d$Average_dist <- rowMeans(K562_50kb_d[,-1])
+
+K562_50kb_ld$Average_dist <- rowMeans(K562_50kb_ld[,-1])
+names(K562_50kb_ld)[-1] <- paste(substr(names(K562_50kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_50kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_50kb_alldist <- cbind.data.frame(K562_50kb_d[,-1], K562_50kb_ld[,-1])
+
+long50kb <- melt(K562_50kb_alldist)
+long50kb$variable <- as.character(long50kb$variable)
+long50kb$Transformation <- NA
+long50kb$Transformation[grep("_logdist", long50kb$variable)] <- rep("Log Distance", length(long50kb$variable[grep("_logdist", long50kb$variable)]))
+long50kb$Transformation[grep("_logdist", long50kb$variable, invert = TRUE)] <- rep("Distance", length(long50kb$variable[grep("_logdist", long50kb$variable, invert = TRUE)]))
+
+table(long50kb$Transformation)
+
+
+distdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("_dist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_dist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("logdist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_logdist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long50kb$value[long50kb$Transformation=="Distance"] <- long50kb$value[long50kb$Transformation=="Distance"]/1000000
+long50kb <- long50kb[grep("Average", long50kb$variable, invert = TRUE),]
+long50kb$variable <- factor(long50kb$variable)
+long50kb$Transformation <- factor(long50kb$Transformation)
+
+alldensity50kb_k562 <- ggplot(long50kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	#ylab("50 kb")+ 
+  ylim(0,.8)+
+  #ggtitle("K562") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+  
+
+###100kb
+
+```{r}
+K562_100kb <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+
+K562_100kb_ld <- K562_100kb[,c(1,grep("_dist", names(K562_100kb)))]
+
+###############
+#K562_100kb_ld <- K562_100kb_ld[,c(1:5)]
+###############
+
+K562_100kb_d <- K562_100kb_ld
+K562_100kb_d[,-1] <- exp(K562_100kb_ld[,-1]) - 1
+K562_100kb_d$Average_dist <- rowMeans(K562_100kb_d[,-1])
+
+K562_100kb_ld$Average_dist <- rowMeans(K562_100kb_ld[,-1])
+names(K562_100kb_ld)[-1] <- paste(substr(names(K562_100kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_100kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_100kb_alldist <- cbind.data.frame(K562_100kb_d[,-1], K562_100kb_ld[,-1])
+
+long100kb <- melt(K562_100kb_alldist)
+long100kb$variable <- as.character(long100kb$variable)
+long100kb$Transformation <- NA
+long100kb$Transformation[grep("_logdist", long100kb$variable)] <- rep("Log Distance", length(long100kb$variable[grep("_logdist", long100kb$variable)]))
+long100kb$Transformation[grep("_logdist", long100kb$variable, invert = TRUE)] <- rep("Distance", length(long100kb$variable[grep("_logdist", long100kb$variable, invert = TRUE)]))
+
+table(long100kb$Transformation)
+
+
+distdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("_dist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_dist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("logdist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_logdist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long100kb$value[long100kb$Transformation=="Distance"] <- long100kb$value[long100kb$Transformation=="Distance"]/1000000
+long100kb <- long100kb[grep("Average", long100kb$variable, invert = TRUE),]
+long100kb$variable <- factor(long100kb$variable)
+long100kb$Transformation <- factor(long100kb$Transformation)
+
+alldensity100kb_k562 <- ggplot(long100kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	#ylab("100 kb")+ 
+  ylim(0,.8)+
+  #ggtitle("K562") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+##Combined
+
+```{r}
+#alldistplots <- grid.arrange(distdensity10kb, logdistdensity10kb,
+#             distdensity25kb, logdistdensity25kb,
+#             distdensity50kb, logdistdensity50kb,
+#             distdensity100kb, logdistdensity100kb, ncol=2, nrow=4)
+
+alldistplots <- ggarrange(alldensity10kb,
+                          alldensity10kb_k562,
+                          alldensity25kb,
+                          alldensity25kb_k562,
+                          alldensity50kb,
+                          alldensity50kb_k562,
+                          alldensity100kb,
+                          alldensity100kb_k562, 
+          ncol=2, 
+          nrow=4,
+          #labels = c("A","", "B","", "C","", "D",""),
+          legend = "top",
+          common.legend = TRUE)
+
+annotate_figure(alldistplots,
+                bottom = text_grob("Distance to Nearest TAD Boundary \n (in millions of basepairs)", 
+                                color = "black", 
+                                face = "bold", 
+                                size = 15),
+                left = text_grob("Density", 
+                                 color = "black",
+                                 size = 15,
+                                 rot = 90))
+```
+
+
+#Evaluating Imbalance Ratios
+##GM12878
+###10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x10 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p10kb <- ggplot(x10, aes(y=IR, x=factor(CB, levels = unique(x10$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+###25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x25 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p25kb <- ggplot(x25, aes(y=IR, x=factor(CB, levels = unique(x25$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+###50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x50 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p50kb <- ggplot(x50, aes(y=IR, x=factor(CB, levels = unique(x50$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+###100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x100 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p100kb <- ggplot(x100, aes(y=IR, x=factor(CB, levels = unique(x100$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+##K562
+###10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x10_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p10kb_k562 <- ggplot(x10_k562, aes(y=IR, x=factor(CB, levels = unique(x10_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+###25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x25_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p25kb_k562 <- ggplot(x25_k562, aes(y=IR, x=factor(CB, levels = unique(x25_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+###50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x50_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p50kb_k562 <- ggplot(x50_k562, aes(y=IR, x=factor(CB, levels = unique(x50_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+###100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x100_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p100kb_k562 <- ggplot(x100_k562, aes(y=IR, x=factor(CB, levels = unique(x100_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+##Combined
+```{r}
+
+IR=c(x10$IR[x10$CB=="Complete"],
+                              x25$IR[x25$CB=="Complete"],
+                              x50$IR[x50$CB=="Complete"],
+                              x100$IR[x100$CB=="Complete"],
+                              x10_k562$IR[x10_k562$CB=="Complete"], 
+                              x25_k562$IR[x25_k562$CB=="Complete"],
+                              x50_k562$IR[x50_k562$CB=="Complete"],
+                              x100_k562$IR[x100_k562$CB=="Complete"])
+CL <- c(rep("GM12878", 4), 
+                  rep("K562", 4))
+Resolution <- c(rep(c("10 kb", "25 kb", "50 kb", "100 kb"), 2))
+
+allirdata <- cbind.data.frame(IR, CL, Resolution)
+allirdata$CL <- factor(allirdata$CL, levels=c("GM12878", "K562"))
+allirdata$Resolution <- factor(allirdata$Resolution, c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+
+allirplots <- ggplot(allirdata, aes(x = Resolution, y = IR,fill = CL)) + 
+  geom_bar(position = "dodge", stat="identity") + 
+  ylab("Imbalance Ratio") +
+  xlab("Resolution") +
+  #scale_fill_manual(name="Cell Line", values=c("red", "blue"))+
+  labs(fill="Cell Line")+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=10),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+
+```
+
+
+#Evaluating Feature Engineering
+
+## PR Curves
+
+###GM12878
+
+####10kb
+
+```{r}
+
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+
+
+```
+
+####25kb
+
+```{r}
+
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+####50kb
+
+```{r}
+
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+####100kb
+
+```{r}
+
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+###K562
+
+####10kb
+
+```{r}
+prall <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )", "Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+####25kb
+
+```{r}
+prall <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )","Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+####50kb
+
+```{r}
+prall <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )","Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+####100kb
+
+```{r}
+prall <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )", "Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+###Combined
+
+```{r}
+#10kb
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prdata_10kb <- rbind.data.frame(prall$curve,
+                                prdist$curve,
+                                prop$curve,
+                                proc$curve,
+                                prall_k562$curve,
+                                prdist_k562$curve,
+                                prop_k562$curve,
+                                proc_k562$curve)
+names(prdata_10kb) <- c("Recall", "Precision", "Threshold")
+prdata_10kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
+                           rep("Distance", dim(prdist$curve)[1]),
+                           rep("OP", dim(prop$curve)[1]),
+                           rep("OC", dim(proc$curve)[1]),
+                           rep("All", dim(prall_k562$curve)[1]),
+                           rep("Distance", dim(prdist_k562$curve)[1]),
+                           rep("OP", dim(prop_k562$curve)[1]),
+                           rep("OC", dim(proc_k562$curve)[1]))
+prdata_10kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
+                                      dim(prdist$curve)[1]+
+                                      dim(prop$curve)[1]+
+                                      dim(proc$curve)[1])),
+                    rep("K562", (dim(prall_k562$curve)[1]+
+                                      dim(prdist_k562$curve)[1]+
+                                      dim(prop_k562$curve)[1]+
+                                      dim(proc_k562$curve)[1])))
+prdata_10kb$Predictor <- factor(prdata_10kb$Predictor)
+prdata_10kb$CL <- factor(prdata_10kb$CL)
+
+prplot_10kb <- ggplot(prdata_10kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+#25kb
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prdata_25kb <- rbind.data.frame(prall$curve,
+                                prdist$curve,
+                                prop$curve,
+                                proc$curve,
+                                prall_k562$curve,
+                                prdist_k562$curve,
+                                prop_k562$curve,
+                                proc_k562$curve)
+names(prdata_25kb) <- c("Recall", "Precision", "Threshold")
+prdata_25kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
+                           rep("Distance", dim(prdist$curve)[1]),
+                           rep("OP", dim(prop$curve)[1]),
+                           rep("OC", dim(proc$curve)[1]),
+                           rep("All", dim(prall_k562$curve)[1]),
+                           rep("Distance", dim(prdist_k562$curve)[1]),
+                           rep("OP", dim(prop_k562$curve)[1]),
+                           rep("OC", dim(proc_k562$curve)[1]))
+prdata_25kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
+                                      dim(prdist$curve)[1]+
+                                      dim(prop$curve)[1]+
+                                      dim(proc$curve)[1])),
+                    rep("K562", (dim(prall_k562$curve)[1]+
+                                      dim(prdist_k562$curve)[1]+
+                                      dim(prop_k562$curve)[1]+
+                                      dim(proc_k562$curve)[1])))
+prdata_25kb$Predictor <- factor(prdata_25kb$Predictor)
+prdata_25kb$CL <- factor(prdata_25kb$CL)
+
+prplot_25kb <- ggplot(prdata_25kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+#50kb
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prdata_50kb <- rbind.data.frame(prall$curve,
+                                prdist$curve,
+                                prop$curve,
+                                proc$curve,
+                                prall_k562$curve,
+                                prdist_k562$curve,
+                                prop_k562$curve,
+                                proc_k562$curve)
+names(prdata_50kb) <- c("Recall", "Precision", "Threshold")
+prdata_50kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
+                           rep("Distance", dim(prdist$curve)[1]),
+                           rep("OP", dim(prop$curve)[1]),
+                           rep("OC", dim(proc$curve)[1]),
+                           rep("All", dim(prall_k562$curve)[1]),
+                           rep("Distance", dim(prdist_k562$curve)[1]),
+                           rep("OP", dim(prop_k562$curve)[1]),
+                           rep("OC", dim(proc_k562$curve)[1]))
+prdata_50kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
+                                      dim(prdist$curve)[1]+
+                                      dim(prop$curve)[1]+
+                                      dim(proc$curve)[1])),
+                    rep("K562", (dim(prall_k562$curve)[1]+
+                                      dim(prdist_k562$curve)[1]+
+                                      dim(prop_k562$curve)[1]+
+                                      dim(proc_k562$curve)[1])))
+prdata_50kb$Predictor <- factor(prdata_50kb$Predictor)
+prdata_50kb$CL <- factor(prdata_50kb$CL)
+
+prplot_50kb <- ggplot(prdata_50kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+#100kb
+prall <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prdata_100kb <- rbind.data.frame(prall$curve,
+                                prdist$curve,
+                                prop$curve,
+                                proc$curve,
+                                prall_k562$curve,
+                                prdist_k562$curve,
+                                prop_k562$curve,
+                                proc_k562$curve)
+names(prdata_100kb) <- c("Recall", "Precision", "Threshold")
+prdata_100kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
+                           rep("Distance", dim(prdist$curve)[1]),
+                           rep("OP", dim(prop$curve)[1]),
+                           rep("OC", dim(proc$curve)[1]),
+                           rep("All", dim(prall_k562$curve)[1]),
+                           rep("Distance", dim(prdist_k562$curve)[1]),
+                           rep("OP", dim(prop_k562$curve)[1]),
+                           rep("OC", dim(proc_k562$curve)[1]))
+prdata_100kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
+                                      dim(prdist$curve)[1]+
+                                      dim(prop$curve)[1]+
+                                      dim(proc$curve)[1])),
+                    rep("K562", (dim(prall_k562$curve)[1]+
+                                      dim(prdist_k562$curve)[1]+
+                                      dim(prop_k562$curve)[1]+
+                                      dim(proc_k562$curve)[1])))
+prdata_100kb$Predictor <- factor(prdata_100kb$Predictor)
+prdata_100kb$CL <- factor(prdata_100kb$CL)
+
+prplot_100kb <- ggplot(prdata_100kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+ggarrange(prplot_25kb, prplot_50kb, prplot_100kb,
+          nrow=2,ncol=2,
+          common.legend = TRUE, legend = "right")
+```
+
+
+
+## RFE
+
+###GM12878
+
+####10kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_10kb <- rfeModel_dist$results[1:6,]
+
+pt10kb <- ggplot(resampdata_10kb, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+####25kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_25kb <- rfeModel_dist$results[1:6,]
+
+pt25kb <- ggplot(resampdata_25kb, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+####50kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_50kb <- rfeModel_dist$results[1:6,]
+
+pt50kb <- ggplot(resampdata_50kb, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+####100kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_100kb <- rfeModel_dist$results[1:6,]
+
+pt100kb <- ggplot(resampdata_100kb, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+###K562
+
+####10kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_10kb_k562 <- rfeModel_dist$results[1:6,]
+
+pt10kb_k562 <- ggplot(resampdata_10kb_k562, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+
+####25kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_25kb_k562 <- rfeModel_dist$results[1:6,]
+
+pt25kb <- ggplot(resampdata_25kb_k562, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+####50kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_50kb_k562 <- rfeModel_dist$results[1:6,]
+
+pt50kb <- ggplot(resampdata_50kb_k562, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+####100kb
+
+```{r}
+#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/rfeModel_all.rds")
+rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
+#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+
+#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+
+#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
+#                                 rep("Distance", nrow(rfeModel_dist$results)),
+#                                 rep("OC", nrow(rfeModel_oc$results)),
+#                                 rep("OP", nrow(rfeModel_op$results)))
+
+#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
+
+resampdata_100kb_k562 <- rfeModel_dist$results[1:6,]
+
+pt100kb <- ggplot(resampdata_100kb_k562, aes(x=Variables, y=AUPRC)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  theme_minimal()+
+  ylim(0,.5)
+
+```
+
+
+### Combined
+
+```{r}
+
+allrfe10kb <- rbind.data.frame(resampdata_10kb, resampdata_10kb_k562)
+allrfe10kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
+allrfe10kb$CL <- factor(allrfe10kb$CL)
+
+rfe10kbplot <- ggplot(data=allrfe10kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  scale_color_discrete(name="Cell Line")+
+  theme_bw()+
+  #ggtitle("10 kb") +
+  ylim(0,.5)+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+allrfe25kb <- rbind.data.frame(resampdata_25kb, resampdata_25kb_k562)
+allrfe25kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
+allrfe25kb$CL <- factor(allrfe25kb$CL)
+
+rfe25kbplot <- ggplot(data=allrfe25kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  scale_color_discrete(name="Cell Line")+
+  theme_bw()+
+  #ggtitle("25 kb") +
+  ylim(0,.5)+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+allrfe50kb <- rbind.data.frame(resampdata_50kb, resampdata_50kb_k562)
+allrfe50kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
+allrfe50kb$CL <- factor(allrfe50kb$CL)
+
+rfe50kbplot <- ggplot(data=allrfe50kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  scale_color_discrete(name="Cell Line")+
+  theme_bw()+
+  #ggtitle("50 kb") +
+  ylim(0,.5)+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+allrfe100kb <- rbind.data.frame(resampdata_100kb, resampdata_100kb_k562)
+allrfe100kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
+allrfe100kb$CL <- factor(allrfe100kb$CL)
+
+rfe100kbplot <- ggplot(data=allrfe100kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point()+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64"), 
+                   labels=c("2", "4", "8", "16", "32", "64"), 
+                   limits=as.character(c(1:64)))+
+  scale_color_discrete(name="Cell Line")+
+  theme_minimal()+
+  theme_bw()+
+  #ggtitle("100 kb") +
+  ylim(0,.5)+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+ggarrange(rfe25kbplot, rfe50kbplot, rfe100kbplot,
+          nrow=2,ncol=2,
+          common.legend = TRUE, legend = "right")
+
+
+#comparing top predictors across resolution and cell line
+rfeModel_dist_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe10kbvars <- rfeModel_dist_10kb$optVariables[1:32]
+
+rfeModel_dist_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe25kbvars <- rfeModel_dist_25kb$optVariables[1:32]
+
+rfeModel_dist_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe50kbvars <- rfeModel_dist_50kb$optVariables[1:32]
+
+rfeModel_dist_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe100kbvars <- rfeModel_dist_100kb$optVariables[1:32]
+
+rfeModel_dist_10kb_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe10kbvars_k562 <- rfeModel_dist_10kb_k562$optVariables[1:32]
+
+rfeModel_dist_25kb_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe25kbvars_k562 <- rfeModel_dist_25kb_k562$optVariables[1:32]
+
+rfeModel_dist_50kb_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe50kbvars_k562 <- rfeModel_dist_50kb_k562$optVariables[1:32]
+
+rfeModel_dist_100kb_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfe100kbvars_k562 <- rfeModel_dist_100kb_k562$variables$var[rfeModel_dist_100kb_k562$variables$Variables==32 & rfeModel_dist_100kb_k562$variables$Resample=="Fold1.Rep1"]
+
+rfe10kbvars <- gsub(paste(c("Gm12878-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe10kbvars)
+rfe25kbvars <- gsub(paste(c("Gm12878-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe25kbvars)
+rfe50kbvars <- gsub(paste(c("Gm12878-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe50kbvars)
+rfe100kbvars <- gsub(paste(c("Gm12878-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe100kbvars)
+
+rfe10kbvars_k562 <- gsub(paste(c("K562-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe10kbvars_k562)
+rfe25kbvars_k562 <- gsub(paste(c("K562-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe25kbvars_k562)
+rfe50kbvars_k562 <- gsub(paste(c("K562-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe50kbvars_k562)
+rfe100kbvars_k562 <- gsub(paste(c("K562-", 
+                            "_dist", 
+                            "-Sydh", 
+                            "-Haib", 
+                            "-Broad",
+                            "-Uchicago",
+                            "-Uta",
+                            "-Uw"), collapse = "|"),"", rfe100kbvars_k562)
+
+alltopvars <- data.frame(rfe10kbvars,
+                         rfe10kbvars_k562,
+                         rfe25kbvars,
+                         rfe25kbvars_k562,
+                         rfe50kbvars,
+                         rfe50kbvars_k562,
+                         rfe100kbvars,
+                         rfe100kbvars_k562)
+
+rfe10kbvars_o <- sort(rfe10kbvars)
+rfe25kbvars_o <- sort(rfe25kbvars)
+rfe50kbvars_o <- sort(rfe50kbvars)
+rfe100kbvars_o <- sort(rfe100kbvars)
+rfe10kbvars_k562_o <- sort(rfe10kbvars_k562)
+rfe25kbvars_k562_o <- sort(rfe25kbvars_k562)
+rfe50kbvars_k562_o <- sort(rfe50kbvars_k562)
+rfe100kbvars_k562_o <- sort(rfe100kbvars_k562)
+alltopvars_o <- data.frame(rfe10kbvars_o,rfe25kbvars_o,rfe50kbvars_o,rfe100kbvars_o,
+                         rfe10kbvars_k562_o,rfe25kbvars_k562_o,rfe50kbvars_k562_o,rfe100kbvars_k562_o)
+
+
+grid.newpage()
+venn.plot <- draw.quad.venn(
+	area1 = length(rfe10kbvars), #The size of the first set
+	area2 = length(rfe25kbvars), #The size of the second set
+	area3 = length(rfe50kbvars), #The size of the third set
+	area4 = length(rfe100kbvars), #The size of the fourth set
+	n12 = length(intersect(rfe10kbvars,rfe25kbvars)), #The size of the intersection between the first and the second set
+	n13 = length(intersect(rfe10kbvars,rfe50kbvars)), #The size of the intersection between the first and the third set
+	n14 = length(intersect(rfe10kbvars,rfe100kbvars)), #The size of the intersection between the first and the fourth set
+	n23 = length(intersect(rfe25kbvars,rfe50kbvars)), #The size of the intersection between the second and the third set
+	n24 = length(intersect(rfe25kbvars,rfe100kbvars)), #The size of the intersection between the second and the fourth set
+	n34 = length(intersect(rfe50kbvars,rfe100kbvars)), #The size of the intersection between the third and the fourth set
+	n123 = length(Reduce(intersect, list(rfe10kbvars,rfe25kbvars,rfe50kbvars))), #The size of the intersection between the first, second and third sets
+	n124 = length(Reduce(intersect, list(rfe10kbvars,rfe25kbvars,rfe100kbvars))), #The size of the intersection between the first, second and fourth sets
+	n134 = length(Reduce(intersect, list(rfe10kbvars,rfe50kbvars,rfe100kbvars))), #The size of the intersection between the first, third and fourth sets
+	n234 = length(Reduce(intersect, list(rfe25kbvars,rfe50kbvars,rfe100kbvars))), #The size of the intersection between the second, third and fourth sets
+	n1234 = length(Reduce(intersect, list(rfe10kbvars,rfe25kbvars,rfe50kbvars,rfe100kbvars))), #The size of the intersection between all four sets
+	category = c("10 kb", "25 kb", "50 kb", "100 kb"),
+	fill = c("orange", "red", "green", "blue"),
+	lty = "dashed",
+	cex = 2,
+	cat.cex = 2,
+	cat.col = c("orange", "red", "green", "blue")
+	);
+
+grid.newpage()
+venn.plot.k562 <- draw.quad.venn(
+	area1 = length(rfe10kbvars_k562), #The size of the first set
+	area2 = length(rfe25kbvars_k562), #The size of the second set
+	area3 = length(rfe50kbvars_k562), #The size of the third set
+	area4 = length(rfe100kbvars_k562), #The size of the fourth set
+	n12 = length(intersect(rfe10kbvars_k562,rfe25kbvars_k562)), #The size of the intersection between the first and the second set
+	n13 = length(intersect(rfe10kbvars_k562,rfe50kbvars_k562)), #The size of the intersection between the first and the third set
+	n14 = length(intersect(rfe10kbvars_k562,rfe100kbvars_k562)), #The size of the intersection between the first and the fourth set
+	n23 = length(intersect(rfe25kbvars_k562,rfe50kbvars_k562)), #The size of the intersection between the second and the third set
+	n24 = length(intersect(rfe25kbvars_k562,rfe100kbvars_k562)), #The size of the intersection between the second and the fourth set
+	n34 = length(intersect(rfe50kbvars_k562,rfe100kbvars_k562)), #The size of the intersection between the third and the fourth set
+	n123 = length(Reduce(intersect, list(rfe10kbvars_k562,rfe25kbvars_k562,rfe50kbvars_k562))), #The size of the intersection between the first, second and third sets
+	n124 = length(Reduce(intersect, list(rfe10kbvars_k562,rfe25kbvars_k562,rfe100kbvars_k562))), #The size of the intersection between the first, second and fourth sets
+	n134 = length(Reduce(intersect, list(rfe10kbvars_k562,rfe50kbvars_k562,rfe100kbvars_k562))), #The size of the intersection between the first, third and fourth sets
+	n234 = length(Reduce(intersect, list(rfe25kbvars_k562,rfe50kbvars_k562,rfe100kbvars_k562))), #The size of the intersection between the second, third and fourth sets
+	n1234 = length(Reduce(intersect, list(rfe10kbvars_k562,rfe25kbvars_k562,rfe50kbvars_k562,rfe100kbvars_k562))), #The size of the intersection between all four sets
+	category = c("10 kb", "25 kb", "50 kb", "100 kb"),
+	fill = c("orange", "red", "green", "blue"),
+	lty = "dashed",
+	cex = 2,
+	cat.cex = 2,
+	cat.col = c("orange", "red", "green", "blue")
+	);
+
+
+grid.newpage()
+venn.plot.10kb <- draw.pairwise.venn(
+	area1 = length(rfe10kbvars),
+	area2 = length(rfe10kbvars_k562),
+	cross.area = length(intersect(rfe10kbvars,rfe10kbvars_k562)),
+	category = c("GM12878", "K562"),
+	fill = c("blue", "red"),
+	lty = "blank",
+	cex = 2,
+	cat.cex = 2,
+	cat.just = list(c(-.5, -3), c(2, -3)))
+
+
+grid.newpage()
+venn.plot.25kb <- draw.pairwise.venn(
+	area1 = length(rfe25kbvars),
+	area2 = length(rfe25kbvars_k562),
+	cross.area = length(intersect(rfe25kbvars,rfe25kbvars_k562)),
+	category = c("GM12878", "K562"),
+	fill = c("blue", "red"),
+	lty = "blank",
+	cex = 2,
+	cat.cex = 2,
+	cat.just = list(c(-.5, -3), c(2, -3)))
+
+
+grid.newpage()
+venn.plot.50kb <- draw.pairwise.venn(
+	area1 = length(rfe50kbvars),
+	area2 = length(rfe50kbvars_k562),
+	cross.area = length(intersect(rfe50kbvars,rfe50kbvars_k562)),
+	category = c("GM12878", "K562"),
+	fill = c("blue", "red"),
+	lty = "blank",
+	cex = 2,
+	cat.cex = 2,
+	cat.just = list(c(-.5, -3), c(2, -3)))
+
+
+grid.newpage()
+venn.plot.100kb <- draw.pairwise.venn(
+	area1 = length(rfe100kbvars),
+	area2 = length(rfe100kbvars_k562),
+	cross.area = length(intersect(rfe100kbvars,rfe100kbvars_k562)),
+	category = c("GM12878", "K562"),
+	fill = c("blue", "red"),
+	lty = "blank",
+	cex = 2,
+	cat.cex = 2,
+	cat.just = list(c(-.5, -3), c(2, -3)))
+
+```
+
+##Heatmaps of top predictors
+
+###10 kb
+
+```{r}
+topvars10kbgm12878 <- cbind.data.frame(names(rfeModel_dist_10kb$fit$importance[,1]), rfeModel_dist_10kb$fit$importance)
+topvars10kbgm12878 <- topvars10kbgm12878[1:32,]
+rownames(topvars10kbgm12878) <- NULL
+names(topvars10kbgm12878) <- c("Feature", "Importance")
+topvars10kbgm12878$Feature <- gsub(paste(c("Gm12878-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars10kbgm12878$Feature)
+
+topvars10kbk562 <- cbind.data.frame(names(rfeModel_dist_10kb_k562$fit$importance[,1]), rfeModel_dist_10kb_k562$fit$importance[,4])
+topvars10kbk562 <- topvars10kbk562[1:32,]
+rownames(topvars10kbk562) <- NULL
+names(topvars10kbk562) <- c("Feature", "Importance")
+topvars10kbk562$Feature <- gsub(paste(c("K562-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars10kbk562$Feature)
+
+
+impdata_10kb <- data.frame(Feature = Reduce(union, 
+                                            list(topvars10kbgm12878$Feature,
+                                                 topvars10kbk562$Feature)))
+impdata_10kb$gm12878_10kb <- NA
+impdata_10kb$k562_10kb <- NA
+
+impdata_10kb$gm12878_10kb[which(impdata_10kb$Feature %in% topvars10kbgm12878$Feature)] <- topvars10kbgm12878$Importance
+impdata_10kb$k562_10kb[which(impdata_10kb$Feature %in% topvars10kbk562$Feature)] <- topvars10kbk562$Importance
+
+impdata_10kb <- impdata_10kb[order(impdata_10kb$Feature),]
+
+#preObj <- preProcess(impdata_10kb, method=c("center", "scale"))
+#impdata_10kb <- predict(preObj, impdata_10kb)
+
+impdata_10kb_long <- melt(impdata_10kb)
+impdata_10kb_long <- ddply(impdata_10kb_long, .(variable), transform,   
+                           rescale = rescale(value))
+
+topvars10kbplot <- ggplot(impdata_10kb_long, aes(variable, Feature)) + 
+    geom_tile(aes(fill = rescale),
+              colour = "white") + scale_fill_gradient2(low = "white", 
+                                                      #mid = "white",
+                                                      high = muted("red"), 
+                                                      #midpoint = 0, 
+                                                      space = "Lab",
+                                                      na.value = "grey50", 
+                                                      guide = "legend", 
+                                                      aesthetics = "fill",
+                                                      name="Importance",
+                                                      labels=c("Very Low",
+                                                               "Low",
+                                                               "Medium",
+                                                               "High",
+                                                               "Very High"))+
+  scale_x_discrete(name="Cell Line", labels=c("GM12878", "K562"))+
+  theme_bw()+
+  theme_minimal()
+```
+
+###25 kb
+
+```{r}
+topvars25kbgm12878 <- cbind.data.frame(names(rfeModel_dist_25kb$fit$importance[,1]), rfeModel_dist_25kb$fit$importance)
+topvars25kbgm12878 <- topvars25kbgm12878[1:32,]
+rownames(topvars25kbgm12878) <- NULL
+names(topvars25kbgm12878) <- c("Feature", "Importance")
+topvars25kbgm12878$Feature <- gsub(paste(c("Gm12878-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars25kbgm12878$Feature)
+
+topvars25kbk562 <- cbind.data.frame(names(rfeModel_dist_25kb_k562$fit$importance[,1]), rfeModel_dist_25kb_k562$fit$importance[,1])
+topvars25kbk562 <- topvars25kbk562[1:32,]
+rownames(topvars25kbk562) <- NULL
+names(topvars25kbk562) <- c("Feature", "Importance")
+topvars25kbk562$Feature <- gsub(paste(c("K562-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars25kbk562$Feature)
+
+
+impdata_25kb <- data.frame(Feature = Reduce(union, 
+                                            list(topvars25kbgm12878$Feature,
+                                                 topvars25kbk562$Feature)))
+impdata_25kb$gm12878_25kb <- NA
+impdata_25kb$k562_25kb <- NA
+
+impdata_25kb$gm12878_25kb[which(impdata_25kb$Feature %in% topvars25kbgm12878$Feature)] <- topvars25kbgm12878$Importance
+impdata_25kb$k562_25kb[which(impdata_25kb$Feature %in% topvars25kbk562$Feature)] <- topvars25kbk562$Importance
+
+impdata_25kb <- impdata_25kb[order(impdata_25kb$Feature),]
+
+#preObj <- preProcess(impdata_25kb, method=c("center", "scale"))
+#impdata_25kb <- predict(preObj, impdata_25kb)
+
+impdata_25kb_long <- melt(impdata_25kb)
+impdata_25kb_long <- ddply(impdata_25kb_long, .(variable), transform,   
+                           rescale = rescale(value))
+
+topvars25kbplot <- ggplot(impdata_25kb_long, aes(variable, Feature)) + 
+    geom_tile(aes(fill = rescale),
+              colour = "white") + scale_fill_gradient2(low = "white", 
+                                                      #mid = "white",
+                                                      high = muted("red"), 
+                                                      #midpoint = 0, 
+                                                      space = "Lab",
+                                                      na.value = "grey50", 
+                                                      guide = "legend", 
+                                                      aesthetics = "fill",
+                                                      name="Importance",
+                                                      labels=c("Very Low",
+                                                               "Low",
+                                                               "Medium",
+                                                               "High",
+                                                               "Very High"))+
+  scale_x_discrete(name="Cell Line", labels=c("GM12878", "K562"))+
+  theme_bw()+
+  theme_minimal()
+```
+
+###50kb
+
+```{r}
+topvars50kbgm12878 <- cbind.data.frame(names(rfeModel_dist_50kb$fit$importance[,1]), rfeModel_dist_50kb$fit$importance)
+topvars50kbgm12878 <- topvars50kbgm12878[1:32,]
+rownames(topvars50kbgm12878) <- NULL
+names(topvars50kbgm12878) <- c("Feature", "Importance")
+topvars50kbgm12878$Feature <- gsub(paste(c("Gm12878-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars50kbgm12878$Feature)
+
+topvars50kbk562 <- cbind.data.frame(names(rfeModel_dist_50kb_k562$fit$importance[,1]), rfeModel_dist_50kb_k562$fit$importance[,1])
+topvars50kbk562 <- topvars50kbk562[1:32,]
+rownames(topvars50kbk562) <- NULL
+names(topvars50kbk562) <- c("Feature", "Importance")
+topvars50kbk562$Feature <- gsub(paste(c("K562-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars50kbk562$Feature)
+
+
+impdata_50kb <- data.frame(Feature = Reduce(union, 
+                                            list(topvars50kbgm12878$Feature,
+                                                 topvars50kbk562$Feature)))
+impdata_50kb$gm12878_50kb <- NA
+impdata_50kb$k562_50kb <- NA
+
+impdata_50kb$gm12878_50kb[which(impdata_50kb$Feature %in% topvars50kbgm12878$Feature)] <- topvars50kbgm12878$Importance
+impdata_50kb$k562_50kb[which(impdata_50kb$Feature %in% topvars50kbk562$Feature)] <- topvars50kbk562$Importance
+
+impdata_50kb <- impdata_50kb[order(impdata_50kb$Feature),]
+
+#preObj <- preProcess(impdata_50kb, method=c("center", "scale"))
+#impdata_50kb <- predict(preObj, impdata_50kb)
+
+impdata_50kb_long <- melt(impdata_50kb)
+impdata_50kb_long <- ddply(impdata_50kb_long, .(variable), transform,   
+                           rescale = rescale(value))
+
+topvars50kbplot <- ggplot(impdata_50kb_long, aes(variable, Feature)) + 
+    geom_tile(aes(fill = rescale),
+              colour = "white") + scale_fill_gradient2(low = "white", 
+                                                      #mid = "white",
+                                                      high = muted("red"), 
+                                                      #midpoint = 0, 
+                                                      space = "Lab",
+                                                      na.value = "grey50", 
+                                                      guide = "legend", 
+                                                      aesthetics = "fill",
+                                                      name="Importance",
+                                                      labels=c("Very Low",
+                                                               "Low",
+                                                               "Medium",
+                                                               "High",
+                                                               "Very High"))+
+  scale_x_discrete(name="Cell Line", labels=c("GM12878", "K562"))+
+  theme_bw()+
+  theme_minimal()
+```
+
+###100kb
+
+```{r}
+topvars100kbgm12878 <- cbind.data.frame(names(rfeModel_dist_100kb$fit$importance[,1]), rfeModel_dist_100kb$fit$importance)
+topvars100kbgm12878 <- topvars100kbgm12878[1:32,]
+rownames(topvars100kbgm12878) <- NULL
+names(topvars100kbgm12878) <- c("Feature", "Importance")
+topvars100kbgm12878$Feature <- gsub(paste(c("Gm12878-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars100kbgm12878$Feature)
+
+topvars100kbk562 <- cbind.data.frame(rfeModel_dist_100kb_k562$variables$var[1:32], rfeModel_dist_100kb_k562$variables$Overall[1:32])
+topvars100kbk562 <- topvars100kbk562[1:32,]
+rownames(topvars100kbk562) <- NULL
+names(topvars100kbk562) <- c("Feature", "Importance")
+topvars100kbk562$Feature <- gsub(paste(c("K562-",
+                                           "_dist",
+                                           "-Haib", 
+                                           "-Sydh",
+                                           "-Uta",
+                                           "-Uw",
+                                           "-Broad",
+                                           "-Uchicago"), collapse = "|"),
+                                   "",
+                                   topvars100kbk562$Feature)
+
+
+impdata_100kb <- data.frame(Feature = Reduce(union, 
+                                            list(topvars100kbgm12878$Feature,
+                                                 topvars100kbk562$Feature)))
+impdata_100kb$gm12878_100kb <- NA
+impdata_100kb$k562_100kb <- NA
+
+impdata_100kb$gm12878_100kb[which(impdata_100kb$Feature %in% topvars100kbgm12878$Feature)] <- topvars100kbgm12878$Importance
+impdata_100kb$k562_100kb[which(impdata_100kb$Feature %in% topvars100kbk562$Feature)] <- topvars100kbk562$Importance
+
+impdata_100kb <- impdata_100kb[order(impdata_100kb$Feature),]
+
+#preObj <- preProcess(impdata_100kb, method=c("center", "scale"))
+#impdata_100kb <- predict(preObj, impdata_100kb)
+
+impdata_100kb_long <- melt(impdata_100kb)
+impdata_100kb_long <- ddply(impdata_100kb_long, .(variable), transform,   
+                           rescale = rescale(value))
+
+topvars100kbplot <- ggplot(impdata_100kb_long, aes(variable, Feature)) + 
+    geom_tile(aes(fill = rescale),
+              colour = "white") + scale_fill_gradient2(low = "white", 
+                                                      #mid = "white",
+                                                      high = muted("red"), 
+                                                      #midpoint = 0, 
+                                                      space = "Lab",
+                                                      na.value = "grey50", 
+                                                      guide = "legend", 
+                                                      aesthetics = "fill",
+                                                      name="Importance",
+                                                      labels=c("Very Low",
+                                                               "Low",
+                                                               "Medium",
+                                                               "High",
+                                                               "Very High"))+
+  scale_x_discrete(name="Cell Line", labels=c("GM12878", "K562"))+
+  theme_bw()+
+  theme_minimal()
+```
+
+###Combined
+
+```{r}
+ggarrange(topvars25kbplot,
+          topvars50kbplot,
+          topvars100kbplot,
+          ncol=3,
+          nrow=1,
+          common.legend = TRUE,
+          legend = "right")
+```
+
+
+#Barplots of performance metrics
+
+##Comparing results for no class balancing
+
+###10kb
+
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+none.10 <- data.frame(Performance = c(rfperf1[9,2],
+								rfperf2[9,2],
+								rfperf3[9,2],
+								rfperf1[17,2],
+								rfperf2[17,2],
+								rfperf3[17,2],
+								rfperf1[16,2],
+								rfperf2[16,2],
+								rfperf3[16,2],
+								rfperf1[15,2],
+								rfperf2[15,2],
+								rfperf3[15,2]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+none.10$Predictor <- factor(none.10$Predictor, levels=c("OC", "OP", "Distance"))
+none.10$Metric <- factor(none.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###25kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+none.25 <- data.frame(Performance = c(rfperf1[9,2],
+								rfperf2[9,2],
+								rfperf3[9,2],
+								rfperf1[17,2],
+								rfperf2[17,2],
+								rfperf3[17,2],
+								rfperf1[16,2],
+								rfperf2[16,2],
+								rfperf3[16,2],
+								rfperf1[15,2],
+								rfperf2[15,2],
+								rfperf3[15,2]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+none.25$Predictor <- factor(none.25$Predictor, levels=c("OC", "OP", "Distance"))
+none.25$Metric <- factor(none.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###50kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+none.50 <- data.frame(Performance = c(rfperf1[9,2],
+								rfperf2[9,2],
+								rfperf3[9,2],
+								rfperf1[17,2],
+								rfperf2[17,2],
+								rfperf3[17,2],
+								rfperf1[16,2],
+								rfperf2[16,2],
+								rfperf3[16,2],
+								rfperf1[15,2],
+								rfperf2[15,2],
+								rfperf3[15,2]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+none.50$Predictor <- factor(none.50$Predictor, levels=c("OC", "OP", "Distance"))
+none.50$Metric <- factor(none.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###100kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+none.100 <- data.frame(Performance = c(rfperf1[9,2],
+								rfperf2[9,2],
+								rfperf3[9,2],
+								rfperf1[17,2],
+								rfperf2[17,2],
+								rfperf3[17,2],
+								rfperf1[16,2],
+								rfperf2[16,2],
+								rfperf3[16,2],
+								rfperf1[15,2],
+								rfperf2[15,2],
+								rfperf3[15,2]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+none.100$Predictor <- factor(none.100$Predictor, levels=c("OC", "OP", "Distance"))
+none.100$Metric <- factor(none.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###Plots
+```{r}
+none.data <- rbind.data.frame(none.10,none.25,none.50,none.100) 
+none.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
+none.data$Resolution <- factor(none.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+
+
+allnoneplots <- ggplot(none.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
+	geom_bar( stat="identity", position="dodge") +
+	facet_grid(Predictor ~ Metric) +
+	ylab("Performance")+
+	xlab("Resolution")+
+	theme_bw() +
+  guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+		legend.position="bottom") 
+
+```
+
+###Tables
+
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
+rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
+rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
+
+nonetab <- cbind.data.frame(rfperf1$Metric,
+                            rfperf1$Performance,
+                            rfperf2$Performance,
+                            rfperf3$Performance,
+                            rfperf4$Performance,
+                            rfperf5$Performance,
+                            rfperf6$Performance,
+                            rfperf7$Performance,
+                            rfperf8$Performance,
+                            rfperf9$Performance,
+                            rfperf10$Performance,
+                            rfperf11$Performance,
+                            rfperf12$Performance)
+nonetab[,-1] <- round(nonetab[,-1], 3)
+datatable(nonetab)
+```
+
+##Comparing results for RUS
+
+###10kb
+
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+RUS.10 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+RUS.10$Predictor <- factor(RUS.10$Predictor, levels=c("OC", "OP", "Distance"))
+RUS.10$Metric <- factor(RUS.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###25kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+RUS.25 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+RUS.25$Predictor <- factor(RUS.25$Predictor, levels=c("OC", "OP", "Distance"))
+RUS.25$Metric <- factor(RUS.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###50kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+RUS.50 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+RUS.50$Predictor <- factor(RUS.50$Predictor, levels=c("OC", "OP", "Distance"))
+RUS.50$Metric <- factor(RUS.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###100kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+RUS.100 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+RUS.100$Predictor <- factor(RUS.100$Predictor, levels=c("OC", "OP", "Distance"))
+RUS.100$Metric <- factor(RUS.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###Plots
+```{r}
+RUS.data <- rbind.data.frame(RUS.10,RUS.25,RUS.50,RUS.100) 
+RUS.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
+RUS.data$Resolution <- factor(RUS.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+
+
+allRUSplots <- ggplot(RUS.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
+	geom_bar( stat="identity", position="dodge") +
+	facet_grid(Predictor ~ Metric) +
+	ylab("Performance")+
+	xlab("Resolution")+
+	theme_bw() +
+  guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+		legend.position="bottom") 
+
+```
+
+###Tables
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf4 <- rowMeans(rfperf4)
+rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf5 <- rowMeans(rfperf5)
+rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf6 <- rowMeans(rfperf6)
+
+rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf7 <- rowMeans(rfperf7)
+rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf8 <- rowMeans(rfperf8)
+rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf9 <- rowMeans(rfperf9)
+
+rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf10 <- rowMeans(rfperf10)
+rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf11 <- rowMeans(rfperf11)
+rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf12 <- rowMeans(rfperf12)
+
+RUStab <- cbind.data.frame(names(rfperf1),
+                            rfperf1,
+                            rfperf2,
+                            rfperf3,
+                            rfperf4,
+                            rfperf5,
+                            rfperf6,
+                            rfperf7,
+                            rfperf8,
+                            rfperf9,
+                            rfperf10,
+                            rfperf11,
+                            rfperf12)
+RUStab[,-1] <- round(RUStab[,-1], 3)
+datatable(RUStab)
+```
+
+##Comparing results for SMOTE
+
+###10kb
+
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+SMOTE.10 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+SMOTE.10$Predictor <- factor(SMOTE.10$Predictor, levels=c("OC", "OP", "Distance"))
+SMOTE.10$Metric <- factor(SMOTE.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###25kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+SMOTE.25 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+SMOTE.25$Predictor <- factor(SMOTE.25$Predictor, levels=c("OC", "OP", "Distance"))
+SMOTE.25$Metric <- factor(SMOTE.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###50kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+SMOTE.50 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+SMOTE.50$Predictor <- factor(SMOTE.50$Predictor, levels=c("OC", "OP", "Distance"))
+SMOTE.50$Metric <- factor(SMOTE.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###100kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+SMOTE.100 <- data.frame(Performance = c(rfperf1[9],
+								NA,#rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								NA,#rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								NA,#rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								NA,#rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+SMOTE.100$Predictor <- factor(SMOTE.100$Predictor, levels=c("OC", "OP", "Distance"))
+SMOTE.100$Metric <- factor(SMOTE.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###Plots
+```{r}
+SMOTE.data <- rbind.data.frame(SMOTE.10,SMOTE.25,SMOTE.50,SMOTE.100) 
+SMOTE.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
+SMOTE.data$Resolution <- factor(SMOTE.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+
+
+allSMOTEplots <- ggplot(SMOTE.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
+	geom_bar( stat="identity", position="dodge") +
+	facet_grid(Predictor ~ Metric) +
+	ylab("Performance")+
+	xlab("Resolution")+
+	theme_bw() +
+  guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+		legend.position="bottom") 
+
+```
+
+###Tables
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf4 <- rowMeans(rfperf4)
+rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf5 <- rowMeans(rfperf5)
+rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf6 <- rowMeans(rfperf6)
+
+rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf7 <- rowMeans(rfperf7)
+rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf8 <- rowMeans(rfperf8)
+rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf9 <- rowMeans(rfperf9)
+
+rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
+rfperf10 <- rowMeans(rfperf10)
+rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
+rfperf11 <- rowMeans(rfperf11)
+rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
+rfperf12 <- rowMeans(rfperf12)
+
+SMOTEtab <- cbind.data.frame(names(rfperf1),
+                            rfperf1,
+                            rfperf2,
+                            rfperf3,
+                            rfperf4,
+                            rfperf5,
+                            rfperf6,
+                            rfperf7,
+                            rfperf8,
+                            rfperf9,
+                            rfperf10,
+                            rep(NA,18),#rfperf11,
+                            rfperf12)
+SMOTEtab[,-c(1)] <- round(SMOTEtab[,-c(1)], 3)
+SMOTEtab[,-c(1,12)] <- round(SMOTEtab[,-c(1,12)], 3)
+datatable(SMOTEtab)
+```
+
+##Comparing results for SMOTE
+
+###10kb
+
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+ROS.10 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+ROS.10$Predictor <- factor(ROS.10$Predictor, levels=c("OC", "OP", "Distance"))
+ROS.10$Metric <- factor(ROS.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###25kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+ROS.25 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+ROS.25$Predictor <- factor(ROS.25$Predictor, levels=c("OC", "OP", "Distance"))
+ROS.25$Metric <- factor(ROS.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###50kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+ROS.50 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+ROS.50$Predictor <- factor(ROS.50$Predictor, levels=c("OC", "OP", "Distance"))
+ROS.50$Metric <- factor(ROS.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+
+###100kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+ROS.100 <- data.frame(Performance = c(rfperf1[9],
+								rfperf2[9],
+								rfperf3[9],
+								rfperf1[17],
+								rfperf2[17],
+								rfperf3[17],
+								rfperf1[16],
+								rfperf2[16],
+								rfperf3[16],
+								rfperf1[15],
+								rfperf2[15],
+								rfperf3[15]),
+				Predictor = rep(c("OC", "OP", "Distance"), 4),
+				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
+ROS.100$Predictor <- factor(ROS.100$Predictor, levels=c("OC", "OP", "Distance"))
+ROS.100$Metric <- factor(ROS.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
+```
+
+###Plots
+```{r}
+ROS.data <- rbind.data.frame(ROS.10,ROS.25,ROS.50,ROS.100) 
+ROS.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
+ROS.data$Resolution <- factor(ROS.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+
+
+allROSplots <- ggplot(ROS.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
+	geom_bar( stat="identity", position="dodge") +
+	facet_grid(Predictor ~ Metric) +
+	ylab("Performance")+
+	xlab("Resolution")+
+	theme_bw() +
+  guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+		legend.position="bottom") 
+
+```
+
+###Tables
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- rowMeans(rfperf1)
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- rowMeans(rfperf2)
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- rowMeans(rfperf3)
+
+rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf4 <- rowMeans(rfperf4)
+rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf5 <- rowMeans(rfperf5)
+rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf6 <- rowMeans(rfperf6)
+
+rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf7 <- rowMeans(rfperf7)
+rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf8 <- rowMeans(rfperf8)
+rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf9 <- rowMeans(rfperf9)
+
+rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
+rfperf10 <- rowMeans(rfperf10)
+rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
+rfperf11 <- rowMeans(rfperf11)
+rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
+rfperf12 <- rowMeans(rfperf12)
+
+ROStab <- cbind.data.frame(names(rfperf1),
+                            rfperf1,
+                            rfperf2,
+                            rfperf3,
+                            rfperf4,
+                            rfperf5,
+                            rfperf6,
+                            rfperf7,
+                            rfperf8,
+                            rfperf9,
+                            rfperf10,
+                            rfperf11,
+                            rfperf12)
+ROStab[,-1] <- round(ROStab[,-1], 3)
+datatable(ROStab)
+```
+
+
+#Comparing performance for distance predictors using RUS 
+##10kb
+```{r}
+rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf1 <- cbind.data.frame(rownames(rfperf1),round(rowMeans(rfperf1),3))
+
+rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf2 <- cbind.data.frame(rownames(rfperf2),round(rowMeans(rfperf2),3))
+
+rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf3 <- cbind.data.frame(rownames(rfperf3),round(rowMeans(rfperf3),3))
+
+
+```
+##25kb
+```{r}
+rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf4 <- cbind.data.frame(rownames(rfperf4),round(rowMeans(rfperf4),3))
+
+rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf5 <- cbind.data.frame(rownames(rfperf5),round(rowMeans(rfperf5),3))
+
+rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf6 <- cbind.data.frame(rownames(rfperf6),round(rowMeans(rfperf6),3))
+```
+##50kb
+```{r}
+rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf7 <- cbind.data.frame(rownames(rfperf7),round(rowMeans(rfperf7),3))
+
+rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf8 <- cbind.data.frame(rownames(rfperf8),round(rowMeans(rfperf8),3))
+
+rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf9 <- cbind.data.frame(rownames(rfperf9),round(rowMeans(rfperf9),3))
+
+```
+##100kb
+```{r}
+rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
+rfperf10 <- cbind.data.frame(rownames(rfperf10),round(rowMeans(rfperf10),3))
+
+rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
+rfperf11 <- cbind.data.frame(rownames(rfperf11),round(rowMeans(rfperf11),3))
+
+rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
+rfperf12 <- cbind.data.frame(rownames(rfperf12),round(rowMeans(rfperf12),3))
+
+```
+
+##Plots
+```{r}
+distperftab <- data.frame(Performance =
+                    c(rfperf1[9,2],
+											rfperf1[17,2],
+											rfperf1[16,2],
+											rfperf1[15,2],
+											rfperf2[9,2],
+											rfperf2[17,2],
+											rfperf2[16,2],
+											rfperf2[15,2],
+											rfperf3[9,2],
+											rfperf3[17,2],
+											rfperf3[16,2],
+											rfperf3[15,2],
+											rfperf4[9,2],
+											rfperf4[17,2],
+											rfperf4[16,2],
+											rfperf4[15,2],
+											rfperf5[9,2],
+											rfperf5[17,2],
+											rfperf5[16,2],
+											rfperf5[15,2],
+											rfperf6[9,2],
+											rfperf6[17,2],
+											rfperf6[16,2],
+											rfperf6[15,2],
+											rfperf7[9,2],
+											rfperf7[17,2],
+											rfperf7[16,2],
+											rfperf7[15,2],
+											rfperf8[9,2],
+											rfperf8[17,2],
+											rfperf8[16,2],
+											rfperf8[15,2],
+											rfperf9[9,2],
+											rfperf9[17,2],
+											rfperf9[16,2],
+											rfperf9[15,2],
+											rfperf10[9,2],
+											rfperf10[17,2],
+											rfperf10[16,2],
+											rfperf10[15,2],
+											rfperf11[9,2],
+											rfperf11[17,2],
+											rfperf11[16,2],
+											rfperf11[15,2],
+											rfperf12[9,2],
+											rfperf12[17,2],
+											rfperf12[16,2],
+											rfperf12[15,2]),
+							Metric = rep(c("Accuracy", "AUC", "F1-Score", "MCC"), 12),
+							Resolution = c(rep("10kb", 12), rep("25kb", 12), rep("50kb", 12), rep("100kb", 12)),
+							Predictor = rep(c(rep("OC", 4), rep("OP", 4), rep("Distance", 4)), 4))
+distperftab$Metric <- factor(distperftab$Metric, levels = c("Accuracy", "AUC", "F1-Score", "MCC"))
+distperftab$Resolution <- factor(distperftab$Resolution, levels = c("10kb","25kb","50kb","100kb"))
+distperftab$Predictor <- factor(distperftab$Predictor, levels = c("OC", "OP", "Distance"))
+
+
+p.distperfsbar <- ggplot(distperftab, aes(fill=Predictor, y=Performance, x=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+	facet_grid(Resolution ~ Metric) +
+  ylab("Performance")+
+	xlab("Predictor Type")+
+  theme_bw() +
+  guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+		legend.position="bottom") 
+  
+
+
+#ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/p.distperfsbarline.png")
+```
+
+#Comparing performances across resolutions for RUS and distance
+
+
+#Variable Importance Plots for distance predictors with ENET reduction
+
+##5kb
+###Random Under-Sampling
+```{r}
+rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/5kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf5kb <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rf5kb <- rf5kb[order(rf5kb$Importance, decreasing=TRUE),]
+rownames(rf) <- NULL
+
+varimp.rf <- rf5kb$Importance
+Labels <- as.character(rf5kb$Feature)
+Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
+Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
+varimp.rf.df.5kb <- cbind.data.frame(Feature=as.character(Labels),
+                                 Importance=varimp.rf)
+varimp.rf.df.5kb$Feature <- as.character(varimp.rf.df.5kb$Feature)							 
+varimp.rf.df.5kb <-varimp.rf.df.5kb[order(varimp.rf.df.5kb$Importance),]
+varimp.rf.df.5kb <- varimp.rf.df.5kb[(dim(varimp.rf.df.5kb)[1]-14):dim(varimp.rf.df.5kb)[1],]
+varimp.rf.df.5kb$Feature <- factor(varimp.rf.df.5kb$Feature,
+                                     levels=as.character(varimp.rf.df.5kb$Feature))
+
+p.rf.5kb <- ggplot(varimp.rf.df.5kb, aes(x=Feature, y=Importance)) +
+  xlab("Predictors") +
+  ylab("Importance") +
+  ggtitle("(A)") +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge",
+           fill="red") +
+  theme_minimal() +
+  theme(axis.text=element_text(size=15),
+        axis.title=element_text(size=20,face="bold")) +
+  coord_flip() 
+
+  ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/5kb/p.rf.5kb.png")
+```
+##25kb
+###Random Under-Sampling
+```{r}
+  rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/25kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rf <- rf[order(rf$Importance, decreasing=TRUE),]
+rownames(rf) <- NULL
+
+varimp.rf <- rf$Importance
+Labels <- as.character(rf$Feature)
+Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
+Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
+varimp.rf.df.25kb <- cbind.data.frame(Feature=as.character(Labels),
+                                 Importance=varimp.rf)
+varimp.rf.df.25kb$Feature <- as.character(varimp.rf.df.25kb$Feature)							 
+varimp.rf.df.25kb <-varimp.rf.df.25kb[order(varimp.rf.df.25kb$Importance),]
+varimp.rf.df.25kb <- varimp.rf.df.25kb[(dim(varimp.rf.df.25kb)[1]-14):dim(varimp.rf.df.25kb)[1],]
+varimp.rf.df.25kb$Feature <- factor(varimp.rf.df.25kb$Feature,
+                                     levels=as.character(varimp.rf.df.25kb$Feature))
+
+p.rf.25kb <- ggplot(varimp.rf.df.25kb, aes(x=Feature, y=Importance)) +
+  xlab("Predictors") +
+  ylab("Importance") +
+  ggtitle("(B)") +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge",
+           fill="blue") +
+  theme_minimal() +
+  theme(axis.text=element_text(size=15),
+        axis.title=element_text(size=20,face="bold")) +
+  coord_flip() 
+
+   ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/25kb/p.rf.25kb.png")
+```
+##50kb
+###Random Under-Sampling
+```{r}
+rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/50kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rf <- rf[order(rf$Importance, decreasing=TRUE),]
+rownames(rf) <- NULL
+
+varimp.rf <- rf$Importance
+Labels <- as.character(rf$Feature)
+Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
+Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
+varimp.rf.df.50kb <- cbind.data.frame(Feature=as.character(Labels),
+                                 Importance=varimp.rf)
+varimp.rf.df.50kb$Feature <- as.character(varimp.rf.df.50kb$Feature)							 
+varimp.rf.df.50kb <-varimp.rf.df.50kb[order(varimp.rf.df.50kb$Importance),]
+varimp.rf.df.50kb <- varimp.rf.df.50kb[(dim(varimp.rf.df.50kb)[1]-14):dim(varimp.rf.df.50kb)[1],]
+varimp.rf.df.50kb$Feature <- factor(varimp.rf.df.50kb$Feature,
+                                     levels=as.character(varimp.rf.df.50kb$Feature))
+
+p.rf.50kb <- ggplot(varimp.rf.df.50kb, aes(x=Feature, y=Importance)) +
+  xlab("Predictors") +
+  ylab("Importance") +
+  ggtitle("(C)") +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge",
+           fill="green") +
+  theme_minimal() +
+  theme(axis.text=element_text(size=15),
+        axis.title=element_text(size=20,face="bold")) +
+  coord_flip() 
+
+   ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/50kb/p.rf.50kb.png")
+```
+##100kb
+###Random Under-Sampling
+```{r}
+rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/100kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rf <- rf[order(rf$Importance, decreasing=TRUE),]
+rownames(rf) <- NULL
+
+varimp.rf <- rf$Importance
+Labels <- as.character(rf$Feature)
+Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
+Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
+varimp.rf.df.100kb <- cbind.data.frame(Feature=as.character(Labels),
+                                 Importance=varimp.rf)
+varimp.rf.df.100kb$Feature <- as.character(varimp.rf.df.100kb$Feature)							 
+varimp.rf.df.100kb <-varimp.rf.df.100kb[order(varimp.rf.df.100kb$Importance),]
+#varimp.rf.df.100kb <- varimp.rf.df.100kb[(dim(varimp.rf.df.100kb)[1]-14):dim(varimp.rf.df.100kb)[1],]
+varimp.rf.df.100kb$Feature <- factor(varimp.rf.df.100kb$Feature,
+                                     levels=as.character(varimp.rf.df.100kb$Feature))
+
+p.rf.100kb <- ggplot(varimp.rf.df.100kb, aes(x=Feature, y=Importance)) +
+  xlab("Predictors") +
+  ylab("Importance") +
+  ggtitle("(D)") +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge",
+           fill="orange") +
+  theme_minimal() +
+  theme(axis.text=element_text(size=15),
+        axis.title=element_text(size=20,face="bold")) +
+  coord_flip() 
+  
+   ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/100kb/p.rf.100kb.png")
+
+allvarimps <- ggarrange(p.rf.5kb,p.rf.25kb,p.rf.50kb,p.rf.100kb, ncol=2, nrow=2)
+
+ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/allvarimps.png")
+```
+
+#Network Analysis
+
+```{r}
+##venn diagram of top predictors 
+#grid.newpage()
+##vennp <- draw.triple.venn(area1 = 10, area2 = 10, area3 = 10, n12 = length(intersect(us,sm)), n23 = length(intersect(sm,km)), n13 = length(intersect(km,us)), 
+##                 n123 = length(intersect(us,intersect(sm,km))), category = c("Under- \n Sampling", "SMOTE", "K-Medoids"), lty = "blank", 
+##                 fill = c("red", "green", "blue"),cex=3,cat.cex = 3)
+#
+#vennp <- draw.pairwise.venn(length(varimp.rf.df.gm12878$Feature),
+#						  length(varimp.rf.df.k562$Feature),
+#						  length(intersect(varimp.rf.df.gm12878$Feature, varimp.rf.df.k562$Feature)),
+#						  category = c("GM12878", "K562"),
+#						  lty = "blank", 
+#                          fill = c("red", "blue"),
+#						  cex=3,
+#						  cat.cex = 3,
+#						  cat.pos = c(0,0),
+#						  scaled = FALSE)
+
+
+##Network Visualization between resolutions
+rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/5kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf5kb <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rownames(rf5kb) <- NULL
+rf5kb$Feature <- as.character(rf5kb$Feature)
+rf5kb$Feature[grep("Gm12878-", rf5kb$Feature)] <- gsub("Gm12878-","",rf5kb$Feature[grep("Gm12878-", rf5kb$Feature)])
+rf5kb$Feature[grep("_dist", rf5kb$Feature)] <- gsub("_dist","",rf5kb$Feature[grep("_dist", rf5kb$Feature)])
+rf5kb$Importance <- rf5kb$Importance/sum(rf5kb$Importance)
+
+
+rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/25kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf25kb <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rownames(rf25kb) <- NULL
+rf25kb$Feature <- as.character(rf25kb$Feature)
+rf25kb$Feature[grep("Gm12878-", rf25kb$Feature)] <- gsub("Gm12878-","",rf25kb$Feature[grep("Gm12878-", rf25kb$Feature)])
+rf25kb$Feature[grep("_dist", rf25kb$Feature)] <- gsub("_dist","",rf25kb$Feature[grep("_dist", rf25kb$Feature)])
+rf25kb$Importance <- rf25kb$Importance/sum(rf25kb$Importance)
+
+
+rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/50kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf50kb <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rownames(rf50kb) <- NULL
+rf50kb$Feature <- as.character(rf50kb$Feature)
+rf50kb$Feature[grep("Gm12878-", rf50kb$Feature)] <- gsub("Gm12878-","",rf50kb$Feature[grep("Gm12878-", rf50kb$Feature)])
+rf50kb$Feature[grep("_dist", rf50kb$Feature)] <- gsub("_dist","",rf50kb$Feature[grep("_dist", rf50kb$Feature)])
+rf50kb$Importance <- rf50kb$Importance/sum(rf50kb$Importance)
+
+
+rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/100kb/CHR1/rus/distance/enet/rfimpvars.rds")
+
+rf100kb <- data.frame(Feature = as.character(rownames(rfimpvars)),
+					Importance = rowMeans(rfimpvars))
+rownames(rf100kb) <- NULL
+rf100kb$Feature <- as.character(rf100kb$Feature)
+rf100kb$Feature[grep("Gm12878-", rf100kb$Feature)] <- gsub("Gm12878-","",rf100kb$Feature[grep("Gm12878-", rf100kb$Feature)])
+rf100kb$Feature[grep("_dist", rf100kb$Feature)] <- gsub("_dist","",rf100kb$Feature[grep("_dist", rf100kb$Feature)])
+rf100kb$Importance <- rf100kb$Importance/sum(rf100kb$Importance)
+
+
+
+commonannots <- union(rf5kb$Feature,union(rf25kb$Feature,union(rf50kb$Feature,rf100kb$Feature)))
+
+networkmat <- matrix(ncol=4, nrow=length(commonannots), dimnames=list(commonannots, c("5kb", "25kb", "50kb", "100kb")))
+
+networkmat[which(rownames(networkmat) %in% rf5kb$Feature),1] <- rf5kb$Importance
+networkmat[which(rownames(networkmat) %in% rf25kb$Feature),2] <- rf25kb$Importance
+networkmat[which(rownames(networkmat) %in% rf50kb$Feature),3] <- rf50kb$Importance
+networkmat[which(rownames(networkmat) %in% rf100kb$Feature),4] <- rf100kb$Importance
+
+networkmat[is.na(networkmat)] <- 0
+networkmat <- networkmat*10
+
+networkdf <- as.data.frame(networkmat)
+
+net = network(networkdf,
+              matrix.type = "bipartite",
+              ignore.eval = FALSE,
+              names.eval = "weights")
+
+col = c("actor" = "green", "event" = "blue")
+
+networkplot <- ggnet2(net, color = "mode", palette = col, edge.size = "weights", label=TRUE)
+
+ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/networkplot.png")
+
+
+networkdf <- as.data.frame(t(networkdf))
+
+net = network(networkdf,
+              matrix.type = "bipartite",
+              ignore.eval = FALSE,
+              names.eval = "weights")
+
+col = c("actor" = "blue", "event" = "green")
+
+networkplot2 <- ggnet2(net, color = "mode", palette = col, edge.size = "weights", label=TRUE)
+
+ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/networkplot2.png")
+
+
+```
+
