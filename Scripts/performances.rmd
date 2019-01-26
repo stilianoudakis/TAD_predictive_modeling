@@ -1707,18 +1707,20 @@ allirplots <- ggplot(allirdata, aes(x = Resolution, y = IR,fill = CL)) +
 
 ####10kb
 
+#####None
+
 ```{r}
 
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
 test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
@@ -1730,20 +1732,113 @@ abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="bla
 
 ```
 
+#####RUS
+
+```{r}
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
 ####25kb
+
+#####None
 
 ```{r}
 
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
 test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
@@ -1753,20 +1848,114 @@ abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="bla
 
 ```
 
+#####RUS
+
+```{r}
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
 ####50kb
+
+#####None
 
 ```{r}
 
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
 test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
@@ -1776,20 +1965,114 @@ abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="bla
 
 ```
 
+#####RUS
+
+```{r}
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
 ####100kb
+
+#####None
 
 ```{r}
 
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
 test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
@@ -1799,48 +2082,330 @@ abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="bla
 
 ```
 
+#####RUS
+
+```{r}
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
 ###K562
 
 ####10kb
 
+#####None
+
 ```{r}
-prall <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prall_None <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
 test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
 
-#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )", "Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+
+
+```
+
+#####RUS
+
+```{r}
+prall_RUS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.431)","All (AUPRC: 0.358)", "Counts (AUPRC: 0.209)","Percents (AUPRC: 0.202)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+####25kb
+
+#####None
+
+```{r}
+
+prall_None <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
 #       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
 
 ```
 
-####25kb
+#####RUS
 
 ```{r}
-prall <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_RUS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
-test <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/test.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
 
-#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )","Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.436)","All (AUPRC: 0.380)", "Percents (AUPRC: 0.239)","Counts (AUPRC: 0.231)", "Baseline"),
 #       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
 
 ```
@@ -1848,22 +2413,116 @@ abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="bla
 
 ####50kb
 
+#####None
+
 ```{r}
-prall <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prall_None <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
-test <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/test.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
 
-#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )","Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+#####RUS
+
+```{r}
+prall_RUS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
+#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.405)","All (AUPRC: 0.367)", "Percents (AUPRC: 0.218)","Counts (AUPRC: 0.212)", "Baseline"),
 #       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
 
 ```
@@ -1871,25 +2530,121 @@ abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="bla
 
 ####100kb
 
+#####None
+
 ```{r}
-prall <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/op/RFE/prcurve.rds")
+
+prall_None <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/op/RFE/prcurve.rds")
 
 #plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
-plot(prall$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
-lines(prdist$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
-lines(proc$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
-lines(prop$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+plot(prall_None$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_None$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_None$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_None$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
 
-test <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/test.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
 abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
 
-#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: )","All (AUPRC: )", "Percents (AUPRC: )", "Counts (AUPRC: )", "Baseline"),
-#       col=c("red", "black", "green", "blue", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
 
 ```
+
+#####RUS
+
+```{r}
+prall_RUS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_RUS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_RUS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_RUS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_RUS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROS
+
+```{r}
+prall_ROS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROS$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROS$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROS$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROS$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####SMOTE
+
+```{r}
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_SMOTE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
+#####ROSE
+
+```{r}
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+#plot(prall, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, rand.plot = TRUE)
+plot(prall_ROSE$curve, auc.main= FALSE, legend=FALSE, col='black', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")
+lines(prdist_ROSE$curve, auc.main= FALSE, legend=FALSE, col='red', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, xlab="Recall", ylab="Precision")#, add=TRUE)
+lines(proc_ROSE$curve, auc.main= FALSE, legend=FALSE, col='blue', panel.first= grid(), cex.main = 1.5, type="l",lwd=2, add=TRUE)
+lines(prop_ROSE$curve, auc.main= FALSE, legend=FALSE, col='green', panel.first= grid(), cex.main = 1.5, type="l", ylim=c(0,1), lwd=2, add=TRUE)
+
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="black", lty=2)
+
+#legend("topright", title="Predictor Type", legend=c("Distance (AUPRC: 0.361)","All (AUPRC: 0.301)", "Counts (AUPRC: 0.175)", "Percents (AUPRC: 0.156)", "Baseline"),
+#       col=c("red", "black", "blue", "green", "black"), lty=c(1,1,1,1,2), lwd=c(3,3,3,3,1), cex=0.8)
+
+```
+
+
 
 ###Combined
 
