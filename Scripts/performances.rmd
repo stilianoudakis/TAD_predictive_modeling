@@ -2650,184 +2650,779 @@ abline(h = sum(test$y=="Yes")/(sum(test$y=="Yes") + sum(test$y=="No")), col="bla
 
 ```{r}
 #10kb
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/op/RFE/prcurve.rds")
+##None
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prdata_10kb <- rbind.data.frame(prall$curve,
-                                prdist$curve,
-                                prop$curve,
-                                proc$curve,
-                                prall_k562$curve,
-                                prdist_k562$curve,
-                                prop_k562$curve,
-                                proc_k562$curve)
-names(prdata_10kb) <- c("Recall", "Precision", "Threshold")
-prdata_10kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
-                           rep("Distance", dim(prdist$curve)[1]),
-                           rep("OP", dim(prop$curve)[1]),
-                           rep("OC", dim(proc$curve)[1]),
-                           rep("All", dim(prall_k562$curve)[1]),
-                           rep("Distance", dim(prdist_k562$curve)[1]),
-                           rep("OP", dim(prop_k562$curve)[1]),
-                           rep("OC", dim(proc_k562$curve)[1]))
-prdata_10kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
-                                      dim(prdist$curve)[1]+
-                                      dim(prop$curve)[1]+
-                                      dim(proc$curve)[1])),
-                    rep("K562", (dim(prall_k562$curve)[1]+
-                                      dim(prdist_k562$curve)[1]+
-                                      dim(prop_k562$curve)[1]+
-                                      dim(proc_k562$curve)[1])))
-prdata_10kb$Predictor <- factor(prdata_10kb$Predictor)
-prdata_10kb$CL <- factor(prdata_10kb$CL)
+prdata_None_10kb <- rbind.data.frame(prall_None$curve,
+                                prdist_None$curve,
+                                prop_None$curve,
+                                proc_None$curve,
+                                prall_None_k562$curve,
+                                prdist_None_k562$curve,
+                                prop_None_k562$curve,
+                                proc_None_k562$curve)
+names(prdata_None_10kb) <- c("Recall", "Precision", "Threshold")
+prdata_None_10kb$Predictor <- c(rep("All", dim(prall_None$curve)[1]),
+                           rep("Distance", dim(prdist_None$curve)[1]),
+                           rep("OP", dim(prop_None$curve)[1]),
+                           rep("OC", dim(proc_None$curve)[1]),
+                           rep("All", dim(prall_None_k562$curve)[1]),
+                           rep("Distance", dim(prdist_None_k562$curve)[1]),
+                           rep("OP", dim(prop_None_k562$curve)[1]),
+                           rep("OC", dim(proc_None_k562$curve)[1]))
+prdata_None_10kb$CL <- c(rep("GM12878", (dim(prall_None$curve)[1]+
+                                      dim(prdist_None$curve)[1]+
+                                      dim(prop_None$curve)[1]+
+                                      dim(proc_None$curve)[1])),
+                    rep("K562", (dim(prall_None_k562$curve)[1]+
+                                      dim(prdist_None_k562$curve)[1]+
+                                      dim(prop_None_k562$curve)[1]+
+                                      dim(proc_None_k562$curve)[1])))
+prdata_None_10kb$Predictor <- factor(prdata_None_10kb$Predictor)
+prdata_None_10kb$CL <- factor(prdata_None_10kb$CL)
 
-prplot_10kb <- ggplot(prdata_10kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+
+prplot_None_10kb <- ggplot(prdata_None_10kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
   geom_line(size=.75)+
   scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
   scale_color_discrete(name = "Predictor Type") +
   theme_minimal()+
   theme_bw()
 
+
+##RUS
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prall_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prdata_RUS_10kb <- rbind.data.frame(prall_RUS$curve,
+                                prdist_RUS$curve,
+                                prop_RUS$curve,
+                                proc_RUS$curve,
+                                prall_RUS_k562$curve,
+                                prdist_RUS_k562$curve,
+                                prop_RUS_k562$curve,
+                                proc_RUS_k562$curve)
+names(prdata_RUS_10kb) <- c("Recall", "Precision", "Threshold")
+prdata_RUS_10kb$Predictor <- c(rep("All", dim(prall_RUS$curve)[1]),
+                           rep("Distance", dim(prdist_RUS$curve)[1]),
+                           rep("OP", dim(prop_RUS$curve)[1]),
+                           rep("OC", dim(proc_RUS$curve)[1]),
+                           rep("All", dim(prall_RUS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_RUS_k562$curve)[1]),
+                           rep("OP", dim(prop_RUS_k562$curve)[1]),
+                           rep("OC", dim(proc_RUS_k562$curve)[1]))
+prdata_RUS_10kb$CL <- c(rep("GM12878", (dim(prall_RUS$curve)[1]+
+                                      dim(prdist_RUS$curve)[1]+
+                                      dim(prop_RUS$curve)[1]+
+                                      dim(proc_RUS$curve)[1])),
+                    rep("K562", (dim(prall_RUS_k562$curve)[1]+
+                                      dim(prdist_RUS_k562$curve)[1]+
+                                      dim(prop_RUS_k562$curve)[1]+
+                                      dim(proc_RUS_k562$curve)[1])))
+prdata_RUS_10kb$Predictor <- factor(prdata_RUS_10kb$Predictor)
+prdata_RUS_10kb$CL <- factor(prdata_RUS_10kb$CL)
+
+
+prplot_RUS_10kb <- ggplot(prdata_RUS_10kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##ROS
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prall_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prdata_ROS_10kb <- rbind.data.frame(prall_ROS$curve,
+                                prdist_ROS$curve,
+                                prop_ROS$curve,
+                                proc_ROS$curve,
+                                prall_ROS_k562$curve,
+                                prdist_ROS_k562$curve,
+                                prop_ROS_k562$curve,
+                                proc_ROS_k562$curve)
+names(prdata_ROS_10kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROS_10kb$Predictor <- c(rep("All", dim(prall_ROS$curve)[1]),
+                           rep("Distance", dim(prdist_ROS$curve)[1]),
+                           rep("OP", dim(prop_ROS$curve)[1]),
+                           rep("OC", dim(proc_ROS$curve)[1]),
+                           rep("All", dim(prall_ROS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROS_k562$curve)[1]),
+                           rep("OP", dim(prop_ROS_k562$curve)[1]),
+                           rep("OC", dim(proc_ROS_k562$curve)[1]))
+prdata_ROS_10kb$CL <- c(rep("GM12878", (dim(prall_ROS$curve)[1]+
+                                      dim(prdist_ROS$curve)[1]+
+                                      dim(prop_ROS$curve)[1]+
+                                      dim(proc_ROS$curve)[1])),
+                    rep("K562", (dim(prall_ROS_k562$curve)[1]+
+                                      dim(prdist_ROS_k562$curve)[1]+
+                                      dim(prop_ROS_k562$curve)[1]+
+                                      dim(proc_ROS_k562$curve)[1])))
+prdata_ROS_10kb$Predictor <- factor(prdata_ROS_10kb$Predictor)
+prdata_ROS_10kb$CL <- factor(prdata_ROS_10kb$CL)
+
+
+prplot_ROS_10kb <- ggplot(prdata_ROS_10kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##SMOTE
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prall_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prdata_SMOTE_10kb <- rbind.data.frame(prall_SMOTE$curve,
+                                prdist_SMOTE$curve,
+                                prop_SMOTE$curve,
+                                proc_SMOTE$curve,
+                                prall_SMOTE_k562$curve,
+                                prdist_SMOTE_k562$curve,
+                                prop_SMOTE_k562$curve,
+                                proc_SMOTE_k562$curve)
+names(prdata_SMOTE_10kb) <- c("Recall", "Precision", "Threshold")
+prdata_SMOTE_10kb$Predictor <- c(rep("All", dim(prall_SMOTE$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE$curve)[1]),
+                           rep("OP", dim(prop_SMOTE$curve)[1]),
+                           rep("OC", dim(proc_SMOTE$curve)[1]),
+                           rep("All", dim(prall_SMOTE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE_k562$curve)[1]),
+                           rep("OP", dim(prop_SMOTE_k562$curve)[1]),
+                           rep("OC", dim(proc_SMOTE_k562$curve)[1]))
+prdata_SMOTE_10kb$CL <- c(rep("GM12878", (dim(prall_SMOTE$curve)[1]+
+                                      dim(prdist_SMOTE$curve)[1]+
+                                      dim(prop_SMOTE$curve)[1]+
+                                      dim(proc_SMOTE$curve)[1])),
+                    rep("K562", (dim(prall_SMOTE_k562$curve)[1]+
+                                      dim(prdist_SMOTE_k562$curve)[1]+
+                                      dim(prop_SMOTE_k562$curve)[1]+
+                                      dim(proc_SMOTE_k562$curve)[1])))
+prdata_SMOTE_10kb$Predictor <- factor(prdata_SMOTE_10kb$Predictor)
+prdata_SMOTE_10kb$CL <- factor(prdata_SMOTE_10kb$CL)
+
+
+prplot_SMOTE_10kb <- ggplot(prdata_SMOTE_10kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+##ROSE
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prall_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prdata_ROSE_10kb <- rbind.data.frame(prall_ROSE$curve,
+                                prdist_ROSE$curve,
+                                prop_ROSE$curve,
+                                proc_ROSE$curve,
+                                prall_ROSE_k562$curve,
+                                prdist_ROSE_k562$curve,
+                                prop_ROSE_k562$curve,
+                                proc_ROSE_k562$curve)
+names(prdata_ROSE_10kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROSE_10kb$Predictor <- c(rep("All", dim(prall_ROSE$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE$curve)[1]),
+                           rep("OP", dim(prop_ROSE$curve)[1]),
+                           rep("OC", dim(proc_ROSE$curve)[1]),
+                           rep("All", dim(prall_ROSE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE_k562$curve)[1]),
+                           rep("OP", dim(prop_ROSE_k562$curve)[1]),
+                           rep("OC", dim(proc_ROSE_k562$curve)[1]))
+prdata_ROSE_10kb$CL <- c(rep("GM12878", (dim(prall_ROSE$curve)[1]+
+                                      dim(prdist_ROSE$curve)[1]+
+                                      dim(prop_ROSE$curve)[1]+
+                                      dim(proc_ROSE$curve)[1])),
+                    rep("K562", (dim(prall_ROSE_k562$curve)[1]+
+                                      dim(prdist_ROSE_k562$curve)[1]+
+                                      dim(prop_ROSE_k562$curve)[1]+
+                                      dim(proc_ROSE_k562$curve)[1])))
+prdata_ROSE_10kb$Predictor <- factor(prdata_ROSE_10kb$Predictor)
+prdata_ROSE_10kb$CL <- factor(prdata_ROSE_10kb$CL)
+
+
+prplot_ROSE_10kb <- ggplot(prdata_ROSE_10kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+##Collecting 10kb plots
+ggarrange(prplot_None_10kb,
+          prplot_RUS_10kb,
+          prplot_ROS_10kb,
+          prplot_SMOTE_10kb,
+          prplot_ROSE_10kb,
+          nrow=3,ncol=2,
+          common.legend = TRUE, legend = "right")
+
+#######################################################################################
 
 #25kb
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/op/RFE/prcurve.rds")
+##None
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prdata_25kb <- rbind.data.frame(prall$curve,
-                                prdist$curve,
-                                prop$curve,
-                                proc$curve,
-                                prall_k562$curve,
-                                prdist_k562$curve,
-                                prop_k562$curve,
-                                proc_k562$curve)
-names(prdata_25kb) <- c("Recall", "Precision", "Threshold")
-prdata_25kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
-                           rep("Distance", dim(prdist$curve)[1]),
-                           rep("OP", dim(prop$curve)[1]),
-                           rep("OC", dim(proc$curve)[1]),
-                           rep("All", dim(prall_k562$curve)[1]),
-                           rep("Distance", dim(prdist_k562$curve)[1]),
-                           rep("OP", dim(prop_k562$curve)[1]),
-                           rep("OC", dim(proc_k562$curve)[1]))
-prdata_25kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
-                                      dim(prdist$curve)[1]+
-                                      dim(prop$curve)[1]+
-                                      dim(proc$curve)[1])),
-                    rep("K562", (dim(prall_k562$curve)[1]+
-                                      dim(prdist_k562$curve)[1]+
-                                      dim(prop_k562$curve)[1]+
-                                      dim(proc_k562$curve)[1])))
-prdata_25kb$Predictor <- factor(prdata_25kb$Predictor)
-prdata_25kb$CL <- factor(prdata_25kb$CL)
+prdata_None_25kb <- rbind.data.frame(prall_None$curve,
+                                prdist_None$curve,
+                                prop_None$curve,
+                                proc_None$curve,
+                                prall_None_k562$curve,
+                                prdist_None_k562$curve,
+                                prop_None_k562$curve,
+                                proc_None_k562$curve)
+names(prdata_None_25kb) <- c("Recall", "Precision", "Threshold")
+prdata_None_25kb$Predictor <- c(rep("All", dim(prall_None$curve)[1]),
+                           rep("Distance", dim(prdist_None$curve)[1]),
+                           rep("OP", dim(prop_None$curve)[1]),
+                           rep("OC", dim(proc_None$curve)[1]),
+                           rep("All", dim(prall_None_k562$curve)[1]),
+                           rep("Distance", dim(prdist_None_k562$curve)[1]),
+                           rep("OP", dim(prop_None_k562$curve)[1]),
+                           rep("OC", dim(proc_None_k562$curve)[1]))
+prdata_None_25kb$CL <- c(rep("GM12878", (dim(prall_None$curve)[1]+
+                                      dim(prdist_None$curve)[1]+
+                                      dim(prop_None$curve)[1]+
+                                      dim(proc_None$curve)[1])),
+                    rep("K562", (dim(prall_None_k562$curve)[1]+
+                                      dim(prdist_None_k562$curve)[1]+
+                                      dim(prop_None_k562$curve)[1]+
+                                      dim(proc_None_k562$curve)[1])))
+prdata_None_25kb$Predictor <- factor(prdata_None_25kb$Predictor)
+prdata_None_25kb$CL <- factor(prdata_None_25kb$CL)
 
-prplot_25kb <- ggplot(prdata_25kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+
+prplot_None_25kb <- ggplot(prdata_None_25kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
   geom_line(size=.75)+
   scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
   scale_color_discrete(name = "Predictor Type") +
   theme_minimal()+
   theme_bw()
+
+
+##RUS
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prall_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prdata_RUS_25kb <- rbind.data.frame(prall_RUS$curve,
+                                prdist_RUS$curve,
+                                prop_RUS$curve,
+                                proc_RUS$curve,
+                                prall_RUS_k562$curve,
+                                prdist_RUS_k562$curve,
+                                prop_RUS_k562$curve,
+                                proc_RUS_k562$curve)
+names(prdata_RUS_25kb) <- c("Recall", "Precision", "Threshold")
+prdata_RUS_25kb$Predictor <- c(rep("All", dim(prall_RUS$curve)[1]),
+                           rep("Distance", dim(prdist_RUS$curve)[1]),
+                           rep("OP", dim(prop_RUS$curve)[1]),
+                           rep("OC", dim(proc_RUS$curve)[1]),
+                           rep("All", dim(prall_RUS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_RUS_k562$curve)[1]),
+                           rep("OP", dim(prop_RUS_k562$curve)[1]),
+                           rep("OC", dim(proc_RUS_k562$curve)[1]))
+prdata_RUS_25kb$CL <- c(rep("GM12878", (dim(prall_RUS$curve)[1]+
+                                      dim(prdist_RUS$curve)[1]+
+                                      dim(prop_RUS$curve)[1]+
+                                      dim(proc_RUS$curve)[1])),
+                    rep("K562", (dim(prall_RUS_k562$curve)[1]+
+                                      dim(prdist_RUS_k562$curve)[1]+
+                                      dim(prop_RUS_k562$curve)[1]+
+                                      dim(proc_RUS_k562$curve)[1])))
+prdata_RUS_25kb$Predictor <- factor(prdata_RUS_25kb$Predictor)
+prdata_RUS_25kb$CL <- factor(prdata_RUS_25kb$CL)
+
+
+prplot_RUS_25kb <- ggplot(prdata_RUS_25kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##ROS
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prall_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prdata_ROS_25kb <- rbind.data.frame(prall_ROS$curve,
+                                prdist_ROS$curve,
+                                prop_ROS$curve,
+                                proc_ROS$curve,
+                                prall_ROS_k562$curve,
+                                prdist_ROS_k562$curve,
+                                prop_ROS_k562$curve,
+                                proc_ROS_k562$curve)
+names(prdata_ROS_25kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROS_25kb$Predictor <- c(rep("All", dim(prall_ROS$curve)[1]),
+                           rep("Distance", dim(prdist_ROS$curve)[1]),
+                           rep("OP", dim(prop_ROS$curve)[1]),
+                           rep("OC", dim(proc_ROS$curve)[1]),
+                           rep("All", dim(prall_ROS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROS_k562$curve)[1]),
+                           rep("OP", dim(prop_ROS_k562$curve)[1]),
+                           rep("OC", dim(proc_ROS_k562$curve)[1]))
+prdata_ROS_25kb$CL <- c(rep("GM12878", (dim(prall_ROS$curve)[1]+
+                                      dim(prdist_ROS$curve)[1]+
+                                      dim(prop_ROS$curve)[1]+
+                                      dim(proc_ROS$curve)[1])),
+                    rep("K562", (dim(prall_ROS_k562$curve)[1]+
+                                      dim(prdist_ROS_k562$curve)[1]+
+                                      dim(prop_ROS_k562$curve)[1]+
+                                      dim(proc_ROS_k562$curve)[1])))
+prdata_ROS_25kb$Predictor <- factor(prdata_ROS_25kb$Predictor)
+prdata_ROS_25kb$CL <- factor(prdata_ROS_25kb$CL)
+
+
+prplot_ROS_25kb <- ggplot(prdata_ROS_25kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##SMOTE
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prall_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prdata_SMOTE_25kb <- rbind.data.frame(prall_SMOTE$curve,
+                                prdist_SMOTE$curve,
+                                prop_SMOTE$curve,
+                                proc_SMOTE$curve,
+                                prall_SMOTE_k562$curve,
+                                prdist_SMOTE_k562$curve,
+                                prop_SMOTE_k562$curve,
+                                proc_SMOTE_k562$curve)
+names(prdata_SMOTE_25kb) <- c("Recall", "Precision", "Threshold")
+prdata_SMOTE_25kb$Predictor <- c(rep("All", dim(prall_SMOTE$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE$curve)[1]),
+                           rep("OP", dim(prop_SMOTE$curve)[1]),
+                           rep("OC", dim(proc_SMOTE$curve)[1]),
+                           rep("All", dim(prall_SMOTE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE_k562$curve)[1]),
+                           rep("OP", dim(prop_SMOTE_k562$curve)[1]),
+                           rep("OC", dim(proc_SMOTE_k562$curve)[1]))
+prdata_SMOTE_25kb$CL <- c(rep("GM12878", (dim(prall_SMOTE$curve)[1]+
+                                      dim(prdist_SMOTE$curve)[1]+
+                                      dim(prop_SMOTE$curve)[1]+
+                                      dim(proc_SMOTE$curve)[1])),
+                    rep("K562", (dim(prall_SMOTE_k562$curve)[1]+
+                                      dim(prdist_SMOTE_k562$curve)[1]+
+                                      dim(prop_SMOTE_k562$curve)[1]+
+                                      dim(proc_SMOTE_k562$curve)[1])))
+prdata_SMOTE_25kb$Predictor <- factor(prdata_SMOTE_25kb$Predictor)
+prdata_SMOTE_25kb$CL <- factor(prdata_SMOTE_25kb$CL)
+
+
+prplot_SMOTE_25kb <- ggplot(prdata_SMOTE_25kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+##ROSE
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prall_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prdata_ROSE_25kb <- rbind.data.frame(prall_ROSE$curve,
+                                prdist_ROSE$curve,
+                                prop_ROSE$curve,
+                                proc_ROSE$curve,
+                                prall_ROSE_k562$curve,
+                                prdist_ROSE_k562$curve,
+                                prop_ROSE_k562$curve,
+                                proc_ROSE_k562$curve)
+names(prdata_ROSE_25kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROSE_25kb$Predictor <- c(rep("All", dim(prall_ROSE$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE$curve)[1]),
+                           rep("OP", dim(prop_ROSE$curve)[1]),
+                           rep("OC", dim(proc_ROSE$curve)[1]),
+                           rep("All", dim(prall_ROSE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE_k562$curve)[1]),
+                           rep("OP", dim(prop_ROSE_k562$curve)[1]),
+                           rep("OC", dim(proc_ROSE_k562$curve)[1]))
+prdata_ROSE_25kb$CL <- c(rep("GM12878", (dim(prall_ROSE$curve)[1]+
+                                      dim(prdist_ROSE$curve)[1]+
+                                      dim(prop_ROSE$curve)[1]+
+                                      dim(proc_ROSE$curve)[1])),
+                    rep("K562", (dim(prall_ROSE_k562$curve)[1]+
+                                      dim(prdist_ROSE_k562$curve)[1]+
+                                      dim(prop_ROSE_k562$curve)[1]+
+                                      dim(proc_ROSE_k562$curve)[1])))
+prdata_ROSE_25kb$Predictor <- factor(prdata_ROSE_25kb$Predictor)
+prdata_ROSE_25kb$CL <- factor(prdata_ROSE_25kb$CL)
+
+
+prplot_ROSE_25kb <- ggplot(prdata_ROSE_25kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+###############################################################################
 
 #50kb
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/op/RFE/prcurve.rds")
+##None
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prdata_50kb <- rbind.data.frame(prall$curve,
-                                prdist$curve,
-                                prop$curve,
-                                proc$curve,
-                                prall_k562$curve,
-                                prdist_k562$curve,
-                                prop_k562$curve,
-                                proc_k562$curve)
-names(prdata_50kb) <- c("Recall", "Precision", "Threshold")
-prdata_50kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
-                           rep("Distance", dim(prdist$curve)[1]),
-                           rep("OP", dim(prop$curve)[1]),
-                           rep("OC", dim(proc$curve)[1]),
-                           rep("All", dim(prall_k562$curve)[1]),
-                           rep("Distance", dim(prdist_k562$curve)[1]),
-                           rep("OP", dim(prop_k562$curve)[1]),
-                           rep("OC", dim(proc_k562$curve)[1]))
-prdata_50kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
-                                      dim(prdist$curve)[1]+
-                                      dim(prop$curve)[1]+
-                                      dim(proc$curve)[1])),
-                    rep("K562", (dim(prall_k562$curve)[1]+
-                                      dim(prdist_k562$curve)[1]+
-                                      dim(prop_k562$curve)[1]+
-                                      dim(proc_k562$curve)[1])))
-prdata_50kb$Predictor <- factor(prdata_50kb$Predictor)
-prdata_50kb$CL <- factor(prdata_50kb$CL)
+prdata_None_50kb <- rbind.data.frame(prall_None$curve,
+                                prdist_None$curve,
+                                prop_None$curve,
+                                proc_None$curve,
+                                prall_None_k562$curve,
+                                prdist_None_k562$curve,
+                                prop_None_k562$curve,
+                                proc_None_k562$curve)
+names(prdata_None_50kb) <- c("Recall", "Precision", "Threshold")
+prdata_None_50kb$Predictor <- c(rep("All", dim(prall_None$curve)[1]),
+                           rep("Distance", dim(prdist_None$curve)[1]),
+                           rep("OP", dim(prop_None$curve)[1]),
+                           rep("OC", dim(proc_None$curve)[1]),
+                           rep("All", dim(prall_None_k562$curve)[1]),
+                           rep("Distance", dim(prdist_None_k562$curve)[1]),
+                           rep("OP", dim(prop_None_k562$curve)[1]),
+                           rep("OC", dim(proc_None_k562$curve)[1]))
+prdata_None_50kb$CL <- c(rep("GM12878", (dim(prall_None$curve)[1]+
+                                      dim(prdist_None$curve)[1]+
+                                      dim(prop_None$curve)[1]+
+                                      dim(proc_None$curve)[1])),
+                    rep("K562", (dim(prall_None_k562$curve)[1]+
+                                      dim(prdist_None_k562$curve)[1]+
+                                      dim(prop_None_k562$curve)[1]+
+                                      dim(proc_None_k562$curve)[1])))
+prdata_None_50kb$Predictor <- factor(prdata_None_50kb$Predictor)
+prdata_None_50kb$CL <- factor(prdata_None_50kb$CL)
 
-prplot_50kb <- ggplot(prdata_50kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+
+prplot_None_50kb <- ggplot(prdata_None_50kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
   geom_line(size=.75)+
   scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
   scale_color_discrete(name = "Predictor Type") +
   theme_minimal()+
   theme_bw()
+
+
+##RUS
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prall_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prdata_RUS_50kb <- rbind.data.frame(prall_RUS$curve,
+                                prdist_RUS$curve,
+                                prop_RUS$curve,
+                                proc_RUS$curve,
+                                prall_RUS_k562$curve,
+                                prdist_RUS_k562$curve,
+                                prop_RUS_k562$curve,
+                                proc_RUS_k562$curve)
+names(prdata_RUS_50kb) <- c("Recall", "Precision", "Threshold")
+prdata_RUS_50kb$Predictor <- c(rep("All", dim(prall_RUS$curve)[1]),
+                           rep("Distance", dim(prdist_RUS$curve)[1]),
+                           rep("OP", dim(prop_RUS$curve)[1]),
+                           rep("OC", dim(proc_RUS$curve)[1]),
+                           rep("All", dim(prall_RUS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_RUS_k562$curve)[1]),
+                           rep("OP", dim(prop_RUS_k562$curve)[1]),
+                           rep("OC", dim(proc_RUS_k562$curve)[1]))
+prdata_RUS_50kb$CL <- c(rep("GM12878", (dim(prall_RUS$curve)[1]+
+                                      dim(prdist_RUS$curve)[1]+
+                                      dim(prop_RUS$curve)[1]+
+                                      dim(proc_RUS$curve)[1])),
+                    rep("K562", (dim(prall_RUS_k562$curve)[1]+
+                                      dim(prdist_RUS_k562$curve)[1]+
+                                      dim(prop_RUS_k562$curve)[1]+
+                                      dim(proc_RUS_k562$curve)[1])))
+prdata_RUS_50kb$Predictor <- factor(prdata_RUS_50kb$Predictor)
+prdata_RUS_50kb$CL <- factor(prdata_RUS_50kb$CL)
+
+
+prplot_RUS_50kb <- ggplot(prdata_RUS_50kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##ROS
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prall_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prdata_ROS_50kb <- rbind.data.frame(prall_ROS$curve,
+                                prdist_ROS$curve,
+                                prop_ROS$curve,
+                                proc_ROS$curve,
+                                prall_ROS_k562$curve,
+                                prdist_ROS_k562$curve,
+                                prop_ROS_k562$curve,
+                                proc_ROS_k562$curve)
+names(prdata_ROS_50kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROS_50kb$Predictor <- c(rep("All", dim(prall_ROS$curve)[1]),
+                           rep("Distance", dim(prdist_ROS$curve)[1]),
+                           rep("OP", dim(prop_ROS$curve)[1]),
+                           rep("OC", dim(proc_ROS$curve)[1]),
+                           rep("All", dim(prall_ROS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROS_k562$curve)[1]),
+                           rep("OP", dim(prop_ROS_k562$curve)[1]),
+                           rep("OC", dim(proc_ROS_k562$curve)[1]))
+prdata_ROS_50kb$CL <- c(rep("GM12878", (dim(prall_ROS$curve)[1]+
+                                      dim(prdist_ROS$curve)[1]+
+                                      dim(prop_ROS$curve)[1]+
+                                      dim(proc_ROS$curve)[1])),
+                    rep("K562", (dim(prall_ROS_k562$curve)[1]+
+                                      dim(prdist_ROS_k562$curve)[1]+
+                                      dim(prop_ROS_k562$curve)[1]+
+                                      dim(proc_ROS_k562$curve)[1])))
+prdata_ROS_50kb$Predictor <- factor(prdata_ROS_50kb$Predictor)
+prdata_ROS_50kb$CL <- factor(prdata_ROS_50kb$CL)
+
+
+prplot_ROS_50kb <- ggplot(prdata_ROS_50kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##SMOTE
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prall_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prdata_SMOTE_50kb <- rbind.data.frame(prall_SMOTE$curve,
+                                prdist_SMOTE$curve,
+                                prop_SMOTE$curve,
+                                proc_SMOTE$curve,
+                                prall_SMOTE_k562$curve,
+                                prdist_SMOTE_k562$curve,
+                                prop_SMOTE_k562$curve,
+                                proc_SMOTE_k562$curve)
+names(prdata_SMOTE_50kb) <- c("Recall", "Precision", "Threshold")
+prdata_SMOTE_50kb$Predictor <- c(rep("All", dim(prall_SMOTE$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE$curve)[1]),
+                           rep("OP", dim(prop_SMOTE$curve)[1]),
+                           rep("OC", dim(proc_SMOTE$curve)[1]),
+                           rep("All", dim(prall_SMOTE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE_k562$curve)[1]),
+                           rep("OP", dim(prop_SMOTE_k562$curve)[1]),
+                           rep("OC", dim(proc_SMOTE_k562$curve)[1]))
+prdata_SMOTE_50kb$CL <- c(rep("GM12878", (dim(prall_SMOTE$curve)[1]+
+                                      dim(prdist_SMOTE$curve)[1]+
+                                      dim(prop_SMOTE$curve)[1]+
+                                      dim(proc_SMOTE$curve)[1])),
+                    rep("K562", (dim(prall_SMOTE_k562$curve)[1]+
+                                      dim(prdist_SMOTE_k562$curve)[1]+
+                                      dim(prop_SMOTE_k562$curve)[1]+
+                                      dim(proc_SMOTE_k562$curve)[1])))
+prdata_SMOTE_50kb$Predictor <- factor(prdata_SMOTE_50kb$Predictor)
+prdata_SMOTE_50kb$CL <- factor(prdata_SMOTE_50kb$CL)
+
+
+prplot_SMOTE_50kb <- ggplot(prdata_SMOTE_50kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+##ROSE
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prall_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prdata_ROSE_50kb <- rbind.data.frame(prall_ROSE$curve,
+                                prdist_ROSE$curve,
+                                prop_ROSE$curve,
+                                proc_ROSE$curve,
+                                prall_ROSE_k562$curve,
+                                prdist_ROSE_k562$curve,
+                                prop_ROSE_k562$curve,
+                                proc_ROSE_k562$curve)
+names(prdata_ROSE_50kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROSE_50kb$Predictor <- c(rep("All", dim(prall_ROSE$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE$curve)[1]),
+                           rep("OP", dim(prop_ROSE$curve)[1]),
+                           rep("OC", dim(proc_ROSE$curve)[1]),
+                           rep("All", dim(prall_ROSE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE_k562$curve)[1]),
+                           rep("OP", dim(prop_ROSE_k562$curve)[1]),
+                           rep("OC", dim(proc_ROSE_k562$curve)[1]))
+prdata_ROSE_50kb$CL <- c(rep("GM12878", (dim(prall_ROSE$curve)[1]+
+                                      dim(prdist_ROSE$curve)[1]+
+                                      dim(prop_ROSE$curve)[1]+
+                                      dim(proc_ROSE$curve)[1])),
+                    rep("K562", (dim(prall_ROSE_k562$curve)[1]+
+                                      dim(prdist_ROSE_k562$curve)[1]+
+                                      dim(prop_ROSE_k562$curve)[1]+
+                                      dim(proc_ROSE_k562$curve)[1])))
+prdata_ROSE_50kb$Predictor <- factor(prdata_ROSE_50kb$Predictor)
+prdata_ROSE_50kb$CL <- factor(prdata_ROSE_50kb$CL)
+
+
+prplot_ROSE_50kb <- ggplot(prdata_ROSE_50kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+###########################################################################
 
 #100kb
-prall <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/op/RFE/prcurve.rds")
+##None
+prall_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prall_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/prcurve.rds")
-prdist_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
-proc_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/oc/RFE/prcurve.rds")
-prop_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/op/RFE/prcurve.rds")
+prall_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/prcurve.rds")
+prdist_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/prcurve.rds")
+proc_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/oc/RFE/prcurve.rds")
+prop_None_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/op/RFE/prcurve.rds")
 
-prdata_100kb <- rbind.data.frame(prall$curve,
-                                prdist$curve,
-                                prop$curve,
-                                proc$curve,
-                                prall_k562$curve,
-                                prdist_k562$curve,
-                                prop_k562$curve,
-                                proc_k562$curve)
-names(prdata_100kb) <- c("Recall", "Precision", "Threshold")
-prdata_100kb$Predictor <- c(rep("All", dim(prall$curve)[1]),
-                           rep("Distance", dim(prdist$curve)[1]),
-                           rep("OP", dim(prop$curve)[1]),
-                           rep("OC", dim(proc$curve)[1]),
-                           rep("All", dim(prall_k562$curve)[1]),
-                           rep("Distance", dim(prdist_k562$curve)[1]),
-                           rep("OP", dim(prop_k562$curve)[1]),
-                           rep("OC", dim(proc_k562$curve)[1]))
-prdata_100kb$CL <- c(rep("GM12878", (dim(prall$curve)[1]+
-                                      dim(prdist$curve)[1]+
-                                      dim(prop$curve)[1]+
-                                      dim(proc$curve)[1])),
-                    rep("K562", (dim(prall_k562$curve)[1]+
-                                      dim(prdist_k562$curve)[1]+
-                                      dim(prop_k562$curve)[1]+
-                                      dim(proc_k562$curve)[1])))
-prdata_100kb$Predictor <- factor(prdata_100kb$Predictor)
-prdata_100kb$CL <- factor(prdata_100kb$CL)
+prdata_None_100kb <- rbind.data.frame(prall_None$curve,
+                                prdist_None$curve,
+                                prop_None$curve,
+                                proc_None$curve,
+                                prall_None_k562$curve,
+                                prdist_None_k562$curve,
+                                prop_None_k562$curve,
+                                proc_None_k562$curve)
+names(prdata_None_100kb) <- c("Recall", "Precision", "Threshold")
+prdata_None_100kb$Predictor <- c(rep("All", dim(prall_None$curve)[1]),
+                           rep("Distance", dim(prdist_None$curve)[1]),
+                           rep("OP", dim(prop_None$curve)[1]),
+                           rep("OC", dim(proc_None$curve)[1]),
+                           rep("All", dim(prall_None_k562$curve)[1]),
+                           rep("Distance", dim(prdist_None_k562$curve)[1]),
+                           rep("OP", dim(prop_None_k562$curve)[1]),
+                           rep("OC", dim(proc_None_k562$curve)[1]))
+prdata_None_100kb$CL <- c(rep("GM12878", (dim(prall_None$curve)[1]+
+                                      dim(prdist_None$curve)[1]+
+                                      dim(prop_None$curve)[1]+
+                                      dim(proc_None$curve)[1])),
+                    rep("K562", (dim(prall_None_k562$curve)[1]+
+                                      dim(prdist_None_k562$curve)[1]+
+                                      dim(prop_None_k562$curve)[1]+
+                                      dim(proc_None_k562$curve)[1])))
+prdata_None_100kb$Predictor <- factor(prdata_None_100kb$Predictor)
+prdata_None_100kb$CL <- factor(prdata_None_100kb$CL)
 
-prplot_100kb <- ggplot(prdata_100kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+
+prplot_None_100kb <- ggplot(prdata_None_100kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
   geom_line(size=.75)+
   scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
   scale_color_discrete(name = "Predictor Type") +
@@ -2835,9 +3430,209 @@ prplot_100kb <- ggplot(prdata_100kb, aes(x=Recall, y=Precision, color=Predictor,
   theme_bw()
 
 
-ggarrange(prplot_25kb, prplot_50kb, prplot_100kb,
-          nrow=2,ncol=2,
-          common.legend = TRUE, legend = "right")
+##RUS
+prall_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prall_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/all/RFE/prcurve.rds")
+prdist_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/RFE/prcurve.rds")
+proc_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/oc/RFE/prcurve.rds")
+prop_RUS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/op/RFE/prcurve.rds")
+
+prdata_RUS_100kb <- rbind.data.frame(prall_RUS$curve,
+                                prdist_RUS$curve,
+                                prop_RUS$curve,
+                                proc_RUS$curve,
+                                prall_RUS_k562$curve,
+                                prdist_RUS_k562$curve,
+                                prop_RUS_k562$curve,
+                                proc_RUS_k562$curve)
+names(prdata_RUS_100kb) <- c("Recall", "Precision", "Threshold")
+prdata_RUS_100kb$Predictor <- c(rep("All", dim(prall_RUS$curve)[1]),
+                           rep("Distance", dim(prdist_RUS$curve)[1]),
+                           rep("OP", dim(prop_RUS$curve)[1]),
+                           rep("OC", dim(proc_RUS$curve)[1]),
+                           rep("All", dim(prall_RUS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_RUS_k562$curve)[1]),
+                           rep("OP", dim(prop_RUS_k562$curve)[1]),
+                           rep("OC", dim(proc_RUS_k562$curve)[1]))
+prdata_RUS_100kb$CL <- c(rep("GM12878", (dim(prall_RUS$curve)[1]+
+                                      dim(prdist_RUS$curve)[1]+
+                                      dim(prop_RUS$curve)[1]+
+                                      dim(proc_RUS$curve)[1])),
+                    rep("K562", (dim(prall_RUS_k562$curve)[1]+
+                                      dim(prdist_RUS_k562$curve)[1]+
+                                      dim(prop_RUS_k562$curve)[1]+
+                                      dim(proc_RUS_k562$curve)[1])))
+prdata_RUS_100kb$Predictor <- factor(prdata_RUS_100kb$Predictor)
+prdata_RUS_100kb$CL <- factor(prdata_RUS_100kb$CL)
+
+
+prplot_RUS_100kb <- ggplot(prdata_RUS_100kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##ROS
+prall_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prall_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/all/RFE/prcurve.rds")
+prdist_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/RFE/prcurve.rds")
+proc_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/oc/RFE/prcurve.rds")
+prop_ROS_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/op/RFE/prcurve.rds")
+
+prdata_ROS_100kb <- rbind.data.frame(prall_ROS$curve,
+                                prdist_ROS$curve,
+                                prop_ROS$curve,
+                                proc_ROS$curve,
+                                prall_ROS_k562$curve,
+                                prdist_ROS_k562$curve,
+                                prop_ROS_k562$curve,
+                                proc_ROS_k562$curve)
+names(prdata_ROS_100kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROS_100kb$Predictor <- c(rep("All", dim(prall_ROS$curve)[1]),
+                           rep("Distance", dim(prdist_ROS$curve)[1]),
+                           rep("OP", dim(prop_ROS$curve)[1]),
+                           rep("OC", dim(proc_ROS$curve)[1]),
+                           rep("All", dim(prall_ROS_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROS_k562$curve)[1]),
+                           rep("OP", dim(prop_ROS_k562$curve)[1]),
+                           rep("OC", dim(proc_ROS_k562$curve)[1]))
+prdata_ROS_100kb$CL <- c(rep("GM12878", (dim(prall_ROS$curve)[1]+
+                                      dim(prdist_ROS$curve)[1]+
+                                      dim(prop_ROS$curve)[1]+
+                                      dim(proc_ROS$curve)[1])),
+                    rep("K562", (dim(prall_ROS_k562$curve)[1]+
+                                      dim(prdist_ROS_k562$curve)[1]+
+                                      dim(prop_ROS_k562$curve)[1]+
+                                      dim(proc_ROS_k562$curve)[1])))
+prdata_ROS_100kb$Predictor <- factor(prdata_ROS_100kb$Predictor)
+prdata_ROS_100kb$CL <- factor(prdata_ROS_100kb$CL)
+
+
+prplot_ROS_100kb <- ggplot(prdata_ROS_100kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+
+##SMOTE
+prall_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prall_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/all/RFE/prcurve.rds")
+prdist_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")
+proc_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/oc/RFE/prcurve.rds")
+prop_SMOTE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/op/RFE/prcurve.rds")
+
+prdata_SMOTE_100kb <- rbind.data.frame(prall_SMOTE$curve,
+                                prdist_SMOTE$curve,
+                                prop_SMOTE$curve,
+                                proc_SMOTE$curve,
+                                prall_SMOTE_k562$curve,
+                                prdist_SMOTE_k562$curve,
+                                prop_SMOTE_k562$curve,
+                                proc_SMOTE_k562$curve)
+names(prdata_SMOTE_100kb) <- c("Recall", "Precision", "Threshold")
+prdata_SMOTE_100kb$Predictor <- c(rep("All", dim(prall_SMOTE$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE$curve)[1]),
+                           rep("OP", dim(prop_SMOTE$curve)[1]),
+                           rep("OC", dim(proc_SMOTE$curve)[1]),
+                           rep("All", dim(prall_SMOTE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_SMOTE_k562$curve)[1]),
+                           rep("OP", dim(prop_SMOTE_k562$curve)[1]),
+                           rep("OC", dim(proc_SMOTE_k562$curve)[1]))
+prdata_SMOTE_100kb$CL <- c(rep("GM12878", (dim(prall_SMOTE$curve)[1]+
+                                      dim(prdist_SMOTE$curve)[1]+
+                                      dim(prop_SMOTE$curve)[1]+
+                                      dim(proc_SMOTE$curve)[1])),
+                    rep("K562", (dim(prall_SMOTE_k562$curve)[1]+
+                                      dim(prdist_SMOTE_k562$curve)[1]+
+                                      dim(prop_SMOTE_k562$curve)[1]+
+                                      dim(proc_SMOTE_k562$curve)[1])))
+prdata_SMOTE_100kb$Predictor <- factor(prdata_SMOTE_100kb$Predictor)
+prdata_SMOTE_100kb$CL <- factor(prdata_SMOTE_100kb$CL)
+
+
+prplot_SMOTE_100kb <- ggplot(prdata_SMOTE_100kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+##ROSE
+prall_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prall_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/all/RFE/prcurve.rds")
+prdist_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")
+proc_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/oc/RFE/prcurve.rds")
+prop_ROSE_k562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/op/RFE/prcurve.rds")
+
+prdata_ROSE_100kb <- rbind.data.frame(prall_ROSE$curve,
+                                prdist_ROSE$curve,
+                                prop_ROSE$curve,
+                                proc_ROSE$curve,
+                                prall_ROSE_k562$curve,
+                                prdist_ROSE_k562$curve,
+                                prop_ROSE_k562$curve,
+                                proc_ROSE_k562$curve)
+names(prdata_ROSE_100kb) <- c("Recall", "Precision", "Threshold")
+prdata_ROSE_100kb$Predictor <- c(rep("All", dim(prall_ROSE$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE$curve)[1]),
+                           rep("OP", dim(prop_ROSE$curve)[1]),
+                           rep("OC", dim(proc_ROSE$curve)[1]),
+                           rep("All", dim(prall_ROSE_k562$curve)[1]),
+                           rep("Distance", dim(prdist_ROSE_k562$curve)[1]),
+                           rep("OP", dim(prop_ROSE_k562$curve)[1]),
+                           rep("OC", dim(proc_ROSE_k562$curve)[1]))
+prdata_ROSE_100kb$CL <- c(rep("GM12878", (dim(prall_ROSE$curve)[1]+
+                                      dim(prdist_ROSE$curve)[1]+
+                                      dim(prop_ROSE$curve)[1]+
+                                      dim(proc_ROSE$curve)[1])),
+                    rep("K562", (dim(prall_ROSE_k562$curve)[1]+
+                                      dim(prdist_ROSE_k562$curve)[1]+
+                                      dim(prop_ROSE_k562$curve)[1]+
+                                      dim(proc_ROSE_k562$curve)[1])))
+prdata_ROSE_100kb$Predictor <- factor(prdata_ROSE_100kb$Predictor)
+prdata_ROSE_100kb$CL <- factor(prdata_ROSE_100kb$CL)
+
+
+prplot_ROSE_100kb <- ggplot(prdata_ROSE_100kb, aes(x=Recall, y=Precision, color=Predictor, linetype=CL)) +
+  geom_line(size=.75)+
+  scale_linetype_manual(name=("Cell Line"), values=c("solid", "dashed"))+
+  scale_color_discrete(name = "Predictor Type") +
+  theme_minimal()+
+  theme_bw()
+
+###############################################################
+
+##Collecting 25kb, 50kb, and 100kb plots
+
+ggarrange(prplot_None_25kb, prplot_None_50kb, prplot_None_100kb,
+          prplot_RUS_25kb, prplot_RUS_50kb, prplot_RUS_100kb,
+          prplot_ROS_25kb, prplot_ROS_50kb, prplot_ROS_100kb,
+          prplot_SMOTE_25kb, prplot_SMOTE_50kb, prplot_SMOTE_100kb,
+          prplot_ROSE_25kb, prplot_ROSE_50kb, prplot_ROSE_100kb,
+          ncol=3,
+          nrow=5,
+          common.legend = TRUE,
+          legend = "right")
 ```
 
 
