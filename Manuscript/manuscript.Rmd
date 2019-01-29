@@ -48,7 +48,7 @@ Replicate Hi-C data for the GM12878, K562, ... cell lines were downloaded from G
 
 ## GENOMIC ANNOTATION DATA
 
-Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and transcription factor binding sites using ChIP-seq peak experiments. Each genomic annotation was represented by a set of regions (their genomic coordinates) annotated as having a functional property or biological significance.
+Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and transcription factor binding sites using ChIP-seq peak experiments for the GM12878, K562, ... cell lines. Each genomic annotation was represented by a set of regions (their genomic coordinates) annotated as having a functional property or biological significance.
 
 
 ## MODEL CONSTRUCTION
@@ -59,7 +59,7 @@ To establish the data for modeling, the genome was binned into equally sized int
 
 An ensemble of models was established for the purposes of systematically comparing the performances of different parameters in the framework (Figure 2). Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type for the feature space.
 
-The data sets used for modeling were composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the minority and majority sets respectively. The data was then split into a 7:3 ratio of training to testing sets. Each training and testing set was composed of a similar majority to minority class ratio as the full data set. That is, for the task of prediction, the test set remained constant for all ensemble systems in order to account for a fair and unbiased comparison.
+The data sets used for modeling were composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the minority and majority sets respectively. The data was then split into a 7:3 ratio of training to testing sets. Each training and testing set was composed of a similar majority to minority class ratio as the full data set. For the task of performance evaluation and prediction, the test set remained constant for all ensemble systems to account for a fair and unbiased comparison.
 
 ### FEATURE ENGINEERING AND REDUCTION USING GENOMIC ANNOTATIONS
 
@@ -69,9 +69,7 @@ Using the sets of genomic annotations, we created three types of predictors that
    
 2. **Overlap Percent (OP)**: For each genomic bin, the percent overlap between the feature width and the total width of the bin was calculated. We defined the feature width as the number of bases that overlapped with the genomic bin. The percent was then calculated by dividing the feature width by the bin width. If multiple overlaps existed, the feature width was defined as the sum of the total number of bases that overlapped with a particular bin. Note that the bin width remained constant for a given resolution (either 10 kb, 25 kb, 50 kb, or 100 kb). Values for bins with no overlaps were set to be 0.
 
-3. **Log2 Distance**: For each genomic bin, the $log_{2}$ of the distance (in bases) from the center of the bin to the center of the nearest region of a respective genomic annotation region [??? Decide whether to use "annotation" or "feature"] was calculated. The log transformation was used as a normalization technique in order to account for the skewness of the data (Supplementary Figure 1).
-
-To assess the predictive performance for each predictor type, we performed individual random forest classification algorithms utilizing each set predictor types as the feature space, in addition to a model with all combined types. Precision-Recall (PR) Curves, and subsequent area under the PR curves (AUPRC), were used to evaluate which predictor type contributed to the best model performance. Recursive feature elimination (RFE) was then used to determine the optimal number of features for models within each set of predictor types. In doing so, random forest models were used to assign weights to a set features of a given size. The optimal number of features was determined by the AUPRC of the corresponding model in order to reduce the feature space accordingly.
+3. **Log2 Distance**: For each genomic bin, the $log_{2}$ of the distance (refered to hereafter simply as $\textit{distance}$), in basepairs, from the center of the bin to the center of the nearest region of a respective genomic annotation region [??? Decide whether to use "annotation" or "feature"] was calculated. The log transformation was used as a normalization technique in order to account for the skewness of the data (Supplementary Figure 1).
 
 ### RE-SAMPLING TECHNIQUES
 
@@ -87,11 +85,11 @@ In order to evaluate the problem of imbalanced classes, we then evaluated four r
 
 5. **ROSE** (Random Over-Sampling Examples): Similar to SMOTE, ROSE combines techniques of over-sampling and under-sampling. However, contrary to SMOTE, all of the data generated by ROSE is synthetic. The data is created by sampling from one of the two classes, then generating a new example in its neighborhood using a smoothed bootstrap approach. The shape of the neighborhood is determined by the kernel density estimate of the two classes [@lunardon2013r]. Another important distinction between ROSE and SMOTE is that, for ROSE, the creation of perfectly balanced classes is unlikely due to the randomness in sampling between the two classes. The `ROSE` R package was used to perform ROSE (version 0.0.3).
 
-### CLASSIFICATION
+### CLASSIFICATION & CROSS VALIDATION 
 
 A classification algorithm in the form of a random forest was performed on the various resampled and reduced training sets and validated using the same test set for all models in the ensemble. To reduce bias due to random dataset generation, 10-fold cross validation was used. The default number of features to consider at each node of the random forest algorithm was set as the square root of the number of features in the model. Likewise, the number of ensemble trees to aggregate was set at 500. Once the model was implemented, it was assessed using the test set, and performance metrics were then recorded. 
 
-### MODEL EVALUATION & PREDICTION
+### PERFORMANCE METRICS 
 
 The efficacy of different ensemble systems was compared using various performance metrics including accuracy, F1-score, and MCC. These metrics are defined as follows:
 
@@ -101,6 +99,12 @@ $$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{ (TP + FP)(TP+FN)(TN+FP)(TN+FN)
 
 
 Here, TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary. Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. The evaluation metrics listed above are all considered single threshold measures. That is, they are defined for individual thresholds that separated class prediction. Thererfore they are unable to give an overview of the potential range of performance as thresholds vary. In order to evaluate the trade-off between precision and recall, we also considered a threshold-free measure in form of the area under the precision recall curve (AUPRC).
+
+###MODEL ASSESSMENT AND PREDICTION
+
+We first assessed predictor type performance using random forest classification algorithms by utilizing each set of predictor types as the feature space, in addition to a model with all combined types. Models were evaluated across each combination of resampling techniques applied to the training set, for each cell line. Performance was based on the AUPRC
+
+To assess the performance for each predictor type, we performed individual random forest classification algorithms utilizing each set of predictor types as the feature space, in addition to a model with all combined types,. Precision-Recall (PR) Curves, and subsequent area under the PR curves (AUPRC), were used to evaluate which predictor type contributed to the best model performance. Recursive feature elimination (RFE) was then used to determine the optimal number of features for models within each set of predictor types. In doing so, random forest models were used to assign weights to a set features of a given size. The optimal number of features was determined by the AUPRC of the corresponding model in order to reduce the feature space accordingly.
 
 For the task of identifying the functional genomic elements that were most predictive of the formation of TAD boundaries, we evaluated the variable importances associated with each predictor of the random forest model. For each tree, the prediction accuracy on the out-of-bag portion of the data was recorded. Then the same was done after permuting each predictor variable. The difference between the two accuracies was then averaged over all trees, and normalized by the standard error [@kuhn2012caret]. 
 
