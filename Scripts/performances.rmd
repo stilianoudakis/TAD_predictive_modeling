@@ -3635,268 +3635,469 @@ ggarrange(prplot_None_25kb, prplot_None_50kb, prplot_None_100kb,
           legend = "right")
 ```
 
+##Tables of AUPRC
+
 
 
 ## RFE
 
-###GM12878
-
-####10kb
+###10kb
 
 ```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+rfeModel_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+rfeModel_None_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
+#None
+resampdata_None_10kb <- rbind.data.frame(rfeModel_None_dist$results,rfeModel_None_dist_K562$results)
+resampdata_None_10kb$CL <- c(rep("GM12878", dim(rfeModel_None_dist$results)[1]),
+                             rep("K562", dim(rfeModel_None_dist_K562$results)[1]))
 
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_10kb <- rfeModel_dist$results[1:6,]
-
-pt10kb <- ggplot(resampdata_10kb, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_None_10kb <- ggplot(resampdata_None_10kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,.5)
+
+#RUS
+resampdata_RUS_10kb <- rbind.data.frame(rfeModel_RUS_dist$results,rfeModel_RUS_dist_K562$results)
+resampdata_RUS_10kb$CL <- c(rep("GM12878", dim(rfeModel_RUS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_RUS_dist_K562$results)[1]))
+
+rfeplot_RUS_10kb <- ggplot(resampdata_RUS_10kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#ROS
+resampdata_ROS_10kb <- rbind.data.frame(rfeModel_ROS_dist$results,rfeModel_ROS_dist_K562$results)
+resampdata_ROS_10kb$CL <- c(rep("GM12878", dim(rfeModel_ROS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROS_dist_K562$results)[1]))
+
+rfeplot_ROS_10kb <- ggplot(resampdata_ROS_10kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#SMOTE
+resampdata_SMOTE_10kb <- rbind.data.frame(rfeModel_SMOTE_dist$results,rfeModel_SMOTE_dist_K562$results)
+resampdata_SMOTE_10kb$CL <- c(rep("GM12878", dim(rfeModel_SMOTE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_SMOTE_dist_K562$results)[1]))
+
+rfeplot_SMOTE_10kb <- ggplot(resampdata_SMOTE_10kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#ROSE
+resampdata_ROSE_10kb <- rbind.data.frame(rfeModel_ROSE_dist$results,rfeModel_ROSE_dist_K562$results)
+resampdata_ROSE_10kb$CL <- c(rep("GM12878", dim(rfeModel_ROSE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROSE_dist_K562$results)[1]))
+
+rfeplot_ROSE_10kb <- ggplot(resampdata_ROSE_10kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#Combining 10 kb plots
+ggarrange(rfeplot_None_10kb,
+          rfeplot_RUS_10kb,
+          rfeplot_ROS_10kb,
+          rfeplot_SMOTE_10kb,
+          rfeplot_ROSE_10kb,
+          nrow = 3,
+          ncol = 2,
+          common.legend = TRUE,
+          legend = "right")
 
 ```
 
-####25kb
+###25kb
 
 ```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+rfeModel_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+rfeModel_None_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
+#None
+resampdata_None_25kb <- rbind.data.frame(rfeModel_None_dist$results,rfeModel_None_dist_K562$results)
+resampdata_None_25kb$CL <- c(rep("GM12878", dim(rfeModel_None_dist$results)[1]),
+                             rep("K562", dim(rfeModel_None_dist_K562$results)[1]))
 
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_25kb <- rfeModel_dist$results[1:6,]
-
-pt25kb <- ggplot(resampdata_25kb, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_None_25kb <- ggplot(resampdata_None_25kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,.5)
+
+#RUS
+resampdata_RUS_25kb <- rbind.data.frame(rfeModel_RUS_dist$results,rfeModel_RUS_dist_K562$results)
+resampdata_RUS_25kb$CL <- c(rep("GM12878", dim(rfeModel_RUS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_RUS_dist_K562$results)[1]))
+
+rfeplot_RUS_25kb <- ggplot(resampdata_RUS_25kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#ROS
+resampdata_ROS_25kb <- rbind.data.frame(rfeModel_ROS_dist$results,rfeModel_ROS_dist_K562$results)
+resampdata_ROS_25kb$CL <- c(rep("GM12878", dim(rfeModel_ROS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROS_dist_K562$results)[1]))
+
+rfeplot_ROS_25kb <- ggplot(resampdata_ROS_25kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#SMOTE
+resampdata_SMOTE_25kb <- rbind.data.frame(rfeModel_SMOTE_dist$results,rfeModel_SMOTE_dist_K562$results)
+resampdata_SMOTE_25kb$CL <- c(rep("GM12878", dim(rfeModel_SMOTE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_SMOTE_dist_K562$results)[1]))
+
+rfeplot_SMOTE_25kb <- ggplot(resampdata_SMOTE_25kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#ROSE
+resampdata_ROSE_25kb <- rbind.data.frame(rfeModel_ROSE_dist$results,rfeModel_ROSE_dist_K562$results)
+resampdata_ROSE_25kb$CL <- c(rep("GM12878", dim(rfeModel_ROSE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROSE_dist_K562$results)[1]))
+
+rfeplot_ROSE_25kb <- ggplot(resampdata_ROSE_25kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
 
 ```
 
-####50kb
+###50kb
 
 ```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+rfeModel_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+rfeModel_None_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
+#None
+resampdata_None_50kb <- rbind.data.frame(rfeModel_None_dist$results,rfeModel_None_dist_K562$results)
+resampdata_None_50kb$CL <- c(rep("GM12878", dim(rfeModel_None_dist$results)[1]),
+                             rep("K562", dim(rfeModel_None_dist_K562$results)[1]))
 
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_50kb <- rfeModel_dist$results[1:6,]
-
-pt50kb <- ggplot(resampdata_50kb, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_None_50kb <- ggplot(resampdata_None_50kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,.5)
+
+#RUS
+resampdata_RUS_50kb <- rbind.data.frame(rfeModel_RUS_dist$results,rfeModel_RUS_dist_K562$results)
+resampdata_RUS_50kb$CL <- c(rep("GM12878", dim(rfeModel_RUS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_RUS_dist_K562$results)[1]))
+
+rfeplot_RUS_50kb <- ggplot(resampdata_RUS_50kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#ROS
+resampdata_ROS_50kb <- rbind.data.frame(rfeModel_ROS_dist$results,rfeModel_ROS_dist_K562$results)
+resampdata_ROS_50kb$CL <- c(rep("GM12878", dim(rfeModel_ROS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROS_dist_K562$results)[1]))
+
+rfeplot_ROS_50kb <- ggplot(resampdata_ROS_50kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#SMOTE
+resampdata_SMOTE_50kb <- rbind.data.frame(rfeModel_SMOTE_dist$results,rfeModel_SMOTE_dist_K562$results)
+resampdata_SMOTE_50kb$CL <- c(rep("GM12878", dim(rfeModel_SMOTE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_SMOTE_dist_K562$results)[1]))
+
+rfeplot_SMOTE_50kb <- ggplot(resampdata_SMOTE_50kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
+#ROSE
+resampdata_ROSE_50kb <- rbind.data.frame(rfeModel_ROSE_dist$results,rfeModel_ROSE_dist_K562$results)
+resampdata_ROSE_50kb$CL <- c(rep("GM12878", dim(rfeModel_ROSE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROSE_dist_K562$results)[1]))
+
+rfeplot_ROSE_50kb <- ggplot(resampdata_ROSE_50kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
+  geom_line() +
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
+  scale_x_discrete(name="Number of Features", 
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
+
 
 ```
 
-####100kb
+###100kb
 
 ```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
+rfeModel_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
+rfeModel_None_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
+rfeModel_RUS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROS_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/RFE/rfeModel_dist.rds")
+rfeModel_SMOTE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/RFE/rfeModel_dist.rds")
+rfeModel_ROSE_dist_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/Distance/RFE/rfeModel_dist.rds")
 
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
+#None
+resampdata_None_100kb <- rbind.data.frame(rfeModel_None_dist$results,rfeModel_None_dist_K562$results)
+resampdata_None_100kb$CL <- c(rep("GM12878", dim(rfeModel_None_dist$results)[1]),
+                             rep("K562", dim(rfeModel_None_dist_K562$results)[1]))
 
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_100kb <- rfeModel_dist$results[1:6,]
-
-pt100kb <- ggplot(resampdata_100kb, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_None_100kb <- ggplot(resampdata_None_100kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,.5)
 
-```
+#RUS
+resampdata_RUS_100kb <- rbind.data.frame(rfeModel_RUS_dist$results,rfeModel_RUS_dist_K562$results)
+resampdata_RUS_100kb$CL <- c(rep("GM12878", dim(rfeModel_RUS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_RUS_dist_K562$results)[1]))
 
-###K562
-
-####10kb
-
-```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
-
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
-
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
-
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_10kb_k562 <- rfeModel_dist$results[1:6,]
-
-pt10kb_k562 <- ggplot(resampdata_10kb_k562, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_RUS_100kb <- ggplot(resampdata_RUS_100kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
 
-```
+#ROS
+resampdata_ROS_100kb <- rbind.data.frame(rfeModel_ROS_dist$results,rfeModel_ROS_dist_K562$results)
+resampdata_ROS_100kb$CL <- c(rep("GM12878", dim(rfeModel_ROS_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROS_dist_K562$results)[1]))
 
-
-####25kb
-
-```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
-
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
-
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
-
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_25kb_k562 <- rfeModel_dist$results[1:6,]
-
-pt25kb <- ggplot(resampdata_25kb_k562, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_ROS_100kb <- ggplot(resampdata_ROS_100kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
 
-```
+#SMOTE
+resampdata_SMOTE_100kb <- rbind.data.frame(rfeModel_SMOTE_dist$results,rfeModel_SMOTE_dist_K562$results)
+resampdata_SMOTE_100kb$CL <- c(rep("GM12878", dim(rfeModel_SMOTE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_SMOTE_dist_K562$results)[1]))
 
-####50kb
-
-```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
-
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
-
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
-
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_50kb_k562 <- rfeModel_dist$results[1:6,]
-
-pt50kb <- ggplot(resampdata_50kb_k562, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_SMOTE_100kb <- ggplot(resampdata_SMOTE_100kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
 
-```
+#ROSE
+resampdata_ROSE_100kb <- rbind.data.frame(rfeModel_ROSE_dist$results,rfeModel_ROSE_dist_K562$results)
+resampdata_ROSE_100kb$CL <- c(rep("GM12878", dim(rfeModel_ROSE_dist$results)[1]),
+                             rep("K562", dim(rfeModel_ROSE_dist_K562$results)[1]))
 
-####100kb
-
-```{r}
-#rfeModel_all <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/rfeModel_all.rds")
-rfeModel_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
-#rfeModel_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/RFE/rfeModel_oc.rds")
-#rfeModel_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/RFE/rfeModel_op.rds")
-
-#resampdata <- rbind.data.frame(rfeModel_all$results,rfeModel_dist$results,rfeModel_oc$results,rfeModel_op$results)
-
-#resampdata$`Predictor Type` <- c(rep("Combined", nrow(rfeModel_all$results)),
-#                                 rep("Distance", nrow(rfeModel_dist$results)),
-#                                 rep("OC", nrow(rfeModel_oc$results)),
-#                                 rep("OP", nrow(rfeModel_op$results)))
-
-#resampdata$`Predictor Type` <- factor(resampdata$`Predictor Type`)
-
-resampdata_100kb_k562 <- rfeModel_dist$results[1:6,]
-
-pt100kb <- ggplot(resampdata_100kb_k562, aes(x=Variables, y=AUPRC)) +
-  geom_point()+
+rfeplot_ROSE_100kb <- ggplot(resampdata_ROSE_100kb, aes(x=Variables, y=AUPRC, color=CL)) +
+  geom_point(position = position_dodge(width = 3))+
   geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
+  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), 
+                width=5,
+                position = position_dodge(width = 3))+
+  scale_color_discrete(name="Cell Line")+
   scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  theme_minimal()+
-  ylim(0,.5)
+                   breaks=c("2", "4", "8", "16", "32", "64", "128"), 
+                   labels=c("2", "4", "8", "16", "32", "64", "128"), 
+                   limits=as.character(c(1:138)))+
+  theme_minimal()#+
+  #ylim(0,1)
 
 ```
 
@@ -3905,87 +4106,15 @@ pt100kb <- ggplot(resampdata_100kb_k562, aes(x=Variables, y=AUPRC)) +
 
 ```{r}
 
-allrfe10kb <- rbind.data.frame(resampdata_10kb, resampdata_10kb_k562)
-allrfe10kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
-allrfe10kb$CL <- factor(allrfe10kb$CL)
-
-rfe10kbplot <- ggplot(data=allrfe10kb, aes(x=Variables, y=AUPRC, color=CL)) +
-  geom_point()+
-  geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
-  scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  scale_color_discrete(name="Cell Line")+
-  theme_bw()+
-  #ggtitle("10 kb") +
-  ylim(0,.5)+
-  theme(plot.title = element_text(hjust = 0.5))
-  
-
-allrfe25kb <- rbind.data.frame(resampdata_25kb, resampdata_25kb_k562)
-allrfe25kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
-allrfe25kb$CL <- factor(allrfe25kb$CL)
-
-rfe25kbplot <- ggplot(data=allrfe25kb, aes(x=Variables, y=AUPRC, color=CL)) +
-  geom_point()+
-  geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
-  scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  scale_color_discrete(name="Cell Line")+
-  theme_bw()+
-  #ggtitle("25 kb") +
-  ylim(0,.5)+
-  theme(plot.title = element_text(hjust = 0.5))
-  
-
-allrfe50kb <- rbind.data.frame(resampdata_50kb, resampdata_50kb_k562)
-allrfe50kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
-allrfe50kb$CL <- factor(allrfe50kb$CL)
-
-rfe50kbplot <- ggplot(data=allrfe50kb, aes(x=Variables, y=AUPRC, color=CL)) +
-  geom_point()+
-  geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
-  scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  scale_color_discrete(name="Cell Line")+
-  theme_bw()+
-  #ggtitle("50 kb") +
-  ylim(0,.5)+
-  theme(plot.title = element_text(hjust = 0.5))
-  
-
-allrfe100kb <- rbind.data.frame(resampdata_100kb, resampdata_100kb_k562)
-allrfe100kb$CL <- c(rep("GM12878", 6),rep("K562", 6))
-allrfe100kb$CL <- factor(allrfe100kb$CL)
-
-rfe100kbplot <- ggplot(data=allrfe100kb, aes(x=Variables, y=AUPRC, color=CL)) +
-  geom_point()+
-  geom_line() +
-  geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1)+
-  scale_x_discrete(name="Number of Features", 
-                   breaks=c("2", "4", "8", "16", "32", "64"), 
-                   labels=c("2", "4", "8", "16", "32", "64"), 
-                   limits=as.character(c(1:64)))+
-  scale_color_discrete(name="Cell Line")+
-  theme_minimal()+
-  theme_bw()+
-  #ggtitle("100 kb") +
-  ylim(0,.5)+
-  theme(plot.title = element_text(hjust = 0.5))
-  
-
-ggarrange(rfe25kbplot, rfe50kbplot, rfe100kbplot,
-          nrow=2,ncol=2,
-          common.legend = TRUE, legend = "right")
-
+ggarrange(rfeplot_None_25kb, rfeplot_None_50kb, rfeplot_None_100kb,
+          rfeplot_RUS_25kb, rfeplot_RUS_50kb, rfeplot_RUS_100kb,
+          rfeplot_ROS_25kb, rfeplot_ROS_50kb, rfeplot_ROS_100kb,
+          rfeplot_SMOTE_25kb, rfeplot_SMOTE_50kb, rfeplot_SMOTE_100kb,
+          rfeplot_ROSE_25kb, rfeplot_ROSE_50kb, rfeplot_ROSE_100kb,
+          nrow = 5,
+          ncol = 3,
+          common.legend = TRUE,
+          legend = "right")
 
 #comparing top predictors across resolution and cell line
 rfeModel_dist_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/rfeModel_dist.rds")
