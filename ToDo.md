@@ -1,7 +1,7 @@
 - clearly define Y variable in figure 1
 - use term "annotation" consistently
-- include supplementary table with HIC data defined
-- remove ... focus on current cell lines
++ include supplementary table with HIC data defined
++ remove ... focus on current cell lines
 - specify how same tfbs from different institutions was handled
 + discuss area under precision recall curve more: how it should look, how to interpret, etc
 - update supp table 1 with cell line specific tfbs
@@ -11,6 +11,8 @@
 + perform variable reduction after balancing
 - cluster heatmaps by row
 - change color of heatmaps (make lighter red)
++ add back extra chromstate predictors
++ specified which tfbs were used for each cell line
 
 
 - directly compare mourad using percent predictor types
