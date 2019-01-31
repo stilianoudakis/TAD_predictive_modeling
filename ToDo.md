@@ -1,10 +1,14 @@
+- clearly define Y variable in figure 1
+- use term "annotation" consistently
+- include supplementary table with HIC data defined
+- remove ... focus on current cell lines
 - specify how same tfbs from different institutions was handled
-- discuss area under precision recall curve more: how it should look, how to interpret, etc
++ discuss area under precision recall curve more: how it should look, how to interpret, etc
 - update supp table 1 with cell line specific tfbs
-- but tfbs specific urls
+- put tfbs specific urls
 - describe error bars for rfe plots in legend
-- extend rfe plots to full feature space
-- perform variable reduction after balancing
++ extend rfe plots to full feature space
++ perform variable reduction after balancing
 - cluster heatmaps by row
 - change color of heatmaps (make lighter red)
 
