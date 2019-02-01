@@ -1,11 +1,11 @@
-- clearly define Y variable in figure 1
++ clearly define Y variable in figure 1 (discuss in meeting)
 - use term "annotation" consistently
 + include supplementary table with HIC data defined
 + remove ... focus on current cell lines
-- specify how same tfbs from different institutions was handled
+- specify how same tfbs from different institutions was handled (discuss in meeting)
 + discuss area under precision recall curve more: how it should look, how to interpret, etc
-- update supp table 1 with cell line specific tfbs
-- put tfbs specific urls
++ update supp table 1 with cell line specific tfbs
++ put tfbs specific urls
 - describe error bars for rfe plots in legend
 + extend rfe plots to full feature space
 + perform variable reduction after balancing
@@ -13,6 +13,7 @@
 - change color of heatmaps (make lighter red)
 + add back extra chromstate predictors
 + specified which tfbs were used for each cell line
++ edit legends
 
 
 - directly compare mourad using percent predictor types
