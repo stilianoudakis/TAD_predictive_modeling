@@ -3637,6 +3637,381 @@ ggarrange(prplot_None_25kb, prplot_None_50kb, prplot_None_100kb,
 
 ##Tables of AUPRC
 
+```{r}
+
+gm12878_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rus_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_smote_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rose_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+gm12878_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rus_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_smote_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rose_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+gm12878_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rus_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_smote_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rose_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+gm12878_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rus_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_smote_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rose_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+K562_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+K562_10kb_rus_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+K562_10kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+K562_10kb_smote_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+K562_10kb_rose_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+K562_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+K562_25kb_rus_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+K562_25kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+K562_25kb_smote_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+K562_25kb_rose_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+K562_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+K562_50kb_rus_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+K562_50kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+K562_50kb_smote_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+K562_50kb_rose_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+K562_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/RFE/prcurve.rds")$auc.integral
+K562_100kb_rus_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/RFE/prcurve.rds")$auc.integral
+K562_100kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/RFE/prcurve.rds")$auc.integral
+K562_100kb_smote_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/RFE/prcurve.rds")$auc.integral
+K562_100kb_rose_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/OC/RFE/prcurve.rds")$auc.integral
+
+gm12878_10kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rus_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_ros_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_smote_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rose_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+gm12878_25kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rus_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_ros_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_smote_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rose_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+gm12878_50kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rus_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_ros_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_smote_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rose_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+gm12878_100kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rus_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_ros_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_smote_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rose_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+K562_10kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+K562_10kb_rus_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+K562_10kb_ros_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+K562_10kb_smote_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+K562_10kb_rose_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+K562_25kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+K562_25kb_rus_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+K562_25kb_ros_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+K562_25kb_smote_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+K562_25kb_rose_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+K562_50kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+K562_50kb_rus_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+K562_50kb_ros_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+K562_50kb_smote_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+K562_50kb_rose_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+K562_100kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/RFE/prcurve.rds")$auc.integral
+K562_100kb_rus_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/RFE/prcurve.rds")$auc.integral
+K562_100kb_ros_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/RFE/prcurve.rds")$auc.integral
+K562_100kb_smote_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/RFE/prcurve.rds")$auc.integral
+K562_100kb_rose_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/OP/RFE/prcurve.rds")$auc.integral
+
+gm12878_10kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+gm12878_25kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+gm12878_50kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+gm12878_100kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+K562_10kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+K562_10kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+K562_10kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+K562_10kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+K562_10kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+K562_25kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+K562_25kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+K562_25kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+K562_25kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+K562_25kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+K562_50kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+K562_50kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+K562_50kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+K562_50kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+K562_50kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+K562_100kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/prcurve.rds")$auc.integral
+K562_100kb_rus_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/RFE/prcurve.rds")$auc.integral
+K562_100kb_ros_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/RFE/prcurve.rds")$auc.integral
+K562_100kb_smote_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/RFE/prcurve.rds")$auc.integral
+K562_100kb_rose_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/Distance/RFE/prcurve.rds")$auc.integral
+
+gm12878_10kb_none_all <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rus_all <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_ros_all <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_smote_all <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+gm12878_10kb_rose_all <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+gm12878_25kb_none_all <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rus_all <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_ros_all <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_smote_all <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+gm12878_25kb_rose_all <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+gm12878_50kb_none_all <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rus_all <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_ros_all <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_smote_all <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+gm12878_50kb_rose_all <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+gm12878_100kb_none_all <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rus_all <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_ros_all <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_smote_all <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+gm12878_100kb_rose_all <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+K562_10kb_none_all <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+K562_10kb_rus_all <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+K562_10kb_ros_all <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+K562_10kb_smote_all <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+K562_10kb_rose_all <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+K562_25kb_none_all <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+K562_25kb_rus_all <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+K562_25kb_ros_all <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+K562_25kb_smote_all <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+K562_25kb_rose_all <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+K562_50kb_none_all <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+K562_50kb_rus_all <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+K562_50kb_ros_all <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+K562_50kb_smote_all <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+K562_50kb_rose_all <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+K562_100kb_none_all <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/all/RFE/prcurve.rds")$auc.integral
+K562_100kb_rus_all <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/all/RFE/prcurve.rds")$auc.integral
+K562_100kb_ros_all <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/all/RFE/prcurve.rds")$auc.integral
+K562_100kb_smote_all <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/all/RFE/prcurve.rds")$auc.integral
+K562_100kb_rose_all <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/all/RFE/prcurve.rds")$auc.integral
+
+prcurvetable <- data.frame(CL=c(rep("GM12878", 20), rep("K562", 20)),
+                           Resolution=c(c(rep("10 kb", 5), 
+                                        rep("25 kb", 5),
+                                        rep("50 kb", 5),
+                                        rep("100 kb", 5)),
+                                        c(rep("10 kb", 5), 
+                                        rep("25 kb", 5),
+                                        rep("50 kb", 5),
+                                        rep("100 kb", 5))),
+                           ReSampling=rep(c("None",
+                                        "RUS",
+                                        "ROS",
+                                        "SMOTE",
+                                        "ROSE"),8))
+prcurvetable$OC <- c(gm12878_10kb_none_oc,
+gm12878_10kb_rus_oc,
+gm12878_10kb_ros_oc,
+gm12878_10kb_smote_oc,
+gm12878_10kb_rose_oc,
+gm12878_25kb_none_oc,
+gm12878_25kb_rus_oc,
+gm12878_25kb_ros_oc,
+gm12878_25kb_smote_oc,
+gm12878_25kb_rose_oc,
+gm12878_50kb_none_oc,
+gm12878_50kb_rus_oc,
+gm12878_50kb_ros_oc,
+gm12878_50kb_smote_oc,
+gm12878_50kb_rose_oc,
+gm12878_100kb_none_oc,
+gm12878_100kb_rus_oc,
+gm12878_100kb_ros_oc,
+gm12878_100kb_smote_oc,
+gm12878_100kb_rose_oc,
+K562_10kb_none_oc,
+K562_10kb_rus_oc,
+K562_10kb_ros_oc,
+K562_10kb_smote_oc,
+K562_10kb_rose_oc,
+K562_25kb_none_oc,
+K562_25kb_rus_oc,
+K562_25kb_ros_oc,
+K562_25kb_smote_oc,
+K562_25kb_rose_oc,
+K562_50kb_none_oc,
+K562_50kb_rus_oc,
+K562_50kb_ros_oc,
+K562_50kb_smote_oc,
+K562_50kb_rose_oc,
+K562_100kb_none_oc,
+K562_100kb_rus_oc,
+K562_100kb_ros_oc,
+K562_100kb_smote_oc,
+K562_100kb_rose_oc)
+
+prcurvetable$OP <- c(gm12878_10kb_none_OP,
+gm12878_10kb_rus_OP,
+gm12878_10kb_ros_OP,
+gm12878_10kb_smote_OP,
+gm12878_10kb_rose_OP,
+gm12878_25kb_none_OP,
+gm12878_25kb_rus_OP,
+gm12878_25kb_ros_OP,
+gm12878_25kb_smote_OP,
+gm12878_25kb_rose_OP,
+gm12878_50kb_none_OP,
+gm12878_50kb_rus_OP,
+gm12878_50kb_ros_OP,
+gm12878_50kb_smote_OP,
+gm12878_50kb_rose_OP,
+gm12878_100kb_none_OP,
+gm12878_100kb_rus_OP,
+gm12878_100kb_ros_OP,
+gm12878_100kb_smote_OP,
+gm12878_100kb_rose_OP,
+K562_10kb_none_OP,
+K562_10kb_rus_OP,
+K562_10kb_ros_OP,
+K562_10kb_smote_OP,
+K562_10kb_rose_OP,
+K562_25kb_none_OP,
+K562_25kb_rus_OP,
+K562_25kb_ros_OP,
+K562_25kb_smote_OP,
+K562_25kb_rose_OP,
+K562_50kb_none_OP,
+K562_50kb_rus_OP,
+K562_50kb_ros_OP,
+K562_50kb_smote_OP,
+K562_50kb_rose_OP,
+K562_100kb_none_OP,
+K562_100kb_rus_OP,
+K562_100kb_ros_OP,
+K562_100kb_smote_OP,
+K562_100kb_rose_OP)
+
+prcurvetable$Distance <- c(gm12878_10kb_none_Distance,
+gm12878_10kb_rus_Distance,
+gm12878_10kb_ros_Distance,
+gm12878_10kb_smote_Distance,
+gm12878_10kb_rose_Distance,
+gm12878_25kb_none_Distance,
+gm12878_25kb_rus_Distance,
+gm12878_25kb_ros_Distance,
+gm12878_25kb_smote_Distance,
+gm12878_25kb_rose_Distance,
+gm12878_50kb_none_Distance,
+gm12878_50kb_rus_Distance,
+gm12878_50kb_ros_Distance,
+gm12878_50kb_smote_Distance,
+gm12878_50kb_rose_Distance,
+gm12878_100kb_none_Distance,
+gm12878_100kb_rus_Distance,
+gm12878_100kb_ros_Distance,
+gm12878_100kb_smote_Distance,
+gm12878_100kb_rose_Distance,
+K562_10kb_none_Distance,
+K562_10kb_rus_Distance,
+K562_10kb_ros_Distance,
+K562_10kb_smote_Distance,
+K562_10kb_rose_Distance,
+K562_25kb_none_Distance,
+K562_25kb_rus_Distance,
+K562_25kb_ros_Distance,
+K562_25kb_smote_Distance,
+K562_25kb_rose_Distance,
+K562_50kb_none_Distance,
+K562_50kb_rus_Distance,
+K562_50kb_ros_Distance,
+K562_50kb_smote_Distance,
+K562_50kb_rose_Distance,
+K562_100kb_none_Distance,
+K562_100kb_rus_Distance,
+K562_100kb_ros_Distance,
+K562_100kb_smote_Distance,
+K562_100kb_rose_Distance)
+
+prcurvetable$All <- c(gm12878_10kb_none_all,
+gm12878_10kb_rus_all,
+gm12878_10kb_ros_all,
+gm12878_10kb_smote_all,
+gm12878_10kb_rose_all,
+gm12878_25kb_none_all,
+gm12878_25kb_rus_all,
+gm12878_25kb_ros_all,
+gm12878_25kb_smote_all,
+gm12878_25kb_rose_all,
+gm12878_50kb_none_all,
+gm12878_50kb_rus_all,
+gm12878_50kb_ros_all,
+gm12878_50kb_smote_all,
+gm12878_50kb_rose_all,
+gm12878_100kb_none_all,
+gm12878_100kb_rus_all,
+gm12878_100kb_ros_all,
+gm12878_100kb_smote_all,
+gm12878_100kb_rose_all,
+K562_10kb_none_all,
+K562_10kb_rus_all,
+K562_10kb_ros_all,
+K562_10kb_smote_all,
+K562_10kb_rose_all,
+K562_25kb_none_all,
+K562_25kb_rus_all,
+K562_25kb_ros_all,
+K562_25kb_smote_all,
+K562_25kb_rose_all,
+K562_50kb_none_all,
+K562_50kb_rus_all,
+K562_50kb_ros_all,
+K562_50kb_smote_all,
+K562_50kb_rose_all,
+K562_100kb_none_all,
+K562_100kb_rus_all,
+K562_100kb_ros_all,
+K562_100kb_smote_all,
+K562_100kb_rose_all)
+
+
+
+```
 
 
 ## RFE
@@ -4120,864 +4495,792 @@ ggarrange(rfeplot_None_25kb, rfeplot_None_50kb, rfeplot_None_100kb,
 ```
 
 
-#Barplots of performance metrics
+#Barplots of performance metrics for models with distance-type predictors
 
 ##10kb
 
 ```{r}
 #GM12878
 
-##Accuracy
-
-
-```
-
-
-##Comparing results for no class balancing
-
-###10kb
-
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-none.10 <- data.frame(Performance = c(rfperf1[9,2],
-								rfperf2[9,2],
-								rfperf3[9,2],
-								rfperf1[17,2],
-								rfperf2[17,2],
-								rfperf3[17,2],
-								rfperf1[16,2],
-								rfperf2[16,2],
-								rfperf3[16,2],
-								rfperf1[15,2],
-								rfperf2[15,2],
-								rfperf3[15,2]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-none.10$Predictor <- factor(none.10$Predictor, levels=c("OC", "OP", "Distance"))
-none.10$Metric <- factor(none.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###25kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-none.25 <- data.frame(Performance = c(rfperf1[9,2],
-								rfperf2[9,2],
-								rfperf3[9,2],
-								rfperf1[17,2],
-								rfperf2[17,2],
-								rfperf3[17,2],
-								rfperf1[16,2],
-								rfperf2[16,2],
-								rfperf3[16,2],
-								rfperf1[15,2],
-								rfperf2[15,2],
-								rfperf3[15,2]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-none.25$Predictor <- factor(none.25$Predictor, levels=c("OC", "OP", "Distance"))
-none.25$Metric <- factor(none.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###50kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-none.50 <- data.frame(Performance = c(rfperf1[9,2],
-								rfperf2[9,2],
-								rfperf3[9,2],
-								rfperf1[17,2],
-								rfperf2[17,2],
-								rfperf3[17,2],
-								rfperf1[16,2],
-								rfperf2[16,2],
-								rfperf3[16,2],
-								rfperf1[15,2],
-								rfperf2[15,2],
-								rfperf3[15,2]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-none.50$Predictor <- factor(none.50$Predictor, levels=c("OC", "OP", "Distance"))
-none.50$Metric <- factor(none.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###100kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-none.100 <- data.frame(Performance = c(rfperf1[9,2],
-								rfperf2[9,2],
-								rfperf3[9,2],
-								rfperf1[17,2],
-								rfperf2[17,2],
-								rfperf3[17,2],
-								rfperf1[16,2],
-								rfperf2[16,2],
-								rfperf3[16,2],
-								rfperf1[15,2],
-								rfperf2[15,2],
-								rfperf3[15,2]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-none.100$Predictor <- factor(none.100$Predictor, levels=c("OC", "OP", "Distance"))
-none.100$Metric <- factor(none.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###Plots
-```{r}
-none.data <- rbind.data.frame(none.10,none.25,none.50,none.100) 
-none.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
-none.data$Resolution <- factor(none.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
-
-
-allnoneplots <- ggplot(none.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
-	geom_bar( stat="identity", position="dodge") +
-	facet_grid(Predictor ~ Metric) +
-	ylab("Performance")+
-	xlab("Resolution")+
-	theme_bw() +
-  guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
-        axis.text.y = element_text(size = 15),
-        #axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-		legend.position="bottom") 
-
-```
-
-###Tables
-
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/LASSO/RF/rfperf.rds")
-rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/LASSO/RF/rfperf.rds")
-rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/LASSO/RF/rfperf.rds")
-
-nonetab <- cbind.data.frame(rfperf1$Metric,
-                            rfperf1$Performance,
-                            rfperf2$Performance,
-                            rfperf3$Performance,
-                            rfperf4$Performance,
-                            rfperf5$Performance,
-                            rfperf6$Performance,
-                            rfperf7$Performance,
-                            rfperf8$Performance,
-                            rfperf9$Performance,
-                            rfperf10$Performance,
-                            rfperf11$Performance,
-                            rfperf12$Performance)
-nonetab[,-1] <- round(nonetab[,-1], 3)
-datatable(nonetab)
-```
-
-##Comparing results for RUS
-
-###10kb
-
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-RUS.10 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-RUS.10$Predictor <- factor(RUS.10$Predictor, levels=c("OC", "OP", "Distance"))
-RUS.10$Metric <- factor(RUS.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###25kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-RUS.25 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-RUS.25$Predictor <- factor(RUS.25$Predictor, levels=c("OC", "OP", "Distance"))
-RUS.25$Metric <- factor(RUS.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###50kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-RUS.50 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-RUS.50$Predictor <- factor(RUS.50$Predictor, levels=c("OC", "OP", "Distance"))
-RUS.50$Metric <- factor(RUS.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###100kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-RUS.100 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-RUS.100$Predictor <- factor(RUS.100$Predictor, levels=c("OC", "OP", "Distance"))
-RUS.100$Metric <- factor(RUS.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###Plots
-```{r}
-RUS.data <- rbind.data.frame(RUS.10,RUS.25,RUS.50,RUS.100) 
-RUS.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
-RUS.data$Resolution <- factor(RUS.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
-
-
-allRUSplots <- ggplot(RUS.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
-	geom_bar( stat="identity", position="dodge") +
-	facet_grid(Predictor ~ Metric) +
-	ylab("Performance")+
-	xlab("Resolution")+
-	theme_bw() +
-  guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
-        axis.text.y = element_text(size = 15),
-        #axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-		legend.position="bottom") 
-
-```
-
-###Tables
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf4 <- rowMeans(rfperf4)
-rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf5 <- rowMeans(rfperf5)
-rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf6 <- rowMeans(rfperf6)
-
-rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf7 <- rowMeans(rfperf7)
-rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf8 <- rowMeans(rfperf8)
-rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf9 <- rowMeans(rfperf9)
-
-rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf10 <- rowMeans(rfperf10)
-rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf11 <- rowMeans(rfperf11)
-rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf12 <- rowMeans(rfperf12)
-
-RUStab <- cbind.data.frame(names(rfperf1),
-                            rfperf1,
-                            rfperf2,
-                            rfperf3,
-                            rfperf4,
-                            rfperf5,
-                            rfperf6,
-                            rfperf7,
-                            rfperf8,
-                            rfperf9,
-                            rfperf10,
-                            rfperf11,
-                            rfperf12)
-RUStab[,-1] <- round(RUStab[,-1], 3)
-datatable(RUStab)
-```
-
-##Comparing results for SMOTE
-
-###10kb
-
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-SMOTE.10 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-SMOTE.10$Predictor <- factor(SMOTE.10$Predictor, levels=c("OC", "OP", "Distance"))
-SMOTE.10$Metric <- factor(SMOTE.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###25kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-SMOTE.25 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-SMOTE.25$Predictor <- factor(SMOTE.25$Predictor, levels=c("OC", "OP", "Distance"))
-SMOTE.25$Metric <- factor(SMOTE.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###50kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-SMOTE.50 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-SMOTE.50$Predictor <- factor(SMOTE.50$Predictor, levels=c("OC", "OP", "Distance"))
-SMOTE.50$Metric <- factor(SMOTE.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###100kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-SMOTE.100 <- data.frame(Performance = c(rfperf1[9],
-								NA,#rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								NA,#rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								NA,#rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								NA,#rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-SMOTE.100$Predictor <- factor(SMOTE.100$Predictor, levels=c("OC", "OP", "Distance"))
-SMOTE.100$Metric <- factor(SMOTE.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###Plots
-```{r}
-SMOTE.data <- rbind.data.frame(SMOTE.10,SMOTE.25,SMOTE.50,SMOTE.100) 
-SMOTE.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
-SMOTE.data$Resolution <- factor(SMOTE.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
-
-
-allSMOTEplots <- ggplot(SMOTE.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
-	geom_bar( stat="identity", position="dodge") +
-	facet_grid(Predictor ~ Metric) +
-	ylab("Performance")+
-	xlab("Resolution")+
-	theme_bw() +
-  guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
-        axis.text.y = element_text(size = 15),
-        #axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-		legend.position="bottom") 
-
-```
-
-###Tables
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf4 <- rowMeans(rfperf4)
-rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf5 <- rowMeans(rfperf5)
-rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf6 <- rowMeans(rfperf6)
-
-rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf7 <- rowMeans(rfperf7)
-rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf8 <- rowMeans(rfperf8)
-rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf9 <- rowMeans(rfperf9)
-
-rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/LASSO/RF/rfperf.rds")
-rfperf10 <- rowMeans(rfperf10)
-rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/LASSO/RF/rfperf.rds")
-rfperf11 <- rowMeans(rfperf11)
-rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/LASSO/RF/rfperf.rds")
-rfperf12 <- rowMeans(rfperf12)
-
-SMOTEtab <- cbind.data.frame(names(rfperf1),
-                            rfperf1,
-                            rfperf2,
-                            rfperf3,
-                            rfperf4,
-                            rfperf5,
-                            rfperf6,
-                            rfperf7,
-                            rfperf8,
-                            rfperf9,
-                            rfperf10,
-                            rep(NA,18),#rfperf11,
-                            rfperf12)
-SMOTEtab[,-c(1)] <- round(SMOTEtab[,-c(1)], 3)
-SMOTEtab[,-c(1,12)] <- round(SMOTEtab[,-c(1,12)], 3)
-datatable(SMOTEtab)
-```
-
-##Comparing results for SMOTE
-
-###10kb
-
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-ROS.10 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-ROS.10$Predictor <- factor(ROS.10$Predictor, levels=c("OC", "OP", "Distance"))
-ROS.10$Metric <- factor(ROS.10$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###25kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-ROS.25 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-ROS.25$Predictor <- factor(ROS.25$Predictor, levels=c("OC", "OP", "Distance"))
-ROS.25$Metric <- factor(ROS.25$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###50kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-ROS.50 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-ROS.50$Predictor <- factor(ROS.50$Predictor, levels=c("OC", "OP", "Distance"))
-ROS.50$Metric <- factor(ROS.50$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-
-###100kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-ROS.100 <- data.frame(Performance = c(rfperf1[9],
-								rfperf2[9],
-								rfperf3[9],
-								rfperf1[17],
-								rfperf2[17],
-								rfperf3[17],
-								rfperf1[16],
-								rfperf2[16],
-								rfperf3[16],
-								rfperf1[15],
-								rfperf2[15],
-								rfperf3[15]),
-				Predictor = rep(c("OC", "OP", "Distance"), 4),
-				Metric = c(rep("Accuracy", 3), rep("AUC", 3), rep("F1-Score", 3), rep("MCC", 3)))
-ROS.100$Predictor <- factor(ROS.100$Predictor, levels=c("OC", "OP", "Distance"))
-ROS.100$Metric <- factor(ROS.100$Metric, levels=c("Accuracy", "AUC", "F1-Score", "MCC"))
-```
-
-###Plots
-```{r}
-ROS.data <- rbind.data.frame(ROS.10,ROS.25,ROS.50,ROS.100) 
-ROS.data$Resolution <- c(rep("10 kb", 12), rep("25 kb", 12), rep("50 kb", 12), rep("100 kb", 12))
-ROS.data$Resolution <- factor(ROS.data$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
-
-
-allROSplots <- ggplot(ROS.data, aes(fill=Resolution, y=Performance, x=Resolution)) +
-	geom_bar( stat="identity", position="dodge") +
-	facet_grid(Predictor ~ Metric) +
-	ylab("Performance")+
-	xlab("Resolution")+
-	theme_bw() +
-  guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
-        axis.text.y = element_text(size = 15),
-        #axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-		legend.position="bottom") 
-
-```
-
-###Tables
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- rowMeans(rfperf1)
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- rowMeans(rfperf2)
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- rowMeans(rfperf3)
-
-rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf4 <- rowMeans(rfperf4)
-rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf5 <- rowMeans(rfperf5)
-rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf6 <- rowMeans(rfperf6)
-
-rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf7 <- rowMeans(rfperf7)
-rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf8 <- rowMeans(rfperf8)
-rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf9 <- rowMeans(rfperf9)
-
-rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/LASSO/RF/rfperf.rds")
-rfperf10 <- rowMeans(rfperf10)
-rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/LASSO/RF/rfperf.rds")
-rfperf11 <- rowMeans(rfperf11)
-rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/LASSO/RF/rfperf.rds")
-rfperf12 <- rowMeans(rfperf12)
-
-ROStab <- cbind.data.frame(names(rfperf1),
-                            rfperf1,
-                            rfperf2,
-                            rfperf3,
-                            rfperf4,
-                            rfperf5,
-                            rfperf6,
-                            rfperf7,
-                            rfperf8,
-                            rfperf9,
-                            rfperf10,
-                            rfperf11,
-                            rfperf12)
-ROStab[,-1] <- round(ROStab[,-1], 3)
-datatable(ROStab)
-```
-
-
-#Comparing performance for distance predictors using RUS 
-##10kb
-```{r}
-rfperf1 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf1 <- cbind.data.frame(rownames(rfperf1),round(rowMeans(rfperf1),3))
-
-rfperf2 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf2 <- cbind.data.frame(rownames(rfperf2),round(rowMeans(rfperf2),3))
-
-rfperf3 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf3 <- cbind.data.frame(rownames(rfperf3),round(rowMeans(rfperf3),3))
-
-
-```
-##25kb
-```{r}
-rfperf4 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf4 <- cbind.data.frame(rownames(rfperf4),round(rowMeans(rfperf4),3))
-
-rfperf5 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf5 <- cbind.data.frame(rownames(rfperf5),round(rowMeans(rfperf5),3))
-
-rfperf6 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf6 <- cbind.data.frame(rownames(rfperf6),round(rowMeans(rfperf6),3))
-```
-##50kb
-```{r}
-rfperf7 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf7 <- cbind.data.frame(rownames(rfperf7),round(rowMeans(rfperf7),3))
-
-rfperf8 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf8 <- cbind.data.frame(rownames(rfperf8),round(rowMeans(rfperf8),3))
-
-rfperf9 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf9 <- cbind.data.frame(rownames(rfperf9),round(rowMeans(rfperf9),3))
-
-```
-##100kb
-```{r}
-rfperf10 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/LASSO/RF/rfperf.rds")
-rfperf10 <- cbind.data.frame(rownames(rfperf10),round(rowMeans(rfperf10),3))
-
-rfperf11 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/LASSO/RF/rfperf.rds")
-rfperf11 <- cbind.data.frame(rownames(rfperf11),round(rowMeans(rfperf11),3))
-
-rfperf12 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/LASSO/RF/rfperf.rds")
-rfperf12 <- cbind.data.frame(rownames(rfperf12),round(rowMeans(rfperf12),3))
-
-```
-
-##Plots
-```{r}
-distperftab <- data.frame(Performance =
-                    c(rfperf1[9,2],
-											rfperf1[17,2],
-											rfperf1[16,2],
-											rfperf1[15,2],
-											rfperf2[9,2],
-											rfperf2[17,2],
-											rfperf2[16,2],
-											rfperf2[15,2],
-											rfperf3[9,2],
-											rfperf3[17,2],
-											rfperf3[16,2],
-											rfperf3[15,2],
-											rfperf4[9,2],
-											rfperf4[17,2],
-											rfperf4[16,2],
-											rfperf4[15,2],
-											rfperf5[9,2],
-											rfperf5[17,2],
-											rfperf5[16,2],
-											rfperf5[15,2],
-											rfperf6[9,2],
-											rfperf6[17,2],
-											rfperf6[16,2],
-											rfperf6[15,2],
-											rfperf7[9,2],
-											rfperf7[17,2],
-											rfperf7[16,2],
-											rfperf7[15,2],
-											rfperf8[9,2],
-											rfperf8[17,2],
-											rfperf8[16,2],
-											rfperf8[15,2],
-											rfperf9[9,2],
-											rfperf9[17,2],
-											rfperf9[16,2],
-											rfperf9[15,2],
-											rfperf10[9,2],
-											rfperf10[17,2],
-											rfperf10[16,2],
-											rfperf10[15,2],
-											rfperf11[9,2],
-											rfperf11[17,2],
-											rfperf11[16,2],
-											rfperf11[15,2],
-											rfperf12[9,2],
-											rfperf12[17,2],
-											rfperf12[16,2],
-											rfperf12[15,2]),
-							Metric = rep(c("Accuracy", "AUC", "F1-Score", "MCC"), 12),
-							Resolution = c(rep("10kb", 12), rep("25kb", 12), rep("50kb", 12), rep("100kb", 12)),
-							Predictor = rep(c(rep("OC", 4), rep("OP", 4), rep("Distance", 4)), 4))
-distperftab$Metric <- factor(distperftab$Metric, levels = c("Accuracy", "AUC", "F1-Score", "MCC"))
-distperftab$Resolution <- factor(distperftab$Resolution, levels = c("10kb","25kb","50kb","100kb"))
-distperftab$Predictor <- factor(distperftab$Predictor, levels = c("OC", "OP", "Distance"))
-
-
-p.distperfsbar <- ggplot(distperftab, aes(fill=Predictor, y=Performance, x=Predictor)) +
+##None
+rfperf_gm12878_10kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_10kb_rus <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_10kb_ros <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_10kb_smote <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_gm12878_10kb_rose <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+#K562
+
+##None
+rfperf_K562_10kb_none <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_10kb_rus <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_10kb_ros <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_10kb_smote <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_K562_10kb_rose <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+
+all10kbresults <- data.frame(Resampling=c(rep("None", 8),
+                                       rep("RUS", 8),
+                                       rep("ROS", 8),
+                                       rep("SMOTE", 8),
+                                       rep("ROSE", 8)),
+                          CL=rep(c(rep("GM12878",4),
+                               rep("K562", 4)),5),
+                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+
+all10kbresults$Performance <- c(round(rfperf_gm12878_10kb_none[9,2],2),
+                                round(rfperf_gm12878_10kb_none[19,2],2),
+                                round(rfperf_gm12878_10kb_none[16,2],2),
+                                round(rfperf_gm12878_10kb_none[15,2],2),
+                                round(rfperf_K562_10kb_none[9,2],2),
+                                round(rfperf_K562_10kb_none[19,2],2),
+                                round(rfperf_K562_10kb_none[16,2],2),
+                                round(rfperf_K562_10kb_none[15,2],2),
+                                round(rfperf_gm12878_10kb_rus[9,2],2),
+                                round(rfperf_gm12878_10kb_rus[19,2],2),
+                                round(rfperf_gm12878_10kb_rus[16,2],2),
+                                round(rfperf_gm12878_10kb_rus[15,2],2),
+                                round(rfperf_K562_10kb_rus[9,2],2),
+                                round(rfperf_K562_10kb_rus[19,2],2),
+                                round(rfperf_K562_10kb_rus[16,2],2),
+                                round(rfperf_K562_10kb_rus[15,2],2),
+                                round(rfperf_gm12878_10kb_ros[9,2],2),
+                                round(rfperf_gm12878_10kb_ros[19,2],2),
+                                round(rfperf_gm12878_10kb_ros[16,2],2),
+                                round(rfperf_gm12878_10kb_ros[15,2],2),
+                                round(rfperf_K562_10kb_ros[9,2],2),
+                                round(rfperf_K562_10kb_ros[19,2],2),
+                                round(rfperf_K562_10kb_ros[16,2],2),
+                                round(rfperf_K562_10kb_ros[15,2],2),
+                                round(rfperf_gm12878_10kb_smote[9,2],2),
+                                round(rfperf_gm12878_10kb_smote[19,2],2),
+                                round(rfperf_gm12878_10kb_smote[16,2],2),
+                                round(rfperf_gm12878_10kb_smote[15,2],2),
+                                round(rfperf_K562_10kb_smote[9,2],2),
+                                round(rfperf_K562_10kb_smote[19,2],2),
+                                round(rfperf_K562_10kb_smote[16,2],2),
+                                round(rfperf_K562_10kb_smote[15,2],2),
+                                round(rfperf_gm12878_10kb_rose[9,2],2),
+                                round(rfperf_gm12878_10kb_rose[19,2],2),
+                                round(rfperf_gm12878_10kb_rose[16,2],2),
+                                round(rfperf_gm12878_10kb_rose[15,2],2),
+                                round(rfperf_K562_10kb_rose[9,2],2),
+                                round(rfperf_K562_10kb_rose[19,2],2),
+                                round(rfperf_K562_10kb_rose[16,2],2),
+                                round(rfperf_K562_10kb_rose[15,2],2))
+
+all10kbresults$Resampling <- factor(all10kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
+all10kbresults$CL <- factor(all10kbresults$CL, levels=c("GM12878", "K562"))
+all10kbresults$Metric <- factor(all10kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
+
+none10kbplot <- ggplot(all10kbresults[which(all10kbresults$Resampling=="None"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
   geom_bar( stat="identity", position="dodge") +
-	facet_grid(Resolution ~ Metric) +
-  ylab("Performance")+
-	xlab("Predictor Type")+
+  xlab("Cell Line") +
+  ylim(0,1)+
   theme_bw() +
-  guides(fill=FALSE)+
+  theme_minimal() +
+  #guides(fill=FALSE)+
 	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
         axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-		legend.position="bottom") 
-  
+        legend.title=element_text(size=20)) 
 
+rus10kbplot <- ggplot(all10kbresults[which(all10kbresults$Resampling=="RUS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
 
-#ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/p.distperfsbarline.png")
+ros10kbplot <- ggplot(all10kbresults[which(all10kbresults$Resampling=="ROS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+smote10kbplot <- ggplot(all10kbresults[which(all10kbresults$Resampling=="SMOTE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+rose10kbplot <- ggplot(all10kbresults[which(all10kbresults$Resampling=="ROSE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+######################################################################
+
+#comparing only f1 and mcc
+
+f1mcc10kbplot <- ggplot(all10kbresults[which(all10kbresults$Metric=="F1-Score" |
+                                               all10kbresults$Metric=="MCC"),],
+                       aes(x=Resampling, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ CL) +
+  xlab("Resampling Technique") +
+  theme_minimal() +
+  theme_bw() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
 ```
 
-#Comparing performances across resolutions for RUS and distance
+
+##25kb
+
+```{r}
+#GM12878
+
+##None
+rfperf_gm12878_25kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_25kb_rus <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_25kb_ros <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_25kb_smote <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_gm12878_25kb_rose <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+#K562
+
+##None
+rfperf_K562_25kb_none <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_25kb_rus <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_25kb_ros <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_25kb_smote <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_K562_25kb_rose <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+
+all25kbresults <- data.frame(Resampling=c(rep("None", 8),
+                                       rep("RUS", 8),
+                                       rep("ROS", 8),
+                                       rep("SMOTE", 8),
+                                       rep("ROSE", 8)),
+                          CL=rep(c(rep("GM12878",4),
+                               rep("K562", 4)),5),
+                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+
+all25kbresults$Performance <- c(round(rfperf_gm12878_25kb_none[9,2],2),
+                                round(rfperf_gm12878_25kb_none[19,2],2),
+                                round(rfperf_gm12878_25kb_none[16,2],2),
+                                round(rfperf_gm12878_25kb_none[15,2],2),
+                                round(rfperf_K562_25kb_none[9,2],2),
+                                round(rfperf_K562_25kb_none[19,2],2),
+                                round(rfperf_K562_25kb_none[16,2],2),
+                                round(rfperf_K562_25kb_none[15,2],2),
+                                round(rfperf_gm12878_25kb_rus[9,2],2),
+                                round(rfperf_gm12878_25kb_rus[19,2],2),
+                                round(rfperf_gm12878_25kb_rus[16,2],2),
+                                round(rfperf_gm12878_25kb_rus[15,2],2),
+                                round(rfperf_K562_25kb_rus[9,2],2),
+                                round(rfperf_K562_25kb_rus[19,2],2),
+                                round(rfperf_K562_25kb_rus[16,2],2),
+                                round(rfperf_K562_25kb_rus[15,2],2),
+                                round(rfperf_gm12878_25kb_ros[9,2],2),
+                                round(rfperf_gm12878_25kb_ros[19,2],2),
+                                round(rfperf_gm12878_25kb_ros[16,2],2),
+                                round(rfperf_gm12878_25kb_ros[15,2],2),
+                                round(rfperf_K562_25kb_ros[9,2],2),
+                                round(rfperf_K562_25kb_ros[19,2],2),
+                                round(rfperf_K562_25kb_ros[16,2],2),
+                                round(rfperf_K562_25kb_ros[15,2],2),
+                                round(rfperf_gm12878_25kb_smote[9,2],2),
+                                round(rfperf_gm12878_25kb_smote[19,2],2),
+                                round(rfperf_gm12878_25kb_smote[16,2],2),
+                                round(rfperf_gm12878_25kb_smote[15,2],2),
+                                round(rfperf_K562_25kb_smote[9,2],2),
+                                round(rfperf_K562_25kb_smote[19,2],2),
+                                round(rfperf_K562_25kb_smote[16,2],2),
+                                round(rfperf_K562_25kb_smote[15,2],2),
+                                round(rfperf_gm12878_25kb_rose[9,2],2),
+                                round(rfperf_gm12878_25kb_rose[19,2],2),
+                                round(rfperf_gm12878_25kb_rose[16,2],2),
+                                round(rfperf_gm12878_25kb_rose[15,2],2),
+                                round(rfperf_K562_25kb_rose[9,2],2),
+                                round(rfperf_K562_25kb_rose[19,2],2),
+                                round(rfperf_K562_25kb_rose[16,2],2),
+                                round(rfperf_K562_25kb_rose[15,2],2))
+
+all25kbresults$Resampling <- factor(all25kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
+all25kbresults$CL <- factor(all25kbresults$CL, levels=c("GM12878", "K562"))
+all25kbresults$Metric <- factor(all25kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
+
+none25kbplot <- ggplot(all25kbresults[which(all25kbresults$Resampling=="None"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+rus25kbplot <- ggplot(all25kbresults[which(all25kbresults$Resampling=="RUS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+ros25kbplot <- ggplot(all25kbresults[which(all25kbresults$Resampling=="ROS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+smote25kbplot <- ggplot(all25kbresults[which(all25kbresults$Resampling=="SMOTE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+rose25kbplot <- ggplot(all25kbresults[which(all25kbresults$Resampling=="ROSE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+######################################################################
+
+#comparing only f1 and mcc
+
+f1mcc25kbplot <- ggplot(all25kbresults[which(all25kbresults$Metric=="F1-Score" |
+                                               all25kbresults$Metric=="MCC"),],
+                       aes(x=Resampling, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ CL) +
+  xlab("Resampling Technique") +
+  theme_minimal() +
+  theme_bw() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+```
+
+
+##50kb
+
+```{r}
+#GM12878
+
+##None
+rfperf_gm12878_50kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_50kb_rus <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_50kb_ros <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_50kb_smote <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_gm12878_50kb_rose <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+#K562
+
+##None
+rfperf_K562_50kb_none <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_50kb_rus <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_50kb_ros <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_50kb_smote <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_K562_50kb_rose <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+
+all50kbresults <- data.frame(Resampling=c(rep("None", 8),
+                                       rep("RUS", 8),
+                                       rep("ROS", 8),
+                                       rep("SMOTE", 8),
+                                       rep("ROSE", 8)),
+                          CL=rep(c(rep("GM12878",4),
+                               rep("K562", 4)),5),
+                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+
+all50kbresults$Performance <- c(round(rfperf_gm12878_50kb_none[9,2],2),
+                                round(rfperf_gm12878_50kb_none[19,2],2),
+                                round(rfperf_gm12878_50kb_none[16,2],2),
+                                round(rfperf_gm12878_50kb_none[15,2],2),
+                                round(rfperf_K562_50kb_none[9,2],2),
+                                round(rfperf_K562_50kb_none[19,2],2),
+                                round(rfperf_K562_50kb_none[16,2],2),
+                                round(rfperf_K562_50kb_none[15,2],2),
+                                round(rfperf_gm12878_50kb_rus[9,2],2),
+                                round(rfperf_gm12878_50kb_rus[19,2],2),
+                                round(rfperf_gm12878_50kb_rus[16,2],2),
+                                round(rfperf_gm12878_50kb_rus[15,2],2),
+                                round(rfperf_K562_50kb_rus[9,2],2),
+                                round(rfperf_K562_50kb_rus[19,2],2),
+                                round(rfperf_K562_50kb_rus[16,2],2),
+                                round(rfperf_K562_50kb_rus[15,2],2),
+                                round(rfperf_gm12878_50kb_ros[9,2],2),
+                                round(rfperf_gm12878_50kb_ros[19,2],2),
+                                round(rfperf_gm12878_50kb_ros[16,2],2),
+                                round(rfperf_gm12878_50kb_ros[15,2],2),
+                                round(rfperf_K562_50kb_ros[9,2],2),
+                                round(rfperf_K562_50kb_ros[19,2],2),
+                                round(rfperf_K562_50kb_ros[16,2],2),
+                                round(rfperf_K562_50kb_ros[15,2],2),
+                                round(rfperf_gm12878_50kb_smote[9,2],2),
+                                round(rfperf_gm12878_50kb_smote[19,2],2),
+                                round(rfperf_gm12878_50kb_smote[16,2],2),
+                                round(rfperf_gm12878_50kb_smote[15,2],2),
+                                round(rfperf_K562_50kb_smote[9,2],2),
+                                round(rfperf_K562_50kb_smote[19,2],2),
+                                round(rfperf_K562_50kb_smote[16,2],2),
+                                round(rfperf_K562_50kb_smote[15,2],2),
+                                round(rfperf_gm12878_50kb_rose[9,2],2),
+                                round(rfperf_gm12878_50kb_rose[19,2],2),
+                                round(rfperf_gm12878_50kb_rose[16,2],2),
+                                round(rfperf_gm12878_50kb_rose[15,2],2),
+                                round(rfperf_K562_50kb_rose[9,2],2),
+                                round(rfperf_K562_50kb_rose[19,2],2),
+                                round(rfperf_K562_50kb_rose[16,2],2),
+                                round(rfperf_K562_50kb_rose[15,2],2))
+
+all50kbresults$Resampling <- factor(all50kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
+all50kbresults$CL <- factor(all50kbresults$CL, levels=c("GM12878", "K562"))
+all50kbresults$Metric <- factor(all50kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
+
+none50kbplot <- ggplot(all50kbresults[which(all50kbresults$Resampling=="None"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+rus50kbplot <- ggplot(all50kbresults[which(all50kbresults$Resampling=="RUS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+ros50kbplot <- ggplot(all50kbresults[which(all50kbresults$Resampling=="ROS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+smote50kbplot <- ggplot(all50kbresults[which(all50kbresults$Resampling=="SMOTE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+rose50kbplot <- ggplot(all50kbresults[which(all50kbresults$Resampling=="ROSE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+######################################################################
+
+#comparing only f1 and mcc
+
+f1mcc50kbplot <- ggplot(all50kbresults[which(all50kbresults$Metric=="F1-Score" |
+                                               all50kbresults$Metric=="MCC"),],
+                       aes(x=Resampling, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ CL) +
+  xlab("Resampling Technique") +
+  theme_minimal() +
+  theme_bw() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+```
+
+
+##100kb
+
+```{r}
+#GM12878
+
+##None
+rfperf_gm12878_100kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_100kb_rus <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_100kb_ros <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_100kb_smote <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_gm12878_100kb_rose <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+#K562
+
+##None
+rfperf_K562_100kb_none <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/RFE/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_100kb_rus <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/RFE/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_100kb_ros <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/RFE/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_100kb_smote <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/RFE/RF/rfperf.rds")
+
+##ROSE
+rfperf_K562_100kb_rose <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
+
+
+all100kbresults <- data.frame(Resampling=c(rep("None", 8),
+                                       rep("RUS", 8),
+                                       rep("ROS", 8),
+                                       rep("SMOTE", 8),
+                                       rep("ROSE", 8)),
+                          CL=rep(c(rep("GM12878",4),
+                               rep("K562", 4)),5),
+                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+
+all100kbresults$Performance <- c(round(rfperf_gm12878_100kb_none[9,2],2),
+                                round(rfperf_gm12878_100kb_none[19,2],2),
+                                round(rfperf_gm12878_100kb_none[16,2],2),
+                                round(rfperf_gm12878_100kb_none[15,2],2),
+                                round(rfperf_K562_100kb_none[9,2],2),
+                                round(rfperf_K562_100kb_none[19,2],2),
+                                round(rfperf_K562_100kb_none[16,2],2),
+                                round(rfperf_K562_100kb_none[15,2],2),
+                                round(rfperf_gm12878_100kb_rus[9,2],2),
+                                round(rfperf_gm12878_100kb_rus[19,2],2),
+                                round(rfperf_gm12878_100kb_rus[16,2],2),
+                                round(rfperf_gm12878_100kb_rus[15,2],2),
+                                round(rfperf_K562_100kb_rus[9,2],2),
+                                round(rfperf_K562_100kb_rus[19,2],2),
+                                round(rfperf_K562_100kb_rus[16,2],2),
+                                round(rfperf_K562_100kb_rus[15,2],2),
+                                round(rfperf_gm12878_100kb_ros[9,2],2),
+                                round(rfperf_gm12878_100kb_ros[19,2],2),
+                                round(rfperf_gm12878_100kb_ros[16,2],2),
+                                round(rfperf_gm12878_100kb_ros[15,2],2),
+                                round(rfperf_K562_100kb_ros[9,2],2),
+                                round(rfperf_K562_100kb_ros[19,2],2),
+                                round(rfperf_K562_100kb_ros[16,2],2),
+                                round(rfperf_K562_100kb_ros[15,2],2),
+                                round(rfperf_gm12878_100kb_smote[9,2],2),
+                                round(rfperf_gm12878_100kb_smote[19,2],2),
+                                round(rfperf_gm12878_100kb_smote[16,2],2),
+                                round(rfperf_gm12878_100kb_smote[15,2],2),
+                                round(rfperf_K562_100kb_smote[9,2],2),
+                                round(rfperf_K562_100kb_smote[19,2],2),
+                                round(rfperf_K562_100kb_smote[16,2],2),
+                                round(rfperf_K562_100kb_smote[15,2],2),
+                                round(rfperf_gm12878_100kb_rose[9,2],2),
+                                round(rfperf_gm12878_100kb_rose[19,2],2),
+                                round(rfperf_gm12878_100kb_rose[16,2],2),
+                                round(rfperf_gm12878_100kb_rose[15,2],2),
+                                round(rfperf_K562_100kb_rose[9,2],2),
+                                round(rfperf_K562_100kb_rose[19,2],2),
+                                round(rfperf_K562_100kb_rose[16,2],2),
+                                round(rfperf_K562_100kb_rose[15,2],2))
+
+all100kbresults$Resampling <- factor(all100kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
+all100kbresults$CL <- factor(all100kbresults$CL, levels=c("GM12878", "K562"))
+all100kbresults$Metric <- factor(all100kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
+
+none100kbplot <- ggplot(all100kbresults[which(all100kbresults$Resampling=="None"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+rus100kbplot <- ggplot(all100kbresults[which(all100kbresults$Resampling=="RUS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+ros100kbplot <- ggplot(all100kbresults[which(all100kbresults$Resampling=="ROS"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+smote100kbplot <- ggplot(all100kbresults[which(all100kbresults$Resampling=="SMOTE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20)) 
+
+rose100kbplot <- ggplot(all100kbresults[which(all100kbresults$Resampling=="ROSE"),],
+                       aes(x=CL, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  xlab("Cell Line") +
+  ylim(0,1)+
+  theme_bw() +
+  theme_minimal() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15), #, angle = 45, margin = ggplot2::margin(t = 35)),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+######################################################################
+
+#comparing only f1 and mcc
+
+f1mcc100kbplot <- ggplot(all100kbresults[which(all100kbresults$Metric=="F1-Score" |
+                                               all100kbresults$Metric=="MCC"),],
+                       aes(x=Resampling, y=Performance, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ CL) +
+  xlab("Resampling Technique") +
+  theme_minimal() +
+  theme_bw() +
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+```
+
+
+#Tables model performances
+
+##10kb
+
+```{r}
+
+
+
+```
+
+
+
 
 
 #Variable Importance Plots for distance predictors with ENET reduction
