@@ -15,6 +15,10 @@
 + specified which tfbs were used for each cell line
 + edit legends
 
+Questions:
+- Cell line or cell type?
+- how to formulate barplots and corresponding table?
+
 
 - directly compare mourad using percent predictor types
 - directly compare hong using count predictor types
