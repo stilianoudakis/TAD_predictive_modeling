@@ -69,7 +69,7 @@ Using the sets of genomic annotations, we created three types of predictors that
    
 2. **Overlap Percent (OP)**: For each genomic bin, the percent overlap between the feature width and the total width of the bin was calculated. We defined the feature width as the number of bases that overlapped with the genomic bin. The percent was then calculated by dividing the feature width by the bin width. If multiple overlaps existed, the feature width was defined as the sum of the total number of bases that overlapped with a particular bin. Note that the bin width remained constant for a given resolution (either 10 kb, 25 kb, 50 kb, or 100 kb). Values for bins with no overlaps were set to be 0.
 
-3. **Log2 Distance**: For each genomic bin, the $log_{2}$ of the distance (refered to hereafter simply as $\textit{distance}$), in basepairs, from the center of the bin to the center of the nearest region of a respective genomic annotation region [??? Decide whether to use "annotation" or "feature"] was calculated. The log transformation was used as a normalization technique in order to account for the skewness of the data (Supplementary Figures 1-8).
+3. **Log2 Distance**: For each genomic bin, the $log_{2}$ of the distance (refered to hereafter simply as $\textit{distance}$), in basepairs, from the center of the bin to the center of the nearest region defined by a specific genomic annotation [??? Decide whether to use "annotation" or "feature"; !!!go with annotation] was calculated. The log transformation was used as a normalization technique in order to account for the skewness of the data (Supplementary Figures 1-8).
 
 ### RE-SAMPLING TECHNIQUES
 
