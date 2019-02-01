@@ -38,7 +38,7 @@ Furthermore, there are other aspects of TAD boundary modelling that current meth
 
 Additionally, model performance is heavily contingent upon the resolution of the contact matrix used to identify the location of TADs throughout the genome. It is often unclear from previous studies what resolution contact matrices were used when retrieving TAD boundaries, and how other resolutions would affect their results. A larger resolution contact matrix will result in the identification of larger-sized TADs, and subsequently, less TAD boundary points. This will contribute to smaller sample sizes and could effect predictive performances.
 
-In this study we have developed an ensemble framework for predicting TAD boundaries that addresses class imbalance problem. We evaluated Hi-C data for the GM12878 cell line obtained at 10 kb, 25 kb, 50 kb, and 100 kb resolution. For each resolution, we examined the inclusion of three different predictor types, including distance as the measure of association between genomic elements. We then tested four re-sampling techniques aimed at creating balanced classes. Random forest classification was performed to both compare each combination of the above ensemble, and investigate which functional genomic features were most associated with the TAD boundaries.  Model performance was evaluated using accuracy, area under the precision-recall curve (AUPRC), F1 score, and Matthew's Correlation Coefficient (MCC). This process was then repeated for X additional cell lines including K562, ......
+In this study we have developed an ensemble framework for predicting TAD boundaries that addresses class imbalance problem. We evaluated Hi-C data for both the GM12878 and K562 cell line obtained at 10 kb, 25 kb, 50 kb, and 100 kb resolution. For each resolution, we examined the inclusion of three different predictor types, including distance as the measure of association between genomic elements. We then tested four re-sampling techniques aimed at creating balanced classes. Random forest classification was performed to both compare each combination of the above ensemble, and investigate which functional genomic features were most associated with the TAD boundaries.  Model performance was evaluated using area under the precision-recall curve (AUPRC), F1-Score, and MCC. 
 
 # METHODS
 
@@ -91,9 +91,8 @@ A classification algorithm in the form of a random forest was performed on the v
 
 ### PERFORMANCE METRICS 
 
-The efficacy of different ensemble systems was compared using various performance metrics including accuracy, F1-score, and MCC. These metrics are defined as follows:
+The efficacy of different ensemble systems was compared using the F1-score and MCC. These metrics are defined as follows:
 
-$$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$
 $$F1 - Score = \frac{2TP}{2TP + FP + FN}$$
 $$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{ (TP + FP)(TP+FN)(TN+FP)(TN+FN) }}$$
 
@@ -104,7 +103,7 @@ Here, TP refers to the number of bins correctly identified as containing a TAD b
 
 We first assessed predictor type performance using random forest classification algorithms by utilizing each set of predictor types as the feature space, in addition to a model with all combined types. Models were evaluated across each combination of resampling technique applied to the training set, for each cell line. Performance was based on the AUPRC. Recursive feature elimination (RFE) was then used to determine the optimal number of features for models with the best performing predictor type, across resampling techniques and cell lines. In doing so, random forest models were again used to recursively assign weights to a set of features of a given size. For computational efficiency we evaluated feature subset sizes in descending order of powers of 2. The optimal number of features was determined by the AUPRC of the corresponding model. Optimal performance was assessed and the feature spaced was reduced accordingly.
 
-For the task of identifying the functional genomic elements that were most predictive of the formation of TAD boundaries, we evaluated the variable importances associated with each predictor of the random forest models associated with each resampling technique. For each model and within each tree, the prediction accuracy on the out-of-bag portion of the data was recorded. Then the same was done after permuting each predictor variable. The difference between the two accuracies was then averaged over all trees, and normalized by the standard error. All random forest algorithms were implemented in R using the `caret` package version 6.0 [@kuhn2012caret]. 
+For the task of identifying the functional genomic elements that were most predictive of the formation of TAD boundaries, we evaluated the variable importances associated with each predictor of the random forest models associated with each resampling technique. For each model and within each tree, the AUPRC on the out-of-bag portion of the data was recorded. Then the same was done after permuting each predictor variable. The difference between the two AUPRC values was then averaged over all trees, and normalized by the standard error. All random forest algorithms were implemented in R using the `caret` package version 6.0 [@kuhn2012caret]. 
 
 # RESULTS
 
