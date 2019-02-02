@@ -48,7 +48,7 @@ Replicate Hi-C data for the GM12878 and K562 cell lines were downloaded from GEO
 
 ## GENOMIC ANNOTATION DATA
 
-Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and transcription factor binding sites using ChIP-seq peak experiments for the GM12878, K562, ... cell lines. Each genomic annotation was represented by a set of regions (their genomic coordinates) annotated as having a functional property or biological significance.
+Genomic annotation data (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 1). The annotations consisted of a variety of different chromatin states, histone marks, and transcription factor binding sites using ChIP-seq peak experiments for the GM12878 and K562 cell lines. Each genomic annotation was represented by a set of regions (their genomic coordinates) annotated as having a functional property or biological significance.
 
 
 ## MODEL CONSTRUCTION
