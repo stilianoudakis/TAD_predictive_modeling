@@ -1,4 +1,5 @@
 
+
 - use term "annotation" consistently
 - discuss area under precision recall curve more: how it should look, how to interpret, etc
 - describe error bars for rfe plots in legend
@@ -10,6 +11,18 @@
    + two bars for each cell line
    + x axis for each plot is sampling technique
    + separate table by metric
+
+- specify how same tfbs from different institutions was handled (discuss in meeting)
++ discuss area under precision recall curve more: how it should look, how to interpret, etc
+    - I still couldn't find a good explanation
+- describe error bars for rfe plots in legend
+- cluster heatmaps by row
+- change color of heatmaps (make lighter red)
+
+Questions:
+- Cell line or cell type?
+- how to formulate barplots and corresponding table?
+>>>>>>> 1e106aee3f5dbe98df189a47bb3c6de6318ce71a
 
 
 - directly compare mourad using percent predictor types
