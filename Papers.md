@@ -42,6 +42,12 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Prediction, general
 
+- When the data is unbalanced, standard machine learning algorithms tend to be overwhelmed by the majority class, http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.711.8214
+
+- C. Drummond, R. Holte, et al. C4. 5, class imbalance, and cost sensitivity: why under-sampling beats over-sampling. In Workshop on Learning from Imbalanced Datasets II. Citeseer, 2003
+
+- Dal Pozzolo, Andrea, Olivier Caelen, Serge Waterschoot, and Gianluca Bontempi. “Racing for Unbalanced Methods Selection.” In International Conference on Intelligent Data Engineering and Automated Learning, 24–31. Springer, 2013. - F-racing strategy to select best performing method to deal with class imbalance. Overview of class imbalance techniques, including SMOTE, Ensemble methods. The F-Racing approach tests in parallel a set of alternatives and uses Friedman test to determine if an alternative is significantly worse than others.Random Forest and SMOTEnsemble generally perform best. race R package to perform F-racing algorithm https://cran.r-project.org/web/packages/race/index.html
+
 - https://shiring.github.io/machine_learning/2017/04/02/unbalanced - Dealing with unbalanced data in machine learning
 
 - Blagus, Rok, and Lara Lusa. “Class Prediction for High-Dimensional Class-Imbalanced Data.” BMC Bioinformatics 11 (October 20, 2010): 523. https://doi.org/10.1186/1471-2105-11-523. - Class imbalance empirical testing. Variable selection introduces additional bias towards classification into the majority class. Undersampling helps, oversampling does not. Variable normalization (centering) can worsen the performance.
