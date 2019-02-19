@@ -4535,55 +4535,89 @@ rfperf_K562_10kb_smote <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE
 rfperf_K562_10kb_rose <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
 
 
-all10kbresults <- data.frame(Resampling=c(rep("None", 8),
-                                       rep("RUS", 8),
-                                       rep("ROS", 8),
-                                       rep("SMOTE", 8),
-                                       rep("ROSE", 8)),
-                          CL=rep(c(rep("GM12878",4),
-                               rep("K562", 4)),5),
-                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+all10kbresults <- data.frame(Resampling=c(rep("None", 12),
+                                       rep("RUS", 12),
+                                       rep("ROS", 12),
+                                       rep("SMOTE", 12),
+                                       rep("ROSE", 12)),
+                          CL=rep(c(rep("GM12878",6),
+                               rep("K562", 6)),5),
+                          Metric=rep(c("Accuracy", 
+                                       "AUPRC", 
+                                       "F1-Score", 
+                                       "MCC",
+                                       "Informedness",
+                                       "Balanced Acc"), 10))
 
-all10kbresults$Performance <- c(round(rfperf_gm12878_10kb_none[9,2],2),
-                                round(rfperf_gm12878_10kb_none[19,2],2),
-                                round(rfperf_gm12878_10kb_none[16,2],2),
-                                round(rfperf_gm12878_10kb_none[15,2],2),
+all10kbresults$Performance <- c(round(rfperf_gm12878_10kb_none[9,2],2), #accuracy
+                                round(rfperf_gm12878_10kb_none[19,2],2), #auprc
+                                round(rfperf_gm12878_10kb_none[16,2],2), #f1
+                                round(rfperf_gm12878_10kb_none[15,2],2), #mcc
+								round(rfperf_gm12878_10kb_none[18,2],2), #youden
+								(round(rfperf_gm12878_10kb_none[6,2],2) + round(rfperf_gm12878_10kb_none[7,2],2))/2, #balanced accuracy
+								
                                 round(rfperf_K562_10kb_none[9,2],2),
                                 round(rfperf_K562_10kb_none[19,2],2),
                                 round(rfperf_K562_10kb_none[16,2],2),
                                 round(rfperf_K562_10kb_none[15,2],2),
-                                round(mean(rfperf_gm12878_10kb_rus[9,]),2),
-                                round(mean(rfperf_gm12878_10kb_rus[19,]),2),
-                                round(mean(rfperf_gm12878_10kb_rus[16,]),2),
-                                round(mean(rfperf_gm12878_10kb_rus[15,]),2),
-                                round(mean(rfperf_K562_10kb_rus[9,]),2),
-                                round(mean(rfperf_K562_10kb_rus[19,]),2),
-                                round(mean(rfperf_K562_10kb_rus[16,]),2),
-                                round(mean(rfperf_K562_10kb_rus[15,]),2),
-                                round(mean(rfperf_gm12878_10kb_ros[9,]),2),
-                                round(mean(rfperf_gm12878_10kb_ros[19,]),2),
-                                round(mean(rfperf_gm12878_10kb_ros[16,]),2),
-                                round(mean(rfperf_gm12878_10kb_ros[15,]),2),
-                                round(mean(rfperf_K562_10kb_ros[9,]),2),
-                                round(mean(rfperf_K562_10kb_ros[19,]),2),
-                                round(mean(rfperf_K562_10kb_ros[16,]),2),
-                                round(mean(rfperf_K562_10kb_ros[15,]),2),
-                                round(mean(rfperf_gm12878_10kb_smote[9,]),2),
-                                round(mean(rfperf_gm12878_10kb_smote[19,]),2),
-                                round(mean(rfperf_gm12878_10kb_smote[16,]),2),
-                                round(mean(rfperf_gm12878_10kb_smote[15,]),2),
-                                round(mean(rfperf_K562_10kb_smote[9,]),2),
-                                round(mean(rfperf_K562_10kb_smote[19,]),2),
-                                round(mean(rfperf_K562_10kb_smote[16,]),2),
-                                round(mean(rfperf_K562_10kb_smote[15,]),2),
-                                round(mean(rfperf_gm12878_10kb_rose[9,]),2),
-                                round(mean(rfperf_gm12878_10kb_rose[19,]),2),
-                                round(mean(rfperf_gm12878_10kb_rose[16,]),2),
-                                round(mean(rfperf_gm12878_10kb_rose[15,]),2),
-                                round(mean(rfperf_K562_10kb_rose[9,]),2),
-                                round(mean(rfperf_K562_10kb_rose[19,]),2),
-                                round(mean(rfperf_K562_10kb_rose[16,]),2),
-                                round(mean(rfperf_K562_10kb_rose[15,]),2))
+								round(rfperf_K562_10kb_none[18,2],2),
+								(round(rfperf_K562_10kb_none[6,2],2) + round(rfperf_K562_10kb_none[7,2],2))/2,
+								
+                                round(mean(rfperf_gm12878_10kb_rus[9,1]),2),
+                                round(mean(rfperf_gm12878_10kb_rus[19,1]),2),
+                                round(mean(rfperf_gm12878_10kb_rus[16,1]),2),
+                                round(mean(rfperf_gm12878_10kb_rus[15,1]),2),
+								round(mean(rfperf_gm12878_10kb_rus[18,1]),2),
+								(round(mean(rfperf_gm12878_10kb_rus[6,1]),2) + round(mean(rfperf_gm12878_10kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_10kb_rus[9,1]),2),
+                                round(mean(rfperf_K562_10kb_rus[19,1]),2),
+                                round(mean(rfperf_K562_10kb_rus[16,1]),2),
+                                round(mean(rfperf_K562_10kb_rus[15,1]),2),
+								round(mean(rfperf_K562_10kb_rus[18,1]),2),
+								(round(mean(rfperf_K562_10kb_rus[6,1]),2) + round(mean(rfperf_K562_10kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_10kb_ros[9,1]),2),
+                                round(mean(rfperf_gm12878_10kb_ros[19,1]),2),
+                                round(mean(rfperf_gm12878_10kb_ros[16,1]),2),
+                                round(mean(rfperf_gm12878_10kb_ros[15,1]),2),
+								round(mean(rfperf_gm12878_10kb_ros[18,1]),2),
+								(round(mean(rfperf_gm12878_10kb_ros[6,1]),2) + round(mean(rfperf_gm12878_10kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_10kb_ros[9,1]),2),
+                                round(mean(rfperf_K562_10kb_ros[19,1]),2),
+                                round(mean(rfperf_K562_10kb_ros[16,1]),2),
+                                round(mean(rfperf_K562_10kb_ros[15,1]),2),
+								round(mean(rfperf_K562_10kb_ros[18,1]),2),
+								(round(mean(rfperf_K562_10kb_ros[6,1]),2) + round(mean(rfperf_K562_10kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_10kb_smote[9,1]),2),
+                                round(mean(rfperf_gm12878_10kb_smote[19,1]),2),
+                                round(mean(rfperf_gm12878_10kb_smote[16,1]),2),
+                                round(mean(rfperf_gm12878_10kb_smote[15,1]),2),
+								round(mean(rfperf_gm12878_10kb_smote[18,1]),2),
+								(round(mean(rfperf_gm12878_10kb_smote[6,1]),2) + round(mean(rfperf_gm12878_10kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_10kb_smote[9,1]),2),
+                                round(mean(rfperf_K562_10kb_smote[19,1]),2),
+                                round(mean(rfperf_K562_10kb_smote[16,1]),2),
+                                round(mean(rfperf_K562_10kb_smote[15,1]),2),
+								round(mean(rfperf_K562_10kb_smote[18,1]),2),
+								(round(mean(rfperf_K562_10kb_smote[6,1]),2) + round(mean(rfperf_K562_10kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_10kb_rose[9,1]),2),
+                                round(mean(rfperf_gm12878_10kb_rose[19,1]),2),
+                                round(mean(rfperf_gm12878_10kb_rose[16,1]),2),
+                                round(mean(rfperf_gm12878_10kb_rose[15,1]),2),
+								round(mean(rfperf_gm12878_10kb_rose[18,1]),2),
+								(round(mean(rfperf_gm12878_10kb_rose[6,1]),2) + round(mean(rfperf_gm12878_10kb_rose[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_10kb_rose[9,1]),2),
+                                round(mean(rfperf_K562_10kb_rose[19,1]),2),
+                                round(mean(rfperf_K562_10kb_rose[16,1]),2),
+                                round(mean(rfperf_K562_10kb_rose[15,1]),2),
+								round(mean(rfperf_K562_10kb_rose[18,1]),2),
+								(round(mean(rfperf_K562_10kb_rose[6,1]),2) + round(mean(rfperf_K562_10kb_rose[7,1]),2))/2)
 
 all10kbresults$Resampling <- factor(all10kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
 all10kbresults$CL <- factor(all10kbresults$CL, levels=c("GM12878", "K562"))
@@ -4688,6 +4722,28 @@ f1mcc10kbplot <- ggplot(all10kbresults[which(all10kbresults$Metric=="F1-Score" |
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
+#comparing only informedness and balanced accuracy
+informBA10kbplot <- ggplot(all10kbresults[which(all10kbresults$Metric=="Informedness" |
+                                               all10kbresults$Metric=="Balanced Acc"),],
+                       aes(x=Resampling, y=Performance, fill=CL)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  ylim(0,.8)+
+  xlab("Resampling Technique") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
 ```
 
 
@@ -4729,55 +4785,89 @@ rfperf_K562_25kb_smote <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE
 rfperf_K562_25kb_rose <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
 
 
-all25kbresults <- data.frame(Resampling=c(rep("None", 8),
-                                       rep("RUS", 8),
-                                       rep("ROS", 8),
-                                       rep("SMOTE", 8),
-                                       rep("ROSE", 8)),
-                          CL=rep(c(rep("GM12878",4),
-                               rep("K562", 4)),5),
-                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+all25kbresults <- data.frame(Resampling=c(rep("None", 12),
+                                       rep("RUS", 12),
+                                       rep("ROS", 12),
+                                       rep("SMOTE", 12),
+                                       rep("ROSE", 12)),
+                          CL=rep(c(rep("GM12878",6),
+                               rep("K562", 6)),5),
+                          Metric=rep(c("Accuracy", 
+                                       "AUPRC", 
+                                       "F1-Score", 
+                                       "MCC",
+                                       "Informedness",
+                                       "Balanced Acc"), 10))
 
-all25kbresults$Performance <- c(round(rfperf_gm12878_25kb_none[9,2],2),
-                                round(rfperf_gm12878_25kb_none[19,2],2),
-                                round(rfperf_gm12878_25kb_none[16,2],2),
-                                round(rfperf_gm12878_25kb_none[15,2],2),
+all25kbresults$Performance <- c(round(rfperf_gm12878_25kb_none[9,2],2), #accuracy
+                                round(rfperf_gm12878_25kb_none[19,2],2), #auprc
+                                round(rfperf_gm12878_25kb_none[16,2],2), #f1
+                                round(rfperf_gm12878_25kb_none[15,2],2), #mcc
+								round(rfperf_gm12878_25kb_none[18,2],2), #youden
+								(round(rfperf_gm12878_25kb_none[6,2],2) + round(rfperf_gm12878_25kb_none[7,2],2))/2, #balanced accuracy
+								
                                 round(rfperf_K562_25kb_none[9,2],2),
                                 round(rfperf_K562_25kb_none[19,2],2),
                                 round(rfperf_K562_25kb_none[16,2],2),
                                 round(rfperf_K562_25kb_none[15,2],2),
-                                round(mean(rfperf_gm12878_25kb_rus[9,]),2),
-                                round(mean(rfperf_gm12878_25kb_rus[19,]),2),
-                                round(mean(rfperf_gm12878_25kb_rus[16,]),2),
-                                round(mean(rfperf_gm12878_25kb_rus[15,]),2),
-                                round(mean(rfperf_K562_25kb_rus[9,]),2),
-                                round(mean(rfperf_K562_25kb_rus[19,]),2),
-                                round(mean(rfperf_K562_25kb_rus[16,]),2),
-                                round(mean(rfperf_K562_25kb_rus[15,]),2),
-                                round(mean(rfperf_gm12878_25kb_ros[9,]),2),
-                                round(mean(rfperf_gm12878_25kb_ros[19,]),2),
-                                round(mean(rfperf_gm12878_25kb_ros[16,]),2),
-                                round(mean(rfperf_gm12878_25kb_ros[15,]),2),
-                                round(mean(rfperf_K562_25kb_ros[9,]),2),
-                                round(mean(rfperf_K562_25kb_ros[19,]),2),
-                                round(mean(rfperf_K562_25kb_ros[16,]),2),
-                                round(mean(rfperf_K562_25kb_ros[15,]),2),
-                                round(mean(rfperf_gm12878_25kb_smote[9,]),2),
-                                round(mean(rfperf_gm12878_25kb_smote[19,]),2),
-                                round(mean(rfperf_gm12878_25kb_smote[16,]),2),
-                                round(mean(rfperf_gm12878_25kb_smote[15,]),2),
-                                round(mean(rfperf_K562_25kb_smote[9,]),2),
-                                round(mean(rfperf_K562_25kb_smote[19,]),2),
-                                round(mean(rfperf_K562_25kb_smote[16,]),2),
-                                round(mean(rfperf_K562_25kb_smote[15,]),2),
-                                round(mean(rfperf_gm12878_25kb_rose[9,]),2),
-                                round(mean(rfperf_gm12878_25kb_rose[19,]),2),
-                                round(mean(rfperf_gm12878_25kb_rose[16,]),2),
-                                round(mean(rfperf_gm12878_25kb_rose[15,]),2),
-                                round(mean(rfperf_K562_25kb_rose[9,]),2),
-                                round(mean(rfperf_K562_25kb_rose[19,]),2),
-                                round(mean(rfperf_K562_25kb_rose[16,]),2),
-                                round(mean(rfperf_K562_25kb_rose[15,]),2))
+								round(rfperf_K562_25kb_none[18,2],2),
+								(round(rfperf_K562_25kb_none[6,2],2) + round(rfperf_K562_25kb_none[7,2],2))/2,
+								
+                                round(mean(rfperf_gm12878_25kb_rus[9,1]),2),
+                                round(mean(rfperf_gm12878_25kb_rus[19,1]),2),
+                                round(mean(rfperf_gm12878_25kb_rus[16,1]),2),
+                                round(mean(rfperf_gm12878_25kb_rus[15,1]),2),
+								round(mean(rfperf_gm12878_25kb_rus[18,1]),2),
+								(round(mean(rfperf_gm12878_25kb_rus[6,1]),2) + round(mean(rfperf_gm12878_25kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_25kb_rus[9,1]),2),
+                                round(mean(rfperf_K562_25kb_rus[19,1]),2),
+                                round(mean(rfperf_K562_25kb_rus[16,1]),2),
+                                round(mean(rfperf_K562_25kb_rus[15,1]),2),
+								round(mean(rfperf_K562_25kb_rus[18,1]),2),
+								(round(mean(rfperf_K562_25kb_rus[6,1]),2) + round(mean(rfperf_K562_25kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_25kb_ros[9,1]),2),
+                                round(mean(rfperf_gm12878_25kb_ros[19,1]),2),
+                                round(mean(rfperf_gm12878_25kb_ros[16,1]),2),
+                                round(mean(rfperf_gm12878_25kb_ros[15,1]),2),
+								round(mean(rfperf_gm12878_25kb_ros[18,1]),2),
+								(round(mean(rfperf_gm12878_25kb_ros[6,1]),2) + round(mean(rfperf_gm12878_25kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_25kb_ros[9,1]),2),
+                                round(mean(rfperf_K562_25kb_ros[19,1]),2),
+                                round(mean(rfperf_K562_25kb_ros[16,1]),2),
+                                round(mean(rfperf_K562_25kb_ros[15,1]),2),
+								round(mean(rfperf_K562_25kb_ros[18,1]),2),
+								(round(mean(rfperf_K562_25kb_ros[6,1]),2) + round(mean(rfperf_K562_25kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_25kb_smote[9,1]),2),
+                                round(mean(rfperf_gm12878_25kb_smote[19,1]),2),
+                                round(mean(rfperf_gm12878_25kb_smote[16,1]),2),
+                                round(mean(rfperf_gm12878_25kb_smote[15,1]),2),
+								round(mean(rfperf_gm12878_25kb_smote[18,1]),2),
+								(round(mean(rfperf_gm12878_25kb_smote[6,1]),2) + round(mean(rfperf_gm12878_25kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_25kb_smote[9,1]),2),
+                                round(mean(rfperf_K562_25kb_smote[19,1]),2),
+                                round(mean(rfperf_K562_25kb_smote[16,1]),2),
+                                round(mean(rfperf_K562_25kb_smote[15,1]),2),
+								round(mean(rfperf_K562_25kb_smote[18,1]),2),
+								(round(mean(rfperf_K562_25kb_smote[6,1]),2) + round(mean(rfperf_K562_25kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_25kb_rose[9,1]),2),
+                                round(mean(rfperf_gm12878_25kb_rose[19,1]),2),
+                                round(mean(rfperf_gm12878_25kb_rose[16,1]),2),
+                                round(mean(rfperf_gm12878_25kb_rose[15,1]),2),
+								round(mean(rfperf_gm12878_25kb_rose[18,1]),2),
+								(round(mean(rfperf_gm12878_25kb_rose[6,1]),2) + round(mean(rfperf_gm12878_25kb_rose[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_25kb_rose[9,1]),2),
+                                round(mean(rfperf_K562_25kb_rose[19,1]),2),
+                                round(mean(rfperf_K562_25kb_rose[16,1]),2),
+                                round(mean(rfperf_K562_25kb_rose[15,1]),2),
+								round(mean(rfperf_K562_25kb_rose[18,1]),2),
+								(round(mean(rfperf_K562_25kb_rose[6,1]),2) + round(mean(rfperf_K562_25kb_rose[7,1]),2))/2)
 
 all25kbresults$Resampling <- factor(all25kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
 all25kbresults$CL <- factor(all25kbresults$CL, levels=c("GM12878", "K562"))
@@ -4882,6 +4972,29 @@ f1mcc25kbplot <- ggplot(all25kbresults[which(all25kbresults$Metric=="F1-Score" |
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
+#comparing only informedness and balanced accuracy
+informBA25kbplot <- ggplot(all25kbresults[which(all25kbresults$Metric=="Informedness" |
+                                               all25kbresults$Metric=="Balanced Acc"),],
+                       aes(x=Resampling, y=Performance, fill=CL)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("Resampling Technique") +
+  ylim(0,.8)+
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+
 ```
 
 
@@ -4923,59 +5036,93 @@ rfperf_K562_50kb_smote <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE
 rfperf_K562_50kb_rose <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
 
 
-all50kbresults <- data.frame(Resampling=c(rep("None", 8),
-                                       rep("RUS", 8),
-                                       rep("ROS", 8),
-                                       rep("SMOTE", 8),
-                                       rep("ROSE", 8)),
-                          CL=rep(c(rep("GM12878",4),
-                               rep("K562", 4)),5),
-                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+all50kbresults <- data.frame(Resampling=c(rep("None", 12),
+                                       rep("RUS", 12),
+                                       rep("ROS", 12),
+                                       rep("SMOTE", 12),
+                                       rep("ROSE", 12)),
+                          CL=rep(c(rep("GM12878",6),
+                               rep("K562", 6)),5),
+                          Metric=rep(c("Accuracy", 
+                                       "AUPRC", 
+                                       "F1-Score", 
+                                       "MCC",
+                                       "Informedness",
+                                       "Balanced Acc"), 10))
 
-all50kbresults$Performance <- c(round(rfperf_gm12878_50kb_none[9,2],2),
-                                round(rfperf_gm12878_50kb_none[19,2],2),
-                                round(rfperf_gm12878_50kb_none[16,2],2),
-                                round(rfperf_gm12878_50kb_none[15,2],2),
+all50kbresults$Performance <- c(round(rfperf_gm12878_50kb_none[9,2],2), #accuracy
+                                round(rfperf_gm12878_50kb_none[19,2],2), #auprc
+                                round(rfperf_gm12878_50kb_none[16,2],2), #f1
+                                round(rfperf_gm12878_50kb_none[15,2],2), #mcc
+								round(rfperf_gm12878_50kb_none[18,2],2), #youden
+								(round(rfperf_gm12878_50kb_none[6,2],2) + round(rfperf_gm12878_50kb_none[7,2],2))/2, #balanced accuracy
+								
                                 round(rfperf_K562_50kb_none[9,2],2),
                                 round(rfperf_K562_50kb_none[19,2],2),
                                 round(rfperf_K562_50kb_none[16,2],2),
                                 round(rfperf_K562_50kb_none[15,2],2),
-                                round(mean(rfperf_gm12878_50kb_rus[9,]),2),
-                                round(mean(rfperf_gm12878_50kb_rus[19,]),2),
-                                round(mean(rfperf_gm12878_50kb_rus[16,]),2),
-                                round(mean(rfperf_gm12878_50kb_rus[15,]),2),
-                                round(mean(rfperf_K562_50kb_rus[9,]),2),
-                                round(mean(rfperf_K562_50kb_rus[19,]),2),
-                                round(mean(rfperf_K562_50kb_rus[16,]),2),
-                                round(mean(rfperf_K562_50kb_rus[15,]),2),
-                                round(mean(rfperf_gm12878_50kb_ros[9,]),2),
-                                round(mean(rfperf_gm12878_50kb_ros[19,]),2),
-                                round(mean(rfperf_gm12878_50kb_ros[16,]),2),
-                                round(mean(rfperf_gm12878_50kb_ros[15,]),2),
-                                round(mean(rfperf_K562_50kb_ros[9,]),2),
-                                round(mean(rfperf_K562_50kb_ros[19,]),2),
-                                round(mean(rfperf_K562_50kb_ros[16,]),2),
-                                round(mean(rfperf_K562_50kb_ros[15,]),2),
-                                round(mean(rfperf_gm12878_50kb_smote[9,]),2),
-                                round(mean(rfperf_gm12878_50kb_smote[19,]),2),
-                                round(mean(rfperf_gm12878_50kb_smote[16,]),2),
-                                round(mean(rfperf_gm12878_50kb_smote[15,]),2),
-                                round(mean(rfperf_K562_50kb_smote[9,]),2),
-                                round(mean(rfperf_K562_50kb_smote[19,]),2),
-                                round(mean(rfperf_K562_50kb_smote[16,]),2),
-                                round(mean(rfperf_K562_50kb_smote[15,]),2),
-                                round(mean(rfperf_gm12878_50kb_rose[9,]),2),
-                                round(mean(rfperf_gm12878_50kb_rose[19,]),2),
-                                round(mean(rfperf_gm12878_50kb_rose[16,]),2),
-                                round(mean(rfperf_gm12878_50kb_rose[15,]),2),
-                                round(mean(rfperf_K562_50kb_rose[9,]),2),
-                                round(mean(rfperf_K562_50kb_rose[19,]),2),
-                                round(mean(rfperf_K562_50kb_rose[16,]),2),
-                                round(mean(rfperf_K562_50kb_rose[15,]),2))
+								round(rfperf_K562_50kb_none[18,2],2),
+								(round(rfperf_K562_50kb_none[6,2],2) + round(rfperf_K562_50kb_none[7,2],2))/2,
+								
+                                round(mean(rfperf_gm12878_50kb_rus[9,1]),2),
+                                round(mean(rfperf_gm12878_50kb_rus[19,1]),2),
+                                round(mean(rfperf_gm12878_50kb_rus[16,1]),2),
+                                round(mean(rfperf_gm12878_50kb_rus[15,1]),2),
+								round(mean(rfperf_gm12878_50kb_rus[18,1]),2),
+								(round(mean(rfperf_gm12878_50kb_rus[6,1]),2) + round(mean(rfperf_gm12878_50kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_50kb_rus[9,1]),2),
+                                round(mean(rfperf_K562_50kb_rus[19,1]),2),
+                                round(mean(rfperf_K562_50kb_rus[16,1]),2),
+                                round(mean(rfperf_K562_50kb_rus[15,1]),2),
+								round(mean(rfperf_K562_50kb_rus[18,1]),2),
+								(round(mean(rfperf_K562_50kb_rus[6,1]),2) + round(mean(rfperf_K562_50kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_50kb_ros[9,1]),2),
+                                round(mean(rfperf_gm12878_50kb_ros[19,1]),2),
+                                round(mean(rfperf_gm12878_50kb_ros[16,1]),2),
+                                round(mean(rfperf_gm12878_50kb_ros[15,1]),2),
+								round(mean(rfperf_gm12878_50kb_ros[18,1]),2),
+								(round(mean(rfperf_gm12878_50kb_ros[6,1]),2) + round(mean(rfperf_gm12878_50kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_50kb_ros[9,1]),2),
+                                round(mean(rfperf_K562_50kb_ros[19,1]),2),
+                                round(mean(rfperf_K562_50kb_ros[16,1]),2),
+                                round(mean(rfperf_K562_50kb_ros[15,1]),2),
+								round(mean(rfperf_K562_50kb_ros[18,1]),2),
+								(round(mean(rfperf_K562_50kb_ros[6,1]),2) + round(mean(rfperf_K562_50kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_50kb_smote[9,1]),2),
+                                round(mean(rfperf_gm12878_50kb_smote[19,1]),2),
+                                round(mean(rfperf_gm12878_50kb_smote[16,1]),2),
+                                round(mean(rfperf_gm12878_50kb_smote[15,1]),2),
+								round(mean(rfperf_gm12878_50kb_smote[18,1]),2),
+								(round(mean(rfperf_gm12878_50kb_smote[6,1]),2) + round(mean(rfperf_gm12878_50kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_50kb_smote[9,1]),2),
+                                round(mean(rfperf_K562_50kb_smote[19,1]),2),
+                                round(mean(rfperf_K562_50kb_smote[16,1]),2),
+                                round(mean(rfperf_K562_50kb_smote[15,1]),2),
+								round(mean(rfperf_K562_50kb_smote[18,1]),2),
+								(round(mean(rfperf_K562_50kb_smote[6,1]),2) + round(mean(rfperf_K562_50kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_50kb_rose[9,1]),2),
+                                round(mean(rfperf_gm12878_50kb_rose[19,1]),2),
+                                round(mean(rfperf_gm12878_50kb_rose[16,1]),2),
+                                round(mean(rfperf_gm12878_50kb_rose[15,1]),2),
+								round(mean(rfperf_gm12878_50kb_rose[18,1]),2),
+								(round(mean(rfperf_gm12878_50kb_rose[6,1]),2) + round(mean(rfperf_gm12878_50kb_rose[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_50kb_rose[9,1]),2),
+                                round(mean(rfperf_K562_50kb_rose[19,1]),2),
+                                round(mean(rfperf_K562_50kb_rose[16,1]),2),
+                                round(mean(rfperf_K562_50kb_rose[15,1]),2),
+								round(mean(rfperf_K562_50kb_rose[18,1]),2),
+								(round(mean(rfperf_K562_50kb_rose[6,1]),2) + round(mean(rfperf_K562_50kb_rose[7,1]),2))/2)
 
-all50kbresults$Resampling <- factor(all50kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
-all50kbresults$CL <- factor(all50kbresults$CL, levels=c("GM12878", "K562"))
-all50kbresults$Metric <- factor(all50kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
+#all50kbresults$Resampling <- factor(all50kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
+#all50kbresults$CL <- factor(all50kbresults$CL, levels=c("GM12878", "K562"))
+#all50kbresults$Metric <- factor(all50kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
 
 none50kbplot <- ggplot(all50kbresults[which(all50kbresults$Resampling=="None"),],
                        aes(x=CL, y=Performance, fill=Metric)) +
@@ -5076,6 +5223,29 @@ f1mcc50kbplot <- ggplot(all50kbresults[which(all50kbresults$Metric=="F1-Score" |
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
+#comparing only informedness and balanced accuracy
+informBA50kbplot <- ggplot(all50kbresults[which(all50kbresults$Metric=="Informedness" |
+                                               all50kbresults$Metric=="Balanced Acc"),],
+                       aes(x=Resampling, y=Performance, fill=CL)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("Resampling Technique") +
+  ylim(0,.8)+
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+
 ```
 
 
@@ -5117,59 +5287,93 @@ rfperf_K562_100kb_smote <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMO
 rfperf_K562_100kb_rose <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROSE/Distance/RFE/RF/rfperf.rds")
 
 
-all100kbresults <- data.frame(Resampling=c(rep("None", 8),
-                                       rep("RUS", 8),
-                                       rep("ROS", 8),
-                                       rep("SMOTE", 8),
-                                       rep("ROSE", 8)),
-                          CL=rep(c(rep("GM12878",4),
-                               rep("K562", 4)),5),
-                          Metric=rep(c("Accuracy", "AUPRC", "F1-Score", "MCC"), 10))
+all100kbresults <- data.frame(Resampling=c(rep("None", 12),
+                                       rep("RUS", 12),
+                                       rep("ROS", 12),
+                                       rep("SMOTE", 12),
+                                       rep("ROSE", 12)),
+                          CL=rep(c(rep("GM12878", 6),
+                               rep("K562", 6)),5),
+                          Metric=rep(c("Accuracy", 
+                                       "AUPRC", 
+                                       "F1-Score", 
+                                       "MCC",
+                                       "Informedness",
+                                       "Balanced Acc"), 10))
 
-all100kbresults$Performance <- c(round(rfperf_gm12878_100kb_none[9,2],2),
-                                round(rfperf_gm12878_100kb_none[19,2],2),
-                                round(rfperf_gm12878_100kb_none[16,2],2),
-                                round(rfperf_gm12878_100kb_none[15,2],2),
+all100kbresults$Performance <- c(round(rfperf_gm12878_100kb_none[9,2],2), #accuracy
+                                round(rfperf_gm12878_100kb_none[19,2],2), #auprc
+                                round(rfperf_gm12878_100kb_none[16,2],2), #f1
+                                round(rfperf_gm12878_100kb_none[15,2],2), #mcc
+								round(rfperf_gm12878_100kb_none[18,2],2), #youden
+								(round(rfperf_gm12878_100kb_none[6,2],2) + round(rfperf_gm12878_100kb_none[7,2],2))/2, #balanced accuracy
+								
                                 round(rfperf_K562_100kb_none[9,2],2),
                                 round(rfperf_K562_100kb_none[19,2],2),
                                 round(rfperf_K562_100kb_none[16,2],2),
                                 round(rfperf_K562_100kb_none[15,2],2),
-                                round(mean(rfperf_gm12878_100kb_rus[9,]),2),
-                                round(mean(rfperf_gm12878_100kb_rus[19,]),2),
-                                round(mean(rfperf_gm12878_100kb_rus[16,]),2),
-                                round(mean(rfperf_gm12878_100kb_rus[15,]),2),
-                                round(mean(rfperf_K562_100kb_rus[9,]),2),
-                                round(mean(rfperf_K562_100kb_rus[19,]),2),
-                                round(mean(rfperf_K562_100kb_rus[16,]),2),
-                                round(mean(rfperf_K562_100kb_rus[15,]),2),
-                                round(mean(rfperf_gm12878_100kb_ros[9,]),2),
-                                round(mean(rfperf_gm12878_100kb_ros[19,]),2),
-                                round(mean(rfperf_gm12878_100kb_ros[16,]),2),
-                                round(mean(rfperf_gm12878_100kb_ros[15,]),2),
-                                round(mean(rfperf_K562_100kb_ros[9,]),2),
-                                round(mean(rfperf_K562_100kb_ros[19,]),2),
-                                round(mean(rfperf_K562_100kb_ros[16,]),2),
-                                round(mean(rfperf_K562_100kb_ros[15,]),2),
-                                round(mean(rfperf_gm12878_100kb_smote[9,]),2),
-                                round(mean(rfperf_gm12878_100kb_smote[19,]),2),
-                                round(mean(rfperf_gm12878_100kb_smote[16,]),2),
-                                round(mean(rfperf_gm12878_100kb_smote[15,]),2),
-                                round(mean(rfperf_K562_100kb_smote[9,]),2),
-                                round(mean(rfperf_K562_100kb_smote[19,]),2),
-                                round(mean(rfperf_K562_100kb_smote[16,]),2),
-                                round(mean(rfperf_K562_100kb_smote[15,]),2),
-                                round(mean(rfperf_gm12878_100kb_rose[9,]),2),
-                                round(mean(rfperf_gm12878_100kb_rose[19,]),2),
-                                round(mean(rfperf_gm12878_100kb_rose[16,]),2),
-                                round(mean(rfperf_gm12878_100kb_rose[15,]),2),
-                                round(mean(rfperf_K562_100kb_rose[9,]),2),
-                                round(mean(rfperf_K562_100kb_rose[19,]),2),
-                                round(mean(rfperf_K562_100kb_rose[16,]),2),
-                                round(mean(rfperf_K562_100kb_rose[15,]),2))
+								round(rfperf_K562_100kb_none[18,2],2),
+								(round(rfperf_K562_100kb_none[6,2],2) + round(rfperf_K562_100kb_none[7,2],2))/2,
+								
+                                round(mean(rfperf_gm12878_100kb_rus[9,1]),2),
+                                round(mean(rfperf_gm12878_100kb_rus[19,1]),2),
+                                round(mean(rfperf_gm12878_100kb_rus[16,1]),2),
+                                round(mean(rfperf_gm12878_100kb_rus[15,1]),2),
+								round(mean(rfperf_gm12878_100kb_rus[18,1]),2),
+								(round(mean(rfperf_gm12878_100kb_rus[6,1]),2) + round(mean(rfperf_gm12878_100kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_100kb_rus[9,1]),2),
+                                round(mean(rfperf_K562_100kb_rus[19,1]),2),
+                                round(mean(rfperf_K562_100kb_rus[16,1]),2),
+                                round(mean(rfperf_K562_100kb_rus[15,1]),2),
+								round(mean(rfperf_K562_100kb_rus[18,1]),2),
+								(round(mean(rfperf_K562_100kb_rus[6,1]),2) + round(mean(rfperf_K562_100kb_rus[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_100kb_ros[9,1]),2),
+                                round(mean(rfperf_gm12878_100kb_ros[19,1]),2),
+                                round(mean(rfperf_gm12878_100kb_ros[16,1]),2),
+                                round(mean(rfperf_gm12878_100kb_ros[15,1]),2),
+								round(mean(rfperf_gm12878_100kb_ros[18,1]),2),
+								(round(mean(rfperf_gm12878_100kb_ros[6,1]),2) + round(mean(rfperf_gm12878_100kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_100kb_ros[9,1]),2),
+                                round(mean(rfperf_K562_100kb_ros[19,1]),2),
+                                round(mean(rfperf_K562_100kb_ros[16,1]),2),
+                                round(mean(rfperf_K562_100kb_ros[15,1]),2),
+								round(mean(rfperf_K562_100kb_ros[18,1]),2),
+								(round(mean(rfperf_K562_100kb_ros[6,1]),2) + round(mean(rfperf_K562_100kb_ros[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_100kb_smote[9,1]),2),
+                                round(mean(rfperf_gm12878_100kb_smote[19,1]),2),
+                                round(mean(rfperf_gm12878_100kb_smote[16,1]),2),
+                                round(mean(rfperf_gm12878_100kb_smote[15,1]),2),
+								round(mean(rfperf_gm12878_100kb_smote[18,1]),2),
+								(round(mean(rfperf_gm12878_100kb_smote[6,1]),2) + round(mean(rfperf_gm12878_100kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_100kb_smote[9,1]),2),
+                                round(mean(rfperf_K562_100kb_smote[19,1]),2),
+                                round(mean(rfperf_K562_100kb_smote[16,1]),2),
+                                round(mean(rfperf_K562_100kb_smote[15,1]),2),
+								round(mean(rfperf_K562_100kb_smote[18,1]),2),
+								(round(mean(rfperf_K562_100kb_smote[6,1]),2) + round(mean(rfperf_K562_100kb_smote[7,1]),2))/2,
+								
+                                round(mean(rfperf_gm12878_100kb_rose[9,1]),2),
+                                round(mean(rfperf_gm12878_100kb_rose[19,1]),2),
+                                round(mean(rfperf_gm12878_100kb_rose[16,1]),2),
+                                round(mean(rfperf_gm12878_100kb_rose[15,1]),2),
+								round(mean(rfperf_gm12878_100kb_rose[18,1]),2),
+								(round(mean(rfperf_gm12878_100kb_rose[6,1]),2) + round(mean(rfperf_gm12878_100kb_rose[7,1]),2))/2,
+								
+                                round(mean(rfperf_K562_100kb_rose[9,1]),2),
+                                round(mean(rfperf_K562_100kb_rose[19,1]),2),
+                                round(mean(rfperf_K562_100kb_rose[16,1]),2),
+                                round(mean(rfperf_K562_100kb_rose[15,1]),2),
+								round(mean(rfperf_K562_100kb_rose[18,1]),2),
+								(round(mean(rfperf_K562_100kb_rose[6,1]),2) + round(mean(rfperf_K562_100kb_rose[7,1]),2))/2)
 
-all100kbresults$Resampling <- factor(all100kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
-all100kbresults$CL <- factor(all100kbresults$CL, levels=c("GM12878", "K562"))
-all100kbresults$Metric <- factor(all100kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
+#all100kbresults$Resampling <- factor(all100kbresults$Resampling, levels=c("None", "RUS", "ROS", "SMOTE", "ROSE"))
+#all100kbresults$CL <- factor(all100kbresults$CL, levels=c("GM12878", "K562"))
+#all100kbresults$Metric <- factor(all100kbresults$Metric, levels=c("Accuracy", "AUPRC", "F1-Score", "MCC"))
 
 none100kbplot <- ggplot(all100kbresults[which(all100kbresults$Resampling=="None"),],
                        aes(x=CL, y=Performance, fill=Metric)) +
@@ -5269,6 +5473,29 @@ f1mcc100kbplot <- ggplot(all100kbresults[which(all100kbresults$Metric=="F1-Score
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
+
+#comparing only informedness and balanced accuracy
+informBA100kbplot <- ggplot(all100kbresults[which(all100kbresults$Metric=="Informedness" |
+                                               all100kbresults$Metric=="Balanced Acc"),],
+                       aes(x=Resampling, y=Performance, fill=CL)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("Resampling Technique") +
+  ylim(0,.8)+
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
 
 ```
 
