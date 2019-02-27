@@ -1,0 +1,927 @@
+---
+title: "Evaluating Distance Densities"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+
+```
+
+
+# Evaluating Distance Densities
+##GM12878
+###10kb
+
+```{r}
+gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+gm12878_10kb_ld <- gm12878_10kb[,c(1,grep("_dist", names(gm12878_10kb)))]
+
+###############
+#gm12878_10kb_ld <- gm12878_10kb_ld[,c(1:5)]
+###############
+
+gm12878_10kb_d <- gm12878_10kb_ld
+gm12878_10kb_d[,-1] <- exp(gm12878_10kb_ld[,-1]) - 1
+gm12878_10kb_d$Average_dist <- rowMeans(gm12878_10kb_d[,-1])
+
+gm12878_10kb_ld$Average_dist <- rowMeans(gm12878_10kb_ld[,-1])
+names(gm12878_10kb_ld)[-1] <- paste(substr(names(gm12878_10kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_10kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_10kb_alldist <- cbind.data.frame(gm12878_10kb_d[,-1], gm12878_10kb_ld[,-1])
+
+long10kb <- melt(gm12878_10kb_alldist)
+long10kb$variable <- as.character(long10kb$variable)
+long10kb$Transformation <- NA
+long10kb$Transformation[grep("_logdist", long10kb$variable)] <- rep("Log Distance", length(long10kb$variable[grep("_logdist", long10kb$variable)]))
+long10kb$Transformation[grep("_logdist", long10kb$variable, invert = TRUE)] <- rep("Distance", length(long10kb$variable[grep("_logdist", long10kb$variable, invert = TRUE)]))
+
+table(long10kb$Transformation)
+
+
+distdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("_dist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_dist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("logdist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_logdist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long10kb$value[long10kb$Transformation=="Distance"] <- long10kb$value[long10kb$Transformation=="Distance"]/1000000
+long10kb <- long10kb[grep("Average", long10kb$variable, invert = TRUE),]
+long10kb$variable <- factor(long10kb$variable)
+long10kb$Transformation <- factor(long10kb$Transformation)
+
+alldensity10kb <- ggplot(long10kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+```
+
+
+###25kb
+
+```{r}
+gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+gm12878_25kb_ld <- gm12878_25kb[,c(1,grep("_dist", names(gm12878_25kb)))]
+
+###############
+#gm12878_25kb_ld <- gm12878_25kb_ld[,c(1:5)]
+###############
+
+gm12878_25kb_d <- gm12878_25kb_ld
+gm12878_25kb_d[,-1] <- exp(gm12878_25kb_ld[,-1]) - 1
+gm12878_25kb_d$Average_dist <- rowMeans(gm12878_25kb_d[,-1])
+
+gm12878_25kb_ld$Average_dist <- rowMeans(gm12878_25kb_ld[,-1])
+names(gm12878_25kb_ld)[-1] <- paste(substr(names(gm12878_25kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_25kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_25kb_alldist <- cbind.data.frame(gm12878_25kb_d[,-1], gm12878_25kb_ld[,-1])
+
+long25kb <- melt(gm12878_25kb_alldist)
+long25kb$variable <- as.character(long25kb$variable)
+long25kb$Transformation <- NA
+long25kb$Transformation[grep("_logdist", long25kb$variable)] <- rep("Log Distance", length(long25kb$variable[grep("_logdist", long25kb$variable)]))
+long25kb$Transformation[grep("_logdist", long25kb$variable, invert = TRUE)] <- rep("Distance", length(long25kb$variable[grep("_logdist", long25kb$variable, invert = TRUE)]))
+
+table(long25kb$Transformation)
+
+
+distdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("_dist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_dist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("logdist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_logdist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) +  
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long25kb$value[long25kb$Transformation=="Distance"] <- long25kb$value[long25kb$Transformation=="Distance"]/1000000
+long25kb <- long25kb[grep("Average", long25kb$variable, invert = TRUE),]
+long25kb$variable <- factor(long25kb$variable)
+long25kb$Transformation <- factor(long25kb$Transformation)
+
+alldensity25kb <- ggplot(long25kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+###50kb
+
+```{r}
+gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+
+gm12878_50kb_ld <- gm12878_50kb[,c(1,grep("_dist", names(gm12878_50kb)))]
+
+###############
+#gm12878_50kb_ld <- gm12878_50kb_ld[,c(1:5)]
+###############
+
+gm12878_50kb_d <- gm12878_50kb_ld
+gm12878_50kb_d[,-1] <- exp(gm12878_50kb_ld[,-1]) - 1
+gm12878_50kb_d$Average_dist <- rowMeans(gm12878_50kb_d[,-1])
+
+gm12878_50kb_ld$Average_dist <- rowMeans(gm12878_50kb_ld[,-1])
+names(gm12878_50kb_ld)[-1] <- paste(substr(names(gm12878_50kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_50kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_50kb_alldist <- cbind.data.frame(gm12878_50kb_d[,-1], gm12878_50kb_ld[,-1])
+
+long50kb <- melt(gm12878_50kb_alldist)
+long50kb$variable <- as.character(long50kb$variable)
+long50kb$Transformation <- NA
+long50kb$Transformation[grep("_logdist", long50kb$variable)] <- rep("Log Distance", length(long50kb$variable[grep("_logdist", long50kb$variable)]))
+long50kb$Transformation[grep("_logdist", long50kb$variable, invert = TRUE)] <- rep("Distance", length(long50kb$variable[grep("_logdist", long50kb$variable, invert = TRUE)]))
+
+table(long50kb$Transformation)
+
+
+distdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("_dist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_dist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("logdist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_logdist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long50kb$value[long50kb$Transformation=="Distance"] <- long50kb$value[long50kb$Transformation=="Distance"]/1000000
+long50kb <- long50kb[grep("Average", long50kb$variable, invert = TRUE),]
+long50kb$variable <- factor(long50kb$variable)
+long50kb$Transformation <- factor(long50kb$Transformation)
+
+alldensity50kb <- ggplot(long50kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+###100kb
+
+```{r}
+gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+
+gm12878_100kb_ld <- gm12878_100kb[,c(1,grep("_dist", names(gm12878_100kb)))]
+
+###############
+#gm12878_100kb_ld <- gm12878_100kb_ld[,c(1:5)]
+###############
+
+gm12878_100kb_d <- gm12878_100kb_ld
+gm12878_100kb_d[,-1] <- exp(gm12878_100kb_ld[,-1]) - 1
+gm12878_100kb_d$Average_dist <- rowMeans(gm12878_100kb_d[,-1])
+
+gm12878_100kb_ld$Average_dist <- rowMeans(gm12878_100kb_ld[,-1])
+names(gm12878_100kb_ld)[-1] <- paste(substr(names(gm12878_100kb_ld)[-1],
+                                           1, 
+                                           nchar(names(gm12878_100kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+gm12878_100kb_alldist <- cbind.data.frame(gm12878_100kb_d[,-1], gm12878_100kb_ld[,-1])
+
+long100kb <- melt(gm12878_100kb_alldist)
+long100kb$variable <- as.character(long100kb$variable)
+long100kb$Transformation <- NA
+long100kb$Transformation[grep("_logdist", long100kb$variable)] <- rep("Log Distance", length(long100kb$variable[grep("_logdist", long100kb$variable)]))
+long100kb$Transformation[grep("_logdist", long100kb$variable, invert = TRUE)] <- rep("Distance", length(long100kb$variable[grep("_logdist", long100kb$variable, invert = TRUE)]))
+
+table(long100kb$Transformation)
+
+
+distdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("_dist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_dist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("No Transformation") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("logdist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_logdist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("Log Tranformation") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long100kb$value[long100kb$Transformation=="Distance"] <- long100kb$value[long100kb$Transformation=="Distance"]/1000000
+long100kb <- long100kb[grep("Average", long100kb$variable, invert = TRUE),]
+long100kb$variable <- factor(long100kb$variable)
+long100kb$Transformation <- factor(long100kb$Transformation)
+
+alldensity100kb <- ggplot(long100kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+##K562
+###10kb
+
+```{r}
+K562_10kb <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+
+K562_10kb_ld <- K562_10kb[,c(1,grep("_dist", names(K562_10kb)))]
+
+###############
+#K562_10kb_ld <- K562_10kb_ld[,c(1:5)]
+###############
+
+K562_10kb_d <- K562_10kb_ld
+K562_10kb_d[,-1] <- exp(K562_10kb_ld[,-1]) - 1
+K562_10kb_d$Average_dist <- rowMeans(K562_10kb_d[,-1])
+
+K562_10kb_ld$Average_dist <- rowMeans(K562_10kb_ld[,-1])
+names(K562_10kb_ld)[-1] <- paste(substr(names(K562_10kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_10kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_10kb_alldist <- cbind.data.frame(K562_10kb_d[,-1], K562_10kb_ld[,-1])
+
+long10kb <- melt(K562_10kb_alldist)
+long10kb$variable <- as.character(long10kb$variable)
+long10kb$Transformation <- NA
+long10kb$Transformation[grep("_logdist", long10kb$variable)] <- rep("Log Distance", length(long10kb$variable[grep("_logdist", long10kb$variable)]))
+long10kb$Transformation[grep("_logdist", long10kb$variable, invert = TRUE)] <- rep("Distance", length(long10kb$variable[grep("_logdist", long10kb$variable, invert = TRUE)]))
+
+table(long10kb$Transformation)
+
+
+distdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("_dist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_dist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity10kb <- ggplot() + 
+  geom_density(data=long10kb[intersect(grep("logdist", long10kb$variable), grep("Average", long10kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long10kb[grep("Average_logdist", long10kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long10kb$value[long10kb$Transformation=="Distance"] <- long10kb$value[long10kb$Transformation=="Distance"]/1000000
+long10kb <- long10kb[grep("Average", long10kb$variable, invert = TRUE),]
+long10kb$variable <- factor(long10kb$variable)
+long10kb$Transformation <- factor(long10kb$Transformation)
+
+alldensity10kb_k562 <- ggplot(long10kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+
+###25kb
+
+```{r}
+K562_25kb <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+
+K562_25kb_ld <- K562_25kb[,c(1,grep("_dist", names(K562_25kb)))]
+
+###############
+#K562_25kb_ld <- K562_25kb_ld[,c(1:5)]
+###############
+
+K562_25kb_d <- K562_25kb_ld
+K562_25kb_d[,-1] <- exp(K562_25kb_ld[,-1]) - 1
+K562_25kb_d$Average_dist <- rowMeans(K562_25kb_d[,-1])
+
+K562_25kb_ld$Average_dist <- rowMeans(K562_25kb_ld[,-1])
+names(K562_25kb_ld)[-1] <- paste(substr(names(K562_25kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_25kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_25kb_alldist <- cbind.data.frame(K562_25kb_d[,-1], K562_25kb_ld[,-1])
+
+long25kb <- melt(K562_25kb_alldist)
+long25kb$variable <- as.character(long25kb$variable)
+long25kb$Transformation <- NA
+long25kb$Transformation[grep("_logdist", long25kb$variable)] <- rep("Log Distance", length(long25kb$variable[grep("_logdist", long25kb$variable)]))
+long25kb$Transformation[grep("_logdist", long25kb$variable, invert = TRUE)] <- rep("Distance", length(long25kb$variable[grep("_logdist", long25kb$variable, invert = TRUE)]))
+
+table(long25kb$Transformation)
+
+
+distdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("_dist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_dist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity25kb <- ggplot() + 
+  geom_density(data=long25kb[intersect(grep("logdist", long25kb$variable), grep("Average", long25kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long25kb[grep("Average_logdist", long25kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long25kb$value[long25kb$Transformation=="Distance"] <- long25kb$value[long25kb$Transformation=="Distance"]/1000000
+long25kb <- long25kb[grep("Average", long25kb$variable, invert = TRUE),]
+long25kb$variable <- factor(long25kb$variable)
+long25kb$Transformation <- factor(long25kb$Transformation)
+
+alldensity25kb_k562 <- ggplot(long25kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+
+###50kb
+
+```{r}
+K562_50kb <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+
+K562_50kb_ld <- K562_50kb[,c(1,grep("_dist", names(K562_50kb)))]
+
+###############
+#K562_50kb_ld <- K562_50kb_ld[,c(1:5)]
+###############
+
+K562_50kb_d <- K562_50kb_ld
+K562_50kb_d[,-1] <- exp(K562_50kb_ld[,-1]) - 1
+K562_50kb_d$Average_dist <- rowMeans(K562_50kb_d[,-1])
+
+K562_50kb_ld$Average_dist <- rowMeans(K562_50kb_ld[,-1])
+names(K562_50kb_ld)[-1] <- paste(substr(names(K562_50kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_50kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_50kb_alldist <- cbind.data.frame(K562_50kb_d[,-1], K562_50kb_ld[,-1])
+
+long50kb <- melt(K562_50kb_alldist)
+long50kb$variable <- as.character(long50kb$variable)
+long50kb$Transformation <- NA
+long50kb$Transformation[grep("_logdist", long50kb$variable)] <- rep("Log Distance", length(long50kb$variable[grep("_logdist", long50kb$variable)]))
+long50kb$Transformation[grep("_logdist", long50kb$variable, invert = TRUE)] <- rep("Distance", length(long50kb$variable[grep("_logdist", long50kb$variable, invert = TRUE)]))
+
+table(long50kb$Transformation)
+
+
+distdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("_dist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_dist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity50kb <- ggplot() + 
+  geom_density(data=long50kb[intersect(grep("logdist", long50kb$variable), grep("Average", long50kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long50kb[grep("Average_logdist", long50kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long50kb$value[long50kb$Transformation=="Distance"] <- long50kb$value[long50kb$Transformation=="Distance"]/1000000
+long50kb <- long50kb[grep("Average", long50kb$variable, invert = TRUE),]
+long50kb$variable <- factor(long50kb$variable)
+long50kb$Transformation <- factor(long50kb$Transformation)
+
+alldensity50kb_k562 <- ggplot(long50kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+  
+
+###100kb
+
+```{r}
+K562_100kb <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+
+K562_100kb_ld <- K562_100kb[,c(1,grep("_dist", names(K562_100kb)))]
+
+###############
+#K562_100kb_ld <- K562_100kb_ld[,c(1:5)]
+###############
+
+K562_100kb_d <- K562_100kb_ld
+K562_100kb_d[,-1] <- exp(K562_100kb_ld[,-1]) - 1
+K562_100kb_d$Average_dist <- rowMeans(K562_100kb_d[,-1])
+
+K562_100kb_ld$Average_dist <- rowMeans(K562_100kb_ld[,-1])
+names(K562_100kb_ld)[-1] <- paste(substr(names(K562_100kb_ld)[-1],
+                                           1, 
+                                           nchar(names(K562_100kb_ld)[-1])-4), 
+                                    "logdist", 
+                                    sep="")
+
+K562_100kb_alldist <- cbind.data.frame(K562_100kb_d[,-1], K562_100kb_ld[,-1])
+
+long100kb <- melt(K562_100kb_alldist)
+long100kb$variable <- as.character(long100kb$variable)
+long100kb$Transformation <- NA
+long100kb$Transformation[grep("_logdist", long100kb$variable)] <- rep("Log Distance", length(long100kb$variable[grep("_logdist", long100kb$variable)]))
+long100kb$Transformation[grep("_logdist", long100kb$variable, invert = TRUE)] <- rep("Distance", length(long100kb$variable[grep("_logdist", long100kb$variable, invert = TRUE)]))
+
+table(long100kb$Transformation)
+
+
+distdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("_dist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_dist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,2.5e+07) + 
+	ylab("")+ 
+  scale_x_continuous(limits = c(0,2.5e+07), labels = c("0.0e+00"="0", "5.0e+06"="5", "1e+07"="10", "1.5e+07"="15", "2.0e+07"="20", "2.0e+07"="25"))+
+	scale_fill_manual(values="red")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+logdistdensity100kb <- ggplot() + 
+  geom_density(data=long100kb[intersect(grep("logdist", long100kb$variable), grep("Average", long100kb$variable, invert = TRUE)),]
+               ,aes(x=value, 
+                    group=variable, 
+                    fill=Transformation), alpha=0.01, size=0.5) +
+  #geom_density(data=long100kb[grep("Average_logdist", long100kb$variable),]
+  #             ,aes(x=value), size = 1) +
+  geom_vline(xintercept=0, size=1)+
+  geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("")+ 
+	scale_fill_manual(values="blue")+
+		#labels=as.character(
+		#		unique(
+		#			sort(
+		#				as.numeric(
+		#					substr(as.character(domains$Chromosome),4,nchar(as.character(domains$Chromosome))))))),
+		#values=rainbow(22)) +
+	theme_minimal() +
+  guides(fill=FALSE)+
+  theme(axis.text.y = element_blank())
+  #theme(axis.line = element_line(color="black", size = .5))
+
+#rescaling nontransformed and combining two plots
+long100kb$value[long100kb$Transformation=="Distance"] <- long100kb$value[long100kb$Transformation=="Distance"]/1000000
+long100kb <- long100kb[grep("Average", long100kb$variable, invert = TRUE),]
+long100kb$variable <- factor(long100kb$variable)
+long100kb$Transformation <- factor(long100kb$Transformation)
+
+alldensity100kb_k562 <- ggplot(long100kb, aes(x=value, group=variable, fill=Transformation)) + 
+  geom_density(alpha=0.01) +
+  scale_fill_manual(name = "", labels = c("Untransformed", "Log2"), values = c("red", "blue")) +
+  guides(fill = guide_legend(override.aes = list(alpha=1)))+
+  #geom_vline(xintercept=0, size=1)+
+  #geom_hline(yintercept=0, size=1)+
+	xlab("") + 
+	xlim(0,25) + 
+	ylab("Density")+ 
+  ylim(0,.8)+
+  #ggtitle("GM12878") +
+  theme_minimal() +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+```
+
+##Combined
+
+```{r}
+#alldistplots <- grid.arrange(distdensity10kb, logdistdensity10kb,
+#             distdensity25kb, logdistdensity25kb,
+#             distdensity50kb, logdistdensity50kb,
+#             distdensity100kb, logdistdensity100kb, ncol=2, nrow=4)
+
+alldistplots <- ggarrange(alldensity10kb,
+                          alldensity10kb_k562,
+                          alldensity25kb,
+                          alldensity25kb_k562,
+                          alldensity50kb,
+                          alldensity50kb_k562,
+                          alldensity100kb,
+                          alldensity100kb_k562, 
+          ncol=2, 
+          nrow=4,
+          #labels = c("A","", "B","", "C","", "D",""),
+          legend = "bottom",
+          common.legend = TRUE)
+
+annotate_figure(alldistplots,
+                bottom = text_grob("Distance to Nearest TAD Boundary \n (in millions of basepairs)", 
+                                color = "black", 
+                                face = "bold", 
+                                size = 15),
+                left = text_grob("Density", 
+                                 color = "black",
+                                 size = 15,
+                                 rot = 90))
+```
+
