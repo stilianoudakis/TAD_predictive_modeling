@@ -39,6 +39,7 @@ library(DT)
 library(tidyverse)
 library(reshape)
 library(ROSE)
+library(lattice)
 
 ```
 
@@ -1699,7 +1700,369 @@ allirplots <- ggplot(allirdata, aes(x = Resolution, y = IR,fill = CL)) +
 ```
 
 
-#Evaluating Feature Engineering
+#Feature Engineering
+
+## Exploring Correlations
+
+###GM12878
+
+####10kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_10kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 10, hjust = 1),
+       axis.text.y = element_text(size = 10))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_10kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_10kb) #4595    4
+sigcorrs_gm12878_10kb[,3:4] <- round(sigcorrs_gm12878_10kb[,3:4], 4)
+sigcorrs_gm12878_10kb <- sigcorrs_gm12878_10kb[order(sigcorrs_gm12878_10kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_10kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_10kb) #21  4
+highcorrs_gm12878_10kb[,3:4] <- round(highcorrs_gm12878_10kb[,3:4], 2)
+highcorrs_gm12878_10kb <- highcorrs_gm12878_10kb[order(abs(highcorrs_gm12878_10kb$value), decreasing = TRUE),]
+
+
+#clustered heatmap
+clustcorplot_gm12878_10kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(12,9),     # widens margins around plot
+          #col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          keysize = 1) 
+```
+
+####25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_25kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 10, hjust = 1),
+       axis.text.y = element_text(size = 10))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_25kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_25kb) #4683    4
+sigcorrs_gm12878_25kb[,3:4] <- round(sigcorrs_gm12878_25kb[,3:4], 4)
+sigcorrs_gm12878_25kb <- sigcorrs_gm12878_25kb[order(sigcorrs_gm12878_25kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_25kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_25kb) #50  4
+highcorrs_gm12878_25kb[,3:4] <- round(highcorrs_gm12878_25kb[,3:4], 2)
+highcorrs_gm12878_25kb <- highcorrs_gm12878_25kb[order(abs(highcorrs_gm12878_25kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+clustcorplot_gm12878_25kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          #col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          keysize = 1) 
+```
+
+####50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_50kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 10, hjust = 1),
+       axis.text.y = element_text(size = 10))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_50kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_50kb) #
+sigcorrs_gm12878_50kb[,3:4] <- round(sigcorrs_gm12878_50kb[,3:4], 4)
+sigcorrs_gm12878_50kb <- sigcorrs_gm12878_50kb[order(sigcorrs_gm12878_50kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_50kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_50kb) #
+highcorrs_gm12878_50kb[,3:4] <- round(highcorrs_gm12878_50kb[,3:4], 2)
+highcorrs_gm12878_50kb <- highcorrs_gm12878_50kb[order(abs(highcorrs_gm12878_50kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+clustcorplot_gm12878_50kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          #col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          keysize = 1)
+```
+
+####100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_100kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 10, hjust = 1),
+       axis.text.y = element_text(size = 10))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_100kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_100kb) #4373    4
+sigcorrs_gm12878_100kb[,3:4] <- round(sigcorrs_gm12878_100kb[,3:4], 4)
+sigcorrs_gm12878_100kb <- sigcorrs_gm12878_100kb[order(sigcorrs_gm12878_100kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_100kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_100kb) #424   4
+highcorrs_gm12878_100kb[,3:4] <- round(highcorrs_gm12878_100kb[,3:4], 2)
+highcorrs_gm12878_100kb <- highcorrs_gm12878_100kb[order(abs(highcorrs_gm12878_100kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+clustcorplot_gm12878_100kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          #col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          keysize = 1)
+```
+
+###K562
+
+
 
 ## PR Curves
 
@@ -4494,6 +4857,1021 @@ ggarrange(rfeplot_None_25kb, rfeplot_None_50kb, rfeplot_None_100kb,
 
 ```
 
+## Evaluating Regularization
+
+### GM12878
+
+####10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_10kb_gm12878, 
+                      enetcoefs_none_op_10kb_gm12878, 
+                      enetcoefs_none_dist_10kb_gm12878,
+                      enetcoefs_RUS_oc_10kb_gm12878, 
+                      enetcoefs_RUS_op_10kb_gm12878, 
+                      enetcoefs_RUS_dist_10kb_gm12878,
+                      enetcoefs_ROS_oc_10kb_gm12878, 
+                      enetcoefs_ROS_op_10kb_gm12878, 
+                      enetcoefs_ROS_dist_10kb_gm12878,
+                      enetcoefs_SMOTE_oc_10kb_gm12878, 
+                      enetcoefs_SMOTE_op_10kb_gm12878, 
+                      enetcoefs_SMOTE_dist_10kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_10kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_10kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_10kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_10kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_25kb_gm12878, 
+                      enetcoefs_none_op_25kb_gm12878, 
+                      enetcoefs_none_dist_25kb_gm12878,
+                      enetcoefs_RUS_oc_25kb_gm12878, 
+                      enetcoefs_RUS_op_25kb_gm12878, 
+                      enetcoefs_RUS_dist_25kb_gm12878,
+                      enetcoefs_ROS_oc_25kb_gm12878, 
+                      enetcoefs_ROS_op_25kb_gm12878, 
+                      enetcoefs_ROS_dist_25kb_gm12878,
+                      enetcoefs_SMOTE_oc_25kb_gm12878, 
+                      enetcoefs_SMOTE_op_25kb_gm12878, 
+                      enetcoefs_SMOTE_dist_25kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_25kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_25kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_25kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_25kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_50kb_gm12878, 
+                      enetcoefs_none_op_50kb_gm12878, 
+                      enetcoefs_none_dist_50kb_gm12878,
+                      enetcoefs_RUS_oc_50kb_gm12878, 
+                      enetcoefs_RUS_op_50kb_gm12878, 
+                      enetcoefs_RUS_dist_50kb_gm12878,
+                      enetcoefs_ROS_oc_50kb_gm12878, 
+                      enetcoefs_ROS_op_50kb_gm12878, 
+                      enetcoefs_ROS_dist_50kb_gm12878,
+                      enetcoefs_SMOTE_oc_50kb_gm12878, 
+                      enetcoefs_SMOTE_op_50kb_gm12878, 
+                      enetcoefs_SMOTE_dist_50kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_50kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_50kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_50kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_50kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_100kb_gm12878, 
+                      enetcoefs_none_op_100kb_gm12878, 
+                      enetcoefs_none_dist_100kb_gm12878,
+                      enetcoefs_RUS_oc_100kb_gm12878, 
+                      enetcoefs_RUS_op_100kb_gm12878, 
+                      enetcoefs_RUS_dist_100kb_gm12878,
+                      enetcoefs_ROS_oc_100kb_gm12878, 
+                      enetcoefs_ROS_op_100kb_gm12878, 
+                      enetcoefs_ROS_dist_100kb_gm12878,
+                      enetcoefs_SMOTE_oc_100kb_gm12878, 
+                      enetcoefs_SMOTE_op_100kb_gm12878, 
+                      enetcoefs_SMOTE_dist_100kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_100kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_100kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_100kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_100kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####Combined
+
+```{r}
+all_featuremat_gm12878 <- cbind(featuremat_10kb,featuremat_25kb,featuremat_50kb,featuremat_100kb)
+levelplot(t(all_featuremat_gm12878), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45, cex=.5),
+                      alternating=3,
+                      y=list(cex=.7)), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 1.5, lty = "dashed");
+            panel.abline(v = 2.5, lty = "dashed");
+            panel.abline(v = 3.5);
+            panel.abline(v = 4.5, lty = "dashed");
+            panel.abline(v = 5.5, lty = "dashed");
+            panel.abline(v = 6.5);
+            panel.abline(v = 7.5, lty = "dashed");
+            panel.abline(v = 8.5, lty = "dashed");
+            panel.abline(v = 9.5);
+            panel.abline(v = 10.5, lty = "dashed");
+            panel.abline(v = 11.5, lty = "dashed");
+            panel.abline(v = 12.5, col="yellow");
+            panel.abline(v = 13.5, lty = "dashed");
+            panel.abline(v = 14.5, lty = "dashed");
+            panel.abline(v = 15.5);
+            panel.abline(v = 16.5, lty = "dashed");
+            panel.abline(v = 17.5, lty = "dashed");
+            panel.abline(v = 18.5);
+            panel.abline(v = 19.5, lty = "dashed");
+            panel.abline(v = 20.5, lty = "dashed");
+            panel.abline(v = 21.5);
+            panel.abline(v = 22.5, lty = "dashed");
+            panel.abline(v = 23.5, lty = "dashed");
+            panel.abline(v = 24.5, col="yellow");
+            panel.abline(v = 25.5, lty = "dashed");
+            panel.abline(v = 26.5, lty = "dashed");
+            panel.abline(v = 27.5);
+            panel.abline(v = 28.5, lty = "dashed");
+            panel.abline(v = 29.5, lty = "dashed");
+            panel.abline(v = 30.5);
+            panel.abline(v = 31.5, lty = "dashed");
+            panel.abline(v = 32.5, lty = "dashed");
+            panel.abline(v = 33.5);
+            panel.abline(v = 34.5, lty = "dashed");
+            panel.abline(v = 35.5, lty = "dashed");
+            panel.abline(v = 36.5, col="yellow");
+            panel.abline(v = 37.5, lty = "dashed");
+            panel.abline(v = 38.5, lty = "dashed");
+            panel.abline(v = 39.5);
+            panel.abline(v = 40.5, lty = "dashed");
+            panel.abline(v = 41.5, lty = "dashed");
+            panel.abline(v = 42.5);
+            panel.abline(v = 43.5, lty = "dashed");
+            panel.abline(v = 44.5, lty = "dashed");
+            panel.abline(v = 45.5);
+            panel.abline(v = 46.5, lty = "dashed");
+            panel.abline(v = 47.5, lty = "dashed");
+          },
+          xlab="",
+          ylab="")
+```
+
+### K562
+
+####10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_10kb_K562, 
+                      enetcoefs_none_op_10kb_K562, 
+                      enetcoefs_none_dist_10kb_K562,
+                      enetcoefs_RUS_oc_10kb_K562, 
+                      enetcoefs_RUS_op_10kb_K562, 
+                      enetcoefs_RUS_dist_10kb_K562,
+                      enetcoefs_ROS_oc_10kb_K562, 
+                      enetcoefs_ROS_op_10kb_K562, 
+                      enetcoefs_ROS_dist_10kb_K562,
+                      enetcoefs_SMOTE_oc_10kb_K562, 
+                      enetcoefs_SMOTE_op_10kb_K562, 
+                      enetcoefs_SMOTE_dist_10kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_10kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_10kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_10kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_10kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_25kb_K562, 
+                      enetcoefs_none_op_25kb_K562, 
+                      enetcoefs_none_dist_25kb_K562,
+                      enetcoefs_RUS_oc_25kb_K562, 
+                      enetcoefs_RUS_op_25kb_K562, 
+                      enetcoefs_RUS_dist_25kb_K562,
+                      enetcoefs_ROS_oc_25kb_K562, 
+                      enetcoefs_ROS_op_25kb_K562, 
+                      enetcoefs_ROS_dist_25kb_K562,
+                      enetcoefs_SMOTE_oc_25kb_K562, 
+                      enetcoefs_SMOTE_op_25kb_K562, 
+                      enetcoefs_SMOTE_dist_25kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_25kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_25kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_25kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_25kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_50kb_K562, 
+                      enetcoefs_none_op_50kb_K562, 
+                      enetcoefs_none_dist_50kb_K562,
+                      enetcoefs_RUS_oc_50kb_K562, 
+                      enetcoefs_RUS_op_50kb_K562, 
+                      enetcoefs_RUS_dist_50kb_K562,
+                      enetcoefs_ROS_oc_50kb_K562, 
+                      enetcoefs_ROS_op_50kb_K562, 
+                      enetcoefs_ROS_dist_50kb_K562,
+                      enetcoefs_SMOTE_oc_50kb_K562, 
+                      enetcoefs_SMOTE_op_50kb_K562, 
+                      enetcoefs_SMOTE_dist_50kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_50kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_50kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_50kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_50kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_100kb_K562, 
+                      enetcoefs_none_op_100kb_K562, 
+                      enetcoefs_none_dist_100kb_K562,
+                      enetcoefs_RUS_oc_100kb_K562, 
+                      enetcoefs_RUS_op_100kb_K562, 
+                      enetcoefs_RUS_dist_100kb_K562,
+                      enetcoefs_ROS_oc_100kb_K562, 
+                      enetcoefs_ROS_op_100kb_K562, 
+                      enetcoefs_ROS_dist_100kb_K562,
+                      enetcoefs_SMOTE_oc_100kb_K562, 
+                      enetcoefs_SMOTE_op_100kb_K562, 
+                      enetcoefs_SMOTE_dist_100kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_100kb <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_100kb[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_100kb), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+featuredf <- data.frame(featuremat_100kb)
+featuredf$Feature <- rownames(featuredf)
+rownames(featuredf) <- NULL
+featuredf <- featuredf[,c(13,1:12)]
+names(featuredf) <- c("Feature",
+                      "None.OC", "None.OP", "None.Distance",
+                      "RUS.OC", "RUS.OP", "RUS.Distance",
+                      "ROS.OC", "ROS.OP", "ROS.Distance",
+                      "SMOTE.OC", "SMOTE.OP", "SMOTE.Distance")
+
+x <- melt(featuredf, id.vars = 1)
+
+
+```
+
+####Combined
+
+```{r}
+all_featuremat_K562 <- cbind(featuremat_10kb,featuremat_25kb,featuremat_50kb,featuremat_100kb)
+levelplot(t(all_featuremat_K562), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45, cex=.5),
+                      alternating=3,
+                      y=list(cex=.7)), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 1.5, lty = "dashed");
+            panel.abline(v = 2.5, lty = "dashed");
+            panel.abline(v = 3.5);
+            panel.abline(v = 4.5, lty = "dashed");
+            panel.abline(v = 5.5, lty = "dashed");
+            panel.abline(v = 6.5);
+            panel.abline(v = 7.5, lty = "dashed");
+            panel.abline(v = 8.5, lty = "dashed");
+            panel.abline(v = 9.5);
+            panel.abline(v = 10.5, lty = "dashed");
+            panel.abline(v = 11.5, lty = "dashed");
+            panel.abline(v = 12.5, col="yellow");
+            panel.abline(v = 13.5, lty = "dashed");
+            panel.abline(v = 14.5, lty = "dashed");
+            panel.abline(v = 15.5);
+            panel.abline(v = 16.5, lty = "dashed");
+            panel.abline(v = 17.5, lty = "dashed");
+            panel.abline(v = 18.5);
+            panel.abline(v = 19.5, lty = "dashed");
+            panel.abline(v = 20.5, lty = "dashed");
+            panel.abline(v = 21.5);
+            panel.abline(v = 22.5, lty = "dashed");
+            panel.abline(v = 23.5, lty = "dashed");
+            panel.abline(v = 24.5, col="yellow");
+            panel.abline(v = 25.5, lty = "dashed");
+            panel.abline(v = 26.5, lty = "dashed");
+            panel.abline(v = 27.5);
+            panel.abline(v = 28.5, lty = "dashed");
+            panel.abline(v = 29.5, lty = "dashed");
+            panel.abline(v = 30.5);
+            panel.abline(v = 31.5, lty = "dashed");
+            panel.abline(v = 32.5, lty = "dashed");
+            panel.abline(v = 33.5);
+            panel.abline(v = 34.5, lty = "dashed");
+            panel.abline(v = 35.5, lty = "dashed");
+            panel.abline(v = 36.5, col="yellow");
+            panel.abline(v = 37.5, lty = "dashed");
+            panel.abline(v = 38.5, lty = "dashed");
+            panel.abline(v = 39.5);
+            panel.abline(v = 40.5, lty = "dashed");
+            panel.abline(v = 41.5, lty = "dashed");
+            panel.abline(v = 42.5);
+            panel.abline(v = 43.5, lty = "dashed");
+            panel.abline(v = 44.5, lty = "dashed");
+            panel.abline(v = 45.5);
+            panel.abline(v = 46.5, lty = "dashed");
+            panel.abline(v = 47.5, lty = "dashed");
+          },
+          xlab="",
+          ylab="")
+```
+
+
 
 #Barplots of performance metrics for models with distance-type predictors
 
@@ -5504,266 +6882,200 @@ informBA100kbplot <- ggplot(all100kbresults[which(all100kbresults$Metric=="Infor
 
 ```{r}
 
-performancetab <- data.frame(Performance = c(rep("F1-Score", 10),
-                                             rep("MCC", 10)),
-                             Resampling = rep(c("None",
-                                                "None",
-                                                "RUS",
-                                                "RUS",
-                                                "ROS",
-                                                "ROS",
-                                                "SMOTE",
-                                                "SMOTE",
-                                                "ROSE",
-                                                "ROSE"),2),
-                             CL = rep(c("GM12878", "K562"), 10)
-                             )
 
-performancetab$kb10 <- c(rfperf_gm12878_10kb_none[16,2],
-                         rfperf_K562_10kb_none[16,2],
-                         mean(rfperf_gm12878_10kb_rus[16,]),
-                         mean(rfperf_K562_10kb_rus[16,]),
-                         mean(rfperf_gm12878_10kb_ros[16,]),
-                         mean(rfperf_K562_10kb_ros[16,]),
-                         mean(rfperf_gm12878_10kb_smote[16,]),
-                         mean(rfperf_K562_10kb_smote[16,]),
-                         mean(rfperf_gm12878_10kb_rose[16,]),
-                         mean(rfperf_K562_10kb_rose[16,]),
-                         rfperf_gm12878_10kb_none[15,2],
-                         rfperf_K562_10kb_none[15,2],
-                         mean(rfperf_gm12878_10kb_rus[15,]),
-                         mean(rfperf_K562_10kb_rus[15,]),
-                         mean(rfperf_gm12878_10kb_ros[15,]),
-                         mean(rfperf_K562_10kb_ros[15,]),
-                         mean(rfperf_gm12878_10kb_smote[15,]),
-                         mean(rfperf_K562_10kb_smote[15,]),
-                         mean(rfperf_gm12878_10kb_rose[15,]),
-                         mean(rfperf_K562_10kb_rose[15,]))
-
-performancetab$kb25 <- c(rfperf_gm12878_25kb_none[16,2],
-                         rfperf_K562_25kb_none[16,2],
-                         mean(rfperf_gm12878_25kb_rus[16,]),
-                         mean(rfperf_K562_25kb_rus[16,]),
-                         mean(rfperf_gm12878_25kb_ros[16,]),
-                         mean(rfperf_K562_25kb_ros[16,]),
-                         mean(rfperf_gm12878_25kb_smote[16,]),
-                         mean(rfperf_K562_25kb_smote[16,]),
-                         mean(rfperf_gm12878_25kb_rose[16,]),
-                         mean(rfperf_K562_25kb_rose[16,]),
-                         rfperf_gm12878_25kb_none[15,2],
-                         rfperf_K562_25kb_none[15,2],
-                         mean(rfperf_gm12878_25kb_rus[15,]),
-                         mean(rfperf_K562_25kb_rus[15,]),
-                         mean(rfperf_gm12878_25kb_ros[15,]),
-                         mean(rfperf_K562_25kb_ros[15,]),
-                         mean(rfperf_gm12878_25kb_smote[15,]),
-                         mean(rfperf_K562_25kb_smote[15,]),
-                         mean(rfperf_gm12878_25kb_rose[15,]),
-                         mean(rfperf_K562_25kb_rose[15,]))
-
-performancetab$kb50 <- c(rfperf_gm12878_50kb_none[16,2],
-                         rfperf_K562_50kb_none[16,2],
-                         mean(rfperf_gm12878_50kb_rus[16,]),
-                         mean(rfperf_K562_50kb_rus[16,]),
-                         mean(rfperf_gm12878_50kb_ros[16,]),
-                         mean(rfperf_K562_50kb_ros[16,]),
-                         mean(rfperf_gm12878_50kb_smote[16,]),
-                         mean(rfperf_K562_50kb_smote[16,]),
-                         mean(rfperf_gm12878_50kb_rose[16,]),
-                         mean(rfperf_K562_50kb_rose[16,]),
-                         rfperf_gm12878_50kb_none[15,2],
-                         rfperf_K562_50kb_none[15,2],
-                         mean(rfperf_gm12878_50kb_rus[15,]),
-                         mean(rfperf_K562_50kb_rus[15,]),
-                         mean(rfperf_gm12878_50kb_ros[15,]),
-                         mean(rfperf_K562_50kb_ros[15,]),
-                         mean(rfperf_gm12878_50kb_smote[15,]),
-                         mean(rfperf_K562_50kb_smote[15,]),
-                         mean(rfperf_gm12878_50kb_rose[15,]),
-                         mean(rfperf_K562_50kb_rose[15,]))
-
-performancetab$kb100 <- c(rfperf_gm12878_100kb_none[16,2],
-                         rfperf_K562_100kb_none[16,2],
-                         mean(rfperf_gm12878_100kb_rus[16,]),
-                         mean(rfperf_K562_100kb_rus[16,]),
-                         mean(rfperf_gm12878_100kb_ros[16,]),
-                         mean(rfperf_K562_100kb_ros[16,]),
-                         mean(rfperf_gm12878_100kb_smote[16,]),
-                         mean(rfperf_K562_100kb_smote[16,]),
-                         mean(rfperf_gm12878_100kb_rose[16,]),
-                         mean(rfperf_K562_100kb_rose[16,]),
-                         rfperf_gm12878_100kb_none[15,2],
-                         rfperf_K562_100kb_none[15,2],
-                         mean(rfperf_gm12878_100kb_rus[15,]),
-                         mean(rfperf_K562_100kb_rus[15,]),
-                         mean(rfperf_gm12878_100kb_ros[15,]),
-                         mean(rfperf_K562_100kb_ros[15,]),
-                         mean(rfperf_gm12878_100kb_smote[15,]),
-                         mean(rfperf_K562_100kb_smote[15,]),
-                         mean(rfperf_gm12878_100kb_rose[15,]),
-                         mean(rfperf_K562_100kb_rose[15,]))
-
-performancetab[,4:7] <- round(performancetab[,4:7], 3)
 ```
 
 
 
 
 
-#Variable Importance Plots for distance predictors with ENET reduction
+#Variable Importance Plots 
 
-##5kb
-###Random Under-Sampling
+##10kb
+
+###None
+
 ```{r}
-rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/5kb/CHR1/rus/distance/enet/rfimpvars.rds")
+rfimpvars_gm12878_10kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/RFE/RF/rfimpvars.rds")
+rfimpvars_gm12878_10kb_none <- rfimpvars_gm12878_10kb_none[1:20,]
 
-rf5kb <- data.frame(Feature = as.character(rownames(rfimpvars)),
-					Importance = rowMeans(rfimpvars))
-rf5kb <- rf5kb[order(rf5kb$Importance, decreasing=TRUE),]
-rownames(rf) <- NULL
+rfimpvars_gm12878_10kb_none$Feature <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rfimpvars_gm12878_10kb_none$Feature)
 
-varimp.rf <- rf5kb$Importance
-Labels <- as.character(rf5kb$Feature)
-Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
-Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
-varimp.rf.df.5kb <- cbind.data.frame(Feature=as.character(Labels),
-                                 Importance=varimp.rf)
-varimp.rf.df.5kb$Feature <- as.character(varimp.rf.df.5kb$Feature)							 
-varimp.rf.df.5kb <-varimp.rf.df.5kb[order(varimp.rf.df.5kb$Importance),]
-varimp.rf.df.5kb <- varimp.rf.df.5kb[(dim(varimp.rf.df.5kb)[1]-14):dim(varimp.rf.df.5kb)[1],]
-varimp.rf.df.5kb$Feature <- factor(varimp.rf.df.5kb$Feature,
-                                     levels=as.character(varimp.rf.df.5kb$Feature))
+rfimpvars_gm12878_10kb_none$Feature <- factor(rfimpvars_gm12878_10kb_none$Feature, levels=rfimpvars_gm12878_10kb_none$Feature)
 
-p.rf.5kb <- ggplot(varimp.rf.df.5kb, aes(x=Feature, y=Importance)) +
-  xlab("Predictors") +
-  ylab("Importance") +
-  ggtitle("(A)") +
-  geom_bar(stat="identity", 
-           width=.5, 
-           position="dodge",
-           fill="red") +
-  theme_minimal() +
-  theme(axis.text=element_text(size=15),
-        axis.title=element_text(size=20,face="bold")) +
-  coord_flip() 
 
-  ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/5kb/p.rf.5kb.png")
+ggplot(rfimpvars_gm12878_10kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity") +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
 ```
+
+###ROS
+
+```{r}
+
+```
+
+
+###RUS
+
+###SMOTE
+
+###ROSE
+
+
 ##25kb
-###Random Under-Sampling
+
+###None
+
 ```{r}
-  rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/25kb/CHR1/rus/distance/enet/rfimpvars.rds")
+rfimpvars_gm12878_25kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/RFE/RF/rfimpvars.rds")
+rfimpvars_gm12878_25kb_none <- rfimpvars_gm12878_25kb_none[1:20,]
 
-rf <- data.frame(Feature = as.character(rownames(rfimpvars)),
-					Importance = rowMeans(rfimpvars))
-rf <- rf[order(rf$Importance, decreasing=TRUE),]
-rownames(rf) <- NULL
+rfimpvars_gm12878_25kb_none$Feature <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rfimpvars_gm12878_25kb_none$Feature)
 
-varimp.rf <- rf$Importance
-Labels <- as.character(rf$Feature)
-Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
-Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
-varimp.rf.df.25kb <- cbind.data.frame(Feature=as.character(Labels),
-                                 Importance=varimp.rf)
-varimp.rf.df.25kb$Feature <- as.character(varimp.rf.df.25kb$Feature)							 
-varimp.rf.df.25kb <-varimp.rf.df.25kb[order(varimp.rf.df.25kb$Importance),]
-varimp.rf.df.25kb <- varimp.rf.df.25kb[(dim(varimp.rf.df.25kb)[1]-14):dim(varimp.rf.df.25kb)[1],]
-varimp.rf.df.25kb$Feature <- factor(varimp.rf.df.25kb$Feature,
-                                     levels=as.character(varimp.rf.df.25kb$Feature))
+rfimpvars_gm12878_25kb_none$Feature <- factor(rfimpvars_gm12878_25kb_none$Feature, levels=rfimpvars_gm12878_25kb_none$Feature)
 
-p.rf.25kb <- ggplot(varimp.rf.df.25kb, aes(x=Feature, y=Importance)) +
-  xlab("Predictors") +
-  ylab("Importance") +
-  ggtitle("(B)") +
-  geom_bar(stat="identity", 
-           width=.5, 
-           position="dodge",
-           fill="blue") +
-  theme_minimal() +
-  theme(axis.text=element_text(size=15),
-        axis.title=element_text(size=20,face="bold")) +
-  coord_flip() 
 
-   ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/25kb/p.rf.25kb.png")
+ggplot(rfimpvars_gm12878_25kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity") +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
 ```
+
+
+###ROS
+
+###RUS
+
+###SMOTE
+
+###ROSE
+
 ##50kb
-###Random Under-Sampling
+
+###None
+
 ```{r}
-rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/50kb/CHR1/rus/distance/enet/rfimpvars.rds")
+rfimpvars_gm12878_50kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/RFE/RF/rfimpvars.rds")
+rfimpvars_gm12878_50kb_none <- rfimpvars_gm12878_50kb_none[1:20,]
 
-rf <- data.frame(Feature = as.character(rownames(rfimpvars)),
-					Importance = rowMeans(rfimpvars))
-rf <- rf[order(rf$Importance, decreasing=TRUE),]
-rownames(rf) <- NULL
+rfimpvars_gm12878_50kb_none$Feature <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rfimpvars_gm12878_50kb_none$Feature)
 
-varimp.rf <- rf$Importance
-Labels <- as.character(rf$Feature)
-Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
-Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
-varimp.rf.df.50kb <- cbind.data.frame(Feature=as.character(Labels),
-                                 Importance=varimp.rf)
-varimp.rf.df.50kb$Feature <- as.character(varimp.rf.df.50kb$Feature)							 
-varimp.rf.df.50kb <-varimp.rf.df.50kb[order(varimp.rf.df.50kb$Importance),]
-varimp.rf.df.50kb <- varimp.rf.df.50kb[(dim(varimp.rf.df.50kb)[1]-14):dim(varimp.rf.df.50kb)[1],]
-varimp.rf.df.50kb$Feature <- factor(varimp.rf.df.50kb$Feature,
-                                     levels=as.character(varimp.rf.df.50kb$Feature))
+rfimpvars_gm12878_50kb_none$Feature <- factor(rfimpvars_gm12878_50kb_none$Feature, levels=rfimpvars_gm12878_50kb_none$Feature)
 
-p.rf.50kb <- ggplot(varimp.rf.df.50kb, aes(x=Feature, y=Importance)) +
-  xlab("Predictors") +
-  ylab("Importance") +
-  ggtitle("(C)") +
-  geom_bar(stat="identity", 
-           width=.5, 
-           position="dodge",
-           fill="green") +
-  theme_minimal() +
-  theme(axis.text=element_text(size=15),
-        axis.title=element_text(size=20,face="bold")) +
-  coord_flip() 
 
-   ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/50kb/p.rf.50kb.png")
+ggplot(rfimpvars_gm12878_50kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity") +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
 ```
+
+
+###ROS
+
+###RUS
+
+###SMOTE
+
+###ROSE
+
+
 ##100kb
-###Random Under-Sampling
+
+###None
 ```{r}
-rfimpvars <- readRDS("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/RData/GM12878/100kb/CHR1/rus/distance/enet/rfimpvars.rds")
+rfimpvars_gm12878_100kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/RFE/RF/rfimpvars.rds")
+rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[1:20,]
 
-rf <- data.frame(Feature = as.character(rownames(rfimpvars)),
-					Importance = rowMeans(rfimpvars))
-rf <- rf[order(rf$Importance, decreasing=TRUE),]
-rownames(rf) <- NULL
+rfimpvars_gm12878_100kb_none$Feature <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rfimpvars_gm12878_100kb_none$Feature)
 
-varimp.rf <- rf$Importance
-Labels <- as.character(rf$Feature)
-Labels[grep("Gm12878-", Labels)] <- gsub("Gm12878-","",Labels[grep("Gm12878-", Labels)])
-Labels[grep("_dist", Labels)] <- gsub("_dist","",Labels[grep("_dist", Labels)])
-varimp.rf.df.100kb <- cbind.data.frame(Feature=as.character(Labels),
-                                 Importance=varimp.rf)
-varimp.rf.df.100kb$Feature <- as.character(varimp.rf.df.100kb$Feature)							 
-varimp.rf.df.100kb <-varimp.rf.df.100kb[order(varimp.rf.df.100kb$Importance),]
-#varimp.rf.df.100kb <- varimp.rf.df.100kb[(dim(varimp.rf.df.100kb)[1]-14):dim(varimp.rf.df.100kb)[1],]
-varimp.rf.df.100kb$Feature <- factor(varimp.rf.df.100kb$Feature,
-                                     levels=as.character(varimp.rf.df.100kb$Feature))
+rfimpvars_gm12878_100kb_none$Feature <- factor(rfimpvars_gm12878_100kb_none$Feature, levels=rfimpvars_gm12878_100kb_none$Feature)
 
-p.rf.100kb <- ggplot(varimp.rf.df.100kb, aes(x=Feature, y=Importance)) +
-  xlab("Predictors") +
-  ylab("Importance") +
-  ggtitle("(D)") +
-  geom_bar(stat="identity", 
-           width=.5, 
-           position="dodge",
-           fill="orange") +
-  theme_minimal() +
-  theme(axis.text=element_text(size=15),
-        axis.title=element_text(size=20,face="bold")) +
-  coord_flip() 
-  
-   ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/100kb/p.rf.100kb.png")
 
-allvarimps <- ggarrange(p.rf.5kb,p.rf.25kb,p.rf.50kb,p.rf.100kb, ncol=2, nrow=2)
-
-ggsave("C:/Users/Spiro Stilianoudakis/Documents/TAD_data/results/GM12878/allvarimps.png")
+ggplot(rfimpvars_gm12878_100kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity") +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
 ```
+
+
+###ROS
+
+###RUS
+
+###SMOTE
+
+###ROSE
+
 
 #Network Analysis
 
