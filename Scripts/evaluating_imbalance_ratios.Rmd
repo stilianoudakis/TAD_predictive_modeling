@@ -1,0 +1,825 @@
+---
+title: "Evaluating Class Imbalance"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+
+```
+
+#Evaluating Imbalance Ratios
+##GM12878
+###10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x10 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p10kb <- ggplot(x10, aes(y=IR, x=factor(CB, levels = unique(x10$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+###25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x25 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p25kb <- ggplot(x25, aes(y=IR, x=factor(CB, levels = unique(x25$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+###50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x50 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p50kb <- ggplot(x50, aes(y=IR, x=factor(CB, levels = unique(x50$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+###100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x100 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p100kb <- ggplot(x100, aes(y=IR, x=factor(CB, levels = unique(x100$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```		
+
+##K562
+###10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x10_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p10kb_k562 <- ggplot(x10_k562, aes(y=IR, x=factor(CB, levels = unique(x10_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+###25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x25_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p25kb_k562 <- ggplot(x25_k562, aes(y=IR, x=factor(CB, levels = unique(x25_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+###50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x50_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p50kb_k562 <- ggplot(x50_k562, aes(y=IR, x=factor(CB, levels = unique(x50_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+###100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+test <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/test.rds")
+
+set.seed(123)
+sampids <- sample(which(train$y=="No"),
+                        length(which(train$y=="Yes")),
+                        replace = FALSE)
+data.rus <- rbind.data.frame(train[which(train$y=="Yes"),],
+                           train[sampids,])
+		
+set.seed(123)		
+sampids <- sample(which(train$y=="Yes"),
+                        length(which(train$y=="No")),
+                        replace = TRUE)
+data.ros <- rbind.data.frame(train[which(train$y=="No"),],
+                           train[sampids,])
+						   
+set.seed(123)
+data.sm <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+names(train)[-1] <- gsub("-","_",names(train)[-1])
+data.rose <- ROSE(y ~ ., data=train,seed=1,p=0.5)$data
+					 
+#set.seed(123)
+#n <- 1000
+#nr <- nrow(train)
+#splitdat <- split(train, rep(1:ceiling(nr/n), each=n, length.out=nr))
+#meds <- max(unlist(lapply(splitdat, function(x){length(which(x$y=="Yes"))})))
+#medoids <- list(as.numeric(),length(splitdat))
+#for(i in 1:length(splitdat)){
+#  print(i)
+#  data <- splitdat[[i]]
+#  majority <- data[which(data$y=="No"),-1]
+#  minnum <- length(which(data$y=="Yes"))
+# 
+#  pam.med <- pam(majority, k = minnum, diss = FALSE,
+#                 metric = "manhattan", 
+#                 #medoids = NULL, 
+#                 #stand = FALSE, 
+#                 cluster.only = FALSE,
+#                 do.swap = TRUE,
+#                 keep.diss = FALSE,
+#                 keep.data = FALSE,
+#                 pamonce = FALSE, trace.lev = 2)
+#  
+#  medoids[[i]] <- as.numeric(rownames(pam.med$medoids))
+#  
+#}
+#medoids <- unlist(medoids)
+#data.km <- rbind.data.frame(train[which(as.numeric(rownames(train)) %in% medoids),],
+#                               train[which(train$y=="Yes"),])
+
+x100_k562 <- data.frame(IR = c((length(train$y[which(train$y=="Yes")])+length(test$y[which(test$y=="Yes")]))/(length(train$y[which(train$y=="No")])+length(test$y[which(test$y=="No")])), 
+					  length(train$y[which(train$y=="Yes")])/length(train$y[which(train$y=="No")]),
+					  length(test$y[which(test$y=="Yes")])/length(test$y[which(test$y=="No")]),
+					  length(data.rus$y[which(data.rus$y=="Yes")])/length(data.rus$y[which(data.rus$y=="No")]),
+					  length(data.ros$y[which(data.ros$y=="Yes")])/length(data.ros$y[which(data.ros$y=="No")]),
+					  length(data.sm$y[which(data.sm$y=="Yes")])/length(data.sm$y[which(data.sm$y=="No")]),
+					  length(data.rose$y[which(data.rose$y=="Yes")])/length(data.rose$y[which(data.rose$y=="No")])),
+					  #length(data.km$y[which(data.km$y=="No")]), 
+					  #length(data.km$y[which(data.km$y=="Yes")])),
+			    CB = c("Complete",
+					   "Train",
+					   "Test",
+					   "Under-Sampling",
+					   "Over-Sampling",
+					   "SMOTE",
+					   "ROSE"))
+
+p100kb_k562 <- ggplot(x100_k562, aes(y=IR, x=factor(CB, levels = unique(x100_k562$CB)))) + 
+  geom_bar( stat="identity") +
+  ylab("Imbalance Ratio")+
+  xlab("")+
+  #ylim(0, 30000)+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15, 
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        #axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)) 
+
+```
+
+
+##Combined
+```{r}
+
+IR=c(x10$IR[x10$CB=="Complete"],
+                              x25$IR[x25$CB=="Complete"],
+                              x50$IR[x50$CB=="Complete"],
+                              x100$IR[x100$CB=="Complete"],
+                              x10_k562$IR[x10_k562$CB=="Complete"], 
+                              x25_k562$IR[x25_k562$CB=="Complete"],
+                              x50_k562$IR[x50_k562$CB=="Complete"],
+                              x100_k562$IR[x100_k562$CB=="Complete"])
+CL <- c(rep("GM12878", 4), 
+                  rep("K562", 4))
+Resolution <- c(rep(c("10 kb", "25 kb", "50 kb", "100 kb"), 2))
+
+allirdata <- cbind.data.frame(IR, CL, Resolution)
+allirdata$CL <- factor(allirdata$CL, levels=c("GM12878", "K562"))
+allirdata$Resolution <- factor(allirdata$Resolution, c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+
+allirplots <- ggplot(allirdata, aes(x = Resolution, y = IR,fill = CL)) + 
+  geom_bar(position = "dodge", stat="identity") + 
+  ylab("Imbalance Ratio") +
+  xlab("Resolution") +
+  #scale_fill_manual(name="Cell Line", values=c("red", "blue"))+
+  labs(fill="Cell Line")+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=10),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+
+```
