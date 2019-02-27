@@ -1,28 +1,4 @@
 
-
-- use term "annotation" consistently
-- discuss area under precision recall curve more: how it should look, how to interpret, etc
-- describe error bars for rfe plots in legend
-- cluster heatmaps by row
-- change color of heatmaps (make lighter red)
-- use cell line instead of cell type
-- how to formulate barplots and corresponding table:
-   + separate plots by performance metric
-   + two bars for each cell line
-   + x axis for each plot is sampling technique
-   + separate table by metric
-
-- specify how same tfbs from different institutions was handled (discuss in meeting)
-+ discuss area under precision recall curve more: how it should look, how to interpret, etc
-    - I still couldn't find a good explanation
-- describe error bars for rfe plots in legend
-- cluster heatmaps by row
-- change color of heatmaps (make lighter red)
-
-Questions:
-- Cell line or cell type?
-- how to formulate barplots and corresponding table?
-
 - Check if we can adapt F-racing strategy: Dal Pozzolo, Andrea, Olivier Caelen, Serge Waterschoot, and Gianluca Bontempi. “Racing for Unbalanced Methods Selection.” In International Conference on Intelligent Data Engineering and Automated Learning, 24–31. Springer, 2013. - F-racing strategy to select best performing method to deal with class imbalance. Overview of class imbalance techniques, including SMOTE, Ensemble methods. The F-Racing approach tests in parallel a set of alternatives and uses Friedman test to determine if an alternative is significantly worse than others.Random Forest and SMOTEnsemble generally perform best. race R package to perform F-racing algorithm https://cran.r-project.org/web/packages/race/index.html
 
 
