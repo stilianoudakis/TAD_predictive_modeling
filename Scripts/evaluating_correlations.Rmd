@@ -1,0 +1,847 @@
+---
+title: "Exploring Feature Engineering"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+
+```
+
+#Feature Engineering
+
+## Exploring Correlations
+
+###GM12878
+
+####10kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_10kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_10kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_10kb) #4595    4
+sigcorrs_gm12878_10kb[,3:4] <- round(sigcorrs_gm12878_10kb[,3:4], 4)
+sigcorrs_gm12878_10kb <- sigcorrs_gm12878_10kb[order(sigcorrs_gm12878_10kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_10kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_10kb) #21  4
+highcorrs_gm12878_10kb[,3:4] <- round(highcorrs_gm12878_10kb[,3:4], 2)
+highcorrs_gm12878_10kb <- highcorrs_gm12878_10kb[order(abs(highcorrs_gm12878_10kb$value), decreasing = TRUE),]
+
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_gm12878_10kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5) 
+```
+
+####25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_25kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_25kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_25kb) #4683    4
+sigcorrs_gm12878_25kb[,3:4] <- round(sigcorrs_gm12878_25kb[,3:4], 4)
+sigcorrs_gm12878_25kb <- sigcorrs_gm12878_25kb[order(sigcorrs_gm12878_25kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_25kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_25kb) #50  4
+highcorrs_gm12878_25kb[,3:4] <- round(highcorrs_gm12878_25kb[,3:4], 2)
+highcorrs_gm12878_25kb <- highcorrs_gm12878_25kb[order(abs(highcorrs_gm12878_25kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_gm12878_25kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5) 
+```
+
+####50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_50kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_50kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_50kb) #
+sigcorrs_gm12878_50kb[,3:4] <- round(sigcorrs_gm12878_50kb[,3:4], 4)
+sigcorrs_gm12878_50kb <- sigcorrs_gm12878_50kb[order(sigcorrs_gm12878_50kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_50kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_50kb) #
+highcorrs_gm12878_50kb[,3:4] <- round(highcorrs_gm12878_50kb[,3:4], 2)
+highcorrs_gm12878_50kb <- highcorrs_gm12878_50kb[order(abs(highcorrs_gm12878_50kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_gm12878_50kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5)
+```
+
+####100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_gm12878_100kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_gm12878_100kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_gm12878_100kb) #4373    4
+sigcorrs_gm12878_100kb[,3:4] <- round(sigcorrs_gm12878_100kb[,3:4], 4)
+sigcorrs_gm12878_100kb <- sigcorrs_gm12878_100kb[order(sigcorrs_gm12878_100kb$pvals, decreasing = FALSE),]
+
+highcorrs_gm12878_100kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_gm12878_100kb) #424   4
+highcorrs_gm12878_100kb[,3:4] <- round(highcorrs_gm12878_100kb[,3:4], 2)
+highcorrs_gm12878_100kb <- highcorrs_gm12878_100kb[order(abs(highcorrs_gm12878_100kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_gm12878_100kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5)
+```
+
+###K562
+
+####10kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_K562_10kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+pvals <- pvals[-which(rownames(pvals) == "Znf274"), -which(colnames(pvals) == "Znf274")]
+
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.0000000000),] #remove main daigonal
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_K562_10kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_K562_10kb) #4595    4
+sigcorrs_K562_10kb[,3:4] <- round(sigcorrs_K562_10kb[,3:4], 4)
+sigcorrs_K562_10kb <- sigcorrs_K562_10kb[order(sigcorrs_K562_10kb$pvals, decreasing = FALSE),]
+
+highcorrs_K562_10kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_K562_10kb) #21  4
+highcorrs_K562_10kb[,3:4] <- round(highcorrs_K562_10kb[,3:4], 2)
+highcorrs_K562_10kb <- highcorrs_K562_10kb[order(abs(highcorrs_K562_10kb$value), decreasing = TRUE),]
+
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_K562_10kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5) 
+```
+
+####25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_K562_25kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+pvals <- pvals[-which(rownames(pvals) == "Znf274"), -which(colnames(pvals) == "Znf274")]
+
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_K562_25kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_K562_25kb) #4683    4
+sigcorrs_K562_25kb[,3:4] <- round(sigcorrs_K562_25kb[,3:4], 4)
+sigcorrs_K562_25kb <- sigcorrs_K562_25kb[order(sigcorrs_K562_25kb$pvals, decreasing = FALSE),]
+
+highcorrs_K562_25kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_K562_25kb) #50  4
+highcorrs_K562_25kb[,3:4] <- round(highcorrs_K562_25kb[,3:4], 2)
+highcorrs_K562_25kb <- highcorrs_K562_25kb[order(abs(highcorrs_K562_25kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_K562_25kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5) 
+```
+
+####50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_K562_50kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+pvals <- pvals[-which(rownames(pvals) == "Znf274"), -which(colnames(pvals) == "Znf274")]
+
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_K562_50kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_K562_50kb) #
+sigcorrs_K562_50kb[,3:4] <- round(sigcorrs_K562_50kb[,3:4], 4)
+sigcorrs_K562_50kb <- sigcorrs_K562_50kb[order(sigcorrs_K562_50kb$pvals, decreasing = FALSE),]
+
+highcorrs_K562_50kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_K562_50kb) #
+highcorrs_K562_50kb[,3:4] <- round(highcorrs_K562_50kb[,3:4], 2)
+highcorrs_K562_50kb <- highcorrs_K562_50kb[order(abs(highcorrs_K562_50kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_K562_50kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5)
+```
+
+####100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad)
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+
+get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+reorder_cormat <- function(cormat){
+# Use correlation between variables as distance
+dd <- as.dist((1-cormat)/2)
+hc <- hclust(dd)
+cormat <-cormat[hc$order, hc$order]
+}
+
+cormat_reorder <- reorder_cormat(cormat)
+
+upper_tri_reorder <- get_upper_tri(cormat_reorder)
+
+melted_cormat_reorder <- melt(upper_tri_reorder, na.rm = TRUE)
+
+corplot_K562_100kb <- ggplot(data = melted_cormat_reorder, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+ ylab("") +
+ xlab("") +  
+ theme_minimal()+ 
+ theme_bw()+
+ guides(fill=FALSE)+
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 5, hjust = 1),
+       axis.text.y = element_text(size = 5))
+ #coord_fixed()
+
+pvals <- rcorr(as.matrix(binswtad))$P
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+pvals <- pvals[-which(rownames(pvals) == "Znf274"), -which(colnames(pvals) == "Znf274")]
+
+upper_tri_pvals <- get_upper_tri(pvals) 
+melted_pvals <- melt(upper_tri_pvals, na.rm = TRUE)
+melted_cormat2 <- melted_cormat[-which(melted_cormat$value==1.00000000),]
+melted_cormat2$pvals <- melted_pvals$value
+
+#find significant correlations
+sigcorrs_K562_100kb <- melted_cormat2[which(melted_cormat2$pvals<=.05),]
+dim(sigcorrs_K562_100kb) #4373    4
+sigcorrs_K562_100kb[,3:4] <- round(sigcorrs_K562_100kb[,3:4], 4)
+sigcorrs_K562_100kb <- sigcorrs_K562_100kb[order(sigcorrs_K562_100kb$pvals, decreasing = FALSE),]
+
+highcorrs_K562_100kb <- melted_cormat2[which(melted_cormat2$value > 0.70 | melted_cormat2$value < (-0.70)),] 
+dim(highcorrs_K562_100kb) #424   4
+highcorrs_K562_100kb[,3:4] <- round(highcorrs_K562_100kb[,3:4], 2)
+highcorrs_K562_100kb <- highcorrs_K562_100kb[order(abs(highcorrs_K562_100kb$value), decreasing = TRUE),]
+
+#clustered heatmap
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+clustcorplot_K562_100kb <- heatmap.2(cormat,
+          #cellnote = cormat,  # same data set for cell labels
+          main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(6,6),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #breaks=col_breaks,    # enable color transition at specified limits
+          dendrogram="row",     # only draw a row dendrogram
+          key=FALSE,
+          keysize = 1,
+          cexRow = .5,
+          cexCol = .5)
+```
