@@ -87,3 +87,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 - Wei, Qiong, and Roland L. Dunbrack. “The Role of Balanced Training and Testing Data Sets for Binary Classifiers in Bioinformatics.” Edited by Iddo Friedberg. PLoS ONE 8, no. 7 (July 9, 2013): e67863. https://doi.org/10.1371/journal.pone.0067863. - Training set should be balanced, tested set stays as-is, unbalanced.
 
+
+## Misc
+
+- Idea that TAD boundaries may not be created equal. Huang, Jialiang, Kailong Li, Wenqing Cai, Xin Liu, Yuannyu Zhang, Stuart H. Orkin, Jian Xu, and Guo-Cheng Yuan. “Dissecting Super-Enhancer Hierarchy Based on Chromatin Interactions.” Nature Communications 9, no. 1 (05 2018): 943. https://doi.org/10.1038/s41467-018-03279-9. - Enhancers can be separated into super- (SE) and regular (RE) enhancers, SE further classified into hub and nonhub based on Hi-C interaction frequency. ROSE to identify enhancers from H3K27ac peaks. Characterization of SEs  - broader. Characterization of hubs - enriched in CTCF, cohesin, disease-associated variants, 
+
