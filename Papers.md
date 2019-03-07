@@ -49,6 +49,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Prediction, general
 
+- Haibo He, and E.A. Garcia. “Learning from Imbalanced Data.” IEEE Transactions on Knowledge and Data Engineering 21, no. 9 (September 2009): 1263–84. https://doi.org/10.1109/TKDE.2008.239. - Class imbalance comprehensive review. Approaches (random under-/oversampling, SMOTE, others). Assessment metrics for imbalanced class learning. Disadvantages of ROC curves and advantages of PR curves (J. Davis, M. Goadrich, "The Relationship between Precision-Recall and ROC Curves", Proc. Int’l Conf. Machine Learning). 
+
 - When the data is unbalanced, standard machine learning algorithms tend to be overwhelmed by the majority class, http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.711.8214
 
 - C. Drummond, R. Holte, et al. C4. 5, class imbalance, and cost sensitivity: why under-sampling beats over-sampling. In Workshop on Learning from Imbalanced Datasets II. Citeseer, 2003
