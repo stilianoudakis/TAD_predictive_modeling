@@ -5,7 +5,7 @@ output: pdf_document
 
 **Supplementary Table 4. Hi-C Data.** A complete list of the Hi-C data libraries used to obtain the locations of topologically associating domains.
 
-**Supplementary Table 1. Genomic Annotations.** A complete list of the genomic annotations used to build the feature space for all downstream models. The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Available Cell Type" - the name of the cell type in which the annotation was available, "Cell Type-Specific Source" - download URL specific to the cell line (not all annotations were provided by the same institutions). [??? Did you use only features common to both cell lines?; !!!clarified, need to discuss further]
+**Supplementary Table 1. Genomic Annotations.** A complete list of the genomic annotations used to build the feature space for all downstream models. The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Available Cell Type" - the name of the cell type in which the annotation was available, "Cell Type-Specific Source" - download URL specific to the cell line (not all annotations were provided by the same institutions). 
 
 **Supplementary Figure 1. Distance Densities across cell lines and resolutions.** Density curves of distances (in millions of base pairs) from genomic bins to flanked TAD boundaries for 10 kb (A), 25 kb (B), 50 kb (C), and 100 kb (D) data resolutions across the GM12878 (left column) and K562 (right column) cell lines. The untransformed distance densities are filled in red, while the $log_{2}$ tranformed distance densities are filled in blue.
 
