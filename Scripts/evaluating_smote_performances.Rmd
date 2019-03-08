@@ -1,0 +1,460 @@
+---
+title: "Comparing top performing models"
+author: "Spiro Stilianoudakis"
+date: "March 8, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+
+```
+
+# Comparing models with distance type predictors
+
+## SMOTE
+
+### GM12878
+
+```{r}
+
+###10kb
+rfperf_gm12878_10kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_gm12878_25kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_gm12878_50kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_gm12878_100kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### K562
+
+```{r}
+
+###10kb
+rfperf_k562_10kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_k562_25kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_k562_50kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_k562_100kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### Combined F1 and MCC and balanced acc
+
+```{r}
+all_smote_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_smote_dist[16,2],
+                                              rfperf_gm12878_10kb_smote_dist[15,2],
+                                              (rfperf_gm12878_10kb_smote_dist[6,2] + rfperf_gm12878_10kb_smote_dist[7,2])/2,
+                                              rfperf_gm12878_25kb_smote_dist[16,2],
+                                              rfperf_gm12878_25kb_smote_dist[15,2],
+                                              (rfperf_gm12878_25kb_smote_dist[6,2] + rfperf_gm12878_25kb_smote_dist[7,2])/2,
+                                              rfperf_gm12878_50kb_smote_dist[16,2],
+                                              rfperf_gm12878_50kb_smote_dist[15,2],
+                                              (rfperf_gm12878_50kb_smote_dist[6,2] + rfperf_gm12878_50kb_smote_dist[7,2])/2,
+                                              rfperf_gm12878_100kb_smote_dist[16,2],
+                                              rfperf_gm12878_100kb_smote_dist[15,2],
+                                              (rfperf_gm12878_100kb_smote_dist[6,2] + rfperf_gm12878_100kb_smote_dist[7,2])/2,
+                                              rfperf_k562_10kb_smote_dist[16,2],
+                                              rfperf_k562_10kb_smote_dist[15,2],
+                                              (rfperf_k562_10kb_smote_dist[6,2] + rfperf_k562_10kb_smote_dist[7,2])/2,
+                                              rfperf_k562_25kb_smote_dist[16,2],
+                                              rfperf_k562_25kb_smote_dist[15,2],
+                                              (rfperf_k562_25kb_smote_dist[6,2] + rfperf_k562_25kb_smote_dist[7,2])/2,
+                                              rfperf_k562_50kb_smote_dist[16,2],
+                                              rfperf_k562_50kb_smote_dist[15,2],
+                                              (rfperf_k562_50kb_smote_dist[6,2] + rfperf_k562_50kb_smote_dist[7,2])/2,
+                                              rfperf_k562_100kb_smote_dist[16,2],
+                                              rfperf_k562_100kb_smote_dist[15,2],
+                                              (rfperf_k562_100kb_smote_dist[6,2] + rfperf_k562_100kb_smote_dist[7,2])/2),
+                              CL = c(rep("GM12878", 12),
+                                     rep("K562", 12)),
+                              Resolution = rep(c(rep("10 kb", 3),
+                                             rep("25 kb", 3),
+                                             rep("50 kb", 3),
+                                             rep("100 kb", 3)), 2),
+                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
+
+all_smote_perfs$CL <- factor(all_smote_perfs$CL, levels=c("GM12878", "K562"))
+all_smote_perfs$Resolution <- factor(all_smote_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_smote_perfs$Metric <- factor(all_smote_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
+
+ggplot(all_smote_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
+  geom_line(aes(linetype=CL))+
+  geom_point(aes(shape=CL))+
+  facet_grid(~ Metric)+
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15
+	                                 #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+	                                 ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+
+## None
+
+### GM12878
+
+```{r}
+
+###10kb
+rfperf_gm12878_10kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_gm12878_25kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_gm12878_50kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_gm12878_100kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### K562
+
+```{r}
+
+###10kb
+rfperf_k562_10kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_k562_25kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_k562_50kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_k562_100kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### Combined F1 and MCC and balanced acc
+
+```{r}
+all_None_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_None_dist[16,2],
+                                              rfperf_gm12878_10kb_None_dist[15,2],
+                                              (rfperf_gm12878_10kb_None_dist[6,2] + rfperf_gm12878_10kb_None_dist[7,2])/2,
+                                              rfperf_gm12878_25kb_None_dist[16,2],
+                                              rfperf_gm12878_25kb_None_dist[15,2],
+                                              (rfperf_gm12878_25kb_None_dist[6,2] + rfperf_gm12878_25kb_None_dist[7,2])/2,
+                                              rfperf_gm12878_50kb_None_dist[16,2],
+                                              rfperf_gm12878_50kb_None_dist[15,2],
+                                              (rfperf_gm12878_50kb_None_dist[6,2] + rfperf_gm12878_50kb_None_dist[7,2])/2,
+                                              rfperf_gm12878_100kb_None_dist[16,2],
+                                              rfperf_gm12878_100kb_None_dist[15,2],
+                                              (rfperf_gm12878_100kb_None_dist[6,2] + rfperf_gm12878_100kb_None_dist[7,2])/2,
+                                              rfperf_k562_10kb_None_dist[16,2],
+                                              rfperf_k562_10kb_None_dist[15,2],
+                                              (rfperf_k562_10kb_None_dist[6,2] + rfperf_k562_10kb_None_dist[7,2])/2,
+                                              rfperf_k562_25kb_None_dist[16,2],
+                                              rfperf_k562_25kb_None_dist[15,2],
+                                              (rfperf_k562_25kb_None_dist[6,2] + rfperf_k562_25kb_None_dist[7,2])/2,
+                                              rfperf_k562_50kb_None_dist[16,2],
+                                              rfperf_k562_50kb_None_dist[15,2],
+                                              (rfperf_k562_50kb_None_dist[6,2] + rfperf_k562_50kb_None_dist[7,2])/2,
+                                              rfperf_k562_100kb_None_dist[16,2],
+                                              rfperf_k562_100kb_None_dist[15,2],
+                                              (rfperf_k562_100kb_None_dist[6,2] + rfperf_k562_100kb_None_dist[7,2])/2),
+                              CL = c(rep("GM12878", 12),
+                                     rep("K562", 12)),
+                              Resolution = rep(c(rep("10 kb", 3),
+                                             rep("25 kb", 3),
+                                             rep("50 kb", 3),
+                                             rep("100 kb", 3)), 2),
+                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
+
+all_None_perfs$CL <- factor(all_None_perfs$CL, levels=c("GM12878", "K562"))
+all_None_perfs$Resolution <- factor(all_None_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_None_perfs$Metric <- factor(all_None_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
+
+ggplot(all_None_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
+  geom_line(aes(linetype=CL))+
+  geom_point(aes(shape=CL))+
+  facet_grid(~ Metric)+
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15
+	                                 #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+	                                 ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+
+##ROS
+
+### GM12878
+
+```{r}
+
+###10kb
+rfperf_gm12878_10kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_gm12878_25kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_gm12878_50kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_gm12878_100kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### K562
+
+```{r}
+
+###10kb
+rfperf_k562_10kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_k562_25kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_k562_50kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_k562_100kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### Combined F1 and MCC and balanced acc
+
+```{r}
+all_ROS_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_ROS_dist[16,2],
+                                              rfperf_gm12878_10kb_ROS_dist[15,2],
+                                              (rfperf_gm12878_10kb_ROS_dist[6,2] + rfperf_gm12878_10kb_ROS_dist[7,2])/2,
+                                              rfperf_gm12878_25kb_ROS_dist[16,2],
+                                              rfperf_gm12878_25kb_ROS_dist[15,2],
+                                              (rfperf_gm12878_25kb_ROS_dist[6,2] + rfperf_gm12878_25kb_ROS_dist[7,2])/2,
+                                              rfperf_gm12878_50kb_ROS_dist[16,2],
+                                              rfperf_gm12878_50kb_ROS_dist[15,2],
+                                              (rfperf_gm12878_50kb_ROS_dist[6,2] + rfperf_gm12878_50kb_ROS_dist[7,2])/2,
+                                              rfperf_gm12878_100kb_ROS_dist[16,2],
+                                              rfperf_gm12878_100kb_ROS_dist[15,2],
+                                              (rfperf_gm12878_100kb_ROS_dist[6,2] + rfperf_gm12878_100kb_ROS_dist[7,2])/2,
+                                              rfperf_k562_10kb_ROS_dist[16,2],
+                                              rfperf_k562_10kb_ROS_dist[15,2],
+                                              (rfperf_k562_10kb_ROS_dist[6,2] + rfperf_k562_10kb_ROS_dist[7,2])/2,
+                                              rfperf_k562_25kb_ROS_dist[16,2],
+                                              rfperf_k562_25kb_ROS_dist[15,2],
+                                              (rfperf_k562_25kb_ROS_dist[6,2] + rfperf_k562_25kb_ROS_dist[7,2])/2,
+                                              rfperf_k562_50kb_ROS_dist[16,2],
+                                              rfperf_k562_50kb_ROS_dist[15,2],
+                                              (rfperf_k562_50kb_ROS_dist[6,2] + rfperf_k562_50kb_ROS_dist[7,2])/2,
+                                              rfperf_k562_100kb_ROS_dist[16,2],
+                                              rfperf_k562_100kb_ROS_dist[15,2],
+                                              (rfperf_k562_100kb_ROS_dist[6,2] + rfperf_k562_100kb_ROS_dist[7,2])/2),
+                              CL = c(rep("GM12878", 12),
+                                     rep("K562", 12)),
+                              Resolution = rep(c(rep("10 kb", 3),
+                                             rep("25 kb", 3),
+                                             rep("50 kb", 3),
+                                             rep("100 kb", 3)), 2),
+                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
+
+all_ROS_perfs$CL <- factor(all_ROS_perfs$CL, levels=c("GM12878", "K562"))
+all_ROS_perfs$Resolution <- factor(all_ROS_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_ROS_perfs$Metric <- factor(all_ROS_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
+
+ggplot(all_ROS_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
+  geom_line(aes(linetype=CL))+
+  geom_point(aes(shape=CL))+
+  facet_grid(~ Metric)+
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15
+	                                 #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+	                                 ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+##RUS
+
+### GM12878
+
+```{r}
+
+###10kb
+rfperf_gm12878_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_gm12878_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_gm12878_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_gm12878_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### K562
+
+```{r}
+
+###10kb
+rfperf_k562_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+###25kb
+rfperf_k562_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+###50kb
+rfperf_k562_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+###100kb
+rfperf_k562_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+### Combined F1 and MCC and balanced acc
+
+```{r}
+all_RUS_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_RUS_dist[16,2],
+                                              rfperf_gm12878_10kb_RUS_dist[15,2],
+                                              (rfperf_gm12878_10kb_RUS_dist[6,2] + rfperf_gm12878_10kb_RUS_dist[7,2])/2,
+                                              rfperf_gm12878_25kb_RUS_dist[16,2],
+                                              rfperf_gm12878_25kb_RUS_dist[15,2],
+                                              (rfperf_gm12878_25kb_RUS_dist[6,2] + rfperf_gm12878_25kb_RUS_dist[7,2])/2,
+                                              rfperf_gm12878_50kb_RUS_dist[16,2],
+                                              rfperf_gm12878_50kb_RUS_dist[15,2],
+                                              (rfperf_gm12878_50kb_RUS_dist[6,2] + rfperf_gm12878_50kb_RUS_dist[7,2])/2,
+                                              rfperf_gm12878_100kb_RUS_dist[16,2],
+                                              rfperf_gm12878_100kb_RUS_dist[15,2],
+                                              (rfperf_gm12878_100kb_RUS_dist[6,2] + rfperf_gm12878_100kb_RUS_dist[7,2])/2,
+                                              rfperf_k562_10kb_RUS_dist[16,2],
+                                              rfperf_k562_10kb_RUS_dist[15,2],
+                                              (rfperf_k562_10kb_RUS_dist[6,2] + rfperf_k562_10kb_RUS_dist[7,2])/2,
+                                              rfperf_k562_25kb_RUS_dist[16,2],
+                                              rfperf_k562_25kb_RUS_dist[15,2],
+                                              (rfperf_k562_25kb_RUS_dist[6,2] + rfperf_k562_25kb_RUS_dist[7,2])/2,
+                                              rfperf_k562_50kb_RUS_dist[16,2],
+                                              rfperf_k562_50kb_RUS_dist[15,2],
+                                              (rfperf_k562_50kb_RUS_dist[6,2] + rfperf_k562_50kb_RUS_dist[7,2])/2,
+                                              rfperf_k562_100kb_RUS_dist[16,2],
+                                              rfperf_k562_100kb_RUS_dist[15,2],
+                                              (rfperf_k562_100kb_RUS_dist[6,2] + rfperf_k562_100kb_RUS_dist[7,2])/2),
+                              CL = c(rep("GM12878", 12),
+                                     rep("K562", 12)),
+                              Resolution = rep(c(rep("10 kb", 3),
+                                             rep("25 kb", 3),
+                                             rep("50 kb", 3),
+                                             rep("100 kb", 3)), 2),
+                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
+
+all_RUS_perfs$CL <- factor(all_RUS_perfs$CL, levels=c("GM12878", "K562"))
+all_RUS_perfs$Resolution <- factor(all_RUS_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_RUS_perfs$Metric <- factor(all_RUS_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
+
+ggplot(all_RUS_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
+  geom_line(aes(linetype=CL))+
+  geom_point(aes(shape=CL))+
+  facet_grid(~ Metric)+
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Cell Line")+
+  #guides(fill=FALSE)+
+	theme(axis.text.x = element_text(size=15
+	                                 #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+	                                 ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+
+```{r}
+ggarrange(p.none, p.ros, p.rus, 
+          ncol=1, nrow=3, 
+          common.legend = TRUE, 
+          legend="bottom",
+          labels="AUTO",
+          font.label = list(size=20))
+```
+
