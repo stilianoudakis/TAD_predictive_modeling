@@ -203,10 +203,11 @@ all_rfperfs_gm12878_10kb$Metric <- factor(all_rfperfs_gm12878_10kb$Metric, level
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_gm12878_10kb[which(all_rfperfs_gm12878_10kb$Metric=="F1-Score" |
-                                               all_rfperfs_gm12878_10kb$Metric=="MCC"),],
+                                               all_rfperfs_gm12878_10kb$Metric=="MCC" |
+                                        all_rfperfs_gm12878_10kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -225,27 +226,6 @@ ggplot(all_rfperfs_gm12878_10kb[which(all_rfperfs_gm12878_10kb$Metric=="F1-Score
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
-
-ggplot(all_rfperfs_gm12878_10kb[which(all_rfperfs_gm12878_10kb$Metric=="Informedness" |
-                                               all_rfperfs_gm12878_10kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
 
 ```
 
@@ -401,10 +381,11 @@ all_rfperfs_gm12878_25kb$Metric <- factor(all_rfperfs_gm12878_25kb$Metric, level
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_gm12878_25kb[which(all_rfperfs_gm12878_25kb$Metric=="F1-Score" |
-                                               all_rfperfs_gm12878_25kb$Metric=="MCC"),],
+                                               all_rfperfs_gm12878_25kb$Metric=="MCC" |
+                                        all_rfperfs_gm12878_25kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -423,27 +404,7 @@ ggplot(all_rfperfs_gm12878_25kb[which(all_rfperfs_gm12878_25kb$Metric=="F1-Score
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
 
-ggplot(all_rfperfs_gm12878_25kb[which(all_rfperfs_gm12878_25kb$Metric=="Informedness" |
-                                               all_rfperfs_gm12878_25kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
 
 ```
 
@@ -599,10 +560,11 @@ all_rfperfs_gm12878_50kb$Metric <- factor(all_rfperfs_gm12878_50kb$Metric, level
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_gm12878_50kb[which(all_rfperfs_gm12878_50kb$Metric=="F1-Score" |
-                                               all_rfperfs_gm12878_50kb$Metric=="MCC"),],
+                                               all_rfperfs_gm12878_50kb$Metric=="MCC" |
+                                        all_rfperfs_gm12878_50kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -621,27 +583,7 @@ ggplot(all_rfperfs_gm12878_50kb[which(all_rfperfs_gm12878_50kb$Metric=="F1-Score
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
 
-ggplot(all_rfperfs_gm12878_50kb[which(all_rfperfs_gm12878_50kb$Metric=="Informedness" |
-                                               all_rfperfs_gm12878_50kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
 
 ```
 
@@ -796,10 +738,11 @@ all_rfperfs_gm12878_100kb$Metric <- factor(all_rfperfs_gm12878_100kb$Metric, lev
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_gm12878_100kb[which(all_rfperfs_gm12878_100kb$Metric=="F1-Score" |
-                                               all_rfperfs_gm12878_100kb$Metric=="MCC"),],
+                                               all_rfperfs_gm12878_100kb$Metric=="MCC" |
+                                         all_rfperfs_gm12878_100kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -818,27 +761,7 @@ ggplot(all_rfperfs_gm12878_100kb[which(all_rfperfs_gm12878_100kb$Metric=="F1-Sco
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
 
-ggplot(all_rfperfs_gm12878_100kb[which(all_rfperfs_gm12878_100kb$Metric=="Informedness" |
-                                               all_rfperfs_gm12878_100kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
 
 ```
 
@@ -997,10 +920,11 @@ all_rfperfs_K562_10kb$Metric <- factor(all_rfperfs_K562_10kb$Metric, levels = c(
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_K562_10kb[which(all_rfperfs_K562_10kb$Metric=="F1-Score" |
-                                               all_rfperfs_K562_10kb$Metric=="MCC"),],
+                                               all_rfperfs_K562_10kb$Metric=="MCC" |
+                                     all_rfperfs_K562_10kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -1019,27 +943,6 @@ ggplot(all_rfperfs_K562_10kb[which(all_rfperfs_K562_10kb$Metric=="F1-Score" |
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
-
-ggplot(all_rfperfs_K562_10kb[which(all_rfperfs_K562_10kb$Metric=="Informedness" |
-                                               all_rfperfs_K562_10kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
 
 ```
 
@@ -1195,10 +1098,11 @@ all_rfperfs_K562_25kb$Metric <- factor(all_rfperfs_K562_25kb$Metric, levels = c(
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_K562_25kb[which(all_rfperfs_K562_25kb$Metric=="F1-Score" |
-                                               all_rfperfs_K562_25kb$Metric=="MCC"),],
+                                               all_rfperfs_K562_25kb$Metric=="MCC" |
+                                     all_rfperfs_K562_25kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -1217,27 +1121,6 @@ ggplot(all_rfperfs_K562_25kb[which(all_rfperfs_K562_25kb$Metric=="F1-Score" |
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
-
-ggplot(all_rfperfs_K562_25kb[which(all_rfperfs_K562_25kb$Metric=="Informedness" |
-                                               all_rfperfs_K562_25kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
 
 ```
 
@@ -1393,10 +1276,11 @@ all_rfperfs_K562_50kb$Metric <- factor(all_rfperfs_K562_50kb$Metric, levels = c(
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_K562_50kb[which(all_rfperfs_K562_50kb$Metric=="F1-Score" |
-                                               all_rfperfs_K562_50kb$Metric=="MCC"),],
+                                               all_rfperfs_K562_50kb$Metric=="MCC" |
+                                     all_rfperfs_K562_50kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -1415,27 +1299,7 @@ ggplot(all_rfperfs_K562_50kb[which(all_rfperfs_K562_50kb$Metric=="F1-Score" |
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
 
-ggplot(all_rfperfs_K562_50kb[which(all_rfperfs_K562_50kb$Metric=="Informedness" |
-                                               all_rfperfs_K562_50kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
 
 ```
 
@@ -1590,10 +1454,11 @@ all_rfperfs_K562_100kb$Metric <- factor(all_rfperfs_K562_100kb$Metric, levels = 
                                                                                       "Informedness",
                                                                                       "Balanced Acc"))
 
-#comparing only f1 and mcc
+#comparing only f1 and mcc and balanced acc
 
 ggplot(all_rfperfs_K562_100kb[which(all_rfperfs_K562_100kb$Metric=="F1-Score" |
-                                               all_rfperfs_K562_100kb$Metric=="MCC"),],
+                                               all_rfperfs_K562_100kb$Metric=="MCC" |
+                                      all_rfperfs_K562_100kb$Metric=="Balanced Acc"),],
                        aes(x=Resampling, y=Performance, fill=Predictor)) +
   geom_bar( stat="identity", position="dodge") +
   facet_grid(~ Metric) +
@@ -1612,27 +1477,17 @@ ggplot(all_rfperfs_K562_100kb[which(all_rfperfs_K562_100kb$Metric=="F1-Score" |
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
-#comparing only informedness and balanced acc
 
-ggplot(all_rfperfs_K562_100kb[which(all_rfperfs_K562_100kb$Metric=="Informedness" |
-                                               all_rfperfs_K562_100kb$Metric=="Balanced Acc"),],
-                       aes(x=Resampling, y=Performance, fill=Predictor)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid(~ Metric) +
-  xlab("Resampling Technique") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Predictor Type")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+```
 
+```{r}
+
+
+ggarrange(p25, p25.2, p50, p50.2, p100, p100.2, 
+          ncol=2, nrow=3, 
+          common.legend = TRUE, 
+          legend = "bottom", 
+          labels = c("A", "D", "B", "E", "C", "F"), 
+          font.label = list(size=20))
 ```
 
