@@ -40,6 +40,9 @@ library(tidyverse)
 library(reshape)
 library(ROSE)
 library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
 
 ```
 
@@ -844,4 +847,319 @@ clustcorplot_K562_100kb <- heatmap.2(cormat,
           keysize = 1,
           cexRow = .5,
           cexCol = .5)
+```
+
+## Using corrplot function
+
+### GM12878
+
+#### 10kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+#### 25kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+#### 50kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+
+
+corrplot(cormat, 
+         type="lower", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+#### 100kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+
+
+corrplot(cormat, 
+         type="lower", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+### K562
+
+#### 10kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .3,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+#### 25kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .3,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+#### 50kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+
+corrplot(cormat, 
+         type="lower", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .3,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+#### 100kb
+
+```{r}
+
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+
+binswtad <- train[which(train$y=="Yes"),]
+binswtad <- binswtad[,grep("count", names(binswtad))]
+
+names(binswtad) <- gsub(paste(c("K562",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", names(binswtad))
+
+
+cormat <- cor(binswtad, method = "spearman")
+#remove Znf274 columns
+#(no counts in flanked tad regions)
+#therefore the corelation will be NA with all other features
+cormat <- cormat[-which(rownames(cormat) == "Znf274"), -which(colnames(cormat) == "Znf274")]
+
+
+corrplot(cormat, 
+         type="lower", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .3,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
 ```
