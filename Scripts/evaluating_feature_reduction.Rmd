@@ -1,0 +1,1232 @@
+---
+title: "Evaluating Regularization"
+author: "Spiro Stilianoudakis"
+date: "March 7, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+
+```
+
+
+### GM12878
+
+####10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_10kb_gm12878, 
+                      enetcoefs_none_op_10kb_gm12878, 
+                      enetcoefs_none_dist_10kb_gm12878,
+                      enetcoefs_RUS_oc_10kb_gm12878, 
+                      enetcoefs_RUS_op_10kb_gm12878, 
+                      enetcoefs_RUS_dist_10kb_gm12878,
+                      enetcoefs_ROS_oc_10kb_gm12878, 
+                      enetcoefs_ROS_op_10kb_gm12878, 
+                      enetcoefs_ROS_dist_10kb_gm12878,
+                      enetcoefs_SMOTE_oc_10kb_gm12878, 
+                      enetcoefs_SMOTE_op_10kb_gm12878, 
+                      enetcoefs_SMOTE_dist_10kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_10kb_gm12878 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_10kb_gm12878[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_10kb_gm12878), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+```
+
+####25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_25kb_gm12878, 
+                      enetcoefs_none_op_25kb_gm12878, 
+                      enetcoefs_none_dist_25kb_gm12878,
+                      enetcoefs_RUS_oc_25kb_gm12878, 
+                      enetcoefs_RUS_op_25kb_gm12878, 
+                      enetcoefs_RUS_dist_25kb_gm12878,
+                      enetcoefs_ROS_oc_25kb_gm12878, 
+                      enetcoefs_ROS_op_25kb_gm12878, 
+                      enetcoefs_ROS_dist_25kb_gm12878,
+                      enetcoefs_SMOTE_oc_25kb_gm12878, 
+                      enetcoefs_SMOTE_op_25kb_gm12878, 
+                      enetcoefs_SMOTE_dist_25kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_25kb_gm12878 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_25kb_gm12878[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_25kb_gm12878), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+```
+
+####50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_50kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_50kb_gm12878, 
+                      enetcoefs_none_op_50kb_gm12878, 
+                      enetcoefs_none_dist_50kb_gm12878,
+                      enetcoefs_RUS_oc_50kb_gm12878, 
+                      enetcoefs_RUS_op_50kb_gm12878, 
+                      enetcoefs_RUS_dist_50kb_gm12878,
+                      enetcoefs_ROS_oc_50kb_gm12878, 
+                      enetcoefs_ROS_op_50kb_gm12878, 
+                      enetcoefs_ROS_dist_50kb_gm12878,
+                      enetcoefs_SMOTE_oc_50kb_gm12878, 
+                      enetcoefs_SMOTE_op_50kb_gm12878, 
+                      enetcoefs_SMOTE_dist_50kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_50kb_gm12878 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_50kb_gm12878[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_50kb_gm12878), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+```
+
+####100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_100kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_100kb_gm12878, 
+                      enetcoefs_none_op_100kb_gm12878, 
+                      enetcoefs_none_dist_100kb_gm12878,
+                      enetcoefs_RUS_oc_100kb_gm12878, 
+                      enetcoefs_RUS_op_100kb_gm12878, 
+                      enetcoefs_RUS_dist_100kb_gm12878,
+                      enetcoefs_ROS_oc_100kb_gm12878, 
+                      enetcoefs_ROS_op_100kb_gm12878, 
+                      enetcoefs_ROS_dist_100kb_gm12878,
+                      enetcoefs_SMOTE_oc_100kb_gm12878, 
+                      enetcoefs_SMOTE_op_100kb_gm12878, 
+                      enetcoefs_SMOTE_dist_100kb_gm12878)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_100kb_gm12878 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_100kb_gm12878[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_100kb_gm12878), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+
+```
+
+####Combined
+
+```{r}
+all_featuremat_gm12878 <- cbind(featuremat_10kb_gm12878,
+                                featuremat_25kb_gm12878,
+                                featuremat_50kb_gm12878,
+                                featuremat_100kb_gm12878)
+all_featuremat_gm12878 <- all_featuremat_gm12878[,c(seq(1,48,3),
+                                                    seq(2,48,3),
+                                                    seq(3,48,3))]
+colnames(all_featuremat_gm12878) <- rep(c("None", "RUS", "ROS", "SMOTE"), 12)
+
+levelplot(t(all_featuremat_gm12878), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45, cex=.5),
+                      #alternating=3,
+                      y=list(cex=.5)), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+			#horizontal lines
+			panel.abline(h = 1.5);
+			panel.abline(h = 2.5);
+			panel.abline(h = 3.5);
+			panel.abline(h = 4.5);
+			panel.abline(h = 5.5);
+			panel.abline(h = 6.5);
+			panel.abline(h = 7.5);
+			panel.abline(h = 8.5);
+			panel.abline(h = 9.5);
+			panel.abline(h = 10.5);
+			panel.abline(h = 11.5);
+			panel.abline(h = 12.5);
+			panel.abline(h = 13.5);
+			panel.abline(h = 14.5);
+			panel.abline(h = 15.5);
+			panel.abline(h = 16.5);
+			panel.abline(h = 17.5);
+			panel.abline(h = 18.5);
+			panel.abline(h = 19.5);
+			panel.abline(h = 20.5);
+			panel.abline(h = 21.5);
+			panel.abline(h = 22.5);
+			panel.abline(h = 23.5);
+			panel.abline(h = 24.5);
+			panel.abline(h = 25.5);
+			panel.abline(h = 26.5);
+			panel.abline(h = 27.5);
+			panel.abline(h = 28.5);
+			panel.abline(h = 29.5);
+			panel.abline(h = 30.5);
+			panel.abline(h = 31.5);
+			panel.abline(h = 32.5);
+			panel.abline(h = 33.5);
+			panel.abline(h = 34.5);
+			panel.abline(h = 35.5);
+			panel.abline(h = 36.5);
+			panel.abline(h = 37.5);
+			panel.abline(h = 38.5);
+			panel.abline(h = 39.5);
+			panel.abline(h = 40.5);
+			panel.abline(h = 41.5);
+			panel.abline(h = 42.5);
+			panel.abline(h = 43.5);
+			panel.abline(h = 44.5);
+			panel.abline(h = 45.5);
+			panel.abline(h = 46.5);
+			panel.abline(h = 47.5);
+			panel.abline(h = 48.5);
+			panel.abline(h = 49.5);
+			panel.abline(h = 50.5);
+			panel.abline(h = 50.5);
+			panel.abline(h = 51.5);
+			panel.abline(h = 52.5);
+			panel.abline(h = 53.5);
+			panel.abline(h = 54.5);
+			panel.abline(h = 55.5);
+			panel.abline(h = 56.5);
+			panel.abline(h = 57.5);
+			panel.abline(h = 58.5);
+			panel.abline(h = 59.5);
+			panel.abline(h = 60.5);
+			panel.abline(h = 61.5);
+			panel.abline(h = 62.5);
+			panel.abline(h = 63.5);
+			panel.abline(h = 64.5);
+			panel.abline(h = 65.5);
+			panel.abline(h = 66.5);
+			panel.abline(h = 67.5);
+			panel.abline(h = 68.5);
+			panel.abline(h = 69.5);
+			panel.abline(h = 70.5);
+			panel.abline(h = 71.5);
+			panel.abline(h = 72.5);
+			panel.abline(h = 73.5);
+			panel.abline(h = 74.5);
+			panel.abline(h = 75.5);
+			panel.abline(h = 76.5);
+			panel.abline(h = 77.5);
+			panel.abline(h = 78.5);
+			panel.abline(h = 79.5);
+			panel.abline(h = 80.5);
+			panel.abline(h = 81.5);
+			panel.abline(h = 82.5);
+			panel.abline(h = 83.5);
+			panel.abline(h = 84.5);
+			panel.abline(h = 85.5);
+			panel.abline(h = 86.5);
+			panel.abline(h = 87.5);
+			panel.abline(h = 88.5);
+			panel.abline(h = 89.5);
+			panel.abline(h = 90.5);
+			panel.abline(h = 91.5);
+			panel.abline(h = 92.5);
+			panel.abline(h = 93.5);
+			panel.abline(h = 94.5);
+			panel.abline(h = 95.5);
+			panel.abline(h = 96.5);
+			panel.abline(h = 97.5);
+			panel.abline(h = 98.5);
+			panel.abline(h = 99.5);
+			panel.abline(h = 100.5);
+			panel.abline(h = 101.5);
+			panel.abline(h = 102.5);
+			panel.abline(h = 103.5);
+			
+			#vertical lines
+            panel.abline(v = 1.5);
+            panel.abline(v = 2.5);
+            panel.abline(v = 3.5);
+            panel.abline(v = 4.5);
+            panel.abline(v = 5.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 7.5);
+            panel.abline(v = 8.5);
+            panel.abline(v = 9.5);
+            panel.abline(v = 10.5);
+            panel.abline(v = 11.5);
+            panel.abline(v = 12.5);
+            panel.abline(v = 13.5);
+            panel.abline(v = 14.5);
+            panel.abline(v = 15.5);
+            panel.abline(v = 16.5, col="yellow");
+            panel.abline(v = 17.5);
+            panel.abline(v = 18.5);
+            panel.abline(v = 19.5);
+            panel.abline(v = 20.5);
+            panel.abline(v = 21.5);
+            panel.abline(v = 22.5);
+            panel.abline(v = 23.5);
+            panel.abline(v = 24.5);
+            panel.abline(v = 25.5);
+            panel.abline(v = 26.5);
+            panel.abline(v = 27.5);
+            panel.abline(v = 28.5);
+            panel.abline(v = 29.5);
+            panel.abline(v = 30.5);
+            panel.abline(v = 31.5);
+            panel.abline(v = 32.5, col="yellow");
+            panel.abline(v = 33.5);
+            panel.abline(v = 34.5);
+            panel.abline(v = 35.5);
+            panel.abline(v = 36.5);
+            panel.abline(v = 37.5);
+            panel.abline(v = 38.5);
+            panel.abline(v = 39.5);
+            panel.abline(v = 40.5);
+            panel.abline(v = 41.5);
+            panel.abline(v = 42.5);
+            panel.abline(v = 43.5);
+            panel.abline(v = 44.5);
+            panel.abline(v = 45.5);
+            panel.abline(v = 46.5);
+            panel.abline(v = 47.5);
+          },
+          xlab="",
+          ylab="")
+```
+
+### K562
+
+####10kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_10kb_K562, 
+                      enetcoefs_none_op_10kb_K562, 
+                      enetcoefs_none_dist_10kb_K562,
+                      enetcoefs_RUS_oc_10kb_K562, 
+                      enetcoefs_RUS_op_10kb_K562, 
+                      enetcoefs_RUS_dist_10kb_K562,
+                      enetcoefs_ROS_oc_10kb_K562, 
+                      enetcoefs_ROS_op_10kb_K562, 
+                      enetcoefs_ROS_dist_10kb_K562,
+                      enetcoefs_SMOTE_oc_10kb_K562, 
+                      enetcoefs_SMOTE_op_10kb_K562, 
+                      enetcoefs_SMOTE_dist_10kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_10kb_k562 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_10kb_k562[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_10kb_k562), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+```
+
+####25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_25kb_K562, 
+                      enetcoefs_none_op_25kb_K562, 
+                      enetcoefs_none_dist_25kb_K562,
+                      enetcoefs_RUS_oc_25kb_K562, 
+                      enetcoefs_RUS_op_25kb_K562, 
+                      enetcoefs_RUS_dist_25kb_K562,
+                      enetcoefs_ROS_oc_25kb_K562, 
+                      enetcoefs_ROS_op_25kb_K562, 
+                      enetcoefs_ROS_dist_25kb_K562,
+                      enetcoefs_SMOTE_oc_25kb_K562, 
+                      enetcoefs_SMOTE_op_25kb_K562, 
+                      enetcoefs_SMOTE_dist_25kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_25kb_k562 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_25kb_k562[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_25kb_k562), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+```
+
+####50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_50kb_K562, 
+                      enetcoefs_none_op_50kb_K562, 
+                      enetcoefs_none_dist_50kb_K562,
+                      enetcoefs_RUS_oc_50kb_K562, 
+                      enetcoefs_RUS_op_50kb_K562, 
+                      enetcoefs_RUS_dist_50kb_K562,
+                      enetcoefs_ROS_oc_50kb_K562, 
+                      enetcoefs_ROS_op_50kb_K562, 
+                      enetcoefs_ROS_dist_50kb_K562,
+                      enetcoefs_SMOTE_oc_50kb_K562, 
+                      enetcoefs_SMOTE_op_50kb_K562, 
+                      enetcoefs_SMOTE_dist_50kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_50kb_k562 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_50kb_k562[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_50kb_k562), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+```
+
+####100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_none_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_none_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/enetcoefs.rds")
+
+#RUS
+##OC
+enetcoefs_RUS_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_RUS_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_RUS_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/enetcoefs.rds")
+
+#ROS
+##OC
+enetcoefs_ROS_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_ROS_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_ROS_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/enetcoefs.rds")
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/ENET/enetcoefs.rds")
+##OP
+enetcoefs_SMOTE_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/ENET/enetcoefs.rds")
+##Distance
+enetcoefs_SMOTE_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+
+enetcoefslist <- list(enetcoefs_none_oc_100kb_K562, 
+                      enetcoefs_none_op_100kb_K562, 
+                      enetcoefs_none_dist_100kb_K562,
+                      enetcoefs_RUS_oc_100kb_K562, 
+                      enetcoefs_RUS_op_100kb_K562, 
+                      enetcoefs_RUS_dist_100kb_K562,
+                      enetcoefs_ROS_oc_100kb_K562, 
+                      enetcoefs_ROS_op_100kb_K562, 
+                      enetcoefs_ROS_dist_100kb_K562,
+                      enetcoefs_SMOTE_oc_100kb_K562, 
+                      enetcoefs_SMOTE_op_100kb_K562, 
+                      enetcoefs_SMOTE_dist_100kb_K562)
+
+enetcoefslist <- lapply(enetcoefslist, function(x){gsub(paste(c("_dist", "_perc", "_count"), collapse = "|"), "", x)})
+
+featuremat_100kb_k562 <- array(NA, dim=c(length(features),12), dimnames = list("Features"=features,
+                                                                    "Predictor Type"=rep(c("OC",
+                                                                                         "OP", 
+                                                                                         "Distance"),4)))
+
+
+for(j in 1:length(enetcoefslist)){
+    featuremat_100kb_k562[,j] <- ifelse(features %in% enetcoefslist[[j]], 1, 0)
+}
+
+#using lattice
+levelplot(t(featuremat_100kb_k562), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45),
+                      alternating=3), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+            panel.abline(v = 3.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 9.5);
+          },
+          xlab="",
+          ylab="")
+grid.text("None",x=unit(.27,"npc"),y=unit(.95, "npc"))
+grid.text("RUS",x=unit(.43,"npc"),y=unit(.95, "npc"))
+grid.text("ROS",x=unit(.59,"npc"),y=unit(.95, "npc"))
+grid.text("SMOTE",x=unit(.75,"npc"),y=unit(.95, "npc"))
+
+
+
+```
+
+####Combined
+
+```{r}
+all_featuremat_k562 <- cbind(featuremat_10kb_k562,
+                                featuremat_25kb_k562,
+                                featuremat_50kb_k562,
+                                featuremat_100kb_k562)
+all_featuremat_k562 <- all_featuremat_k562[,c(seq(1,48,3),
+                                                    seq(2,48,3),
+                                                    seq(3,48,3))]
+colnames(all_featuremat_k562) <- rep(c("None", "RUS", "ROS", "SMOTE"), 12)
+
+levelplot(t(all_featuremat_k562), 
+          colorkey=FALSE, 
+          scales=list(x=list(rot=45, cex=.5),
+                      #alternating=3,
+                      y=list(cex=.5)), 
+          col.regions=c("white", "red"),
+          aspect="fill",panel = function(...){
+            panel.levelplot(...)
+			#horizontal lines
+			panel.abline(h = 1.5);
+			panel.abline(h = 2.5);
+			panel.abline(h = 3.5);
+			panel.abline(h = 4.5);
+			panel.abline(h = 5.5);
+			panel.abline(h = 6.5);
+			panel.abline(h = 7.5);
+			panel.abline(h = 8.5);
+			panel.abline(h = 9.5);
+			panel.abline(h = 10.5);
+			panel.abline(h = 11.5);
+			panel.abline(h = 12.5);
+			panel.abline(h = 13.5);
+			panel.abline(h = 14.5);
+			panel.abline(h = 15.5);
+			panel.abline(h = 16.5);
+			panel.abline(h = 17.5);
+			panel.abline(h = 18.5);
+			panel.abline(h = 19.5);
+			panel.abline(h = 20.5);
+			panel.abline(h = 21.5);
+			panel.abline(h = 22.5);
+			panel.abline(h = 23.5);
+			panel.abline(h = 24.5);
+			panel.abline(h = 25.5);
+			panel.abline(h = 26.5);
+			panel.abline(h = 27.5);
+			panel.abline(h = 28.5);
+			panel.abline(h = 29.5);
+			panel.abline(h = 30.5);
+			panel.abline(h = 31.5);
+			panel.abline(h = 32.5);
+			panel.abline(h = 33.5);
+			panel.abline(h = 34.5);
+			panel.abline(h = 35.5);
+			panel.abline(h = 36.5);
+			panel.abline(h = 37.5);
+			panel.abline(h = 38.5);
+			panel.abline(h = 39.5);
+			panel.abline(h = 40.5);
+			panel.abline(h = 41.5);
+			panel.abline(h = 42.5);
+			panel.abline(h = 43.5);
+			panel.abline(h = 44.5);
+			panel.abline(h = 45.5);
+			panel.abline(h = 46.5);
+			panel.abline(h = 47.5);
+			panel.abline(h = 48.5);
+			panel.abline(h = 49.5);
+			panel.abline(h = 50.5);
+			panel.abline(h = 50.5);
+			panel.abline(h = 51.5);
+			panel.abline(h = 52.5);
+			panel.abline(h = 53.5);
+			panel.abline(h = 54.5);
+			panel.abline(h = 55.5);
+			panel.abline(h = 56.5);
+			panel.abline(h = 57.5);
+			panel.abline(h = 58.5);
+			panel.abline(h = 59.5);
+			panel.abline(h = 60.5);
+			panel.abline(h = 61.5);
+			panel.abline(h = 62.5);
+			panel.abline(h = 63.5);
+			panel.abline(h = 64.5);
+			panel.abline(h = 65.5);
+			panel.abline(h = 66.5);
+			panel.abline(h = 67.5);
+			panel.abline(h = 68.5);
+			panel.abline(h = 69.5);
+			panel.abline(h = 70.5);
+			panel.abline(h = 71.5);
+			panel.abline(h = 72.5);
+			panel.abline(h = 73.5);
+			panel.abline(h = 74.5);
+			panel.abline(h = 75.5);
+			panel.abline(h = 76.5);
+			panel.abline(h = 77.5);
+			panel.abline(h = 78.5);
+			panel.abline(h = 79.5);
+			panel.abline(h = 80.5);
+			panel.abline(h = 81.5);
+			panel.abline(h = 82.5);
+			panel.abline(h = 83.5);
+			panel.abline(h = 84.5);
+			panel.abline(h = 85.5);
+			panel.abline(h = 86.5);
+			panel.abline(h = 87.5);
+			panel.abline(h = 88.5);
+			panel.abline(h = 89.5);
+			panel.abline(h = 90.5);
+			panel.abline(h = 91.5);
+			panel.abline(h = 92.5);
+			panel.abline(h = 93.5);
+			panel.abline(h = 94.5);
+			panel.abline(h = 95.5);
+			panel.abline(h = 96.5);
+			panel.abline(h = 97.5);
+			panel.abline(h = 98.5);
+			panel.abline(h = 99.5);
+			panel.abline(h = 100.5);
+			panel.abline(h = 101.5);
+			panel.abline(h = 102.5);
+			panel.abline(h = 103.5);
+			panel.abline(h = 104.5);
+			panel.abline(h = 105.5);
+			panel.abline(h = 106.5);
+			panel.abline(h = 107.5);
+			panel.abline(h = 108.5);
+			panel.abline(h = 109.5);
+			panel.abline(h = 110.5);
+			panel.abline(h = 111.5);
+			panel.abline(h = 112.5);
+			panel.abline(h = 113.5);
+			panel.abline(h = 114.5);
+			panel.abline(h = 115.5);
+			panel.abline(h = 116.5);
+			panel.abline(h = 117.5);
+			panel.abline(h = 118.5);
+			panel.abline(h = 119.5);
+			panel.abline(h = 120.5);
+			panel.abline(h = 121.5);
+			panel.abline(h = 122.5);
+			panel.abline(h = 123.5);
+			panel.abline(h = 124.5);
+			panel.abline(h = 125.5);
+			panel.abline(h = 126.5);
+			panel.abline(h = 127.5);
+			panel.abline(h = 128.5);
+			panel.abline(h = 129.5);
+			panel.abline(h = 130.5);
+			panel.abline(h = 131.5);
+			panel.abline(h = 132.5);
+			panel.abline(h = 133.5);
+			panel.abline(h = 134.5);
+			panel.abline(h = 135.5);
+			panel.abline(h = 136.5);
+			panel.abline(h = 137.5);
+			
+			#vertical lines
+            panel.abline(v = 1.5);
+            panel.abline(v = 2.5);
+            panel.abline(v = 3.5);
+            panel.abline(v = 4.5);
+            panel.abline(v = 5.5);
+            panel.abline(v = 6.5);
+            panel.abline(v = 7.5);
+            panel.abline(v = 8.5);
+            panel.abline(v = 9.5);
+            panel.abline(v = 10.5);
+            panel.abline(v = 11.5);
+            panel.abline(v = 12.5);
+            panel.abline(v = 13.5);
+            panel.abline(v = 14.5);
+            panel.abline(v = 15.5);
+            panel.abline(v = 16.5, col="yellow");
+            panel.abline(v = 17.5);
+            panel.abline(v = 18.5);
+            panel.abline(v = 19.5);
+            panel.abline(v = 20.5);
+            panel.abline(v = 21.5);
+            panel.abline(v = 22.5);
+            panel.abline(v = 23.5);
+            panel.abline(v = 24.5);
+            panel.abline(v = 25.5);
+            panel.abline(v = 26.5);
+            panel.abline(v = 27.5);
+            panel.abline(v = 28.5);
+            panel.abline(v = 29.5);
+            panel.abline(v = 30.5);
+            panel.abline(v = 31.5);
+            panel.abline(v = 32.5, col="yellow");
+            panel.abline(v = 33.5);
+            panel.abline(v = 34.5);
+            panel.abline(v = 35.5);
+            panel.abline(v = 36.5);
+            panel.abline(v = 37.5);
+            panel.abline(v = 38.5);
+            panel.abline(v = 39.5);
+            panel.abline(v = 40.5);
+            panel.abline(v = 41.5);
+            panel.abline(v = 42.5);
+            panel.abline(v = 43.5);
+            panel.abline(v = 44.5);
+            panel.abline(v = 45.5);
+            panel.abline(v = 46.5);
+            panel.abline(v = 47.5);
+          },
+          xlab="",
+          ylab="")
+```
