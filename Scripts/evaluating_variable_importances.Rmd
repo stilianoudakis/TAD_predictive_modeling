@@ -1042,14 +1042,32 @@ vim.gm12878.RUS.m$X2 <- factor(vim.gm12878.RUS.m$X2, levels = c("10 kb", "25 kb"
 ggplot(vim.gm12878.RUS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
     geom_tile(aes(fill = value), 
               colour = "white") + 
-    scale_fill_gradient(low = "white", 
+    scale_fill_gradient2(low = "white", 
                         high = "steelblue",
                         na.value = "grey50",
-                        name="Importance") +
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
     theme_bw() +
     theme_minimal() +
     xlab("Resolution") +
-    ylab("Genomic Annotation")
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
 
 
 ####K562
@@ -1079,14 +1097,32 @@ vim.K562.RUS.m$X2 <- factor(vim.K562.RUS.m$X2, levels = c("10 kb", "25 kb", "50 
 ggplot(vim.K562.RUS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
     geom_tile(aes(fill = value), 
               colour = "white") + 
-    scale_fill_gradient(low = "white", 
+    scale_fill_gradient2(low = "white", 
                         high = "steelblue",
                         na.value = "grey50",
-                        name="Importance") +
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
     theme_bw() +
     theme_minimal() +
     xlab("Resolution") +
-    ylab("Genomic Annotation")
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
 
 ```
 
@@ -1121,14 +1157,32 @@ vim.gm12878.ROS.m$X2 <- factor(vim.gm12878.ROS.m$X2, levels = c("10 kb", "25 kb"
 ggplot(vim.gm12878.ROS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
     geom_tile(aes(fill = value), 
               colour = "white") + 
-    scale_fill_gradient(low = "white", 
+    scale_fill_gradient2(low = "white", 
                         high = "steelblue",
                         na.value = "grey50",
-                        name="Importance") +
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
     theme_bw() +
     theme_minimal() +
     xlab("Resolution") +
-    ylab("Genomic Annotation")
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
 
 
 ####K562
@@ -1158,14 +1212,32 @@ vim.K562.ROS.m$X2 <- factor(vim.K562.ROS.m$X2, levels = c("10 kb", "25 kb", "50 
 ggplot(vim.K562.ROS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
     geom_tile(aes(fill = value), 
               colour = "white") + 
-    scale_fill_gradient(low = "white", 
+    scale_fill_gradient2(low = "white", 
                         high = "steelblue",
                         na.value = "grey50",
-                        name="Importance") +
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
     theme_bw() +
     theme_minimal() +
     xlab("Resolution") +
-    ylab("Genomic Annotation")
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
 
 ```
 
@@ -1201,14 +1273,32 @@ vim.gm12878.none.m$X2 <- factor(vim.gm12878.none.m$X2, levels = c("10 kb", "25 k
 ggplot(vim.gm12878.none.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
     geom_tile(aes(fill = value), 
               colour = "white") + 
-    scale_fill_gradient(low = "white", 
+    scale_fill_gradient2(low = "white", 
                         high = "steelblue",
                         na.value = "grey50",
-                        name="Importance") +
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
     theme_bw() +
     theme_minimal() +
     xlab("Resolution") +
-    ylab("Genomic Annotation")
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
 
 
 ####K562
@@ -1238,13 +1328,31 @@ vim.K562.none.m$X2 <- factor(vim.K562.none.m$X2, levels = c("10 kb", "25 kb", "5
 ggplot(vim.K562.none.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
     geom_tile(aes(fill = value), 
               colour = "white") + 
-    scale_fill_gradient(low = "white", 
+    scale_fill_gradient2(low = "white", 
                         high = "steelblue",
                         na.value = "grey50",
-                        name="Importance") +
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
     theme_bw() +
     theme_minimal() +
     xlab("Resolution") +
-    ylab("Genomic Annotation")
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
 
 ```
