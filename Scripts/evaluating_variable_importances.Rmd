@@ -1,0 +1,1250 @@
+---
+title: "Evaluating Variable Importances"
+author: "Spiro Stilianoudakis"
+date: "March 9, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+
+```
+
+#Variable Importance Bar Plots for models with distance type predictors
+
+##10kb
+
+###None
+
+```{r}
+#GM12878
+rfimpvars_gm12878_10kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_10kb_none <- rfimpvars_gm12878_10kb_none[1:10,]
+#rfimpvars_gm12878_10kb_none <- rfimpvars_gm12878_10kb_none[10:1,]
+rfimpvars_gm12878_10kb_none <- rfimpvars_gm12878_10kb_none[1:20,]
+rfimpvars_gm12878_10kb_none <- rfimpvars_gm12878_10kb_none[20:1,]
+
+
+rfimpvars_gm12878_10kb_none$Feature <- gsub("_dist","", rfimpvars_gm12878_10kb_none$Feature)
+
+rfimpvars_gm12878_10kb_none$Feature <- factor(rfimpvars_gm12878_10kb_none$Feature, levels=rfimpvars_gm12878_10kb_none$Feature)
+
+
+vip.gm12878.10kb.none <- ggplot(rfimpvars_gm12878_10kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_10kb_none <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_10kb_none <- rfimpvars_K562_10kb_none[1:10,]
+#rfimpvars_K562_10kb_none <- rfimpvars_K562_10kb_none[10:1,]
+rfimpvars_K562_10kb_none <- rfimpvars_K562_10kb_none[1:20,]
+rfimpvars_K562_10kb_none <- rfimpvars_K562_10kb_none[20:1,]
+
+rfimpvars_K562_10kb_none$Feature <- gsub("_dist","", rfimpvars_K562_10kb_none$Feature)
+
+rfimpvars_K562_10kb_none$Feature <- factor(rfimpvars_K562_10kb_none$Feature, levels=rfimpvars_K562_10kb_none$Feature)
+
+
+vip.K562.10kb.none <- ggplot(rfimpvars_K562_10kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+
+```
+
+###ROS
+
+```{r}
+rfimpvars_gm12878_10kb_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_10kb_ROS <- rfimpvars_gm12878_10kb_ROS[1:10,]
+#rfimpvars_gm12878_10kb_ROS <- rfimpvars_gm12878_10kb_ROS[10:1,]
+rfimpvars_gm12878_10kb_ROS <- rfimpvars_gm12878_10kb_ROS[1:20,]
+rfimpvars_gm12878_10kb_ROS <- rfimpvars_gm12878_10kb_ROS[20:1,]
+
+rfimpvars_gm12878_10kb_ROS$Feature <- gsub("_dist","", rfimpvars_gm12878_10kb_ROS$Feature)
+
+rfimpvars_gm12878_10kb_ROS$Feature <- factor(rfimpvars_gm12878_10kb_ROS$Feature, levels=rfimpvars_gm12878_10kb_ROS$Feature)
+
+
+vip.gm12878.10kb.ROS <- ggplot(rfimpvars_gm12878_10kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_10kb_ROS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_10kb_ROS <- rfimpvars_K562_10kb_ROS[1:10,]
+#rfimpvars_K562_10kb_ROS <- rfimpvars_K562_10kb_ROS[10:1,]
+rfimpvars_K562_10kb_ROS <- rfimpvars_K562_10kb_ROS[1:20,]
+rfimpvars_K562_10kb_ROS <- rfimpvars_K562_10kb_ROS[20:1,]
+
+rfimpvars_K562_10kb_ROS$Feature <- gsub("_dist","", rfimpvars_K562_10kb_ROS$Feature)
+
+rfimpvars_K562_10kb_ROS$Feature <- factor(rfimpvars_K562_10kb_ROS$Feature, levels=rfimpvars_K562_10kb_ROS$Feature)
+
+
+vip.K562.10kb.ROS <- ggplot(rfimpvars_K562_10kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###RUS
+
+```{r}
+rfimpvars_gm12878_10kb_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_10kb_RUS <- rfimpvars_gm12878_10kb_RUS[1:10,]
+#rfimpvars_gm12878_10kb_RUS <- rfimpvars_gm12878_10kb_RUS[10:1,]
+rfimpvars_gm12878_10kb_RUS <- rfimpvars_gm12878_10kb_RUS[1:20,]
+rfimpvars_gm12878_10kb_RUS <- rfimpvars_gm12878_10kb_RUS[20:1,]
+
+rfimpvars_gm12878_10kb_RUS$Feature <- gsub("_dist","", rfimpvars_gm12878_10kb_RUS$Feature)
+
+rfimpvars_gm12878_10kb_RUS$Feature <- factor(rfimpvars_gm12878_10kb_RUS$Feature, levels=rfimpvars_gm12878_10kb_RUS$Feature)
+
+
+vip.gm12878.10kb.RUS <- ggplot(rfimpvars_gm12878_10kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_10kb_RUS <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_10kb_RUS <- rfimpvars_K562_10kb_RUS[1:10,]
+#rfimpvars_K562_10kb_RUS <- rfimpvars_K562_10kb_RUS[10:1,]
+rfimpvars_K562_10kb_RUS <- rfimpvars_K562_10kb_RUS[1:20,]
+rfimpvars_K562_10kb_RUS <- rfimpvars_K562_10kb_RUS[20:1,]
+
+rfimpvars_K562_10kb_RUS$Feature <- gsub("_dist","", rfimpvars_K562_10kb_RUS$Feature)
+
+rfimpvars_K562_10kb_RUS$Feature <- factor(rfimpvars_K562_10kb_RUS$Feature, levels=rfimpvars_K562_10kb_RUS$Feature)
+
+
+vip.K562.10kb.RUS <- ggplot(rfimpvars_K562_10kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###SMOTE
+
+```{r}
+rfimpvars_gm12878_10kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_10kb_SMOTE <- rfimpvars_gm12878_10kb_SMOTE[1:10,]
+#rfimpvars_gm12878_10kb_SMOTE <- rfimpvars_gm12878_10kb_SMOTE[10:1,]
+rfimpvars_gm12878_10kb_SMOTE <- rfimpvars_gm12878_10kb_SMOTE[1:20,]
+rfimpvars_gm12878_10kb_SMOTE <- rfimpvars_gm12878_10kb_SMOTE[20:1,]
+
+rfimpvars_gm12878_10kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_gm12878_10kb_SMOTE$Feature)
+
+rfimpvars_gm12878_10kb_SMOTE$Feature <- factor(rfimpvars_gm12878_10kb_SMOTE$Feature, levels=rfimpvars_gm12878_10kb_SMOTE$Feature)
+
+
+vip.gm12878.10kb.SMOTE <- ggplot(rfimpvars_gm12878_10kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_10kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_10kb_SMOTE <- rfimpvars_K562_10kb_SMOTE[1:10,]
+#rfimpvars_K562_10kb_SMOTE <- rfimpvars_K562_10kb_SMOTE[10:1,]
+rfimpvars_K562_10kb_SMOTE <- rfimpvars_K562_10kb_SMOTE[1:20,]
+rfimpvars_K562_10kb_SMOTE <- rfimpvars_K562_10kb_SMOTE[20:1,]
+
+rfimpvars_K562_10kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_K562_10kb_SMOTE$Feature)
+
+rfimpvars_K562_10kb_SMOTE$Feature <- factor(rfimpvars_K562_10kb_SMOTE$Feature, levels=rfimpvars_K562_10kb_SMOTE$Feature)
+
+
+vip.K562.10kb.SMOTE <- ggplot(rfimpvars_K562_10kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+
+##25kb
+
+###None
+
+```{r}
+#GM12878
+rfimpvars_gm12878_25kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_25kb_none <- rfimpvars_gm12878_25kb_none[1:10,]
+#rfimpvars_gm12878_25kb_none <- rfimpvars_gm12878_25kb_none[10:1,]
+rfimpvars_gm12878_25kb_none <- rfimpvars_gm12878_25kb_none[1:20,]
+rfimpvars_gm12878_25kb_none <- rfimpvars_gm12878_25kb_none[20:1,]
+
+rfimpvars_gm12878_25kb_none$Feature <- gsub("_dist","", rfimpvars_gm12878_25kb_none$Feature)
+
+rfimpvars_gm12878_25kb_none$Feature <- factor(rfimpvars_gm12878_25kb_none$Feature, levels=rfimpvars_gm12878_25kb_none$Feature)
+
+
+vip.gm12878.25kb.none <- ggplot(rfimpvars_gm12878_25kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_25kb_none <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_25kb_none <- rfimpvars_K562_25kb_none[1:10,]
+#rfimpvars_K562_25kb_none <- rfimpvars_K562_25kb_none[10:1,]
+rfimpvars_K562_25kb_none <- rfimpvars_K562_25kb_none[1:20,]
+rfimpvars_K562_25kb_none <- rfimpvars_K562_25kb_none[20:1,]
+
+rfimpvars_K562_25kb_none$Feature <- gsub("_dist","", rfimpvars_K562_25kb_none$Feature)
+
+rfimpvars_K562_25kb_none$Feature <- factor(rfimpvars_K562_25kb_none$Feature, levels=rfimpvars_K562_25kb_none$Feature)
+
+
+vip.K562.25kb.none <- ggplot(rfimpvars_K562_25kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+
+```
+
+###ROS
+
+```{r}
+rfimpvars_gm12878_25kb_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_25kb_ROS <- rfimpvars_gm12878_25kb_ROS[1:10,]
+#rfimpvars_gm12878_25kb_ROS <- rfimpvars_gm12878_25kb_ROS[10:1,]
+rfimpvars_gm12878_25kb_ROS <- rfimpvars_gm12878_25kb_ROS[1:20,]
+rfimpvars_gm12878_25kb_ROS <- rfimpvars_gm12878_25kb_ROS[20:1,]
+
+rfimpvars_gm12878_25kb_ROS$Feature <- gsub("_dist","", rfimpvars_gm12878_25kb_ROS$Feature)
+
+rfimpvars_gm12878_25kb_ROS$Feature <- factor(rfimpvars_gm12878_25kb_ROS$Feature, levels=rfimpvars_gm12878_25kb_ROS$Feature)
+
+
+vip.gm12878.25kb.ROS <- ggplot(rfimpvars_gm12878_25kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_25kb_ROS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_25kb_ROS <- rfimpvars_K562_25kb_ROS[1:10,]
+#rfimpvars_K562_25kb_ROS <- rfimpvars_K562_25kb_ROS[10:1,]
+rfimpvars_K562_25kb_ROS <- rfimpvars_K562_25kb_ROS[1:20,]
+rfimpvars_K562_25kb_ROS <- rfimpvars_K562_25kb_ROS[20:1,]
+
+rfimpvars_K562_25kb_ROS$Feature <- gsub("_dist","", rfimpvars_K562_25kb_ROS$Feature)
+
+rfimpvars_K562_25kb_ROS$Feature <- factor(rfimpvars_K562_25kb_ROS$Feature, levels=rfimpvars_K562_25kb_ROS$Feature)
+
+
+vip.K562.25kb.ROS <- ggplot(rfimpvars_K562_25kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###RUS
+
+```{r}
+rfimpvars_gm12878_25kb_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_25kb_RUS <- rfimpvars_gm12878_25kb_RUS[1:10,]
+#rfimpvars_gm12878_25kb_RUS <- rfimpvars_gm12878_25kb_RUS[10:1,]
+rfimpvars_gm12878_25kb_RUS <- rfimpvars_gm12878_25kb_RUS[1:20,]
+rfimpvars_gm12878_25kb_RUS <- rfimpvars_gm12878_25kb_RUS[20:1,]
+
+rfimpvars_gm12878_25kb_RUS$Feature <- gsub("_dist","", rfimpvars_gm12878_25kb_RUS$Feature)
+
+rfimpvars_gm12878_25kb_RUS$Feature <- factor(rfimpvars_gm12878_25kb_RUS$Feature, levels=rfimpvars_gm12878_25kb_RUS$Feature)
+
+
+vip.gm12878.25kb.RUS <- ggplot(rfimpvars_gm12878_25kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_25kb_RUS <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_25kb_RUS <- rfimpvars_K562_25kb_RUS[1:10,]
+#rfimpvars_K562_25kb_RUS <- rfimpvars_K562_25kb_RUS[10:1,]
+rfimpvars_K562_25kb_RUS <- rfimpvars_K562_25kb_RUS[1:20,]
+rfimpvars_K562_25kb_RUS <- rfimpvars_K562_25kb_RUS[20:1,]
+
+rfimpvars_K562_25kb_RUS$Feature <- gsub("_dist","", rfimpvars_K562_25kb_RUS$Feature)
+
+rfimpvars_K562_25kb_RUS$Feature <- factor(rfimpvars_K562_25kb_RUS$Feature, levels=rfimpvars_K562_25kb_RUS$Feature)
+
+
+vip.K562.25kb.RUS <- ggplot(rfimpvars_K562_25kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###SMOTE
+
+```{r}
+rfimpvars_gm12878_25kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_25kb_SMOTE <- rfimpvars_gm12878_25kb_SMOTE[1:10,]
+#rfimpvars_gm12878_25kb_SMOTE <- rfimpvars_gm12878_25kb_SMOTE[10:1,]
+rfimpvars_gm12878_25kb_SMOTE <- rfimpvars_gm12878_25kb_SMOTE[1:20,]
+rfimpvars_gm12878_25kb_SMOTE <- rfimpvars_gm12878_25kb_SMOTE[20:1,]
+
+rfimpvars_gm12878_25kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_gm12878_25kb_SMOTE$Feature)
+
+rfimpvars_gm12878_25kb_SMOTE$Feature <- factor(rfimpvars_gm12878_25kb_SMOTE$Feature, levels=rfimpvars_gm12878_25kb_SMOTE$Feature)
+
+
+vip.gm12878.25kb.SMOTE <- ggplot(rfimpvars_gm12878_25kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_25kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_25kb_SMOTE <- rfimpvars_K562_25kb_SMOTE[1:10,]
+#rfimpvars_K562_25kb_SMOTE <- rfimpvars_K562_25kb_SMOTE[10:1,]
+rfimpvars_K562_25kb_SMOTE <- rfimpvars_K562_25kb_SMOTE[1:20,]
+rfimpvars_K562_25kb_SMOTE <- rfimpvars_K562_25kb_SMOTE[20:1,]
+
+rfimpvars_K562_25kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_K562_25kb_SMOTE$Feature)
+
+rfimpvars_K562_25kb_SMOTE$Feature <- factor(rfimpvars_K562_25kb_SMOTE$Feature, levels=rfimpvars_K562_25kb_SMOTE$Feature)
+
+
+vip.K562.25kb.SMOTE <- ggplot(rfimpvars_K562_25kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+##50kb
+
+###None
+
+```{r}
+#GM12878
+rfimpvars_gm12878_50kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_50kb_none <- rfimpvars_gm12878_50kb_none[1:10,]
+#rfimpvars_gm12878_50kb_none <- rfimpvars_gm12878_50kb_none[10:1,]
+rfimpvars_gm12878_50kb_none <- rfimpvars_gm12878_50kb_none[1:20,]
+rfimpvars_gm12878_50kb_none <- rfimpvars_gm12878_50kb_none[20:1,]
+
+rfimpvars_gm12878_50kb_none$Feature <- gsub("_dist","", rfimpvars_gm12878_50kb_none$Feature)
+
+rfimpvars_gm12878_50kb_none$Feature <- factor(rfimpvars_gm12878_50kb_none$Feature, levels=rfimpvars_gm12878_50kb_none$Feature)
+
+
+vip.gm12878.50kb.none <- ggplot(rfimpvars_gm12878_50kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_50kb_none <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_50kb_none <- rfimpvars_K562_50kb_none[1:10,]
+#rfimpvars_K562_50kb_none <- rfimpvars_K562_50kb_none[10:1,]
+rfimpvars_K562_50kb_none <- rfimpvars_K562_50kb_none[1:20,]
+rfimpvars_K562_50kb_none <- rfimpvars_K562_50kb_none[20:1,]
+
+rfimpvars_K562_50kb_none$Feature <- gsub("_dist","", rfimpvars_K562_50kb_none$Feature)
+
+rfimpvars_K562_50kb_none$Feature <- factor(rfimpvars_K562_50kb_none$Feature, levels=rfimpvars_K562_50kb_none$Feature)
+
+
+vip.K562.50kb.none <- ggplot(rfimpvars_K562_50kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+
+```
+
+###ROS
+
+```{r}
+rfimpvars_gm12878_50kb_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_50kb_ROS <- rfimpvars_gm12878_50kb_ROS[1:10,]
+#rfimpvars_gm12878_50kb_ROS <- rfimpvars_gm12878_50kb_ROS[10:1,]
+rfimpvars_gm12878_50kb_ROS <- rfimpvars_gm12878_50kb_ROS[1:20,]
+rfimpvars_gm12878_50kb_ROS <- rfimpvars_gm12878_50kb_ROS[20:1,]
+
+rfimpvars_gm12878_50kb_ROS$Feature <- gsub("_dist","", rfimpvars_gm12878_50kb_ROS$Feature)
+
+rfimpvars_gm12878_50kb_ROS$Feature <- factor(rfimpvars_gm12878_50kb_ROS$Feature, levels=rfimpvars_gm12878_50kb_ROS$Feature)
+
+
+vip.gm12878.50kb.ROS <- ggplot(rfimpvars_gm12878_50kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_50kb_ROS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_50kb_ROS <- rfimpvars_K562_50kb_ROS[1:10,]
+#rfimpvars_K562_50kb_ROS <- rfimpvars_K562_50kb_ROS[10:1,]
+rfimpvars_K562_50kb_ROS <- rfimpvars_K562_50kb_ROS[1:20,]
+rfimpvars_K562_50kb_ROS <- rfimpvars_K562_50kb_ROS[20:1,]
+
+rfimpvars_K562_50kb_ROS$Feature <- gsub("_dist","", rfimpvars_K562_50kb_ROS$Feature)
+
+rfimpvars_K562_50kb_ROS$Feature <- factor(rfimpvars_K562_50kb_ROS$Feature, levels=rfimpvars_K562_50kb_ROS$Feature)
+
+
+vip.K562.50kb.ROS <- ggplot(rfimpvars_K562_50kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###RUS
+
+```{r}
+rfimpvars_gm12878_50kb_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_50kb_RUS <- rfimpvars_gm12878_50kb_RUS[1:10,]
+#rfimpvars_gm12878_50kb_RUS <- rfimpvars_gm12878_50kb_RUS[10:1,]
+rfimpvars_gm12878_50kb_RUS <- rfimpvars_gm12878_50kb_RUS[1:20,]
+rfimpvars_gm12878_50kb_RUS <- rfimpvars_gm12878_50kb_RUS[20:1,]
+
+rfimpvars_gm12878_50kb_RUS$Feature <- gsub("_dist","", rfimpvars_gm12878_50kb_RUS$Feature)
+
+rfimpvars_gm12878_50kb_RUS$Feature <- factor(rfimpvars_gm12878_50kb_RUS$Feature, levels=rfimpvars_gm12878_50kb_RUS$Feature)
+
+
+vip.gm12878.50kb.RUS <- ggplot(rfimpvars_gm12878_50kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_50kb_RUS <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_50kb_RUS <- rfimpvars_K562_50kb_RUS[1:10,]
+#rfimpvars_K562_50kb_RUS <- rfimpvars_K562_50kb_RUS[10:1,]
+rfimpvars_K562_50kb_RUS <- rfimpvars_K562_50kb_RUS[1:20,]
+rfimpvars_K562_50kb_RUS <- rfimpvars_K562_50kb_RUS[20:1,]
+
+rfimpvars_K562_50kb_RUS$Feature <- gsub("_dist","", rfimpvars_K562_50kb_RUS$Feature)
+
+rfimpvars_K562_50kb_RUS$Feature <- factor(rfimpvars_K562_50kb_RUS$Feature, levels=rfimpvars_K562_50kb_RUS$Feature)
+
+
+vip.K562.50kb.RUS <- ggplot(rfimpvars_K562_50kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###SMOTE
+
+```{r}
+rfimpvars_gm12878_50kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_50kb_SMOTE <- rfimpvars_gm12878_50kb_SMOTE[1:10,]
+#rfimpvars_gm12878_50kb_SMOTE <- rfimpvars_gm12878_50kb_SMOTE[10:1,]
+rfimpvars_gm12878_50kb_SMOTE <- rfimpvars_gm12878_50kb_SMOTE[1:20,]
+rfimpvars_gm12878_50kb_SMOTE <- rfimpvars_gm12878_50kb_SMOTE[20:1,]
+
+rfimpvars_gm12878_50kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_gm12878_50kb_SMOTE$Feature)
+
+rfimpvars_gm12878_50kb_SMOTE$Feature <- factor(rfimpvars_gm12878_50kb_SMOTE$Feature, levels=rfimpvars_gm12878_50kb_SMOTE$Feature)
+
+
+vip.gm12878.50kb.SMOTE <- ggplot(rfimpvars_gm12878_50kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_50kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_50kb_SMOTE <- rfimpvars_K562_50kb_SMOTE[1:10,]
+#rfimpvars_K562_50kb_SMOTE <- rfimpvars_K562_50kb_SMOTE[10:1,]
+rfimpvars_K562_50kb_SMOTE <- rfimpvars_K562_50kb_SMOTE[1:20,]
+rfimpvars_K562_50kb_SMOTE <- rfimpvars_K562_50kb_SMOTE[20:1,]
+
+rfimpvars_K562_50kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_K562_50kb_SMOTE$Feature)
+
+rfimpvars_K562_50kb_SMOTE$Feature <- factor(rfimpvars_K562_50kb_SMOTE$Feature, levels=rfimpvars_K562_50kb_SMOTE$Feature)
+
+
+vip.K562.50kb.SMOTE <- ggplot(rfimpvars_K562_50kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+##100kb
+
+###None
+
+```{r}
+#GM12878
+rfimpvars_gm12878_100kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[1:10,]
+#rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[10:1,]
+rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[1:20,]
+rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[20:1,]
+
+rfimpvars_gm12878_100kb_none$Feature <- gsub("_dist","", rfimpvars_gm12878_100kb_none$Feature)
+
+rfimpvars_gm12878_100kb_none$Feature <- factor(rfimpvars_gm12878_100kb_none$Feature, levels=rfimpvars_gm12878_100kb_none$Feature)
+
+
+vip.gm12878.100kb.none <- ggplot(rfimpvars_gm12878_100kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_100kb_none <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_100kb_none <- rfimpvars_K562_100kb_none[1:10,]
+#rfimpvars_K562_100kb_none <- rfimpvars_K562_100kb_none[10:1,]
+rfimpvars_K562_100kb_none <- rfimpvars_K562_100kb_none[1:20,]
+rfimpvars_K562_100kb_none <- rfimpvars_K562_100kb_none[20:1,]
+
+rfimpvars_K562_100kb_none$Feature <- gsub("_dist","", rfimpvars_K562_100kb_none$Feature)
+
+rfimpvars_K562_100kb_none$Feature <- factor(rfimpvars_K562_100kb_none$Feature, levels=rfimpvars_K562_100kb_none$Feature)
+
+
+vip.K562.100kb.none <- ggplot(rfimpvars_K562_100kb_none, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+
+```
+
+###ROS
+
+```{r}
+rfimpvars_gm12878_100kb_ROS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_100kb_ROS <- rfimpvars_gm12878_100kb_ROS[1:10,]
+#rfimpvars_gm12878_100kb_ROS <- rfimpvars_gm12878_100kb_ROS[10:1,]
+rfimpvars_gm12878_100kb_ROS <- rfimpvars_gm12878_100kb_ROS[1:20,]
+rfimpvars_gm12878_100kb_ROS <- rfimpvars_gm12878_100kb_ROS[20:1,]
+
+rfimpvars_gm12878_100kb_ROS$Feature <- gsub("_dist","", rfimpvars_gm12878_100kb_ROS$Feature)
+
+rfimpvars_gm12878_100kb_ROS$Feature <- factor(rfimpvars_gm12878_100kb_ROS$Feature, levels=rfimpvars_gm12878_100kb_ROS$Feature)
+
+
+vip.gm12878.100kb.ROS <- ggplot(rfimpvars_gm12878_100kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_100kb_ROS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_100kb_ROS <- rfimpvars_K562_100kb_ROS[1:10,]
+#rfimpvars_K562_100kb_ROS <- rfimpvars_K562_100kb_ROS[10:1,]
+rfimpvars_K562_100kb_ROS <- rfimpvars_K562_100kb_ROS[1:20,]
+rfimpvars_K562_100kb_ROS <- rfimpvars_K562_100kb_ROS[20:1,]
+
+rfimpvars_K562_100kb_ROS$Feature <- gsub("_dist","", rfimpvars_K562_100kb_ROS$Feature)
+
+rfimpvars_K562_100kb_ROS$Feature <- factor(rfimpvars_K562_100kb_ROS$Feature, levels=rfimpvars_K562_100kb_ROS$Feature)
+
+
+vip.K562.100kb.ROS <- ggplot(rfimpvars_K562_100kb_ROS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###RUS
+
+```{r}
+rfimpvars_gm12878_100kb_RUS <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_100kb_RUS <- rfimpvars_gm12878_100kb_RUS[1:10,]
+#rfimpvars_gm12878_100kb_RUS <- rfimpvars_gm12878_100kb_RUS[10:1,]
+rfimpvars_gm12878_100kb_RUS <- rfimpvars_gm12878_100kb_RUS[1:20,]
+rfimpvars_gm12878_100kb_RUS <- rfimpvars_gm12878_100kb_RUS[20:1,]
+
+rfimpvars_gm12878_100kb_RUS$Feature <- gsub("_dist","", rfimpvars_gm12878_100kb_RUS$Feature)
+
+rfimpvars_gm12878_100kb_RUS$Feature <- factor(rfimpvars_gm12878_100kb_RUS$Feature, levels=rfimpvars_gm12878_100kb_RUS$Feature)
+
+
+vip.gm12878.100kb.RUS <- ggplot(rfimpvars_gm12878_100kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_100kb_RUS <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_100kb_RUS <- rfimpvars_K562_100kb_RUS[1:10,]
+#rfimpvars_K562_100kb_RUS <- rfimpvars_K562_100kb_RUS[10:1,]
+rfimpvars_K562_100kb_RUS <- rfimpvars_K562_100kb_RUS[1:20,]
+rfimpvars_K562_100kb_RUS <- rfimpvars_K562_100kb_RUS[20:1,]
+
+rfimpvars_K562_100kb_RUS$Feature <- gsub("_dist","", rfimpvars_K562_100kb_RUS$Feature)
+
+rfimpvars_K562_100kb_RUS$Feature <- factor(rfimpvars_K562_100kb_RUS$Feature, levels=rfimpvars_K562_100kb_RUS$Feature)
+
+
+vip.K562.100kb.RUS <- ggplot(rfimpvars_K562_100kb_RUS, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+###SMOTE
+
+```{r}
+rfimpvars_gm12878_100kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_gm12878_100kb_SMOTE <- rfimpvars_gm12878_100kb_SMOTE[1:10,]
+#rfimpvars_gm12878_100kb_SMOTE <- rfimpvars_gm12878_100kb_SMOTE[10:1,]
+rfimpvars_gm12878_100kb_SMOTE <- rfimpvars_gm12878_100kb_SMOTE[1:20,]
+rfimpvars_gm12878_100kb_SMOTE <- rfimpvars_gm12878_100kb_SMOTE[20:1,]
+
+rfimpvars_gm12878_100kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_gm12878_100kb_SMOTE$Feature)
+
+rfimpvars_gm12878_100kb_SMOTE$Feature <- factor(rfimpvars_gm12878_100kb_SMOTE$Feature, levels=rfimpvars_gm12878_100kb_SMOTE$Feature)
+
+
+vip.gm12878.100kb.SMOTE <- ggplot(rfimpvars_gm12878_100kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+
+#K562
+rfimpvars_K562_100kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+#rfimpvars_K562_100kb_SMOTE <- rfimpvars_K562_100kb_SMOTE[1:10,]
+#rfimpvars_K562_100kb_SMOTE <- rfimpvars_K562_100kb_SMOTE[10:1,]
+rfimpvars_K562_100kb_SMOTE <- rfimpvars_K562_100kb_SMOTE[1:20,]
+rfimpvars_K562_100kb_SMOTE <- rfimpvars_K562_100kb_SMOTE[20:1,]
+
+rfimpvars_K562_100kb_SMOTE$Feature <- gsub("_dist","", rfimpvars_K562_100kb_SMOTE$Feature)
+
+rfimpvars_K562_100kb_SMOTE$Feature <- factor(rfimpvars_K562_100kb_SMOTE$Feature, levels=rfimpvars_K562_100kb_SMOTE$Feature)
+
+
+vip.K562.100kb.SMOTE <- ggplot(rfimpvars_K562_100kb_SMOTE, aes(x=Feature, y=Importance)) +
+  geom_bar(stat="identity", 
+           width=.5, 
+           position="dodge") +
+  coord_flip() +
+  theme_minimal()+
+  theme_bw()+
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20))
+```
+
+
+## Combined
+
+```{r}
+ggarrange(vip.gm12878.10kb.SMOTE, vip.K562.10kb.SMOTE, ncol = 2, nrow = 1)
+```
+
+
+## Variable Importance Heatmaps for models with distance type predictors
+
+###SMOTE
+
+```{r}
+####GM12878
+
+rfimpvars_gm12878_10kb_SMOTE <- rfimpvars_gm12878_10kb_SMOTE[order(as.character(rfimpvars_gm12878_10kb_SMOTE$Feature)),]
+rfimpvars_gm12878_25kb_SMOTE <- rfimpvars_gm12878_25kb_SMOTE[order(as.character(rfimpvars_gm12878_25kb_SMOTE$Feature)),]
+rfimpvars_gm12878_50kb_SMOTE <- rfimpvars_gm12878_50kb_SMOTE[order(as.character(rfimpvars_gm12878_50kb_SMOTE$Feature)),]
+rfimpvars_gm12878_100kb_SMOTE <- rfimpvars_gm12878_100kb_SMOTE[order(as.character(rfimpvars_gm12878_100kb_SMOTE$Feature)),]
+
+unionannots <- union(rfimpvars_gm12878_10kb_SMOTE$Feature,
+                      union(rfimpvars_gm12878_25kb_SMOTE$Feature,
+                            union(rfimpvars_gm12878_50kb_SMOTE$Feature,rfimpvars_gm12878_100kb_SMOTE$Feature)))
+unionannots <- sort(unionannots)
+
+vim.gm12878.smote <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.gm12878.smote[which(rownames(vim.gm12878.smote) %in% rfimpvars_gm12878_10kb_SMOTE$Feature), 1] <- rfimpvars_gm12878_10kb_SMOTE$Importance
+vim.gm12878.smote[which(rownames(vim.gm12878.smote) %in% rfimpvars_gm12878_25kb_SMOTE$Feature), 2] <- rfimpvars_gm12878_25kb_SMOTE$Importance
+vim.gm12878.smote[which(rownames(vim.gm12878.smote) %in% rfimpvars_gm12878_50kb_SMOTE$Feature), 3] <- rfimpvars_gm12878_50kb_SMOTE$Importance
+vim.gm12878.smote[which(rownames(vim.gm12878.smote) %in% rfimpvars_gm12878_100kb_SMOTE$Feature), 4] <- rfimpvars_gm12878_100kb_SMOTE$Importance
+
+vim.gm12878.smote <- vim.gm12878.smote[order(vim.gm12878.smote[,1], decreasing = TRUE),]
+
+vim.gm12878.smote.m <- melt(vim.gm12878.smote)
+vim.gm12878.smote.m$X1 <- factor(vim.gm12878.smote.m$X1, levels = rownames(vim.gm12878.smote))
+vim.gm12878.smote.m$X2 <- factor(vim.gm12878.smote.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.gm12878.smote.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient2(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
+
+####K562
+
+rfimpvars_K562_10kb_SMOTE <- rfimpvars_K562_10kb_SMOTE[order(as.character(rfimpvars_K562_10kb_SMOTE$Feature)),]
+rfimpvars_K562_25kb_SMOTE <- rfimpvars_K562_25kb_SMOTE[order(as.character(rfimpvars_K562_25kb_SMOTE$Feature)),]
+rfimpvars_K562_50kb_SMOTE <- rfimpvars_K562_50kb_SMOTE[order(as.character(rfimpvars_K562_50kb_SMOTE$Feature)),]
+rfimpvars_K562_100kb_SMOTE <- rfimpvars_K562_100kb_SMOTE[order(as.character(rfimpvars_K562_100kb_SMOTE$Feature)),]
+
+unionannots <- union(rfimpvars_K562_10kb_SMOTE$Feature,
+                      union(rfimpvars_K562_25kb_SMOTE$Feature,
+                            union(rfimpvars_K562_50kb_SMOTE$Feature,rfimpvars_K562_100kb_SMOTE$Feature)))
+unionannots <- sort(unionannots)
+
+vim.K562.smote <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.K562.smote[which(rownames(vim.K562.smote) %in% rfimpvars_K562_10kb_SMOTE$Feature), 1] <- rfimpvars_K562_10kb_SMOTE$Importance
+vim.K562.smote[which(rownames(vim.K562.smote) %in% rfimpvars_K562_25kb_SMOTE$Feature), 2] <- rfimpvars_K562_25kb_SMOTE$Importance
+vim.K562.smote[which(rownames(vim.K562.smote) %in% rfimpvars_K562_50kb_SMOTE$Feature), 3] <- rfimpvars_K562_50kb_SMOTE$Importance
+vim.K562.smote[which(rownames(vim.K562.smote) %in% rfimpvars_K562_100kb_SMOTE$Feature), 4] <- rfimpvars_K562_100kb_SMOTE$Importance
+
+vim.K562.smote <- vim.K562.smote[order(vim.K562.smote[,1], decreasing = TRUE),]
+
+vim.K562.smote.m <- melt(vim.K562.smote)
+vim.K562.smote.m$X1 <- factor(vim.K562.smote.m$X1, levels = rownames(vim.K562.smote))
+vim.K562.smote.m$X2 <- factor(vim.K562.smote.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.K562.smote.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient2(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Variable \n Importance",
+                        limits = c(0,100),
+                        breaks = c(0,25,50,75, 100),
+                        labels = c("0", "25", "50", "75", "100")) +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation") +
+    theme(#legend.position = c(.10, .10), 
+        #legend.justification = c(.10, .10),
+        #panel.border = element_rect(colour = "black", fill=NA),
+        axis.text.x = element_text(size=15, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20) #,
+        #legend.background = element_rect(fill="white",
+        #                                 size=0.5, 
+        #                                 linetype="solid", 
+        #                                 colour ="black")
+        )
+
+
+```
+
+
+###RUS
+
+```{r}
+####GM12878
+
+rfimpvars_gm12878_10kb_RUS <- rfimpvars_gm12878_10kb_RUS[order(as.character(rfimpvars_gm12878_10kb_RUS$Feature)),]
+rfimpvars_gm12878_25kb_RUS <- rfimpvars_gm12878_25kb_RUS[order(as.character(rfimpvars_gm12878_25kb_RUS$Feature)),]
+rfimpvars_gm12878_50kb_RUS <- rfimpvars_gm12878_50kb_RUS[order(as.character(rfimpvars_gm12878_50kb_RUS$Feature)),]
+rfimpvars_gm12878_100kb_RUS <- rfimpvars_gm12878_100kb_RUS[order(as.character(rfimpvars_gm12878_100kb_RUS$Feature)),]
+
+unionannots <- union(rfimpvars_gm12878_10kb_RUS$Feature,
+                      union(rfimpvars_gm12878_25kb_RUS$Feature,
+                            union(rfimpvars_gm12878_50kb_RUS$Feature,rfimpvars_gm12878_100kb_RUS$Feature)))
+unionannots <- sort(unionannots)
+
+vim.gm12878.RUS <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.gm12878.RUS[which(rownames(vim.gm12878.RUS) %in% rfimpvars_gm12878_10kb_RUS$Feature), 1] <- rfimpvars_gm12878_10kb_RUS$Importance
+vim.gm12878.RUS[which(rownames(vim.gm12878.RUS) %in% rfimpvars_gm12878_25kb_RUS$Feature), 2] <- rfimpvars_gm12878_25kb_RUS$Importance
+vim.gm12878.RUS[which(rownames(vim.gm12878.RUS) %in% rfimpvars_gm12878_50kb_RUS$Feature), 3] <- rfimpvars_gm12878_50kb_RUS$Importance
+vim.gm12878.RUS[which(rownames(vim.gm12878.RUS) %in% rfimpvars_gm12878_100kb_RUS$Feature), 4] <- rfimpvars_gm12878_100kb_RUS$Importance
+
+vim.gm12878.RUS <- vim.gm12878.RUS[order(vim.gm12878.RUS[,1], decreasing = TRUE),]
+
+vim.gm12878.RUS.m <- melt(vim.gm12878.RUS)
+vim.gm12878.RUS.m$X1 <- factor(vim.gm12878.RUS.m$X1, levels = rownames(vim.gm12878.RUS))
+vim.gm12878.RUS.m$X2 <- factor(vim.gm12878.RUS.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.gm12878.RUS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Importance") +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation")
+
+
+####K562
+
+rfimpvars_K562_10kb_RUS <- rfimpvars_K562_10kb_RUS[order(as.character(rfimpvars_K562_10kb_RUS$Feature)),]
+rfimpvars_K562_25kb_RUS <- rfimpvars_K562_25kb_RUS[order(as.character(rfimpvars_K562_25kb_RUS$Feature)),]
+rfimpvars_K562_50kb_RUS <- rfimpvars_K562_50kb_RUS[order(as.character(rfimpvars_K562_50kb_RUS$Feature)),]
+rfimpvars_K562_100kb_RUS <- rfimpvars_K562_100kb_RUS[order(as.character(rfimpvars_K562_100kb_RUS$Feature)),]
+
+unionannots <- union(rfimpvars_K562_10kb_RUS$Feature,
+                      union(rfimpvars_K562_25kb_RUS$Feature,
+                            union(rfimpvars_K562_50kb_RUS$Feature,rfimpvars_K562_100kb_RUS$Feature)))
+unionannots <- sort(unionannots)
+
+vim.K562.RUS <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.K562.RUS[which(rownames(vim.K562.RUS) %in% rfimpvars_K562_10kb_RUS$Feature), 1] <- rfimpvars_K562_10kb_RUS$Importance
+vim.K562.RUS[which(rownames(vim.K562.RUS) %in% rfimpvars_K562_25kb_RUS$Feature), 2] <- rfimpvars_K562_25kb_RUS$Importance
+vim.K562.RUS[which(rownames(vim.K562.RUS) %in% rfimpvars_K562_50kb_RUS$Feature), 3] <- rfimpvars_K562_50kb_RUS$Importance
+vim.K562.RUS[which(rownames(vim.K562.RUS) %in% rfimpvars_K562_100kb_RUS$Feature), 4] <- rfimpvars_K562_100kb_RUS$Importance
+
+vim.K562.RUS <- vim.K562.RUS[order(vim.K562.RUS[,1], decreasing = TRUE),]
+
+vim.K562.RUS.m <- melt(vim.K562.RUS)
+vim.K562.RUS.m$X1 <- factor(vim.K562.RUS.m$X1, levels = rownames(vim.K562.RUS))
+vim.K562.RUS.m$X2 <- factor(vim.K562.RUS.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.K562.RUS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Importance") +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation")
+
+```
+
+
+###ROS
+
+```{r}
+####GM12878
+
+rfimpvars_gm12878_10kb_ROS <- rfimpvars_gm12878_10kb_ROS[order(as.character(rfimpvars_gm12878_10kb_ROS$Feature)),]
+rfimpvars_gm12878_25kb_ROS <- rfimpvars_gm12878_25kb_ROS[order(as.character(rfimpvars_gm12878_25kb_ROS$Feature)),]
+rfimpvars_gm12878_50kb_ROS <- rfimpvars_gm12878_50kb_ROS[order(as.character(rfimpvars_gm12878_50kb_ROS$Feature)),]
+rfimpvars_gm12878_100kb_ROS <- rfimpvars_gm12878_100kb_ROS[order(as.character(rfimpvars_gm12878_100kb_ROS$Feature)),]
+
+unionannots <- union(rfimpvars_gm12878_10kb_ROS$Feature,
+                      union(rfimpvars_gm12878_25kb_ROS$Feature,
+                            union(rfimpvars_gm12878_50kb_ROS$Feature,rfimpvars_gm12878_100kb_ROS$Feature)))
+unionannots <- sort(unionannots)
+
+vim.gm12878.ROS <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.gm12878.ROS[which(rownames(vim.gm12878.ROS) %in% rfimpvars_gm12878_10kb_ROS$Feature), 1] <- rfimpvars_gm12878_10kb_ROS$Importance
+vim.gm12878.ROS[which(rownames(vim.gm12878.ROS) %in% rfimpvars_gm12878_25kb_ROS$Feature), 2] <- rfimpvars_gm12878_25kb_ROS$Importance
+vim.gm12878.ROS[which(rownames(vim.gm12878.ROS) %in% rfimpvars_gm12878_50kb_ROS$Feature), 3] <- rfimpvars_gm12878_50kb_ROS$Importance
+vim.gm12878.ROS[which(rownames(vim.gm12878.ROS) %in% rfimpvars_gm12878_100kb_ROS$Feature), 4] <- rfimpvars_gm12878_100kb_ROS$Importance
+
+vim.gm12878.ROS <- vim.gm12878.ROS[order(vim.gm12878.ROS[,1], decreasing = TRUE),]
+
+vim.gm12878.ROS.m <- melt(vim.gm12878.ROS)
+vim.gm12878.ROS.m$X1 <- factor(vim.gm12878.ROS.m$X1, levels = rownames(vim.gm12878.ROS))
+vim.gm12878.ROS.m$X2 <- factor(vim.gm12878.ROS.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.gm12878.ROS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Importance") +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation")
+
+
+####K562
+
+rfimpvars_K562_10kb_ROS <- rfimpvars_K562_10kb_ROS[order(as.character(rfimpvars_K562_10kb_ROS$Feature)),]
+rfimpvars_K562_25kb_ROS <- rfimpvars_K562_25kb_ROS[order(as.character(rfimpvars_K562_25kb_ROS$Feature)),]
+rfimpvars_K562_50kb_ROS <- rfimpvars_K562_50kb_ROS[order(as.character(rfimpvars_K562_50kb_ROS$Feature)),]
+rfimpvars_K562_100kb_ROS <- rfimpvars_K562_100kb_ROS[order(as.character(rfimpvars_K562_100kb_ROS$Feature)),]
+
+unionannots <- union(rfimpvars_K562_10kb_ROS$Feature,
+                      union(rfimpvars_K562_25kb_ROS$Feature,
+                            union(rfimpvars_K562_50kb_ROS$Feature,rfimpvars_K562_100kb_ROS$Feature)))
+unionannots <- sort(unionannots)
+
+vim.K562.ROS <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.K562.ROS[which(rownames(vim.K562.ROS) %in% rfimpvars_K562_10kb_ROS$Feature), 1] <- rfimpvars_K562_10kb_ROS$Importance
+vim.K562.ROS[which(rownames(vim.K562.ROS) %in% rfimpvars_K562_25kb_ROS$Feature), 2] <- rfimpvars_K562_25kb_ROS$Importance
+vim.K562.ROS[which(rownames(vim.K562.ROS) %in% rfimpvars_K562_50kb_ROS$Feature), 3] <- rfimpvars_K562_50kb_ROS$Importance
+vim.K562.ROS[which(rownames(vim.K562.ROS) %in% rfimpvars_K562_100kb_ROS$Feature), 4] <- rfimpvars_K562_100kb_ROS$Importance
+
+vim.K562.ROS <- vim.K562.ROS[order(vim.K562.ROS[,1], decreasing = TRUE),]
+
+vim.K562.ROS.m <- melt(vim.K562.ROS)
+vim.K562.ROS.m$X1 <- factor(vim.K562.ROS.m$X1, levels = rownames(vim.K562.ROS))
+vim.K562.ROS.m$X2 <- factor(vim.K562.ROS.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.K562.ROS.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Importance") +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation")
+
+```
+
+
+###None
+
+```{r}
+####GM12878
+
+rfimpvars_gm12878_10kb_none <- rfimpvars_gm12878_10kb_none[order(as.character(rfimpvars_gm12878_10kb_none$Feature)),]
+rfimpvars_gm12878_25kb_none <- rfimpvars_gm12878_25kb_none[order(as.character(rfimpvars_gm12878_25kb_none$Feature)),]
+rfimpvars_gm12878_50kb_none <- rfimpvars_gm12878_50kb_none[order(as.character(rfimpvars_gm12878_50kb_none$Feature)),]
+#rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[-which(is.na(rfimpvars_gm12878_100kb_none$Importance)),]
+rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[order(as.character(rfimpvars_gm12878_100kb_none$Feature)),]
+
+unionannots <- union(rfimpvars_gm12878_10kb_none$Feature,
+                      union(rfimpvars_gm12878_25kb_none$Feature,
+                            union(rfimpvars_gm12878_50kb_none$Feature,rfimpvars_gm12878_100kb_none$Feature)))
+unionannots <- sort(unionannots)
+
+vim.gm12878.none <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.gm12878.none[which(rownames(vim.gm12878.none) %in% rfimpvars_gm12878_10kb_none$Feature), 1] <- rfimpvars_gm12878_10kb_none$Importance
+vim.gm12878.none[which(rownames(vim.gm12878.none) %in% rfimpvars_gm12878_25kb_none$Feature), 2] <- rfimpvars_gm12878_25kb_none$Importance
+vim.gm12878.none[which(rownames(vim.gm12878.none) %in% rfimpvars_gm12878_50kb_none$Feature), 3] <- rfimpvars_gm12878_50kb_none$Importance
+vim.gm12878.none[which(rownames(vim.gm12878.none) %in% rfimpvars_gm12878_100kb_none$Feature), 4] <- rfimpvars_gm12878_100kb_none$Importance
+
+vim.gm12878.none <- vim.gm12878.none[order(vim.gm12878.none[,1], decreasing = TRUE),]
+
+vim.gm12878.none.m <- melt(vim.gm12878.none)
+vim.gm12878.none.m$X1 <- factor(vim.gm12878.none.m$X1, levels = rownames(vim.gm12878.none))
+vim.gm12878.none.m$X2 <- factor(vim.gm12878.none.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.gm12878.none.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Importance") +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation")
+
+
+####K562
+
+rfimpvars_K562_10kb_none <- rfimpvars_K562_10kb_none[order(as.character(rfimpvars_K562_10kb_none$Feature)),]
+rfimpvars_K562_25kb_none <- rfimpvars_K562_25kb_none[order(as.character(rfimpvars_K562_25kb_none$Feature)),]
+rfimpvars_K562_50kb_none <- rfimpvars_K562_50kb_none[order(as.character(rfimpvars_K562_50kb_none$Feature)),]
+rfimpvars_K562_100kb_none <- rfimpvars_K562_100kb_none[order(as.character(rfimpvars_K562_100kb_none$Feature)),]
+
+unionannots <- union(rfimpvars_K562_10kb_none$Feature,
+                      union(rfimpvars_K562_25kb_none$Feature,
+                            union(rfimpvars_K562_50kb_none$Feature,rfimpvars_K562_100kb_none$Feature)))
+unionannots <- sort(unionannots)
+
+vim.K562.none <- matrix(ncol=4, nrow=length(unionannots), dimnames=list(unionannots, c("10 kb", "25 kb", "50 kb", "100 kb")))
+vim.K562.none[which(rownames(vim.K562.none) %in% rfimpvars_K562_10kb_none$Feature), 1] <- rfimpvars_K562_10kb_none$Importance
+vim.K562.none[which(rownames(vim.K562.none) %in% rfimpvars_K562_25kb_none$Feature), 2] <- rfimpvars_K562_25kb_none$Importance
+vim.K562.none[which(rownames(vim.K562.none) %in% rfimpvars_K562_50kb_none$Feature), 3] <- rfimpvars_K562_50kb_none$Importance
+vim.K562.none[which(rownames(vim.K562.none) %in% rfimpvars_K562_100kb_none$Feature), 4] <- rfimpvars_K562_100kb_none$Importance
+
+vim.K562.none <- vim.K562.none[order(vim.K562.none[,1], decreasing = TRUE),]
+
+vim.K562.none.m <- melt(vim.K562.none)
+vim.K562.none.m$X1 <- factor(vim.K562.none.m$X1, levels = rownames(vim.K562.none))
+vim.K562.none.m$X2 <- factor(vim.K562.none.m$X2, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(vim.K562.none.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) + 
+    geom_tile(aes(fill = value), 
+              colour = "white") + 
+    scale_fill_gradient(low = "white", 
+                        high = "steelblue",
+                        na.value = "grey50",
+                        name="Importance") +
+    theme_bw() +
+    theme_minimal() +
+    xlab("Resolution") +
+    ylab("Genomic Annotation")
+
+```
