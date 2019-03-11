@@ -1,3 +1,8 @@
+- what to do about top important features in k562 that were not provided in the gm12878 cell line
+- fix supp fig 3; add lables to x axis; order by resamp technique
+   - look at using coefficients instead of 0/1
+-fix fig 4 and supp; put common x and y axis labels using annotate_figure()
+
 
 - Check if we can adapt F-racing strategy: Dal Pozzolo, Andrea, Olivier Caelen, Serge Waterschoot, and Gianluca Bontempi. “Racing for Unbalanced Methods Selection.” In International Conference on Intelligent Data Engineering and Automated Learning, 24–31. Springer, 2013. - F-racing strategy to select best performing method to deal with class imbalance. Overview of class imbalance techniques, including SMOTE, Ensemble methods. The F-Racing approach tests in parallel a set of alternatives and uses Friedman test to determine if an alternative is significantly worse than others.Random Forest and SMOTEnsemble generally perform best. race R package to perform F-racing algorithm https://cran.r-project.org/web/packages/race/index.html
 
