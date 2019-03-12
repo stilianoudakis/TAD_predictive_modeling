@@ -48,6 +48,9 @@ library(RColorBrewer)
 
 ```
 
+# Evaluating Elastic-Net
+
+## Heatmaps of whether or not a variable was reduced
 
 ### GM12878
 
@@ -1229,4 +1232,422 @@ levelplot(t(all_featuremat_k562),
           },
           xlab="",
           ylab="")
+```
+
+
+## Heatmaps using coefficients from elastic-net
+
+### G12878
+
+#### 10 kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/enetModel.rds")
+enetcoefs_none_oc_10kb_gm12878 <- coef(enetcoefs_none_oc_10kb_gm12878$finalModel, s=enetcoefs_none_oc_10kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_none_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/enetModel.rds")
+enetcoefs_none_op_10kb_gm12878 <- coef(enetcoefs_none_op_10kb_gm12878$finalModel, s=enetcoefs_none_op_10kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_none_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/enetModel.rds")
+enetcoefs_none_dist_10kb_gm12878 <- coef(enetcoefs_none_dist_10kb_gm12878$finalModel, s=enetcoefs_none_dist_10kb_gm12878$bestTune$lambda)
+
+#RUS
+##OC
+enetcoefs_RUS_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/enetModel.rds")
+enetcoefs_RUS_oc_10kb_gm12878 <- coef(enetcoefs_RUS_oc_10kb_gm12878$finalModel, s=enetcoefs_RUS_oc_10kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_RUS_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/enetModel.rds")
+enetcoefs_RUS_op_10kb_gm12878 <- coef(enetcoefs_RUS_op_10kb_gm12878$finalModel, s=enetcoefs_RUS_op_10kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_RUS_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/enetModel.rds")
+enetcoefs_RUS_dist_10kb_gm12878 <- coef(enetcoefs_RUS_dist_10kb_gm12878$finalModel, s=enetcoefs_RUS_dist_10kb_gm12878$bestTune$lambda)
+
+#ROS
+##OC
+enetcoefs_ROS_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/enetModel.rds")
+enetcoefs_ROS_oc_10kb_gm12878 <- coef(enetcoefs_ROS_oc_10kb_gm12878$finalModel, s=enetcoefs_ROS_oc_10kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_ROS_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/enetModel.rds")
+enetcoefs_ROS_op_10kb_gm12878 <- coef(enetcoefs_ROS_op_10kb_gm12878$finalModel, s=enetcoefs_ROS_op_10kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_ROS_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/enetModel.rds")
+enetcoefs_ROS_dist_10kb_gm12878 <- coef(enetcoefs_ROS_dist_10kb_gm12878$finalModel, s=enetcoefs_ROS_dist_10kb_gm12878$bestTune$lambda)
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/enetModel.rds")
+enetcoefs_SMOTE_oc_10kb_gm12878 <- coef(enetcoefs_SMOTE_oc_10kb_gm12878$finalModel, s=enetcoefs_SMOTE_oc_10kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_SMOTE_op_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/enetModel.rds")
+enetcoefs_SMOTE_op_10kb_gm12878 <- coef(enetcoefs_SMOTE_op_10kb_gm12878$finalModel, s=enetcoefs_SMOTE_op_10kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_SMOTE_dist_10kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/enetModel.rds")
+enetcoefs_SMOTE_dist_10kb_gm12878 <- coef(enetcoefs_SMOTE_dist_10kb_gm12878$finalModel, s=enetcoefs_SMOTE_dist_10kb_gm12878$bestTune$lambda)
+
+enetcoefsmat <- cbind(enetcoefs_none_oc_10kb_gm12878[-1,1], 
+                      enetcoefs_ROS_oc_10kb_gm12878[-1,1],
+                      enetcoefs_RUS_oc_10kb_gm12878[-1,1], 
+                      enetcoefs_SMOTE_oc_10kb_gm12878[-1,1], 
+                      
+                      enetcoefs_none_op_10kb_gm12878[-1,1], 
+                      enetcoefs_ROS_op_10kb_gm12878[-1,1],
+                      enetcoefs_RUS_op_10kb_gm12878[-1,1], 
+                      enetcoefs_SMOTE_op_10kb_gm12878[-1,1],
+                      
+                      enetcoefs_none_dist_10kb_gm12878[-1,1],
+                      enetcoefs_ROS_dist_10kb_gm12878[-1,1],
+                      enetcoefs_RUS_dist_10kb_gm12878[-1,1],
+                      enetcoefs_SMOTE_dist_10kb_gm12878[-1,1])
+
+enetcoefsmat[enetcoefsmat == 0] <- NA
+
+#colnames(enetcoefsmat) <- c(paste(c("OC","OP","Distance"), rep("None", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("RUS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("ROS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("SMOTE", 3), sep=" "))
+colnames(enetcoefsmat) <- rep(c("None", "ROS", "RUS", "SMOTE"), 3)
+rownames(enetcoefsmat) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rownames(enetcoefsmat))
+
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(10))
+
+
+```
+
+##### Overlap Counts
+
+```{r}
+heatmap.2(enetcoefsmat[,1:4],
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          dendrogram="row",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=1:4,
+          rowsep=1:nrow(enetcoefsmat),
+          keysize = 1) 
+```
+
+
+#####Overlap Percents
+
+```{r}
+heatmap.2(enetcoefsmat[,5:8],
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          dendrogram="row",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=1:4,
+          rowsep=1:nrow(enetcoefsmat),
+          keysize = 1) 
+```
+
+
+##### Distances
+
+```{r}
+heatmap.2(enetcoefsmat[,9:12],
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          dendrogram="row",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=1:4,
+          rowsep=1:nrow(enetcoefsmat),
+          keysize = 1) 
+```
+
+
+#### 25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/ENET/enetModel.rds")
+enetcoefs_none_oc_25kb_gm12878 <- coef(enetcoefs_none_oc_25kb_gm12878$finalModel, s=enetcoefs_none_oc_25kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_none_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/ENET/enetModel.rds")
+enetcoefs_none_op_25kb_gm12878 <- coef(enetcoefs_none_op_25kb_gm12878$finalModel, s=enetcoefs_none_op_25kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_none_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/enetModel.rds")
+enetcoefs_none_dist_25kb_gm12878 <- coef(enetcoefs_none_dist_25kb_gm12878$finalModel, s=enetcoefs_none_dist_25kb_gm12878$bestTune$lambda)
+
+#RUS
+##OC
+enetcoefs_RUS_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/ENET/enetModel.rds")
+enetcoefs_RUS_oc_25kb_gm12878 <- coef(enetcoefs_RUS_oc_25kb_gm12878$finalModel, s=enetcoefs_RUS_oc_25kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_RUS_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/ENET/enetModel.rds")
+enetcoefs_RUS_op_25kb_gm12878 <- coef(enetcoefs_RUS_op_25kb_gm12878$finalModel, s=enetcoefs_RUS_op_25kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_RUS_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/enetModel.rds")
+enetcoefs_RUS_dist_25kb_gm12878 <- coef(enetcoefs_RUS_dist_25kb_gm12878$finalModel, s=enetcoefs_RUS_dist_25kb_gm12878$bestTune$lambda)
+
+#ROS
+##OC
+enetcoefs_ROS_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/ENET/enetModel.rds")
+enetcoefs_ROS_oc_25kb_gm12878 <- coef(enetcoefs_ROS_oc_25kb_gm12878$finalModel, s=enetcoefs_ROS_oc_25kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_ROS_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/ENET/enetModel.rds")
+enetcoefs_ROS_op_25kb_gm12878 <- coef(enetcoefs_ROS_op_25kb_gm12878$finalModel, s=enetcoefs_ROS_op_25kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_ROS_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/enetModel.rds")
+enetcoefs_ROS_dist_25kb_gm12878 <- coef(enetcoefs_ROS_dist_25kb_gm12878$finalModel, s=enetcoefs_ROS_dist_25kb_gm12878$bestTune$lambda)
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/ENET/enetModel.rds")
+enetcoefs_SMOTE_oc_25kb_gm12878 <- coef(enetcoefs_SMOTE_oc_25kb_gm12878$finalModel, s=enetcoefs_SMOTE_oc_25kb_gm12878$bestTune$lambda)
+##OP
+enetcoefs_SMOTE_op_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/ENET/enetModel.rds")
+enetcoefs_SMOTE_op_25kb_gm12878 <- coef(enetcoefs_SMOTE_op_25kb_gm12878$finalModel, s=enetcoefs_SMOTE_op_25kb_gm12878$bestTune$lambda)
+##Distance
+enetcoefs_SMOTE_dist_25kb_gm12878 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/enetModel.rds")
+enetcoefs_SMOTE_dist_25kb_gm12878 <- coef(enetcoefs_SMOTE_dist_25kb_gm12878$finalModel, s=enetcoefs_SMOTE_dist_25kb_gm12878$bestTune$lambda)
+
+enetcoefsmat <- cbind(enetcoefs_none_oc_25kb_gm12878[-1,1], 
+                      enetcoefs_ROS_oc_25kb_gm12878[-1,1],
+                      enetcoefs_RUS_oc_25kb_gm12878[-1,1], 
+                      enetcoefs_SMOTE_oc_25kb_gm12878[-1,1], 
+                      
+                      enetcoefs_none_op_25kb_gm12878[-1,1], 
+                      enetcoefs_ROS_op_25kb_gm12878[-1,1],
+                      enetcoefs_RUS_op_25kb_gm12878[-1,1], 
+                      enetcoefs_SMOTE_op_25kb_gm12878[-1,1],
+                      
+                      enetcoefs_none_dist_25kb_gm12878[-1,1],
+                      enetcoefs_ROS_dist_25kb_gm12878[-1,1],
+                      enetcoefs_RUS_dist_25kb_gm12878[-1,1],
+                      enetcoefs_SMOTE_dist_25kb_gm12878[-1,1])
+
+enetcoefsmat[enetcoefsmat == 0] <- NA
+
+#colnames(enetcoefsmat) <- c(paste(c("OC","OP","Distance"), rep("None", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("RUS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("ROS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("SMOTE", 3), sep=" "))
+colnames(enetcoefsmat) <- rep(c("None", "ROS", "RUS", "SMOTE"), 3)
+rownames(enetcoefsmat) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "Gm12878", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rownames(enetcoefsmat))
+
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(10))
+
+
+```
+
+##### Overlap Counts
+
+```{r}
+heatmap.2(enetcoefsmat[,1:4],
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          dendrogram="row",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=1:4,
+          rowsep=1:nrow(enetcoefsmat),
+          keysize = 1) 
+```
+
+
+#####Overlap Percents
+
+```{r}
+heatmap.2(enetcoefsmat[,5:8],
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          dendrogram="row",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=1:4,
+          rowsep=1:nrow(enetcoefsmat),
+          keysize = 1) 
+```
+
+
+##### Distances
+
+```{r}
+my_palette2 <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(10))
+my_palette2 <- c(my_palette2[1:20], "gray", my_palette2[21:39])
+my_palette2 <- colorRampPalette(c("blue", "white", "red"))(n=100)
+
+color.palette  <- c(colorRampPalette(c("blue", "gray", "red"))(n=99)[1:49], 
+                    "#F8F8F8", 
+                    colorRampPalette(c("yellow", "orange", "red"))(n=99)[50:99])
+enetcoefsmat2 <- enetcoefsmat
+enetcoefsmat2[,9:12][is.na(enetcoefsmat2[,9:12])] <- 0
+
+col_breaks = c(seq(-.999,-.900,length=2),
+           seq(-.899,-.800,length=2),
+           seq(-.799,-.700,length=2),
+           seq(-.699,-.600,length=2),
+           seq(-.599,-.500,length=2),
+           seq(-.499,-.400,length=2),
+           seq(-.399,-.300,length=2),
+           seq(-.299,-.200,length=2),
+           seq(-.199,-.100,length=2),
+           seq(-.099,-.001,length=2),
+           seq(0,0.1,length=1),  # for gray
+           seq(.001,.099,length=2),
+           seq(.100,.199,length=2),
+           seq(.200,.299,length=2),
+           seq(.300,.399,length=2),
+           seq(.400,.499,length=2),
+           seq(.500,.599,length=2),
+           seq(.600,.699,length=2),
+           seq(.700,.799,length=2),
+           seq(.800,.899,length=2),
+           seq(.900,.999,length=2))
+
+col_breaks = c(seq(-1,-.7,length=20),
+           seq(-.699,-.001,length=20),
+           seq(0,0.001,length=1),  # for white
+           seq(.001,.699,length=20),
+           seq(.7,1,length=20))
+
+heatmap.2(enetcoefsmat2[,9:12],
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette2,       # use on color palette defined earlier
+          #na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          dendrogram="row",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=1:4,
+          rowsep=1:nrow(enetcoefsmat),
+          keysize = 1) 
 ```
