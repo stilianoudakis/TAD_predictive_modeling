@@ -1,0 +1,79 @@
+---
+title: "Performing Cluster Analysis on TAD boundaries & Annotations"
+author: "Spiro Stilianoudakis"
+date: "March 14, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(factoextra)
+library(FactoMineR)
+
+```
+
+# Boundaries as rows; Annotations as columns; clustering annotations
+
+## GM12878
+
+### 10kb
+
+#### Overlap counts data
+
+```{r}
+pcadat_gm12878_10kb_count <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_count.rds")
+
+#filtering low variance predictors
+nzv <- nearZeroVar(pcadat_gm12878_10kb_count , saveMetrics= TRUE)
+nzvar <- rownames(nzv[nzv$nzv,])
+nzvar
+
+pcadat_gm12878_10kb_count_f <- pcadat_gm12878_10kb_count[, -which(colnames(pcadat_gm12878_10kb_count) %in% nzvar)]
+
+dim(pcadat_gm12878_10kb_count) 
+dim(pcadat_gm12878_10kb_count_f) 
+```
+
+#### Distance data
+
+```{r}
+pcadat_gm12878_10kb_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_dist.rds")
+```
