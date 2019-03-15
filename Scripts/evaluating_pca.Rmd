@@ -2461,13 +2461,13 @@ fileslst <- c(paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "1
               paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_dist.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_K562_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_count.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_K562_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_perc.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_K562_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_dist.rds",sep=""))
 
@@ -2534,55 +2534,55 @@ for(i in 1:length(fileslst)){
                                                     "Uchicago"), collapse = "|"),"", colnames(pcadata_f))
 
   #heatmap 
-  #my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(100))
-  #png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", heatnames[i], sep=""),
-  #    width=11, height=8, units="in")
-  #heatmap.2(pcadata_f,
-  #        #cellnote = ,  # same data set for cell labels
-  #        #main = "", # heat map title
-  #        notecol="black",      # change font color of cell labels to black
-  #        density.info="none",  # turns off density plot inside color legend
-  #        trace="none",         # turns off trace lines inside the heat map
-  #        #margins =c(5,5),     # widens margins around plot
-  #        col=my_palette,       # use on color palette defined earlier
-  #        #na.color = "gray",
-  #        #breaks=col_breaks,    # enable color transition at specified limits
-  #        key=TRUE,
-  #        dendrogram="column",     # only draw a row dendrogram
-  #        cexRow=0.5,
-  #        cexCol=0.5,
-  #        labRow = FALSE,
-  #        #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
-  #        #lhei=c(.5,6,0),
-  #        #sepwidth=c(0.001,0.001),
-  #        #sepcolor="black",
-  #        #colsep=1:ncol(pcadata_f),
-  #        #rowsep=1:nrow(pcadata_f),
-  #        keysize = 1) 
-  #dev.off()
+  my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(100))
+  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", heatnames[i], sep=""),
+      width=11, height=8, units="in", res = 300)
+  heatmap.2(pcadata_f,
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          #margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=TRUE,
+          dendrogram="column",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.5,
+          labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          #sepwidth=c(0.001,0.001),
+          #sepcolor="black",
+          #colsep=1:ncol(pcadata_f),
+          #rowsep=1:nrow(pcadata_f),
+          keysize = 1) 
+  dev.off()
   
   #PCA
-  pcadata_f <- t(pcadata_f)
-  Group <- ifelse(rownames(pcadata_f) %in% cs, "Chromatin State", ###chromatin states
-                                            ifelse(rownames(pcadata_f)=="DNase", "DNase I", ###dnase
-                                                   ifelse(rownames(pcadata_f) %in% hm, "Histone Modification", ###histone modifications
-                                                          "TFBS"))) ###transcription factor binding sites
-  pcadata_f <- cbind.data.frame(pcadata_f, Group)
+  #pcadata_f <- t(pcadata_f)
+  #Group <- ifelse(rownames(pcadata_f) %in% cs, "Chromatin State", ###chromatin states
+  #                                          ifelse(rownames(pcadata_f)=="DNase", "DNase I", ###dnase
+  #                                                 ifelse(rownames(pcadata_f) %in% hm, "Histone Modification", ###histone modifications
+  #                                                        "TFBS"))) ###transcription factor binding sites
+  #pcadata_f <- cbind.data.frame(pcadata_f, Group)
+  #
+  ###Plots without loadings
+  #p <- autoplot(prcomp(pcadata_f[,-(dim(pcadata_f)[2])]),
+  #       #loadings = TRUE,
+  #       label = TRUE, 
+  #       label.size = 3,
+  #       label.repel=T,
+  #       data=pcadata_f,
+  #       colour='Group',
+  #       label.show.legend = FALSE) +
+  #theme_bw()
   
-  ##Plots without loadings
-  p <- autoplot(prcomp(pcadata_f[,-(dim(pcadata_f)[2])]),
-         #loadings = TRUE,
-         label = TRUE, 
-         label.size = 3,
-         label.repel=T,
-         data=pcadata_f,
-         colour='Group',
-         label.show.legend = FALSE) +
-  theme_bw()
-  
-  ggsave(p, filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", 
-                             scorepnames[i], sep=""),
-         width=8, height=11, units="in", dpi=300)
+  #ggsave(p, filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", 
+  #                           scorepnames[i], sep=""),
+  #       width=8, height=11, units="in", dpi=300)
 
 }
 
