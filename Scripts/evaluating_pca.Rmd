@@ -2452,22 +2452,22 @@ autoplot(kmeans(pcadat_K562_100kb_dist_f[,-(dim(pcadat_K562_100kb_dist_f2)[2])],
 ## Saving plots
 
 ```{r}
-fileslst <- c(paste("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_GM12878_", 
+fileslst <- c(paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "100kb"), "/Ensemble/PCA/pcadat_GM12878_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_count.rds",sep=""),
-              paste("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_perc.rds",sep=""),
-              paste("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_dist.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/10kb/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_count.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/10kb/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_perc.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/10kb/Ensemble/PCA/pcadat_GM12878_", 
+              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
                     c("10kb", "25kb", "50kb", "100kb"), 
                     "_dist.rds",sep=""))
 
@@ -2502,6 +2502,7 @@ hm <- unique(gsub(paste(c("Gm12878-", "K562-", ".bed"),
 
 
 for(i in 1:length(fileslst)){
+  print(i)
   pcadata <- readRDS(fileslst[i])
   
   #performing log2 transformation only for distance predictor types
@@ -2514,7 +2515,7 @@ for(i in 1:length(fileslst)){
   nzvar <- rownames(nzv[nzv$nzv,])
   if(length(nzvar) > 0){ 
     pcadata_f <- pcadata[, -which(colnames(pcadata) %in% nzvar)]
-    }
+    }else{pcadata_f <- pcadata}
   
   #cleaning column names
   colnames(pcadata_f) <- gsub(paste(c("`", 
@@ -2575,7 +2576,8 @@ for(i in 1:length(fileslst)){
          label.size = 3,
          label.repel=T,
          data=pcadata_f,
-         colour='Group') +
+         colour='Group',
+         label.show.legend = FALSE) +
   theme_bw()
   
   ggsave(p, filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", 
