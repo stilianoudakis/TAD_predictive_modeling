@@ -112,42 +112,31 @@ heatmap.2(pcadat_gm12878_10kb_count_f,
           keysize = 1) 
 
 #PCA
-pca_gm12878_10kb_count <- prcomp(pcadat_gm12878_10kb_count_f, 
-                  scale = FALSE)
-
-##looking at the loadings
-pca_gm12878_10kb_count$rotation[1:5,1:5]
-
-##looking at the score vectors
-pca_gm12878_10kb_count$x[1:5,1:5]
-
-##screeplot
-###full
-std_dev <- pca_gm12878_10kb_count$sdev
-pr_var <- std_dev^2
-prop_varex <- pr_var/sum(pr_var)
-plot(prop_varex, xlab = "Principal Component",
-             ylab = "Proportion of Variance Explained",
-             type = "b")
-###top 10
-fviz_eig(pca_gm12878_10kb_count, addlabels = TRUE)
-
-##cumulative variance explained
-plot(cumsum(prop_varex), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-##biplot
-biplot(pca_gm12878_10kb_count, scale = 0)
-
-##graph of the variables
-fviz_pca_var(pca_gm12878_10kb_count,
-             col.var = "contrib", # Color by contributions to the PC
-             gradient.cols = c("red", "white", "blue"),
-             repel = TRUE     # Avoid text overlapping
-             )
-
-
+pcadat_gm12878_10kb_count_f <- t(pcadat_gm12878_10kb_count_f)
+##with loadings
+autoplot(prcomp(pcadat_gm12878_10kb_count_f),
+         loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##without loadings
+autoplot(prcomp(pcadat_gm12878_10kb_count_f),
+         #loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##kmeans clustering algorithm to group annotations
+set.seed(1)
+autoplot(kmeans(pcadat_gm12878_10kb_count_f, 4),
+         data=pcadat_gm12878_10kb_count_f,
+         frame = TRUE,
+         #frame.type = 'norm',
+         label = TRUE, 
+         label.size = 3, 
+         label.repel=T) + 
+  theme_bw()
 
 ```
 
@@ -157,12 +146,18 @@ fviz_pca_var(pca_gm12878_10kb_count,
 pcadat_gm12878_10kb_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_dist.rds")
 dim(pcadat_gm12878_10kb_dist) 
 
+#performing log2 transformation
+pcadat_gm12878_10kb_dist <- apply(pcadat_gm12878_10kb_dist,2,function(x){log(x + 1, base=2)})
+
+
 #filtering low variance predictors
-nzv <- nearZeroVar(pcadat_gm12878_10kb_dist , saveMetrics= TRUE)
-nzvar <- rownames(nzv[nzv$nzv,])
-nzvar
+#nzv <- nearZeroVar(pcadat_gm12878_10kb_dist , saveMetrics= TRUE)
+#nzvar <- rownames(nzv[nzv$nzv,])
+#nzvar
+#no near zero variance predictors
 
 pcadat_gm12878_10kb_dist_f <- pcadat_gm12878_10kb_dist[, -which(colnames(pcadat_gm12878_10kb_dist) %in% nzvar)]
+pcadat_gm12878_10kb_dist_f <- pcadat_gm12878_10kb_dist
 
 dim(pcadat_gm12878_10kb_dist) 
 dim(pcadat_gm12878_10kb_dist_f) 
@@ -207,41 +202,207 @@ heatmap.2(pcadat_gm12878_10kb_dist_f,
           keysize = 1) 
 
 #PCA
-pca_gm12878_10kb_dist <- prcomp(pcadat_gm12878_10kb_dist_f, 
-                  scale = FALSE)
-
-##looking at the loadings
-pca_gm12878_10kb_dist$rotation[1:5,1:5]
-
-##looking at the score vectors
-pca_gm12878_10kb_dist$x[1:5,1:5]
-
-##screeplot
-###full
-std_dev <- pca_gm12878_10kb_dist$sdev
-pr_var <- std_dev^2
-prop_varex <- pr_var/sum(pr_var)
-plot(prop_varex, xlab = "Principal Component",
-             ylab = "Proportion of Variance Explained",
-             type = "b")
-###top 10
-fviz_eig(pca_gm12878_10kb_dist, addlabels = TRUE)
-
-##cumulative variance explained
-plot(cumsum(prop_varex), xlab = "Principal Component",
-     ylab = "Cumulative Proportion of Variance Explained",
-     ylim = c(0, 1), type = "b")
-
-##biplot
-biplot(pca_gm12878_10kb_dist, scale = 0)
-
-##graph of the variables
-fviz_pca_var(pca_gm12878_10kb_dist,
-             col.var = "contrib", # Color by contributions to the PC
-             gradient.cols = c("red", "white", "blue"),
-             repel = TRUE     # Avoid text overlapping
-             )
+pcadat_gm12878_10kb_dist_f <- t(pcadat_gm12878_10kb_dist_f)
+##with loadings
+autoplot(prcomp(pcadat_gm12878_10kb_dist_f),
+         loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##without loadings
+autoplot(prcomp(pcadat_gm12878_10kb_dist_f),
+         #loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##kmeans clustering algorithm to group annotations
+set.seed(1)
+autoplot(kmeans(pcadat_gm12878_10kb_dist_f, 5),
+         data=pcadat_gm12878_10kb_dist_f,
+         frame = TRUE,
+         #frame.type = 'norm',
+         label = TRUE, 
+         label.size = 3, 
+         label.repel=T) + 
+  theme_bw()
+```
 
 
+## K562
 
+### 10kb
+
+#### Overlap counts data
+
+```{r}
+pcadat_K562_10kb_count <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/PCA/pcadat_K562_10kb_count.rds")
+dim(pcadat_K562_10kb_count) 
+
+#filtering low variance predictors
+nzv <- nearZeroVar(pcadat_K562_10kb_count , saveMetrics= TRUE)
+nzvar <- rownames(nzv[nzv$nzv,])
+nzvar
+
+pcadat_K562_10kb_count_f <- pcadat_K562_10kb_count[, -which(colnames(pcadat_K562_10kb_count) %in% nzvar)]
+
+dim(pcadat_K562_10kb_count) 
+dim(pcadat_K562_10kb_count_f) 
+
+colnames(pcadat_K562_10kb_count_f) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", colnames(pcadat_K562_10kb_count_f))
+
+#heatmap 
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(100))
+heatmap.2(pcadat_K562_10kb_count_f,
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          #margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=TRUE,
+          dendrogram="column",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.5,
+          labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          #sepwidth=c(0.001,0.001),
+          #sepcolor="black",
+          #colsep=1:ncol(pcadat_K562_10kb_count_f),
+          #rowsep=1:nrow(pcadat_K562_10kb_count_f),
+          keysize = 1) 
+
+#PCA
+pcadat_K562_10kb_count_f <- t(pcadat_K562_10kb_count_f)
+##with loadings
+autoplot(prcomp(pcadat_K562_10kb_count_f),
+         loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##without loadings
+autoplot(prcomp(pcadat_K562_10kb_count_f),
+         #loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##kmeans clustering algorithm to group annotations
+set.seed(1)
+autoplot(kmeans(pcadat_K562_10kb_count_f, 4),
+         data=pcadat_K562_10kb_count_f,
+         frame = TRUE,
+         #frame.type = 'norm',
+         label = TRUE, 
+         label.size = 3, 
+         label.repel=T) + 
+  theme_bw()
+
+```
+
+#### Distance data
+
+```{r}
+pcadat_K562_10kb_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/PCA/pcadat_K562_10kb_dist.rds")
+dim(pcadat_K562_10kb_dist) 
+
+#performing log2 transformation
+pcadat_K562_10kb_dist <- apply(pcadat_K562_10kb_dist,2,function(x){log(x + 1, base=2)})
+
+
+#filtering low variance predictors
+#nzv <- nearZeroVar(pcadat_K562_10kb_dist , saveMetrics= TRUE)
+#nzvar <- rownames(nzv[nzv$nzv,])
+#nzvar
+#no near zero variance predictors
+
+pcadat_K562_10kb_dist_f <- pcadat_K562_10kb_dist[, -which(colnames(pcadat_K562_10kb_dist) %in% nzvar)]
+pcadat_K562_10kb_dist_f <- pcadat_K562_10kb_dist
+
+dim(pcadat_K562_10kb_dist) 
+dim(pcadat_K562_10kb_dist_f) 
+
+colnames(pcadat_K562_10kb_dist_f) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", colnames(pcadat_K562_10kb_dist_f))
+
+#heatmap 
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(100))
+heatmap.2(pcadat_K562_10kb_dist_f,
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          #margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          #na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=TRUE,
+          dendrogram="column",     # only draw a row dendrogram
+          cexRow=0.5,
+          cexCol=0.5,
+          labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          #sepwidth=c(0.001,0.001),
+          #sepcolor="black",
+          #colsep=1:ncol(pcadat_K562_10kb_dist_f),
+          #rowsep=1:nrow(pcadat_K562_10kb_dist_f),
+          keysize = 1) 
+
+#PCA
+pcadat_K562_10kb_dist_f <- t(pcadat_K562_10kb_dist_f)
+##with loadings
+autoplot(prcomp(pcadat_K562_10kb_dist_f),
+         loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##without loadings
+autoplot(prcomp(pcadat_K562_10kb_dist_f),
+         #loadings = TRUE,
+         label = TRUE, 
+         label.size = 3,
+         label.repel=T) +
+  theme_bw()
+##kmeans clustering algorithm to group annotations
+set.seed(1)
+autoplot(kmeans(pcadat_K562_10kb_dist_f, 4),
+         data=pcadat_K562_10kb_dist_f,
+         frame = TRUE,
+         #frame.type = 'norm',
+         label = TRUE, 
+         label.size = 3, 
+         label.repel=T) + 
+  theme_bw()
 ```
