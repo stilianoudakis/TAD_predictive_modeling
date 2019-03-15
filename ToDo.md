@@ -1,4 +1,10 @@
 - what to do about top important features in k562 that were not provided in the gm12878 cell line
+- compare results from rfe method with enet method
+- quantify correlations in table
+   - think abount other ways to present (plots etc)
+- break correlation heatmaps into different categories
+   - remove rows with all NAs (to fix clustering issue)
++ plot clustered heatmaps and score plots from pca for different predictor types
 + fix supp fig 3; add lables to x axis; order by resamp technique
    + look at using coefficients instead of 0/1
    + using coefficients makes heatmap too cluttered
@@ -7,7 +13,8 @@
    + there are instances where all rows are regularized (0 coef); so clustering is not possible
 +fix fig 4 and supp fig 4; put common x and y axis labels using annotate_figure()
 +fix supp fig 5; put common x and y axis labels using annotate_figure()
-- compare results from rfe method with enet method
+
+
 
 
 - Check if we can adapt F-racing strategy: Dal Pozzolo, Andrea, Olivier Caelen, Serge Waterschoot, and Gianluca Bontempi. “Racing for Unbalanced Methods Selection.” In International Conference on Intelligent Data Engineering and Automated Learning, 24–31. Springer, 2013. - F-racing strategy to select best performing method to deal with class imbalance. Overview of class imbalance techniques, including SMOTE, Ensemble methods. The F-Racing approach tests in parallel a set of alternatives and uses Friedman test to determine if an alternative is significantly worse than others.Random Forest and SMOTEnsemble generally perform best. race R package to perform F-racing algorithm https://cran.r-project.org/web/packages/race/index.html
