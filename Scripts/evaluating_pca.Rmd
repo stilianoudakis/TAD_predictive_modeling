@@ -47,7 +47,7 @@ library(cluster)
 library(RColorBrewer)
 library(factoextra)
 library(FactoMineR)
-
+library(ggfortify)
 ```
 
 # Clustering Annotations
@@ -56,113 +56,98 @@ library(FactoMineR)
 
 ### 10kb
 
-#### Overlap counts data
-
 ```{r}
 pcadat_gm12878_10kb_count <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_count.rds")
-dim(pcadat_gm12878_10kb_count) 
+pcadat_gm12878_10kb_perc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_perc.rds")
+pcadat_gm12878_10kb_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_dist.rds")
 
-#filtering low variance predictors
-nzv <- nearZeroVar(pcadat_gm12878_10kb_count , saveMetrics= TRUE)
-nzvar <- rownames(nzv[nzv$nzv,])
-nzvar
+#performing log2 transformation on distances
+pcadat_gm12878_10kb_dist <- apply(pcadat_gm12878_10kb_dist,2,function(x){log(x + 1, base=2)})
 
-pcadat_gm12878_10kb_count_f <- pcadat_gm12878_10kb_count[, -which(colnames(pcadat_gm12878_10kb_count) %in% nzvar)]
+cleancolnames <- function(x){gsub(paste(c("`", 
+                                          "_",
+                                          #"-",
+                                          #"Gm12878", 
+                                          #"Haib", 
+                                          #"Sydh",
+                                          #"Uta",
+                                          #"Uw",
+                                          #"Broad",
+                                          #"Uchicago",
+                                          "dist",
+                                          "count",
+                                          "perc"), collapse = "|"),"", 
+                                  colnames(x))}
 
-dim(pcadat_gm12878_10kb_count) 
-dim(pcadat_gm12878_10kb_count_f) 
+colnames(pcadat_gm12878_10kb_count) <- cleancolnames(pcadat_gm12878_10kb_count)
+colnames(pcadat_gm12878_10kb_perc) <- cleancolnames(pcadat_gm12878_10kb_perc)
+colnames(pcadat_gm12878_10kb_dist) <- cleancolnames(pcadat_gm12878_10kb_dist)
 
-colnames(pcadat_gm12878_10kb_count_f) <- gsub(paste(c("`", 
-                                                    "_",
-                                                    "-",
-                                                    "Gm12878", 
-                                                    "dist",
-                                                    "count",
-                                                    "perc",
-                                                    "Haib", 
-                                                    "Sydh",
-                                                    "Uta",
-                                                    "Uw",
-                                                    "Broad",
-                                                    "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_count_f))
+pcadat_gm12878_10kb_count <- t(pcadat_gm12878_10kb_count)
+pcadat_gm12878_10kb_perc <- t(pcadat_gm12878_10kb_perc)
+pcadat_gm12878_10kb_dist <- t(pcadat_gm12878_10kb_dist)
 
-#heatmap 
-my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(100))
-heatmap.2(pcadat_gm12878_10kb_count_f,
-          #cellnote = ,  # same data set for cell labels
-          #main = "", # heat map title
-          notecol="black",      # change font color of cell labels to black
-          density.info="none",  # turns off density plot inside color legend
-          trace="none",         # turns off trace lines inside the heat map
-          #margins =c(5,5),     # widens margins around plot
-          col=my_palette,       # use on color palette defined earlier
-          #na.color = "gray",
-          #breaks=col_breaks,    # enable color transition at specified limits
-          key=TRUE,
-          dendrogram="column",     # only draw a row dendrogram
-          cexRow=0.5,
-          cexCol=0.5,
-          labRow = FALSE,
-          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
-          #lhei=c(.5,6,0),
-          #sepwidth=c(0.001,0.001),
-          #sepcolor="black",
-          #colsep=1:ncol(pcadat_gm12878_10kb_count_f),
-          #rowsep=1:nrow(pcadat_gm12878_10kb_count_f),
-          keysize = 1) 
+#pcadat_gm12878_10kb_count <- data.frame(pcadat_gm12878_10kb_count)
+#pcadat_gm12878_10kb_perc <- data.frame(pcadat_gm12878_10kb_perc)
+#pcadat_gm12878_10kb_dist <- data.frame(pcadat_gm12878_10kb_dist)
 
-##create annotation groups
-cs <- unique(gsub(paste(c("Gm12878-", "K562-", ".bed"), 
-                 sep = "",
-                 collapse = "|"),
-           "", 
-           list.files("Z:/TAD_data_analysis/annotations/BroadHMM")))
-hm <- unique(gsub(paste(c("Gm12878-", "K562-", ".bed"), 
-                 sep = "",
-                 collapse = "|"),
-           "", 
-           list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")))
+#pcadat_gm12878_10kb_count$Type <- "Counts"
+#pcadat_gm12878_10kb_perc$Type <- "Percent"
+#pcadat_gm12878_10kb_dist$Type <- "Distance"
 
-#PCA
-pcadat_gm12878_10kb_count_f <- t(pcadat_gm12878_10kb_count_f)
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
 
-Group <- ifelse(rownames(pcadat_gm12878_10kb_count_f) %in% cs, "Chromatin State", ###chromatin states
-                                            ifelse(rownames(pcadat_gm12878_10kb_count_f)=="DNase", "DNase I", ###dnase
-                                                   ifelse(rownames(pcadat_gm12878_10kb_count_f) %in% hm, "Histone Modification", ###histone modifications
-                                                          "TFBS"))) ###transcription factor binding sites
+```
 
-pcadat_gm12878_10kb_count_f <- cbind.data.frame(pcadat_gm12878_10kb_count_f, Group)
+#### Chromatin States
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+```
+
+##### Overlap Counts
+
+```{r}
+pcadat_gm12878_10kb_count <- pcadat_gm12878_10kb_count[which(rownames(pcadat_gm12878_10kb_count) %in% chromstatevars),]
+
 ##with loadings
-autoplot(prcomp(pcadat_gm12878_10kb_count_f[,-(dim(pcadat_gm12878_10kb_count_f2)[2])]),
+autoplot(prcomp(pcadat_gm12878_10kb_count),
          loadings = TRUE,
          label = TRUE, 
          label.size = 3,
-         label.repel=T,
-         data=pcadat_gm12878_10kb_count_f,
-         colour='Group') +
+         label.repel=T) +
   theme_bw()
 ##without loadings
-autoplot(prcomp(pcadat_gm12878_10kb_count_f[,-(dim(pcadat_gm12878_10kb_count_f)[2])]),
+autoplot(prcomp(pcadat_gm12878_10kb_count),
          #loadings = TRUE,
          label = TRUE, 
          label.size = 3,
-         label.repel=T,
-         data=pcadat_gm12878_10kb_count_f,
-         colour='Group') +
+         label.repel=T) +
   theme_bw()
 ##kmeans clustering algorithm to group annotations
+wss <- (nrow(pcadat_gm12878_10kb_count)-1)*sum(apply(pcadat_gm12878_10kb_count,2,var))
+  for (i in 2:5) wss[i] <- sum(kmeans(pcadat_gm12878_10kb_count,
+                                       centers=i, nstart=25, iter.max = 1000)$withinss)
+plot(1:5, wss, type="b", xlab="Number of Clusters",
+     ylab="Within groups sum of squares")
+
 set.seed(1)
-autoplot(kmeans(pcadat_gm12878_10kb_count_f[,-(dim(pcadat_gm12878_10kb_count_f2)[2])], 4),
-         data=pcadat_gm12878_10kb_count_f,
+autoplot(kmeans(pcadat_gm12878_10kb_count, 3, nstart=25, iter.max = 1000),
+         data=pcadat_gm12878_10kb_count,
          frame = TRUE,
          frame.type = 'norm',
          label = TRUE, 
          label.size = 3, 
-         #colour='Group',
-         label.repel=T) + 
+         label.repel=T,
+         label.show.legend = FALSE) + 
+  #guides(fill=FALSE) +
   theme_bw()
 
 ```
+
+
+
 
 #### Overlap percent data
 
