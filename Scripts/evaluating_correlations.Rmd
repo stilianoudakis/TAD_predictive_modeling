@@ -1163,3 +1163,1317 @@ corrplot(cormat,
          mar = c(0, 0, 0, 0))
 
 ```
+
+
+## Stratifying by annotation group (using pca data--flanked TAD boundaries)
+
+###GM12878
+
+####10kb
+
+##### Counts
+
+```{r}
+pcadat_gm12878_10kb_count <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_count.rds")
+
+colnames(pcadat_gm12878_10kb_count) <- gsub("_count","",colnames(pcadat_gm12878_10kb_count))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_10kb_count_chromstates <- pcadat_gm12878_10kb_count[,which(colnames(pcadat_gm12878_10kb_count) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_10kb_count_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_count_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_10kb_count_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_10kb_count_histones <- pcadat_gm12878_10kb_count[,which(colnames(pcadat_gm12878_10kb_count) %in% histonevars)]
+
+colnames(pcadat_gm12878_10kb_count_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_count_histones))
+
+
+cormat <- cor(pcadat_gm12878_10kb_count_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_10kb_count_tfbs <- pcadat_gm12878_10kb_count[,which(colnames(pcadat_gm12878_10kb_count) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_10kb_count_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_count_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_10kb_count_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+##### Percents
+
+```{r}
+pcadat_gm12878_10kb_perc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_perc.rds")
+
+colnames(pcadat_gm12878_10kb_perc) <- gsub("_perc","",colnames(pcadat_gm12878_10kb_perc))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_10kb_perc_chromstates <- pcadat_gm12878_10kb_perc[,which(colnames(pcadat_gm12878_10kb_perc) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_10kb_perc_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_perc_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_10kb_perc_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_10kb_perc_histones <- pcadat_gm12878_10kb_perc[,which(colnames(pcadat_gm12878_10kb_perc) %in% histonevars)]
+
+colnames(pcadat_gm12878_10kb_perc_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_perc_histones))
+
+
+cormat <- cor(pcadat_gm12878_10kb_perc_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_10kb_perc_tfbs <- pcadat_gm12878_10kb_perc[,which(colnames(pcadat_gm12878_10kb_perc) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_10kb_perc_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_perc_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_10kb_perc_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+####Distances
+
+```{r}
+pcadat_gm12878_10kb_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/PCA/pcadat_gm12878_10kb_dist.rds")
+
+colnames(pcadat_gm12878_10kb_dist) <- gsub("_dist","",colnames(pcadat_gm12878_10kb_dist))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_10kb_dist_chromstates <- pcadat_gm12878_10kb_dist[,which(colnames(pcadat_gm12878_10kb_dist) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_10kb_dist_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_dist_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_10kb_dist_chromstates, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_10kb_dist_histones <- pcadat_gm12878_10kb_dist[,which(colnames(pcadat_gm12878_10kb_dist) %in% histonevars)]
+
+colnames(pcadat_gm12878_10kb_dist_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_dist_histones))
+
+
+cormat <- cor(pcadat_gm12878_10kb_dist_histones, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_10kb_dist_tfbs <- pcadat_gm12878_10kb_dist[,which(colnames(pcadat_gm12878_10kb_dist) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_10kb_dist_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_10kb_dist_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_10kb_dist_tfbs, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+####25kb
+
+##### Counts
+
+```{r}
+pcadat_gm12878_25kb_count <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/PCA/pcadat_gm12878_25kb_count.rds")
+
+colnames(pcadat_gm12878_25kb_count) <- gsub("_count","",colnames(pcadat_gm12878_25kb_count))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_25kb_count_chromstates <- pcadat_gm12878_25kb_count[,which(colnames(pcadat_gm12878_25kb_count) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_25kb_count_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_count_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_25kb_count_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_25kb_count_histones <- pcadat_gm12878_25kb_count[,which(colnames(pcadat_gm12878_25kb_count) %in% histonevars)]
+
+colnames(pcadat_gm12878_25kb_count_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_count_histones))
+
+
+cormat <- cor(pcadat_gm12878_25kb_count_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_25kb_count_tfbs <- pcadat_gm12878_25kb_count[,which(colnames(pcadat_gm12878_25kb_count) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_25kb_count_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_count_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_25kb_count_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+##### Percents
+
+```{r}
+pcadat_gm12878_25kb_perc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/PCA/pcadat_gm12878_25kb_perc.rds")
+
+colnames(pcadat_gm12878_25kb_perc) <- gsub("_perc","",colnames(pcadat_gm12878_25kb_perc))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_25kb_perc_chromstates <- pcadat_gm12878_25kb_perc[,which(colnames(pcadat_gm12878_25kb_perc) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_25kb_perc_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_perc_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_25kb_perc_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_25kb_perc_histones <- pcadat_gm12878_25kb_perc[,which(colnames(pcadat_gm12878_25kb_perc) %in% histonevars)]
+
+colnames(pcadat_gm12878_25kb_perc_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_perc_histones))
+
+
+cormat <- cor(pcadat_gm12878_25kb_perc_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_25kb_perc_tfbs <- pcadat_gm12878_25kb_perc[,which(colnames(pcadat_gm12878_25kb_perc) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_25kb_perc_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_perc_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_25kb_perc_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+####Distances
+
+```{r}
+pcadat_gm12878_25kb_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/PCA/pcadat_gm12878_25kb_dist.rds")
+
+colnames(pcadat_gm12878_25kb_dist) <- gsub("_dist","",colnames(pcadat_gm12878_25kb_dist))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_25kb_dist_chromstates <- pcadat_gm12878_25kb_dist[,which(colnames(pcadat_gm12878_25kb_dist) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_25kb_dist_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_dist_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_25kb_dist_chromstates, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_25kb_dist_histones <- pcadat_gm12878_25kb_dist[,which(colnames(pcadat_gm12878_25kb_dist) %in% histonevars)]
+
+colnames(pcadat_gm12878_25kb_dist_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_dist_histones))
+
+
+cormat <- cor(pcadat_gm12878_25kb_dist_histones, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_25kb_dist_tfbs <- pcadat_gm12878_25kb_dist[,which(colnames(pcadat_gm12878_25kb_dist) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_25kb_dist_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_25kb_dist_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_25kb_dist_tfbs, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+####50kb
+
+##### Counts
+
+```{r}
+pcadat_gm12878_50kb_count <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/PCA/pcadat_gm12878_50kb_count.rds")
+
+colnames(pcadat_gm12878_50kb_count) <- gsub("_count","",colnames(pcadat_gm12878_50kb_count))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_50kb_count_chromstates <- pcadat_gm12878_50kb_count[,which(colnames(pcadat_gm12878_50kb_count) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_50kb_count_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_count_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_50kb_count_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_50kb_count_histones <- pcadat_gm12878_50kb_count[,which(colnames(pcadat_gm12878_50kb_count) %in% histonevars)]
+
+colnames(pcadat_gm12878_50kb_count_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_count_histones))
+
+
+cormat <- cor(pcadat_gm12878_50kb_count_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_50kb_count_tfbs <- pcadat_gm12878_50kb_count[,which(colnames(pcadat_gm12878_50kb_count) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_50kb_count_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_count_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_50kb_count_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+##### Percents
+
+```{r}
+pcadat_gm12878_50kb_perc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/PCA/pcadat_gm12878_50kb_perc.rds")
+
+colnames(pcadat_gm12878_50kb_perc) <- gsub("_perc","",colnames(pcadat_gm12878_50kb_perc))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_50kb_perc_chromstates <- pcadat_gm12878_50kb_perc[,which(colnames(pcadat_gm12878_50kb_perc) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_50kb_perc_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_perc_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_50kb_perc_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_50kb_perc_histones <- pcadat_gm12878_50kb_perc[,which(colnames(pcadat_gm12878_50kb_perc) %in% histonevars)]
+
+colnames(pcadat_gm12878_50kb_perc_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_perc_histones))
+
+
+cormat <- cor(pcadat_gm12878_50kb_perc_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_50kb_perc_tfbs <- pcadat_gm12878_50kb_perc[,which(colnames(pcadat_gm12878_50kb_perc) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_50kb_perc_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_perc_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_50kb_perc_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+####Distances
+
+```{r}
+pcadat_gm12878_50kb_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/PCA/pcadat_gm12878_50kb_dist.rds")
+
+colnames(pcadat_gm12878_50kb_dist) <- gsub("_dist","",colnames(pcadat_gm12878_50kb_dist))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_50kb_dist_chromstates <- pcadat_gm12878_50kb_dist[,which(colnames(pcadat_gm12878_50kb_dist) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_50kb_dist_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_dist_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_50kb_dist_chromstates, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_50kb_dist_histones <- pcadat_gm12878_50kb_dist[,which(colnames(pcadat_gm12878_50kb_dist) %in% histonevars)]
+
+colnames(pcadat_gm12878_50kb_dist_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_dist_histones))
+
+
+cormat <- cor(pcadat_gm12878_50kb_dist_histones, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_50kb_dist_tfbs <- pcadat_gm12878_50kb_dist[,which(colnames(pcadat_gm12878_50kb_dist) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_50kb_dist_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_50kb_dist_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_50kb_dist_tfbs, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+####100kb
+
+##### Counts
+
+```{r}
+pcadat_gm12878_100kb_count <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/PCA/pcadat_gm12878_100kb_count.rds")
+
+colnames(pcadat_gm12878_100kb_count) <- gsub("_count","",colnames(pcadat_gm12878_100kb_count))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_100kb_count_chromstates <- pcadat_gm12878_100kb_count[,which(colnames(pcadat_gm12878_100kb_count) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_100kb_count_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_count_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_100kb_count_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_100kb_count_histones <- pcadat_gm12878_100kb_count[,which(colnames(pcadat_gm12878_100kb_count) %in% histonevars)]
+
+colnames(pcadat_gm12878_100kb_count_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_count_histones))
+
+
+cormat <- cor(pcadat_gm12878_100kb_count_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_100kb_count_tfbs <- pcadat_gm12878_100kb_count[,which(colnames(pcadat_gm12878_100kb_count) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_100kb_count_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_count_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_100kb_count_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+##### Percents
+
+```{r}
+pcadat_gm12878_100kb_perc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/PCA/pcadat_gm12878_100kb_perc.rds")
+
+colnames(pcadat_gm12878_100kb_perc) <- gsub("_perc","",colnames(pcadat_gm12878_100kb_perc))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_100kb_perc_chromstates <- pcadat_gm12878_100kb_perc[,which(colnames(pcadat_gm12878_100kb_perc) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_100kb_perc_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_perc_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_100kb_perc_chromstates, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_100kb_perc_histones <- pcadat_gm12878_100kb_perc[,which(colnames(pcadat_gm12878_100kb_perc) %in% histonevars)]
+
+colnames(pcadat_gm12878_100kb_perc_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_perc_histones))
+
+
+cormat <- cor(pcadat_gm12878_100kb_perc_histones, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_100kb_perc_tfbs <- pcadat_gm12878_100kb_perc[,which(colnames(pcadat_gm12878_100kb_perc) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_100kb_perc_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_perc_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_100kb_perc_tfbs, method = "spearman")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+####Distances
+
+```{r}
+pcadat_gm12878_100kb_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/PCA/pcadat_gm12878_100kb_dist.rds")
+
+colnames(pcadat_gm12878_100kb_dist) <- gsub("_dist","",colnames(pcadat_gm12878_100kb_dist))
+```
+
+######Chromstates
+
+```{r}
+chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+
+pcadat_gm12878_100kb_dist_chromstates <- pcadat_gm12878_100kb_dist[,which(colnames(pcadat_gm12878_100kb_dist) %in% chromstatevars)]
+
+colnames(pcadat_gm12878_100kb_dist_chromstates) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_dist_chromstates))
+
+
+cormat <- cor(pcadat_gm12878_100kb_dist_chromstates, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+######Histones
+
+```{r}
+histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+
+pcadat_gm12878_100kb_dist_histones <- pcadat_gm12878_100kb_dist[,which(colnames(pcadat_gm12878_100kb_dist) %in% histonevars)]
+
+colnames(pcadat_gm12878_100kb_dist_histones) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_dist_histones))
+
+
+cormat <- cor(pcadat_gm12878_100kb_dist_histones, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+##### TFBS
+
+```{r}
+tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+
+pcadat_gm12878_100kb_dist_tfbs <- pcadat_gm12878_100kb_dist[,which(colnames(pcadat_gm12878_100kb_dist) %in% tfbsvars)]
+
+colnames(pcadat_gm12878_100kb_dist_tfbs) <- gsub(paste(c("Gm12878",
+                          "-",
+                          "_",
+                          "count",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(pcadat_gm12878_100kb_dist_tfbs))
+
+
+cormat <- cor(pcadat_gm12878_100kb_dist_tfbs, method = "pearson")
+
+corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+```
+
+
+#### Saving GM12878 Correlation Plots
+
+```{r}
+
+corfunction <- function(resolution, predictortype, annotation){
+  
+}
+
+```
+
+
