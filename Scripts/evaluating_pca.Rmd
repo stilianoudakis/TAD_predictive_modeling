@@ -3521,7 +3521,8 @@ pcaplotfunction <- function(cl, resolution, predictortype, annotation){
                        cl, resolution, predictortype, annotation,
                        ".png", sep=""),
       width=11, height=8, units="in", res = 300)
-  autoplot(prcomp(data[,-c(dim(data)[2]-1,dim(data)[2])]),
+  print({
+    autoplot(prcomp(data[,-c(dim(data)[2]-1,dim(data)[2])]),
            data=data,
            #loadings = TRUE,
            label = TRUE, 
@@ -3531,6 +3532,7 @@ pcaplotfunction <- function(cl, resolution, predictortype, annotation){
            shape="Medoid",
            label.show.legend = FALSE) +
     theme_bw()
+  })
   dev.off()
   
 }
@@ -3594,6 +3596,53 @@ pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", an
 ###K562
 
 ```{r}
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "dist", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "25kb", predictortype = "dist", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "50kb", predictortype = "dist", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "tfbs")
 
 ```
 
