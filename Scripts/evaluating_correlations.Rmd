@@ -2490,6 +2490,12 @@ corfunction <- function(cl, resolution, predictortype, annotation){
                     sep="")}
   
   data <- readRDS(datadir)
+  
+  if(predictortype=="dist"){
+    #performing log2 transformation on distances
+    data <- apply(data,2,function(x){log(x + 1, base=2)})
+  }
+  
   colnames(data) <- gsub(paste("_", predictortype, sep=""),"",colnames(data))
   
   if(annotation=="chromstates"){
@@ -2606,6 +2612,18 @@ corfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annota
 #### Saving K562 Correlation Plots
 
 ```{r}
+corfunction(cl = "K562", resolution = "10kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "10kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "K562", resolution = "10kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "10kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "10kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "K562", resolution = "10kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "10kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "10kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "K562", resolution = "10kb", predictortype = "dist", annotation = "tfbs")
+
 corfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "chromstates")
 corfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "histones")
 corfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "tfbs")
