@@ -2470,10 +2470,177 @@ corrplot(cormat,
 
 ```{r}
 
-corfunction <- function(resolution, predictortype, annotation){
+corfunction <- function(cl, resolution, predictortype, annotation){
+  #set up variable names to subset
+  chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+  histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+  if(cl=="GM12878"){
+    tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+  } else {
+    tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/k562"))
+  }
   
+  
+  if(cl=="GM12878"){
+    datadir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA", 
+                    "/pcadat_gm12878_", resolution, "_", predictortype, ".rds",
+                    sep="")
+  }else{datadir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA", 
+                    "/pcadat_", cl, "_", resolution, "_", predictortype, ".rds",
+                    sep="")}
+  
+  data <- readRDS(datadir)
+  colnames(data) <- gsub(paste("_", predictortype, sep=""),"",colnames(data))
+  
+  if(annotation=="chromstates"){
+    data <- data[,which(colnames(data) %in% chromstatevars)];
+    colnames(data) <- gsub(paste(c("Gm12878", "K562",
+                          "-",
+                          "_",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(data))
+  } else if(annotation=="histones"){
+    data <- data[,which(colnames(data) %in% histonevars)];
+    colnames(data) <- gsub(paste(c("Gm12878", "K562",
+                          "-",
+                          "_",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(data))
+  } else if(annotation=="tfbs"){
+    data <- data[,which(colnames(data) %in% tfbsvars)];
+    colnames(data) <- gsub(paste(c("Gm12878", "K562",
+                          "-",
+                          "_",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", colnames(data))
+  }
+  
+  if(predictortype=="count" | predictortype=="perc"){
+    cormat <- cor(data, method = "spearman")
+  } else {
+    cormat <- cor(data, method = "pearson")
+  }
+  
+
+  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/correlation_plots/", 
+                       cl, resolution, predictortype, annotation,
+                       ".png", sep=""),
+      width=11, height=8, units="in", res = 300)
+  corrplot(cormat, 
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .5,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+  dev.off()
+
 }
+
+
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annotation = "tfbs")
 
 ```
 
+
+#### Saving K562 Correlation Plots
+
+```{r}
+corfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "K562", resolution = "25kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "25kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "25kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "K562", resolution = "25kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "25kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "25kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "K562", resolution = "25kb", predictortype = "dist", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "50kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "50kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "K562", resolution = "50kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "50kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "50kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "K562", resolution = "50kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "50kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "50kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "K562", resolution = "50kb", predictortype = "dist", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "100kb", predictortype = "count", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "100kb", predictortype = "count", annotation = "histones")
+corfunction(cl = "K562", resolution = "100kb", predictortype = "count", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "100kb", predictortype = "perc", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "100kb", predictortype = "perc", annotation = "histones")
+corfunction(cl = "K562", resolution = "100kb", predictortype = "perc", annotation = "tfbs")
+
+corfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "chromstates")
+corfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "histones")
+corfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "tfbs")
+
+```
 
