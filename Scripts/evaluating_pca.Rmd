@@ -48,6 +48,7 @@ library(RColorBrewer)
 library(factoextra)
 library(FactoMineR)
 library(ggfortify)
+library(fpc)
 ```
 
 # Clustering Annotations
@@ -3430,142 +3431,172 @@ autoplot(kmeans(pcadat_K562_100kb_dist_tfbs, 5, nstart=25, iter.max = 1000),
 ## Saving plots clustered annotation plots
 
 ```{r}
-fileslst <- c(paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "100kb"), "/Ensemble/PCA/pcadat_GM12878_", 
-                    c("10kb", "25kb", "50kb", "100kb"), 
-                    "_count.rds",sep=""),
-              paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
-                    c("10kb", "25kb", "50kb", "100kb"), 
-                    "_perc.rds",sep=""),
-              paste("Z:/TAD_data_analysis/GM12878/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_GM12878_", 
-                    c("10kb", "25kb", "50kb", "100kb"), 
-                    "_dist.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_K562_", 
-                    c("10kb", "25kb", "50kb", "100kb"), 
-                    "_count.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_K562_", 
-                    c("10kb", "25kb", "50kb", "100kb"), 
-                    "_perc.rds",sep=""),
-              paste("Z:/TAD_data_analysis/K562/",c("10kb", "25kb", "50kb", "100kb"),"/Ensemble/PCA/pcadat_K562_", 
-                    c("10kb", "25kb", "50kb", "100kb"), 
-                    "_dist.rds",sep=""))
-
-#file names for heatmaps
-heatnames <- c(paste("gm12878", c("_10kb", "_25kb", "_50kb", "_100kb"), "_count", "_heatmap.png", sep=""),
-               paste("gm12878", c("_10kb", "_25kb", "_50kb", "_100kb"), "_perc", "_heatmap.png", sep=""),
-               paste("gm12878", c("_10kb", "_25kb", "_50kb", "_100kb"), "_dist", "_heatmap.png", sep=""),
-               paste("k562", c("_10kb", "_25kb", "_50kb", "_100kb"), "_count", "_heatmap.png", sep=""),
-               paste("k562", c("_10kb", "_25kb", "_50kb", "_100kb"), "_perc", "_heatmap.png", sep=""),
-               paste("k562", c("_10kb", "_25kb", "_50kb", "_100kb"), "_dist", "_heatmap.png", sep=""))
-
-#file names for pca plots
-scorepnames <- c(paste("gm12878", c("_10kb", "_25kb", "_50kb", "_100kb"), "_count", "_scoreplots.png", sep=""),
-               paste("gm12878", c("_10kb", "_25kb", "_50kb", "_100kb"), "_perc", "_scoreplots.png", sep=""),
-               paste("gm12878", c("_10kb", "_25kb", "_50kb", "_100kb"), "_dist", "_scoreplots.png", sep=""),
-               paste("k562", c("_10kb", "_25kb", "_50kb", "_100kb"), "_count", "_scoreplots.png", sep=""),
-               paste("k562", c("_10kb", "_25kb", "_50kb", "_100kb"), "_perc", "_scoreplots.png", sep=""),
-               paste("k562", c("_10kb", "_25kb", "_50kb", "_100kb"), "_dist", "_scoreplots.png", sep=""))
-
-
-##create annotation groups
-cs <- unique(gsub(paste(c("Gm12878-", "K562-", ".bed"), 
-                 sep = "",
-                 collapse = "|"),
-           "", 
-           list.files("Z:/TAD_data_analysis/annotations/BroadHMM")))
-hm <- unique(gsub(paste(c("Gm12878-", "K562-", ".bed"), 
-                 sep = "",
-                 collapse = "|"),
-           "", 
-           list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")))
-
-
-for(i in 1:length(fileslst)){
-  print(i)
-  pcadata <- readRDS(fileslst[i])
+pcaplotfunction <- function(cl, resolution, predictortype, annotation){
   
-  #performing log2 transformation only for distance predictor types
-  if(grepl("_dist", colnames(pcadata)[1])){
-    pcadata <- apply(pcadata,2,function(x){log(x + 1, base=2)})
+  #set up variable names to subset
+  chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
+  histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
+  if(cl=="GM12878"){
+    tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878"))
+  } else {
+    tfbsvars <-  gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/k562"))
   }
   
-  #filtering low variance predictors
-  nzv <- nearZeroVar(pcadata, saveMetrics= TRUE)
-  nzvar <- rownames(nzv[nzv$nzv,])
-  if(length(nzvar) > 0){ 
-    pcadata_f <- pcadata[, -which(colnames(pcadata) %in% nzvar)]
-    }else{pcadata_f <- pcadata}
+  if(cl=="GM12878"){
+    datadir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA", 
+                    "/pcadat_gm12878_", resolution, "_", predictortype, ".rds",
+                    sep="")
+  }else{datadir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA", 
+                        "/pcadat_", cl, "_", resolution, "_", predictortype, ".rds",
+                        sep="")}
   
-  #cleaning column names
-  colnames(pcadata_f) <- gsub(paste(c("`", 
-                                                    "_",
-                                                    "-",
-                                                    "Gm12878",
-                                                    "K562", 
-                                                    "dist",
-                                                    "count",
-                                                    "perc",
-                                                    "Haib", 
-                                                    "Sydh",
-                                                    "Uta",
-                                                    "Uw",
-                                                    "Broad",
-                                                    "Uchicago"), collapse = "|"),"", colnames(pcadata_f))
-
-  #heatmap 
-  my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(100))
-  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", heatnames[i], sep=""),
+  data <- readRDS(datadir)
+  
+  if(predictortype=="dist"){
+    #performing log2 transformation on distances
+    data <- apply(data,2,function(x){log(x + 1, base=2)})
+  }
+  
+  colnames(data) <- gsub(paste("_", predictortype, sep=""),"",colnames(data))
+  
+  data <- t(data)
+  
+  if(annotation=="chromstates"){
+    data <- data[which(rownames(data) %in% chromstatevars),];
+    rownames(data) <- gsub(paste(c("Gm12878", "K562",
+                                   "-",
+                                   "_",
+                                   "Haib",
+                                   "Sydh",
+                                   "Uta",
+                                   "Uw",
+                                   "Broad",
+                                   "Uchicago"), collapse = "|"),"", rownames(data))
+  } else if(annotation=="histones"){
+    data <- data[which(rownames(data) %in% histonevars),];
+    rownames(data) <- gsub(paste(c("Gm12878", "K562",
+                                   "-",
+                                   "_",
+                                   "Haib",
+                                   "Sydh",
+                                   "Uta",
+                                   "Uw",
+                                   "Broad",
+                                   "Uchicago"), collapse = "|"),"", rownames(data))
+  } else if(annotation=="tfbs"){
+    data <- data[which(rownames(data) %in% tfbsvars),];
+    rownames(data) <- gsub(paste(c("Gm12878", "K562",
+                                   "-",
+                                   "_",
+                                   "Haib",
+                                   "Sydh",
+                                   "Uta",
+                                   "Uw",
+                                   "Broad",
+                                   "Uchicago"), collapse = "|"),"", rownames(data))
+  }
+  
+  #determine optimal number of clusters
+  pamk.best <- pamk(data)
+  
+  #perform PAM clustering
+  pam.med <- pam(data, k = pamk.best$nc, diss = FALSE,
+                 metric = "manhattan", 
+                 #medoids = NULL, 
+                 #stand = FALSE, 
+                 cluster.only = FALSE,
+                 do.swap = TRUE,
+                 keep.diss = FALSE,
+                 keep.data = FALSE,
+                 pamonce = FALSE, 
+                 trace.lev = 0)
+  
+  data <- data.frame(data)
+  data$Cluster <- factor(pam.med$clustering)
+  data$Medoid <- factor(ifelse(rownames(data) %in% rownames(pam.med$medoids), "Center", "Other"),
+                        levels=c("Other", "Center"))
+  
+  
+  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", 
+                       cl, resolution, predictortype, annotation,
+                       ".png", sep=""),
       width=11, height=8, units="in", res = 300)
-  heatmap.2(pcadata_f,
-          #cellnote = ,  # same data set for cell labels
-          #main = "", # heat map title
-          notecol="black",      # change font color of cell labels to black
-          density.info="none",  # turns off density plot inside color legend
-          trace="none",         # turns off trace lines inside the heat map
-          #margins =c(5,5),     # widens margins around plot
-          col=my_palette,       # use on color palette defined earlier
-          #na.color = "gray",
-          #breaks=col_breaks,    # enable color transition at specified limits
-          key=TRUE,
-          dendrogram="column",     # only draw a row dendrogram
-          cexRow=0.5,
-          cexCol=0.5,
-          labRow = FALSE,
-          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
-          #lhei=c(.5,6,0),
-          #sepwidth=c(0.001,0.001),
-          #sepcolor="black",
-          #colsep=1:ncol(pcadata_f),
-          #rowsep=1:nrow(pcadata_f),
-          keysize = 1) 
+  autoplot(prcomp(data[,-c(dim(data)[2]-1,dim(data)[2])]),
+           data=data,
+           #loadings = TRUE,
+           label = TRUE, 
+           label.size = 3,
+           label.repel=T, 
+           colour="Cluster",
+           shape="Medoid",
+           label.show.legend = FALSE) +
+    theme_bw()
   dev.off()
   
-  #PCA
-  #pcadata_f <- t(pcadata_f)
-  #Group <- ifelse(rownames(pcadata_f) %in% cs, "Chromatin State", ###chromatin states
-  #                                          ifelse(rownames(pcadata_f)=="DNase", "DNase I", ###dnase
-  #                                                 ifelse(rownames(pcadata_f) %in% hm, "Histone Modification", ###histone modifications
-  #                                                        "TFBS"))) ###transcription factor binding sites
-  #pcadata_f <- cbind.data.frame(pcadata_f, Group)
-  #
-  ###Plots without loadings
-  #p <- autoplot(prcomp(pcadata_f[,-(dim(pcadata_f)[2])]),
-  #       #loadings = TRUE,
-  #       label = TRUE, 
-  #       label.size = 3,
-  #       label.repel=T,
-  #       data=pcadata_f,
-  #       colour='Group',
-  #       label.show.legend = FALSE) +
-  #theme_bw()
-  
-  #ggsave(p, filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", 
-  #                           scorepnames[i], sep=""),
-  #       width=8, height=11, units="in", dpi=300)
-
 }
 
+```
+
+
+###GM12878
+
+```{r}
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", annotation = "tfbs")
+
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annotation = "chromstates")
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annotation = "histones")
+pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annotation = "tfbs")
 
 ```
+
+###K562
+
+```{r}
+
+```
+
 
 
 # Clustering TADs
