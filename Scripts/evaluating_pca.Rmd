@@ -3428,7 +3428,7 @@ autoplot(kmeans(pcadat_K562_100kb_dist_tfbs, 5, nstart=25, iter.max = 1000),
 
 
 
-## Saving plots clustered annotation plots
+## Saving clustered annotation plots
 
 ```{r}
 pcaplotfunction <- function(cl, resolution, predictortype, annotation){
@@ -3698,10 +3698,8 @@ tadclusterplotfunction <- function(cl, resolution, predictortype, cluster){
     data$Medoid <- NA
   }
   
-  data <- data.frame(data)
-  
   png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/cluster_by_tad/", 
-                       cl, resolution, predictortype, annotation,
+                       cl, resolution, predictortype, cluster,
                        ".png", sep=""),
       width=11, height=8, units="in", res = 300)
   print({
@@ -3713,9 +3711,9 @@ tadclusterplotfunction <- function(cl, resolution, predictortype, cluster){
              #label.repel=T, 
              colour="Cluster",
              #shape="Medoid",
-             size=3,
-             frame = TRUE, 
-             frame.type = 'norm',
+             #size=3,
+             #frame = TRUE, 
+             #frame.type = 'norm',
              label.show.legend = FALSE) +
       theme_bw()
   })
@@ -3725,4 +3723,88 @@ tadclusterplotfunction <- function(cl, resolution, predictortype, cluster){
 
 ```
 
+### Saving clustered tad plots
+
+####GM12878
+
+```{r}
+tadclusterplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "dist", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "25kb", predictortype = "dist", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "50kb", predictortype = "dist", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", cluster = "kmeans")
+
+```
+
+
+#### K562
+
+```{r}
+tadclusterplotfunction(cl = "K562", resolution = "10kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "10kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "10kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "10kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "10kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "10kb", predictortype = "dist", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "25kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "25kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "25kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "25kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "25kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "25kb", predictortype = "dist", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "50kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "50kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "50kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "50kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "50kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "50kb", predictortype = "dist", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "100kb", predictortype = "count", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "100kb", predictortype = "count", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "100kb", predictortype = "perc", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "100kb", predictortype = "perc", cluster = "kmeans")
+
+tadclusterplotfunction(cl = "K562", resolution = "100kb", predictortype = "dist", cluster = "kmedoids")
+tadclusterplotfunction(cl = "K562", resolution = "100kb", predictortype = "dist", cluster = "kmeans")
+
+```
 
