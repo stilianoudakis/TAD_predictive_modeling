@@ -3517,7 +3517,7 @@ pcaplotfunction <- function(cl, resolution, predictortype, annotation){
                         levels=c("Other", "Center"))
   
   
-  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/", 
+  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/cluster_by_annotation/", 
                        cl, resolution, predictortype, annotation,
                        ".png", sep=""),
       width=11, height=8, units="in", res = 300)
@@ -3649,3 +3649,80 @@ pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annot
 
 
 # Clustering TADs
+
+```{r}
+tadclusterplotfunction <- function(cl, resolution, predictortype, cluster){
+  
+  if(cl=="GM12878"){
+    datadir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA", 
+                    "/pcadat_gm12878_", resolution, "_", predictortype, ".rds",
+                    sep="")
+  }else{datadir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA", 
+                        "/pcadat_", cl, "_", resolution, "_", predictortype, ".rds",
+                        sep="")}
+  
+  data <- readRDS(datadir)
+  
+  if(predictortype=="dist"){
+    #performing log2 transformation on distances
+    data <- apply(data,2,function(x){log(x + 1, base=2)})
+  }
+  
+  colnames(data) <- gsub(paste("_", predictortype, sep=""),"",colnames(data))
+  
+  #determine optimal number of clusters
+  pamk.best <- pamk(data)
+  
+  if(cluster=="kmedoids"){
+    #perform PAM clustering
+    clusters <- pam(data, k = pamk.best$nc, diss = FALSE,
+                   metric = "manhattan", 
+                   #medoids = NULL, 
+                   #stand = FALSE, 
+                   cluster.only = FALSE,
+                   do.swap = TRUE,
+                   keep.diss = FALSE,
+                   keep.data = FALSE,
+                   pamonce = FALSE, 
+                   trace.lev = 0)
+    
+    data <- data.frame(data)
+    data$Cluster <- factor(clusters$clustering)
+    data$Medoid <- factor(ifelse(rownames(data) %in% rownames(clusters$medoids), "Center", "Other"),
+                          levels=c("Other", "Center"))
+  }else{
+    clusters <- kmeans(data, centers = pamk.best$nc, nstart = 25, iter.max = 1000)
+    
+    data <- data.frame(data)
+    data$Cluster <- factor(clusters$cluster)
+    data$Medoid <- NA
+  }
+  
+  data <- data.frame(data)
+  
+  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/cluster_by_tad/", 
+                       cl, resolution, predictortype, annotation,
+                       ".png", sep=""),
+      width=11, height=8, units="in", res = 300)
+  print({
+    autoplot(prcomp(data[,-c(dim(data)[2]-1,dim(data)[2])]),
+             data=data,
+             #loadings = TRUE,
+             label = FALSE, 
+             #label.size = 3,
+             #label.repel=T, 
+             colour="Cluster",
+             #shape="Medoid",
+             size=3,
+             frame = TRUE, 
+             frame.type = 'norm',
+             label.show.legend = FALSE) +
+      theme_bw()
+  })
+  dev.off()
+  
+}
+
+```
+
+
