@@ -3670,6 +3670,19 @@ tadclusterplotfunction <- function(cl, resolution, predictortype, cluster){
   
   colnames(data) <- gsub(paste("_", predictortype, sep=""),"",colnames(data))
   
+  ##Removing zero variance predictors
+  ###using caret
+  #nzv <- nearZeroVar(data, saveMetrics= TRUE)
+  #nzvar <- rownames(nzv[nzv$nzv,])
+  #if(length(nzvar) > 0){
+  #  data <- data[, -which(colnames(data) %in% nzvar)]
+  #}
+  
+  ##keeping top 75th percentile variable
+  colvariance <- apply(data,2,var)
+  thirdquart <- as.numeric(summary(colvariance)[5])
+  data <- data[,which(colvariance >= thirdquart)]
+  
   #determine optimal number of clusters
   pamk.best <- pamk(data)
   
