@@ -690,6 +690,7 @@ rfimpvars_gm12878_100kb_none <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ense
 #rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[10:1,]
 rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[1:20,]
 rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[20:1,]
+#rfimpvars_gm12878_100kb_none <- rfimpvars_gm12878_100kb_none[19:1,]
 
 rfimpvars_gm12878_100kb_none$Feature <- gsub("_dist","", rfimpvars_gm12878_100kb_none$Feature)
 
@@ -920,6 +921,7 @@ vim.gm12878.smote[which(rownames(vim.gm12878.smote) %in% rfimpvars_gm12878_50kb_
 vim.gm12878.smote[which(rownames(vim.gm12878.smote) %in% rfimpvars_gm12878_100kb_SMOTE$Feature), 4] <- rfimpvars_gm12878_100kb_SMOTE$Importance
 
 vim.gm12878.smote <- vim.gm12878.smote[order(vim.gm12878.smote[,1], decreasing = TRUE),]
+rownames(vim.gm12878.smote) <- gsub("`","",rownames(vim.gm12878.smote))
 
 vim.gm12878.smote.m <- melt(vim.gm12878.smote)
 vim.gm12878.smote.m$X1 <- factor(vim.gm12878.smote.m$X1, levels = rownames(vim.gm12878.smote))
@@ -974,6 +976,7 @@ vim.K562.smote[which(rownames(vim.K562.smote) %in% rfimpvars_K562_50kb_SMOTE$Fea
 vim.K562.smote[which(rownames(vim.K562.smote) %in% rfimpvars_K562_100kb_SMOTE$Feature), 4] <- rfimpvars_K562_100kb_SMOTE$Importance
 
 vim.K562.smote <- vim.K562.smote[order(vim.K562.smote[,1], decreasing = TRUE),]
+rownames(vim.K562.smote) <- gsub("`","",rownames(vim.K562.smote))
 
 vim.K562.smote.m <- melt(vim.K562.smote)
 vim.K562.smote.m$X1 <- factor(vim.K562.smote.m$X1, levels = rownames(vim.K562.smote))
@@ -1034,6 +1037,7 @@ vim.gm12878.RUS[which(rownames(vim.gm12878.RUS) %in% rfimpvars_gm12878_50kb_RUS$
 vim.gm12878.RUS[which(rownames(vim.gm12878.RUS) %in% rfimpvars_gm12878_100kb_RUS$Feature), 4] <- rfimpvars_gm12878_100kb_RUS$Importance
 
 vim.gm12878.RUS <- vim.gm12878.RUS[order(vim.gm12878.RUS[,1], decreasing = TRUE),]
+rownames(vim.gm12878.RUS) <- gsub("`","",rownames(vim.gm12878.RUS))
 
 vim.gm12878.RUS.m <- melt(vim.gm12878.RUS)
 vim.gm12878.RUS.m$X1 <- factor(vim.gm12878.RUS.m$X1, levels = rownames(vim.gm12878.RUS))
@@ -1089,6 +1093,7 @@ vim.K562.RUS[which(rownames(vim.K562.RUS) %in% rfimpvars_K562_50kb_RUS$Feature),
 vim.K562.RUS[which(rownames(vim.K562.RUS) %in% rfimpvars_K562_100kb_RUS$Feature), 4] <- rfimpvars_K562_100kb_RUS$Importance
 
 vim.K562.RUS <- vim.K562.RUS[order(vim.K562.RUS[,1], decreasing = TRUE),]
+rownames(vim.K562.RUS) <- gsub("`","",rownames(vim.K562.RUS))
 
 vim.K562.RUS.m <- melt(vim.K562.RUS)
 vim.K562.RUS.m$X1 <- factor(vim.K562.RUS.m$X1, levels = rownames(vim.K562.RUS))
@@ -1149,6 +1154,7 @@ vim.gm12878.ROS[which(rownames(vim.gm12878.ROS) %in% rfimpvars_gm12878_50kb_ROS$
 vim.gm12878.ROS[which(rownames(vim.gm12878.ROS) %in% rfimpvars_gm12878_100kb_ROS$Feature), 4] <- rfimpvars_gm12878_100kb_ROS$Importance
 
 vim.gm12878.ROS <- vim.gm12878.ROS[order(vim.gm12878.ROS[,1], decreasing = TRUE),]
+rownames(vim.gm12878.ROS) <- gsub("`","",rownames(vim.gm12878.ROS))
 
 vim.gm12878.ROS.m <- melt(vim.gm12878.ROS)
 vim.gm12878.ROS.m$X1 <- factor(vim.gm12878.ROS.m$X1, levels = rownames(vim.gm12878.ROS))
@@ -1204,6 +1210,7 @@ vim.K562.ROS[which(rownames(vim.K562.ROS) %in% rfimpvars_K562_50kb_ROS$Feature),
 vim.K562.ROS[which(rownames(vim.K562.ROS) %in% rfimpvars_K562_100kb_ROS$Feature), 4] <- rfimpvars_K562_100kb_ROS$Importance
 
 vim.K562.ROS <- vim.K562.ROS[order(vim.K562.ROS[,1], decreasing = TRUE),]
+rownames(vim.K562.ROS) <- gsub("`","",rownames(vim.K562.ROS))
 
 vim.K562.ROS.m <- melt(vim.K562.ROS)
 vim.K562.ROS.m$X1 <- factor(vim.K562.ROS.m$X1, levels = rownames(vim.K562.ROS))
@@ -1265,6 +1272,7 @@ vim.gm12878.none[which(rownames(vim.gm12878.none) %in% rfimpvars_gm12878_50kb_no
 vim.gm12878.none[which(rownames(vim.gm12878.none) %in% rfimpvars_gm12878_100kb_none$Feature), 4] <- rfimpvars_gm12878_100kb_none$Importance
 
 vim.gm12878.none <- vim.gm12878.none[order(vim.gm12878.none[,1], decreasing = TRUE),]
+rownames(vim.gm12878.none) <- gsub("`","",rownames(vim.gm12878.none))
 
 vim.gm12878.none.m <- melt(vim.gm12878.none)
 vim.gm12878.none.m$X1 <- factor(vim.gm12878.none.m$X1, levels = rownames(vim.gm12878.none))
@@ -1320,6 +1328,7 @@ vim.K562.none[which(rownames(vim.K562.none) %in% rfimpvars_K562_50kb_none$Featur
 vim.K562.none[which(rownames(vim.K562.none) %in% rfimpvars_K562_100kb_none$Feature), 4] <- rfimpvars_K562_100kb_none$Importance
 
 vim.K562.none <- vim.K562.none[order(vim.K562.none[,1], decreasing = TRUE),]
+rownames(vim.K562.none) <- gsub("`","",rownames(vim.K562.none))
 
 vim.K562.none.m <- melt(vim.K562.none)
 vim.K562.none.m$X1 <- factor(vim.K562.none.m$X1, levels = rownames(vim.K562.none))
@@ -1356,3 +1365,38 @@ ggplot(vim.K562.none.m, aes(x=X2, y=ordered(X1, levels=rev(levels(X1))))) +
 
 
 ```
+
+
+##Plots
+
+```{r}
+figure <- ggarrange(p1,p2,ncol=2,nrow=1,common.legend = TRUE, legend = "right", labels="AUTO")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Genomic Annotation", color = "black", rot = 90, size=20)
+)
+
+figure <- ggarrange(p3,p4,ncol=2,nrow=1,common.legend = TRUE, legend = "right", labels="AUTO")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Genomic Annotation", color = "black", rot = 90, size=20)
+)
+
+figure <- ggarrange(p5,p6,ncol=2,nrow=1,common.legend = TRUE, legend = "right", labels="AUTO")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Genomic Annotation", color = "black", rot = 90, size=20)
+)
+
+figure <- ggarrange(p7,p8,ncol=2,nrow=1,common.legend = TRUE, legend = "right", labels="AUTO")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Genomic Annotation", color = "black", rot = 90, size=20)
+)
+
+```
+

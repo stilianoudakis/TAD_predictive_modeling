@@ -1480,14 +1480,29 @@ ggplot(all_rfperfs_K562_100kb[which(all_rfperfs_K562_100kb$Metric=="F1-Score" |
 
 ```
 
+##Plots
+
 ```{r}
 
+figure <- ggarrange(p1,p2,ncol = 2, nrow = 1, common.legend = TRUE, legend = "top")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resampling Technique", color = "black", size = 20),
+    left = text_grob("Performance", color = "black", rot = 90, size=20)
+)
 
-ggarrange(p25, p25.2, p50, p50.2, p100, p100.2, 
+
+figure <- ggarrange(p25, p25.2, p50, p50.2, p100, p100.2, 
           ncol=2, nrow=3, 
           common.legend = TRUE, 
-          legend = "bottom", 
+          legend = "top", 
           labels = c("A", "D", "B", "E", "C", "F"), 
           font.label = list(size=20))
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resampling Technique", color = "black", size = 20),
+    left = text_grob("Performance", color = "black", rot = 90, size=20)
+)
+
 ```
 

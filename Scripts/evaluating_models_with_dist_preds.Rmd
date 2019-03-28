@@ -450,11 +450,17 @@ ggplot(all_RUS_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
 
 
 ```{r}
-ggarrange(p.none, p.ros, p.rus, 
+figure <- ggarrange(p.none, p.ros, p.rus, 
           ncol=1, nrow=3, 
           common.legend = TRUE, 
-          legend="bottom",
+          legend="top",
           labels="AUTO",
           font.label = list(size=20))
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resampling Technique", color = "black", size = 20),
+    left = text_grob("Performance", color = "black", rot = 90, size=20)
+)
+
 ```
 
