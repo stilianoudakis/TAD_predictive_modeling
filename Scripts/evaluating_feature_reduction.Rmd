@@ -1991,3 +1991,546 @@ heatmap.2(enetcoefsmat,
           colsep=0:12,
           rowsep=0:nrow(enetcoefsmat)) 
 ```
+
+### K562
+
+#### 10 kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/ENET/enetModel.rds")
+enetcoefs_none_oc_10kb_K562 <- coef(enetcoefs_none_oc_10kb_K562$finalModel, s=enetcoefs_none_oc_10kb_K562$bestTune$lambda)
+##OP
+enetcoefs_none_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/ENET/enetModel.rds")
+enetcoefs_none_op_10kb_K562 <- coef(enetcoefs_none_op_10kb_K562$finalModel, s=enetcoefs_none_op_10kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_none_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/enetModel.rds")
+enetcoefs_none_dist_10kb_K562 <- coef(enetcoefs_none_dist_10kb_K562$finalModel, s=enetcoefs_none_dist_10kb_K562$bestTune$lambda)
+
+#RUS
+##OC
+enetcoefs_RUS_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/ENET/enetModel.rds")
+enetcoefs_RUS_oc_10kb_K562 <- coef(enetcoefs_RUS_oc_10kb_K562$finalModel, s=enetcoefs_RUS_oc_10kb_K562$bestTune$lambda)
+##OP
+enetcoefs_RUS_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/ENET/enetModel.rds")
+enetcoefs_RUS_op_10kb_K562 <- coef(enetcoefs_RUS_op_10kb_K562$finalModel, s=enetcoefs_RUS_op_10kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_RUS_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/enetModel.rds")
+enetcoefs_RUS_dist_10kb_K562 <- coef(enetcoefs_RUS_dist_10kb_K562$finalModel, s=enetcoefs_RUS_dist_10kb_K562$bestTune$lambda)
+
+#ROS
+##OC
+enetcoefs_ROS_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/ENET/enetModel.rds")
+enetcoefs_ROS_oc_10kb_K562 <- coef(enetcoefs_ROS_oc_10kb_K562$finalModel, s=enetcoefs_ROS_oc_10kb_K562$bestTune$lambda)
+##OP
+enetcoefs_ROS_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/ENET/enetModel.rds")
+enetcoefs_ROS_op_10kb_K562 <- coef(enetcoefs_ROS_op_10kb_K562$finalModel, s=enetcoefs_ROS_op_10kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_ROS_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/enetModel.rds")
+enetcoefs_ROS_dist_10kb_K562 <- coef(enetcoefs_ROS_dist_10kb_K562$finalModel, s=enetcoefs_ROS_dist_10kb_K562$bestTune$lambda)
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/ENET/enetModel.rds")
+enetcoefs_SMOTE_oc_10kb_K562 <- coef(enetcoefs_SMOTE_oc_10kb_K562$finalModel, s=enetcoefs_SMOTE_oc_10kb_K562$bestTune$lambda)
+##OP
+enetcoefs_SMOTE_op_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/ENET/enetModel.rds")
+enetcoefs_SMOTE_op_10kb_K562 <- coef(enetcoefs_SMOTE_op_10kb_K562$finalModel, s=enetcoefs_SMOTE_op_10kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_SMOTE_dist_10kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/enetModel.rds")
+enetcoefs_SMOTE_dist_10kb_K562 <- coef(enetcoefs_SMOTE_dist_10kb_K562$finalModel, s=enetcoefs_SMOTE_dist_10kb_K562$bestTune$lambda)
+
+enetcoefsmat <- cbind(enetcoefs_none_oc_10kb_K562[-1,1], 
+                      enetcoefs_ROS_oc_10kb_K562[-1,1],
+                      enetcoefs_RUS_oc_10kb_K562[-1,1], 
+                      enetcoefs_SMOTE_oc_10kb_K562[-1,1], 
+                      
+                      enetcoefs_none_op_10kb_K562[-1,1], 
+                      enetcoefs_ROS_op_10kb_K562[-1,1],
+                      enetcoefs_RUS_op_10kb_K562[-1,1], 
+                      enetcoefs_SMOTE_op_10kb_K562[-1,1],
+                      
+                      enetcoefs_none_dist_10kb_K562[-1,1],
+                      enetcoefs_ROS_dist_10kb_K562[-1,1],
+                      enetcoefs_RUS_dist_10kb_K562[-1,1],
+                      enetcoefs_SMOTE_dist_10kb_K562[-1,1])
+
+enetcoefsmat[enetcoefsmat == 0] <- NA
+
+#colnames(enetcoefsmat) <- c(paste(c("OC","OP","Distance"), rep("None", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("RUS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("ROS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("SMOTE", 3), sep=" "))
+colnames(enetcoefsmat) <- rep(c("None", "ROS", "RUS", "SMOTE"), 3)
+rownames(enetcoefsmat) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rownames(enetcoefsmat))
+
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(10))
+
+
+```
+
+
+#####All
+
+```{r}
+heatmap.2(enetcoefsmat,
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #key.title = "Elastic-Net\nCoefficient",
+          #keysize = 1.5,
+          dendrogram="row",     # only draw a row dendrogram,
+          Rowv = TRUE,
+          Colv = FALSE,
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=0:12,
+          rowsep=0:nrow(enetcoefsmat)) 
+```
+
+
+#### 25kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/ENET/enetModel.rds")
+enetcoefs_none_oc_25kb_K562 <- coef(enetcoefs_none_oc_25kb_K562$finalModel, s=enetcoefs_none_oc_25kb_K562$bestTune$lambda)
+##OP
+enetcoefs_none_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/ENET/enetModel.rds")
+enetcoefs_none_op_25kb_K562 <- coef(enetcoefs_none_op_25kb_K562$finalModel, s=enetcoefs_none_op_25kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_none_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/enetModel.rds")
+enetcoefs_none_dist_25kb_K562 <- coef(enetcoefs_none_dist_25kb_K562$finalModel, s=enetcoefs_none_dist_25kb_K562$bestTune$lambda)
+
+#RUS
+##OC
+enetcoefs_RUS_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/ENET/enetModel.rds")
+enetcoefs_RUS_oc_25kb_K562 <- coef(enetcoefs_RUS_oc_25kb_K562$finalModel, s=enetcoefs_RUS_oc_25kb_K562$bestTune$lambda)
+##OP
+enetcoefs_RUS_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/ENET/enetModel.rds")
+enetcoefs_RUS_op_25kb_K562 <- coef(enetcoefs_RUS_op_25kb_K562$finalModel, s=enetcoefs_RUS_op_25kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_RUS_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/enetModel.rds")
+enetcoefs_RUS_dist_25kb_K562 <- coef(enetcoefs_RUS_dist_25kb_K562$finalModel, s=enetcoefs_RUS_dist_25kb_K562$bestTune$lambda)
+
+#ROS
+##OC
+enetcoefs_ROS_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/ENET/enetModel.rds")
+enetcoefs_ROS_oc_25kb_K562 <- coef(enetcoefs_ROS_oc_25kb_K562$finalModel, s=enetcoefs_ROS_oc_25kb_K562$bestTune$lambda)
+##OP
+enetcoefs_ROS_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/ENET/enetModel.rds")
+enetcoefs_ROS_op_25kb_K562 <- coef(enetcoefs_ROS_op_25kb_K562$finalModel, s=enetcoefs_ROS_op_25kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_ROS_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/enetModel.rds")
+enetcoefs_ROS_dist_25kb_K562 <- coef(enetcoefs_ROS_dist_25kb_K562$finalModel, s=enetcoefs_ROS_dist_25kb_K562$bestTune$lambda)
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/ENET/enetModel.rds")
+enetcoefs_SMOTE_oc_25kb_K562 <- coef(enetcoefs_SMOTE_oc_25kb_K562$finalModel, s=enetcoefs_SMOTE_oc_25kb_K562$bestTune$lambda)
+##OP
+enetcoefs_SMOTE_op_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/ENET/enetModel.rds")
+enetcoefs_SMOTE_op_25kb_K562 <- coef(enetcoefs_SMOTE_op_25kb_K562$finalModel, s=enetcoefs_SMOTE_op_25kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_SMOTE_dist_25kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/enetModel.rds")
+enetcoefs_SMOTE_dist_25kb_K562 <- coef(enetcoefs_SMOTE_dist_25kb_K562$finalModel, s=enetcoefs_SMOTE_dist_25kb_K562$bestTune$lambda)
+
+enetcoefsmat <- cbind(enetcoefs_none_oc_25kb_K562[-1,1], 
+                      enetcoefs_ROS_oc_25kb_K562[-1,1],
+                      enetcoefs_RUS_oc_25kb_K562[-1,1], 
+                      enetcoefs_SMOTE_oc_25kb_K562[-1,1], 
+                      
+                      enetcoefs_none_op_25kb_K562[-1,1], 
+                      enetcoefs_ROS_op_25kb_K562[-1,1],
+                      enetcoefs_RUS_op_25kb_K562[-1,1], 
+                      enetcoefs_SMOTE_op_25kb_K562[-1,1],
+                      
+                      enetcoefs_none_dist_25kb_K562[-1,1],
+                      enetcoefs_ROS_dist_25kb_K562[-1,1],
+                      enetcoefs_RUS_dist_25kb_K562[-1,1],
+                      enetcoefs_SMOTE_dist_25kb_K562[-1,1])
+
+enetcoefsmat[enetcoefsmat == 0] <- NA
+
+#colnames(enetcoefsmat) <- c(paste(c("OC","OP","Distance"), rep("None", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("RUS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("ROS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("SMOTE", 3), sep=" "))
+colnames(enetcoefsmat) <- rep(c("None", "ROS", "RUS", "SMOTE"), 3)
+rownames(enetcoefsmat) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rownames(enetcoefsmat))
+
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(10))
+
+
+```
+
+#####All
+
+```{r}
+heatmap.2(enetcoefsmat,
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #key.title = "Elastic-Net\nCoefficient",
+          #keysize = 1.5,
+          dendrogram="row",     # only draw a row dendrogram,
+          Rowv = TRUE,
+          Colv = FALSE,
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=0:12,
+          rowsep=0:nrow(enetcoefsmat)) 
+```
+
+
+#### 50kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/ENET/enetModel.rds")
+enetcoefs_none_oc_50kb_K562 <- coef(enetcoefs_none_oc_50kb_K562$finalModel, s=enetcoefs_none_oc_50kb_K562$bestTune$lambda)
+##OP
+enetcoefs_none_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/ENET/enetModel.rds")
+enetcoefs_none_op_50kb_K562 <- coef(enetcoefs_none_op_50kb_K562$finalModel, s=enetcoefs_none_op_50kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_none_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/enetModel.rds")
+enetcoefs_none_dist_50kb_K562 <- coef(enetcoefs_none_dist_50kb_K562$finalModel, s=enetcoefs_none_dist_50kb_K562$bestTune$lambda)
+
+#RUS
+##OC
+enetcoefs_RUS_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/ENET/enetModel.rds")
+enetcoefs_RUS_oc_50kb_K562 <- coef(enetcoefs_RUS_oc_50kb_K562$finalModel, s=enetcoefs_RUS_oc_50kb_K562$bestTune$lambda)
+##OP
+enetcoefs_RUS_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/ENET/enetModel.rds")
+enetcoefs_RUS_op_50kb_K562 <- coef(enetcoefs_RUS_op_50kb_K562$finalModel, s=enetcoefs_RUS_op_50kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_RUS_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/enetModel.rds")
+enetcoefs_RUS_dist_50kb_K562 <- coef(enetcoefs_RUS_dist_50kb_K562$finalModel, s=enetcoefs_RUS_dist_50kb_K562$bestTune$lambda)
+
+#ROS
+##OC
+enetcoefs_ROS_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/ENET/enetModel.rds")
+enetcoefs_ROS_oc_50kb_K562 <- coef(enetcoefs_ROS_oc_50kb_K562$finalModel, s=enetcoefs_ROS_oc_50kb_K562$bestTune$lambda)
+##OP
+enetcoefs_ROS_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/ENET/enetModel.rds")
+enetcoefs_ROS_op_50kb_K562 <- coef(enetcoefs_ROS_op_50kb_K562$finalModel, s=enetcoefs_ROS_op_50kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_ROS_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/enetModel.rds")
+enetcoefs_ROS_dist_50kb_K562 <- coef(enetcoefs_ROS_dist_50kb_K562$finalModel, s=enetcoefs_ROS_dist_50kb_K562$bestTune$lambda)
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/ENET/enetModel.rds")
+enetcoefs_SMOTE_oc_50kb_K562 <- coef(enetcoefs_SMOTE_oc_50kb_K562$finalModel, s=enetcoefs_SMOTE_oc_50kb_K562$bestTune$lambda)
+##OP
+enetcoefs_SMOTE_op_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/ENET/enetModel.rds")
+enetcoefs_SMOTE_op_50kb_K562 <- coef(enetcoefs_SMOTE_op_50kb_K562$finalModel, s=enetcoefs_SMOTE_op_50kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_SMOTE_dist_50kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/enetModel.rds")
+enetcoefs_SMOTE_dist_50kb_K562 <- coef(enetcoefs_SMOTE_dist_50kb_K562$finalModel, s=enetcoefs_SMOTE_dist_50kb_K562$bestTune$lambda)
+
+enetcoefsmat <- cbind(enetcoefs_none_oc_50kb_K562[-1,1], 
+                      enetcoefs_ROS_oc_50kb_K562[-1,1],
+                      enetcoefs_RUS_oc_50kb_K562[-1,1], 
+                      enetcoefs_SMOTE_oc_50kb_K562[-1,1], 
+                      
+                      enetcoefs_none_op_50kb_K562[-1,1], 
+                      enetcoefs_ROS_op_50kb_K562[-1,1],
+                      enetcoefs_RUS_op_50kb_K562[-1,1], 
+                      enetcoefs_SMOTE_op_50kb_K562[-1,1],
+                      
+                      enetcoefs_none_dist_50kb_K562[-1,1],
+                      enetcoefs_ROS_dist_50kb_K562[-1,1],
+                      enetcoefs_RUS_dist_50kb_K562[-1,1],
+                      enetcoefs_SMOTE_dist_50kb_K562[-1,1])
+
+enetcoefsmat[enetcoefsmat == 0] <- NA
+
+#colnames(enetcoefsmat) <- c(paste(c("OC","OP","Distance"), rep("None", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("RUS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("ROS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("SMOTE", 3), sep=" "))
+colnames(enetcoefsmat) <- rep(c("None", "ROS", "RUS", "SMOTE"), 3)
+rownames(enetcoefsmat) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rownames(enetcoefsmat))
+
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(10))
+
+
+```
+
+#####All
+
+```{r}
+heatmap.2(enetcoefsmat,
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #key.title = "Elastic-Net\nCoefficient",
+          #keysize = 1.5,
+          dendrogram="row",     # only draw a row dendrogram,
+          Rowv = TRUE,
+          Colv = FALSE,
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=0:12,
+          rowsep=0:nrow(enetcoefsmat)) 
+```
+
+
+#### 100kb
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+
+features <- names(train)[-1]
+features <- features[grep("dist", features)]
+features <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist", 
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", features)
+
+#None
+##OC
+enetcoefs_none_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/ENET/enetModel.rds")
+enetcoefs_none_oc_100kb_K562 <- coef(enetcoefs_none_oc_100kb_K562$finalModel, s=enetcoefs_none_oc_100kb_K562$bestTune$lambda)
+##OP
+enetcoefs_none_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/ENET/enetModel.rds")
+enetcoefs_none_op_100kb_K562 <- coef(enetcoefs_none_op_100kb_K562$finalModel, s=enetcoefs_none_op_100kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_none_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/enetModel.rds")
+enetcoefs_none_dist_100kb_K562 <- coef(enetcoefs_none_dist_100kb_K562$finalModel, s=enetcoefs_none_dist_100kb_K562$bestTune$lambda)
+
+#RUS
+##OC
+enetcoefs_RUS_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/ENET/enetModel.rds")
+enetcoefs_RUS_oc_100kb_K562 <- coef(enetcoefs_RUS_oc_100kb_K562$finalModel, s=enetcoefs_RUS_oc_100kb_K562$bestTune$lambda)
+##OP
+enetcoefs_RUS_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/ENET/enetModel.rds")
+enetcoefs_RUS_op_100kb_K562 <- coef(enetcoefs_RUS_op_100kb_K562$finalModel, s=enetcoefs_RUS_op_100kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_RUS_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/enetModel.rds")
+enetcoefs_RUS_dist_100kb_K562 <- coef(enetcoefs_RUS_dist_100kb_K562$finalModel, s=enetcoefs_RUS_dist_100kb_K562$bestTune$lambda)
+
+#ROS
+##OC
+enetcoefs_ROS_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/ENET/enetModel.rds")
+enetcoefs_ROS_oc_100kb_K562 <- coef(enetcoefs_ROS_oc_100kb_K562$finalModel, s=enetcoefs_ROS_oc_100kb_K562$bestTune$lambda)
+##OP
+enetcoefs_ROS_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/ENET/enetModel.rds")
+enetcoefs_ROS_op_100kb_K562 <- coef(enetcoefs_ROS_op_100kb_K562$finalModel, s=enetcoefs_ROS_op_100kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_ROS_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/enetModel.rds")
+enetcoefs_ROS_dist_100kb_K562 <- coef(enetcoefs_ROS_dist_100kb_K562$finalModel, s=enetcoefs_ROS_dist_100kb_K562$bestTune$lambda)
+
+#SMOTE
+##OC
+enetcoefs_SMOTE_oc_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/ENET/enetModel.rds")
+enetcoefs_SMOTE_oc_100kb_K562 <- coef(enetcoefs_SMOTE_oc_100kb_K562$finalModel, s=enetcoefs_SMOTE_oc_100kb_K562$bestTune$lambda)
+##OP
+enetcoefs_SMOTE_op_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/ENET/enetModel.rds")
+enetcoefs_SMOTE_op_100kb_K562 <- coef(enetcoefs_SMOTE_op_100kb_K562$finalModel, s=enetcoefs_SMOTE_op_100kb_K562$bestTune$lambda)
+##Distance
+enetcoefs_SMOTE_dist_100kb_K562 <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/enetModel.rds")
+enetcoefs_SMOTE_dist_100kb_K562 <- coef(enetcoefs_SMOTE_dist_100kb_K562$finalModel, s=enetcoefs_SMOTE_dist_100kb_K562$bestTune$lambda)
+
+enetcoefsmat <- cbind(enetcoefs_none_oc_100kb_K562[-1,1], 
+                      enetcoefs_ROS_oc_100kb_K562[-1,1],
+                      enetcoefs_RUS_oc_100kb_K562[-1,1], 
+                      enetcoefs_SMOTE_oc_100kb_K562[-1,1], 
+                      
+                      enetcoefs_none_op_100kb_K562[-1,1], 
+                      enetcoefs_ROS_op_100kb_K562[-1,1],
+                      enetcoefs_RUS_op_100kb_K562[-1,1], 
+                      enetcoefs_SMOTE_op_100kb_K562[-1,1],
+                      
+                      enetcoefs_none_dist_100kb_K562[-1,1],
+                      enetcoefs_ROS_dist_100kb_K562[-1,1],
+                      enetcoefs_RUS_dist_100kb_K562[-1,1],
+                      enetcoefs_SMOTE_dist_100kb_K562[-1,1])
+
+enetcoefsmat[enetcoefsmat == 0] <- NA
+
+#colnames(enetcoefsmat) <- c(paste(c("OC","OP","Distance"), rep("None", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("RUS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("ROS", 3), sep=" "),
+#paste(c("OC","OP","Distance"), rep("SMOTE", 3), sep=" "))
+colnames(enetcoefsmat) <- rep(c("None", "ROS", "RUS", "SMOTE"), 3)
+rownames(enetcoefsmat) <- gsub(paste(c("`", 
+                                                    "_",
+                                                    "-",
+                                                    "K562", 
+                                                    "dist",
+                                                    "count",
+                                                    "perc",
+                                                    "Haib", 
+                                                    "Sydh",
+                                                    "Uta",
+                                                    "Uw",
+                                                    "Broad",
+                                                    "Uchicago"), collapse = "|"),"", rownames(enetcoefsmat))
+
+my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(10))
+
+
+```
+
+
+#####All
+
+```{r}
+heatmap.2(enetcoefsmat,
+          #cellnote = cormat,  # same data set for cell labels
+          #main = "Correlation", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins =c(5,5),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #key.title = "Elastic-Net\nCoefficient",
+          #keysize = 1.5,
+          dendrogram="row",     # only draw a row dendrogram,
+          Rowv = TRUE,
+          Colv = FALSE,
+          cexRow=0.5,
+          cexCol=0.75,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black",
+          colsep=0:12,
+          rowsep=0:nrow(enetcoefsmat)) 
+```
