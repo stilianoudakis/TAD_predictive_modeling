@@ -464,3 +464,70 @@ annotate_figure(figure,
 
 ```
 
+```{r}
+all_perfs <- rbind.data.frame(all_None_perfs,
+                              all_ROS_perfs,
+                              all_RUS_perfs,
+                              all_smote_perfs)
+all_perfs$Resampling <- c(rep("None",24),
+                          rep("ROS",24),
+                          rep("RUS",24),
+                          rep("SMOTE",24))
+all_perfs$CL <- factor(all_perfs$CL, levels=c("GM12878","K562"))
+all_perfs$Resolution <- factor(all_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_perfs$Metric <- factor(all_perfs$Metric, levels=c("Balanced Acc", "F1-Score", "MCC"))
+all_perfs$Resampling <- factor(all_perfs$Resampling, levels = c("None", "ROS", "RUS", "SMOTE"))
+
+#gm12878
+p1 <- ggplot(all_perfs[which(all_perfs$CL=="GM12878"),], aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
+    geom_line(size=2)+
+    geom_point(size=5)+
+    facet_grid(~ Metric)+
+    theme_minimal() +
+    theme_bw()+
+    xlab("") + ylab("") +
+    ggtitle("GM12878") +
+  scale_color_discrete(name="Re-Sampling Technique")+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1
+	                                 ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+	      plot.title = element_text(size=20))
+
+#k562
+p2 <- ggplot(all_perfs[which(all_perfs$CL=="K562"),], aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
+    geom_line(size=2)+
+    geom_point(size=5)+
+    facet_grid(~ Metric)+
+    theme_minimal() +
+    theme_bw()+
+    xlab("") + ylab("") +
+    ggtitle("K562") +
+  scale_color_discrete(name="Re-Sampling Technique")+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1
+	                                 ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+	      plot.title = element_text(size=20))
+
+figure <- ggarrange(p1,p2,ncol = 2, nrow=1, common.legend = TRUE, legend = "top")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Performance", color = "black", rot = 90, size=20)
+)
+
+```
+

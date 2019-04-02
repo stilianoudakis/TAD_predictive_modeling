@@ -1506,3 +1506,1118 @@ annotate_figure(figure,
 
 ```
 
+
+##gm12878
+
+###none
+
+```{r}
+
+#OC
+##None
+rfperf_gm12878_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_10kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_10kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_gm12878_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_25kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_25kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_gm12878_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_50kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_50kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_gm12878_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_100kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_100kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+
+all_rfperfs_gm12878_none <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+
+all_rfperfs_gm12878_none$Performance <- c(round(rfperf_gm12878_10kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_none_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_none_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_none_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_none_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_gm12878_10kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_none_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_none_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_none_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_none_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_gm12878_10kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_none_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_gm12878_10kb_none_oc[6,2],2) + round(rfperf_gm12878_10kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_none_op[6,2],2) + round(rfperf_gm12878_10kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_none_dist[6,2],2) + round(rfperf_gm12878_10kb_none_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_none_oc[6,2],2) + round(rfperf_gm12878_25kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_none_op[6,2],2) + round(rfperf_gm12878_25kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_none_dist[6,2],2) + round(rfperf_gm12878_25kb_none_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_none_oc[6,2],2) + round(rfperf_gm12878_50kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_none_op[6,2],2) + round(rfperf_gm12878_50kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_none_dist[6,2],2) + round(rfperf_gm12878_50kb_none_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_none_oc[6,2],2) + round(rfperf_gm12878_100kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_none_op[6,2],2) + round(rfperf_gm12878_100kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_none_dist[6,2],2) + round(rfperf_gm12878_100kb_none_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_gm12878_none$Resolution <- factor(all_rfperfs_gm12878_none$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_gm12878_none$Predictor <- factor(all_rfperfs_gm12878_none$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_gm12878_none$Metric <- factor(all_rfperfs_gm12878_none$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+p1 <- ggplot(all_rfperfs_gm12878_none,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+###ROS
+
+```{r}
+##ROS
+rfperf_gm12878_10kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_10kb_ros_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_10kb_ros_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_25kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_25kb_ros_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_25kb_ros_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_50kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_50kb_ros_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_50kb_ros_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_100kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_100kb_ros_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_gm12878_100kb_ros_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+all_rfperfs_gm12878_ros <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+all_rfperfs_gm12878_ros$Performance <- c(round(rfperf_gm12878_10kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_ros_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_ros_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_ros_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_ros_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_ros_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_ros_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_ros_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_ros_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_gm12878_10kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_ros_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_ros_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_ros_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_ros_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_ros_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_ros_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_ros_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_ros_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_gm12878_10kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_ros_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_ros_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_ros_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_ros_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_gm12878_10kb_ros_oc[6,2],2) + round(rfperf_gm12878_10kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_ros_op[6,2],2) + round(rfperf_gm12878_10kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_ros_dist[6,2],2) + round(rfperf_gm12878_10kb_ros_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_ros_oc[6,2],2) + round(rfperf_gm12878_25kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_ros_op[6,2],2) + round(rfperf_gm12878_25kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_ros_dist[6,2],2) + round(rfperf_gm12878_25kb_ros_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_ros_oc[6,2],2) + round(rfperf_gm12878_50kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_ros_op[6,2],2) + round(rfperf_gm12878_50kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_ros_dist[6,2],2) + round(rfperf_gm12878_50kb_ros_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_ros_oc[6,2],2) + round(rfperf_gm12878_100kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_ros_op[6,2],2) + round(rfperf_gm12878_100kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_ros_dist[6,2],2) + round(rfperf_gm12878_100kb_ros_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_gm12878_ros$Resolution <- factor(all_rfperfs_gm12878_ros$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_gm12878_ros$Predictor <- factor(all_rfperfs_gm12878_ros$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_gm12878_ros$Metric <- factor(all_rfperfs_gm12878_ros$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+ggplot(all_rfperfs_gm12878_ros,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+```
+
+###RUS
+
+```{r}
+##RUS
+rfperf_gm12878_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_10kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_25kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_50kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_100kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_gm12878_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+all_rfperfs_gm12878_RUS <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+all_rfperfs_gm12878_RUS$Performance <- c(round(rfperf_gm12878_10kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_RUS_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_gm12878_10kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_RUS_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_gm12878_10kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_RUS_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_gm12878_10kb_RUS_oc[6,2],2) + round(rfperf_gm12878_10kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_RUS_op[6,2],2) + round(rfperf_gm12878_10kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_RUS_dist[6,2],2) + round(rfperf_gm12878_10kb_RUS_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_RUS_oc[6,2],2) + round(rfperf_gm12878_25kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_RUS_op[6,2],2) + round(rfperf_gm12878_25kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_RUS_dist[6,2],2) + round(rfperf_gm12878_25kb_RUS_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_RUS_oc[6,2],2) + round(rfperf_gm12878_50kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_RUS_op[6,2],2) + round(rfperf_gm12878_50kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_RUS_dist[6,2],2) + round(rfperf_gm12878_50kb_RUS_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_RUS_oc[6,2],2) + round(rfperf_gm12878_100kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_RUS_op[6,2],2) + round(rfperf_gm12878_100kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_RUS_dist[6,2],2) + round(rfperf_gm12878_100kb_RUS_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_gm12878_RUS$Resolution <- factor(all_rfperfs_gm12878_RUS$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_gm12878_RUS$Predictor <- factor(all_rfperfs_gm12878_RUS$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_gm12878_RUS$Metric <- factor(all_rfperfs_gm12878_RUS$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+ggplot(all_rfperfs_gm12878_RUS,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+###SMOTE
+
+```{r}
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+all_rfperfs_gm12878_SMOTE <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+all_rfperfs_gm12878_SMOTE$Performance <- c(round(rfperf_gm12878_10kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_SMOTE_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_SMOTE_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_SMOTE_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_SMOTE_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_gm12878_10kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_SMOTE_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_SMOTE_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_SMOTE_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_SMOTE_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_gm12878_10kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_SMOTE_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_SMOTE_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_SMOTE_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_SMOTE_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_gm12878_10kb_SMOTE_oc[6,2],2) + round(rfperf_gm12878_10kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_SMOTE_op[6,2],2) + round(rfperf_gm12878_10kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_10kb_SMOTE_dist[6,2],2) + round(rfperf_gm12878_10kb_SMOTE_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_SMOTE_oc[6,2],2) + round(rfperf_gm12878_25kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_SMOTE_op[6,2],2) + round(rfperf_gm12878_25kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_25kb_SMOTE_dist[6,2],2) + round(rfperf_gm12878_25kb_SMOTE_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_SMOTE_oc[6,2],2) + round(rfperf_gm12878_50kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_SMOTE_op[6,2],2) + round(rfperf_gm12878_50kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_50kb_SMOTE_dist[6,2],2) + round(rfperf_gm12878_50kb_SMOTE_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_SMOTE_oc[6,2],2) + round(rfperf_gm12878_100kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_SMOTE_op[6,2],2) + round(rfperf_gm12878_100kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_gm12878_100kb_SMOTE_dist[6,2],2) + round(rfperf_gm12878_100kb_SMOTE_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_gm12878_SMOTE$Resolution <- factor(all_rfperfs_gm12878_SMOTE$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_gm12878_SMOTE$Predictor <- factor(all_rfperfs_gm12878_SMOTE$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_gm12878_SMOTE$Metric <- factor(all_rfperfs_gm12878_SMOTE$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+ggplot(all_rfperfs_gm12878_SMOTE,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+
+##k562
+
+###none
+
+```{r}
+#OC
+##None
+rfperf_K562_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_10kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_10kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_25kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_25kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_50kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_50kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_100kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_100kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+
+all_rfperfs_K562_none <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+
+all_rfperfs_K562_none$Performance <- c(round(rfperf_K562_10kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_none_dist[17,2],2), #auc
+                                          round(rfperf_K562_25kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_none_dist[17,2],2), #auc
+                                          round(rfperf_K562_50kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_none_dist[17,2],2), #auc
+                                          round(rfperf_K562_100kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_none_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_K562_10kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_none_dist[16,2],2), #f1
+                                          round(rfperf_K562_25kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_none_dist[16,2],2), #f1
+                                          round(rfperf_K562_50kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_none_dist[16,2],2), #f1
+                                          round(rfperf_K562_100kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_none_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_K562_10kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_none_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_K562_10kb_none_oc[6,2],2) + round(rfperf_K562_10kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_none_op[6,2],2) + round(rfperf_K562_10kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_none_dist[6,2],2) + round(rfperf_K562_10kb_none_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_none_oc[6,2],2) + round(rfperf_K562_25kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_none_op[6,2],2) + round(rfperf_K562_25kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_none_dist[6,2],2) + round(rfperf_K562_25kb_none_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_none_oc[6,2],2) + round(rfperf_K562_50kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_none_op[6,2],2) + round(rfperf_K562_50kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_none_dist[6,2],2) + round(rfperf_K562_50kb_none_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_none_oc[6,2],2) + round(rfperf_K562_100kb_none_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_none_op[6,2],2) + round(rfperf_K562_100kb_none_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_none_dist[6,2],2) + round(rfperf_K562_100kb_none_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_K562_none$Resolution <- factor(all_rfperfs_K562_none$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_K562_none$Predictor <- factor(all_rfperfs_K562_none$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_K562_none$Metric <- factor(all_rfperfs_K562_none$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+p2 <- ggplot(all_rfperfs_K562_none,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+
+###ROS
+
+```{r}
+##ROS
+rfperf_K562_10kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_10kb_ros_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_10kb_ros_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_25kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_25kb_ros_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_25kb_ros_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_50kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_50kb_ros_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_50kb_ros_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_100kb_ros_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_100kb_ros_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+##ROS
+rfperf_K562_100kb_ros_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+all_rfperfs_K562_ros <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+all_rfperfs_K562_ros$Performance <- c(round(rfperf_K562_10kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_ros_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_ros_dist[17,2],2), #auc
+                                          round(rfperf_K562_25kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_ros_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_ros_dist[17,2],2), #auc
+                                          round(rfperf_K562_50kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_ros_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_ros_dist[17,2],2), #auc
+                                          round(rfperf_K562_100kb_ros_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_ros_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_ros_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_K562_10kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_ros_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_ros_dist[16,2],2), #f1
+                                          round(rfperf_K562_25kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_ros_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_ros_dist[16,2],2), #f1
+                                          round(rfperf_K562_50kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_ros_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_ros_dist[16,2],2), #f1
+                                          round(rfperf_K562_100kb_ros_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_ros_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_ros_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_K562_10kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_ros_dist[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_ros_dist[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_ros_dist[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_ros_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_ros_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_ros_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_K562_10kb_ros_oc[6,2],2) + round(rfperf_K562_10kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_ros_op[6,2],2) + round(rfperf_K562_10kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_ros_dist[6,2],2) + round(rfperf_K562_10kb_ros_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_ros_oc[6,2],2) + round(rfperf_K562_25kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_ros_op[6,2],2) + round(rfperf_K562_25kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_ros_dist[6,2],2) + round(rfperf_K562_25kb_ros_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_ros_oc[6,2],2) + round(rfperf_K562_50kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_ros_op[6,2],2) + round(rfperf_K562_50kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_ros_dist[6,2],2) + round(rfperf_K562_50kb_ros_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_ros_oc[6,2],2) + round(rfperf_K562_100kb_ros_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_ros_op[6,2],2) + round(rfperf_K562_100kb_ros_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_ros_dist[6,2],2) + round(rfperf_K562_100kb_ros_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_K562_ros$Resolution <- factor(all_rfperfs_K562_ros$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_K562_ros$Predictor <- factor(all_rfperfs_K562_ros$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_K562_ros$Metric <- factor(all_rfperfs_K562_ros$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+ggplot(all_rfperfs_K562_ros,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+```
+
+###RUS
+
+```{r}
+##RUS
+rfperf_K562_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_10kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_25kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_50kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_100kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+##RUS
+rfperf_K562_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+all_rfperfs_K562_RUS <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+all_rfperfs_K562_RUS$Performance <- c(round(rfperf_K562_10kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_K562_25kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_K562_50kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_K562_100kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_RUS_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_K562_10kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_K562_25kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_K562_50kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_K562_100kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_RUS_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_K562_10kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_RUS_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_K562_10kb_RUS_oc[6,2],2) + round(rfperf_K562_10kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_RUS_op[6,2],2) + round(rfperf_K562_10kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_RUS_dist[6,2],2) + round(rfperf_K562_10kb_RUS_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_RUS_oc[6,2],2) + round(rfperf_K562_25kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_RUS_op[6,2],2) + round(rfperf_K562_25kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_RUS_dist[6,2],2) + round(rfperf_K562_25kb_RUS_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_RUS_oc[6,2],2) + round(rfperf_K562_50kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_RUS_op[6,2],2) + round(rfperf_K562_50kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_RUS_dist[6,2],2) + round(rfperf_K562_50kb_RUS_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_RUS_oc[6,2],2) + round(rfperf_K562_100kb_RUS_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_RUS_op[6,2],2) + round(rfperf_K562_100kb_RUS_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_RUS_dist[6,2],2) + round(rfperf_K562_100kb_RUS_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_K562_RUS$Resolution <- factor(all_rfperfs_K562_RUS$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_K562_RUS$Predictor <- factor(all_rfperfs_K562_RUS$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_K562_RUS$Metric <- factor(all_rfperfs_K562_RUS$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+ggplot(all_rfperfs_K562_RUS,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+###SMOTE
+
+```{r}
+##SMOTE
+rfperf_K562_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_10kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_10kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_25kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_25kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_50kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_50kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_100kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+##SMOTE
+rfperf_K562_100kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+all_rfperfs_K562_SMOTE <- data.frame(Resolution=rep(c(rep("10 kb", 3),
+                                                        rep("25 kb", 3),
+                                                        rep("50 kb", 3),
+                                                        rep("100 kb", 3)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),16),
+                                       Metric=c(rep("AUC",12),
+                                                rep("F1-Score",12), 
+                                                rep("MCC",12),
+                                                rep("Balanced Acc", 12)))
+
+all_rfperfs_K562_SMOTE$Performance <- c(round(rfperf_K562_10kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_SMOTE_dist[17,2],2), #auc
+                                          round(rfperf_K562_25kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_SMOTE_dist[17,2],2), #auc
+                                          round(rfperf_K562_50kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_SMOTE_dist[17,2],2), #auc
+                                          round(rfperf_K562_100kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_SMOTE_dist[17,2],2), #auc
+                                          
+                                          round(rfperf_K562_10kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_SMOTE_dist[16,2],2), #f1
+                                          round(rfperf_K562_25kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_SMOTE_dist[16,2],2), #f1
+                                          round(rfperf_K562_50kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_SMOTE_dist[16,2],2), #f1
+                                          round(rfperf_K562_100kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_SMOTE_dist[16,2],2), #f1
+                                          
+                                          round(rfperf_K562_10kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_SMOTE_dist[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_SMOTE_dist[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_SMOTE_dist[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_SMOTE_dist[15,2],2), #mcc
+                                          
+                                          (round(rfperf_K562_10kb_SMOTE_oc[6,2],2) + round(rfperf_K562_10kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_SMOTE_op[6,2],2) + round(rfperf_K562_10kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_10kb_SMOTE_dist[6,2],2) + round(rfperf_K562_10kb_SMOTE_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_SMOTE_oc[6,2],2) + round(rfperf_K562_25kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_SMOTE_op[6,2],2) + round(rfperf_K562_25kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_25kb_SMOTE_dist[6,2],2) + round(rfperf_K562_25kb_SMOTE_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_SMOTE_oc[6,2],2) + round(rfperf_K562_50kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_SMOTE_op[6,2],2) + round(rfperf_K562_50kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_50kb_SMOTE_dist[6,2],2) + round(rfperf_K562_50kb_SMOTE_dist[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_SMOTE_oc[6,2],2) + round(rfperf_K562_100kb_SMOTE_oc[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_SMOTE_op[6,2],2) + round(rfperf_K562_100kb_SMOTE_op[7,2],2))/2, #balanced accuracy
+                                          (round(rfperf_K562_100kb_SMOTE_dist[6,2],2) + round(rfperf_K562_100kb_SMOTE_dist[7,2],2))/2 #balanced accuracy
+)
+
+all_rfperfs_K562_SMOTE$Resolution <- factor(all_rfperfs_K562_SMOTE$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_K562_SMOTE$Predictor <- factor(all_rfperfs_K562_SMOTE$Predictor, levels = c("OC", "OP", "Distance"))
+all_rfperfs_K562_SMOTE$Metric <- factor(all_rfperfs_K562_SMOTE$Metric, levels = c("AUC",
+                                                                                      "Balanced Acc",
+                                                                                      "F1-Score",
+                                                                                      "MCC"))
+
+ggplot(all_rfperfs_K562_SMOTE,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Metric) +
+  xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Predictor Type")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+##Plots
+
+```{r}
+p.g.none <- p.g.none + ggtitle("None") + ylab("GM12878") + theme(plot.title = element_text(size=20)) #+ ylim(0,.85)
+p.g.ros <- p.g.ros + ggtitle("ROS") + theme(plot.title = element_text(size=20)) #+ ylim(0,.85)
+p.g.rus <- p.g.rus + ggtitle("RUS") + theme(plot.title = element_text(size=20)) #+ ylim(0,.85)
+p.g.smote <- p.g.smote + ggtitle("SMOTE") + theme(plot.title = element_text(size=20)) #+ ylim(0,.85)
+p.k.none <- p.k.none + ylab("K562") #+ ylim(0,.85)
+p.k.ros <- p.k.ros #+ ylim(0,.85)
+p.k.rus <- p.k.rus #+ ylim(0,.85)
+p.k.smote <- p.k.smote #+ ylim(0,.85)
+
+figure <- ggarrange(p.g.ros,p.g.rus,p.g.smote,
+                    p.k.ros,p.k.rus,p.k.smote,ncol = 3, nrow = 2, common.legend = TRUE, legend = "top")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resampling Technique", color = "black", size = 20),
+    left = text_grob("Performance", color = "black", rot = 90, size=20)
+)
+
+
+figure <- ggarrange(p.g.none,p.g.ros,p.g.rus,p.g.smote,
+                    p.k.none,p.k.ros,p.k.rus,p.k.smote,
+          ncol=4, nrow=2, 
+          common.legend = TRUE, 
+          legend = "top") 
+          #, 
+          #labels = c("A", "D", "B", "E", "C", "F"), 
+          #font.label = list(size=20)
+          #)
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resampling Technique", color = "black", size = 20),
+    left = text_grob("Performance", color = "black", rot = 90, size=20)
+)
+
+```

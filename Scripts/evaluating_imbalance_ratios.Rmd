@@ -809,17 +809,80 @@ allirdata$Resolution <- factor(allirdata$Resolution, c("10 kb", "25 kb", "50 kb"
 allirplots <- ggplot(allirdata, aes(x = Resolution, y = IR,fill = CL)) + 
   geom_bar(position = "dodge", stat="identity") + 
   ylab("Imbalance Ratio") +
-  xlab("Resolution") +
+  xlab("") +
   #scale_fill_manual(name="Cell Line", values=c("red", "blue"))+
   labs(fill="Cell Line")+
   theme_bw() +
   #guides(fill=FALSE)+
-  theme(axis.text.x = element_text(size=10),
-        axis.text.y = element_text(size = 10),
-        axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20))
 
 
 ```
+
+
+# Evaluating number of bins
+
+```{r}
+binslist10 <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/binslist10.rds")
+binslist10 <- length(binslist10)
+binslist25 <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/binslist25.rds")
+binslist25 <- length(binslist25)
+binslist50 <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/binslist50.rds")
+binslist50 <- length(binslist50)
+binslist100 <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/binslist100.rds")
+binslist100 <- length(binslist100)
+
+binslist10k <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/binslist10.rds")
+binslist10k <- length(binslist10k)
+binslist25k <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/binslist25.rds")
+binslist25k <- length(binslist25k)
+binslist50k <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/binslist50.rds")
+binslist50k <- length(binslist50k)
+binslist100k <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/binslist100.rds")
+binslist100k <- length(binslist100k)
+
+Bins <- c(binslist10,binslist25,binslist50,binslist100,
+          binslist10k,binslist25k,binslist50k,binslist100k)
+CL <- c(rep("GM12878", 4), 
+                  rep("K562", 4))
+Resolution <- c(rep(c("10 kb", "25 kb", "50 kb", "100 kb"), 2))
+
+allbinsdata <- cbind.data.frame(Bins, CL, Resolution)
+allbinsdata$CL <- factor(allbinsdata$CL, levels=c("GM12878", "K562"))
+allbinsdata$Resolution <- factor(allbinsdata$Resolution, c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+allbinsplots <- ggplot(allbinsdata, aes(x = Resolution, y = Bins,fill = CL)) + 
+  geom_bar(position = "dodge", stat="identity") + 
+  ylab("Total Number of Genomic Bins\n(in thousands of basepairs)") +
+  xlab("") +
+  #scale_fill_manual(name="Cell Line", values=c("red", "blue"))+
+  scale_y_continuous(limits=c(0,3e+05),
+                     breaks=c(0, 1e+05, 2e+05),
+                     labels = c("0", "100", "200")) +
+  labs(fill="Cell Line")+
+  theme_bw() +
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+```{r}
+figure <- ggarrange(allbinsplots, allirplots, ncol = 2, nrow = 1, common.legend = TRUE, legend = "top")
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20))
+```
+

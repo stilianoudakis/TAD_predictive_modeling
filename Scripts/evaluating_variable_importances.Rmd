@@ -1400,3 +1400,10 @@ annotate_figure(figure,
 
 ```
 
+
+# ICC
+
+```{r}
+vim.gm12878.smote[is.na(vim.gm12878.smote)] <- 0
+```
+
