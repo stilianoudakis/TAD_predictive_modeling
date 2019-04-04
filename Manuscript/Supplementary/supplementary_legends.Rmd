@@ -9,7 +9,11 @@ output: pdf_document
 
 **Supplementary Figure 1. Distance Densities across cell lines and resolutions.** Density curves of distances (in millions of base pairs) from genomic bins to flanked TAD boundaries for 10 kb (A), 25 kb (B), 50 kb (C), and 100 kb (D) data resolutions across the GM12878 (left column) and K562 (right column) cell lines. The untransformed distance densities are filled in red, while the $log_{2}$ tranformed distance densities are filled in blue.
 
+<!--
 **Supplementary Table 5. Data Summaries and Imbalance Ratios.** The total number of genomic bins included in the complete, training, and testing sets, as well as the subsequent imbalance ratios across resolutions and cell lines. Imbalance ratio is defined as the ratio of genomic bins that overlapped a flanked TAD boundary (minority class), divided by the number of genomic bins that did not overlap a flanked TAD boundary (majority class).
+-->
+
+**Supplementary Figure 15. Data summaries in the form of barplots for the GM12878 (red) and K562 (blue) cell lines.** (A) The total number of genomic bins created by partitioning the linear genome into unit intervals corresponding to the resolution of the relevant domain data. (B) Subsequent imbalance ratios, defined as the ratio of the number of bins that overlapped with a flanked TAD boundary to the number of bins that did not overlap with a flanked TAD boundary.
 
 **Supplementary Figure 2. Correlations between genomic annotations across cell lines and resolutions.** Upper and lower correlation heatmaps between genomic annotations for the GM12878 (A-D) and K562 (E-H) cell lines, across the 10 kb, 25 kb, 50 kb, and 100 kb resolutions (A, B, C, D; and E, F, G, H respectively). The correlations were evaluated on the total number of overlapped bases between flanked TAD boundaries and genomic annotations. High correlations (red) denote annotations that tended to occur colocally near TAD boundaries. Low correlations (blue) denote annotations that did not tend to occur near TAD boundaries together.
 
