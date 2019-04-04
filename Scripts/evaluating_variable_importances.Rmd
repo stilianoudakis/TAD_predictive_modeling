@@ -1405,5 +1405,7 @@ annotate_figure(figure,
 
 ```{r}
 vim.gm12878.smote[is.na(vim.gm12878.smote)] <- 0
+icc(vim.gm12878.smote, model = "twoway", type = "agreement")
+
 ```
 
