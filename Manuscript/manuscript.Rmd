@@ -127,11 +127,11 @@ Lastly, for the task of identifying the genomic annotations that were most predi
 
 ## ENSEMBLE COMPARISONS
 
-We evaluated and compared multiple random forest classification algorithms built on domain data extracted from Hi-C datasets for 2 cell lines $C = {GM12878, K562}$, at four different resolutions $R = {10 kb, 25 kb, 50 kb, 100 kb}$. For each classifier, we compared three predictor types $P = {OC, OP, Distance}$ and five class balancing techniques $B = {None, RUS, ROS, SMOTE, ROSE}$. A system produced from the ensemble framework was defined as: $ = {c, r, p, b}$, where $c \in C, \quad R \in R, \quad p \in P,$ and $b \in B$. Letting $|X|$ denote the cardinality of each set, we evaluated $|C| \times |R| \times |P| \times |B|$ different ensemble systems, totaling $X (= x \times 4 \times 3 \times 5)$ separate models. For each model, we aimed to assess both model performance and identify the genomic annotations that were most important in correctly labeling the genomic bins that overlapped with flanked TAD boundaries. 
+Multiple random forest classification algorithms were built on domain data extracted from Hi-C data for 2 cell lines $C = \{GM12878, K562\}$, at four different resolutions $R = \{10 kb, 25 kb, 50 kb, 100 kb\}$. For each classifier, we compared three predictor types $P = \{\text{OC}, \text{OP}, \text{Distance}\}$ and 4 class balancing techniques $B = \{None, RUS, ROS, SMOTE}$. A system produced from the ensemble framework was defined as: $S = \{c, r, p, b\}$, where $c \in C, \quad R \in R, \quad p \in P,$ and $b \in B$. Letting $|X|$ denote the cardinality of each set, we evaluated $|C| \times |R| \times |P| \times |B|$ different ensemble systems, totaling $96 (= 2 \times 4 \times 3 \times 4)$ separate models. 
 
 ## IMBALANCE RATIOS REMAINED SEVERE AND CONSISTENT ACROSS RESOLUTIONS
 
-We first examined the class imbalance of the different data resolutions for each cell line (Supplementary Table 5). While the total number of genomic bins decreased as resolution increased, the imbalance ratios remained relatively stable. We found that there was an average imbalance ratio of 0.154 (SD=0.022) and 0.137 (SD=0.0181) across resolutions for the GM12878 and K562 cell lines respectively. The low imbalance ratios indicate a wide disparity between majority and minority classes, and therefore suitable resampling techniques were needed.  
+We first examined the class imbalance of the different data resolutions for each cell line. As expected, the total number of genomic bins decreased as resolution decreased. That is, at lower resolutions, the linear genome was binned into larger units, thereby creating fewer bins (Supplementary Figure 15 (A)). The imbalance ratios, however, remained relatively stable (Supplementary Figure 15 (B)). We found that there was an average IR of 0.154 (SD=0.022) and 0.137 (SD=0.0181) across resolutions for the GM12878 and K562 cell lines respectively. Ideally, a balanced dataset will have an IR close to 0.50. Here, the low imbalance ratios indicated a wide disparity between majority and minority classes (i.e. a genomic bin was much more likely to not overlap with a flanked TAD boundary than it was to overlap with one). Therefore suitable resampling techniques were needed.  
 
 ## HIGH CORRRELATIONS IMPLY COLOCALIZATION OF MANY ANNOTATIONS AROUND TAD BOUNDARIES
 
@@ -157,7 +157,9 @@ We then directly compared models using SMOTE resampled datasets across each data
 
 
 
-# Discussion
+# DISCUSSION
+
+We developed an ensemble framework to systematically compare model performances for different combinations of class balancing and feature engineering techniques aimed aimed at determining a consensus approach to predicting TAD boundary formation using genomic annotations
 
 
 # Abbreviations
