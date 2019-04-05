@@ -15,11 +15,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Figure 3. The three predictor types considered when quantifying the association between TAD boundaries and genomic annotations.** The _overlap count_ (OC) predictors consider the total number of genomic features that overlapped with each genomic bin. The _overlap percent_ (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin by the total bin width. The _distance_ ($log_{2}$ transformed) predictors were calculated by measuring the distance (in bases) from the center of each genomic bin to the center of the nearest genomic feature.
 
+**Figure 7. Evaluating effect of class imbalance on model performance.** 
+
+<!--
 **Figure 4. Barplots comparing model performance for each predictor type.** Model performances were evaluated using F1-score, MCC, and balanced accuracy for each of the 4 resampling techniques, across both the GM12878 (A) and K562 (B) cell lines. The results presented are for models applied to 10 kb resolution data.
 
 **Figure 5. Line plots comparing models using SMOTE resampling with distance-type predictors.** Model performances were evaluated using F1-score, MCC, and balanced accuracy for each of the 4 data resolutions, across both the GM12878 (red, solid line) and K562 (blue; dashed line) cell lines. For a given metric, each point represents a model applied to a particular resolution with distance type predictors for the feature space, after which the SMOTE algorithm was used to create balanced classes on the trianing set.
 
 **Figure 6. Variable importance of the top 20 most predictive genomic annotations for models using SMOTE resampling with distance-type predictors.** The list of genomic features are the union of the top 20 most important genomic annotations across resolutions for the GM12878 (A) and K562 (B) cell lines. Variable importance is assigned on a continuous scale (range: 0-100). Grid entries filled in gray denote an annotation that was not featured as one of the top 20 most predictive variables in a given model. The genomic annotations are sorted by highest level of importance obtained from a random forest model using distance-type predictors at the 10 kb data resolution, while using SMOTE resampling, for each cell line respectively.
+-->
 
 <!--
 **Figures 4-8. Precision-Recall curves for 10 kb data.** Precision-recall curves were used to initially compare performance of random forest models with different predictor types on 10 kb resolution data, across each resampling technique. GM12878 (solid line) and K562 (dashed line) cell lines were compared with predictor type-specific models which included overlap counts (blue), overlap percents (purple), log distance (green), and all three combined (red). 
