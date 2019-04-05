@@ -15,73 +15,13 @@ output: pdf_document
 
 **Supplementary Figure 15. Data summaries in the form of barplots for the GM12878 (red) and K562 (blue) cell lines.** (A) The total number of genomic bins created by partitioning the linear genome into unit intervals corresponding to the resolution of the relevant domain data. (B) Subsequent imbalance ratios, defined as the ratio of the number of bins that overlapped with a flanked TAD boundary to the number of bins that did not overlap with a flanked TAD boundary.
 
+<!--
 **Supplementary Figure 2. Correlations between genomic annotations across cell lines and resolutions.** Upper and lower correlation heatmaps between genomic annotations for the GM12878 (A-D) and K562 (E-H) cell lines, across the 10 kb, 25 kb, 50 kb, and 100 kb resolutions (A, B, C, D; and E, F, G, H respectively). The correlations were evaluated on the total number of overlapped bases between flanked TAD boundaries and genomic annotations. High correlations (red) denote annotations that tended to occur colocally near TAD boundaries. Low correlations (blue) denote annotations that did not tend to occur near TAD boundaries together.
 
 **Supplementary Figure 2A. Correlograms separated by genomic annotation category for overlap count predictor types, using 10 kb resolution data, on the GM12878 cell line** 
+-->
 
-**Supplementary Figure 2B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 10 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 2C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 10 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 3A. Correlograms separated by genomic annotation category for overlap count predictor types, using 25 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 3B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 25 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 3C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 25 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 4A. Correlograms separated by genomic annotation category for overlap count predictor types, using 50 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 4B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 50 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 4C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 50 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 5A. Correlograms separated by genomic annotation category for overlap count predictor types, using 100 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 5B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 100 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 5C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 100 kb resolution data, on the GM12878 cell line** 
-
-**Supplementary Figure 6A. Correlograms separated by genomic annotation category for overlap count predictor types, using 10 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 6B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 10 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 6C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 10 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 7A. Correlograms separated by genomic annotation category for overlap count predictor types, using 25 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 7B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 25 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 7C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 25 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 8A. Correlograms separated by genomic annotation category for overlap count predictor types, using 50 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 8B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 50 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 8C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 50 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 9A. Correlograms separated by genomic annotation category for overlap count predictor types, using 100 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 9B. Correlograms separated by genomic annotation category for overlap percent predictor types, using 100 kb resolution data, on the K562 cell line** 
-
-**Supplementary Figure 9C. Correlograms separated by genomic annotation category for $log_{2}$ distance predictor types, using 100 kb resolution data, on the K562 cell line** 
-
-
-**Supplementary Figure 10A. Heatmap illustrating which features were regularized using Elastic-Net for 10 kb resolution data applied to the GM12878 cell line.**
-
-**Supplementary Figure 10B. Heatmap illustrating which features were regularized using Elastic-Net for 25 kb resolution data applied to the GM12878 cell line.**
-
-**Supplementary Figure 10C. Heatmap illustrating which features were regularized using Elastic-Net for 50 kb resolution data applied to the GM12878 cell line.**
-
-**Supplementary Figure 10D. Heatmap illustrating which features were regularized using Elastic-Net for 100 kb resolution data applied to the GM12878 cell line.**
-
-**Supplementary Figure 11A. Heatmap illustrating which features were regularized using Elastic-Net for 10 kb resolution data applied to the GM12878 cell line.**
-
-**Supplementary Figure 11B. Heatmap illustrating which features were regularized using Elastic-Net for 25 kb resolution data applied to the GM12878 cell line.**
-
-**Supplementary Figure 11C. Heatmap illustrating which features were regularized using Elastic-Net for 50 kb resolution data applied to the GM12878 cell line.**
-
-**Supplementary Figure 11D. Heatmap illustrating which features were regularized using Elastic-Net for 100 kb resolution data applied to the GM12878 cell line.**
-
+<!--
 **Supplementary Figrue 12. Barplots comparing model performance for each predictor type across 25 kb, 50 kb, and 100 kb data resolutions** Model performances were evaluated using F1-scores, MCCs, and balanced accuracies for each of the 4 resampling techniques, across both the GM12878 (A-C) and K562 (D-F) cell lines. Missing bars indicate that the model was unable to correctly predict any genomic regions that overlapped with flanked TAD boundaries in the test data, resulting in zero true positives. Bars that appear in the opposite direction (for MCC) indicate a negative correlation between the observed and predicted binary classifications of flanked TAD boundaries.
 
 **Supplementary Figure 13. Line plots comparing models using the remaining resampling techniques with distance-type predictors.** Model performances were evaluated using F1-score, MCC, and balanced accuracy for each of the 4 data resolutions, across both the GM12878 (red, solid line) and K562 (blue; dashed line) cell lines. For a given metric, each point represents a model applied to a particular resolution with distance type predictors for the feature space, after which a particular resampling technique was used to create balanced classes on the trianing set, including none (A), random over-sampling (B), and random under-sampling (C).
@@ -91,6 +31,8 @@ output: pdf_document
 **Supplementary Figure 14B. Variable importance of the top 20 most predictive genomic annotations for models using random over-sampling with distance-type predictors.** The list of genomic features are the union of the top 20 most important genomic annotations across resolutions for the GM12878 (A) and K562 (B) cell lines. Variable importance is assigned on a continuous scale (range: 0-100). Grid entries filled in gray denote an annotation that was not featured as one of the top 20 most predictive variables in a given model. The genomic annotations are sorted by highest level of importance obtained from a random forest model using distance-type predictors at the 10 kb data resolution, while using random over-sampling to create balanced classes, for each cell line respectively.
 
 **Supplementary Figure 14C. Variable importance of the top 20 most predictive genomic annotations for models using random under-sampling with distance-type predictors.** The list of genomic features are the union of the top 20 most important genomic annotations across resolutions for the GM12878 (A) and K562 (B) cell lines. Variable importance is assigned on a continuous scale (range: 0-100). Grid entries filled in gray denote an annotation that was not featured as one of the top 20 most predictive variables in a given model. The genomic annotations are sorted by highest level of importance obtained from a random forest model using distance-type predictors at the 10 kb data resolution, while using random under-sampling to create balanced classes, for each cell line respectively.
+-->
+
 
 <!--
 **Supplementary Figures 9-23. Precision-Recall curves for 25 kb, 50kb, and 100kb data.** Precision-recall curves were used to initially compare performance of random forest models with different predictor types on 25 kb, 50kb, and 100kb resolution data, across each resampling technique. GM12878 (solid line) and K562 (dashed line) cell lines were compared with predictor type-specific models which included overlap counts (blue), overlap percents (purple), log distance (green), and all three combined (red). 
