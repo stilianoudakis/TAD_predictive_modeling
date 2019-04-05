@@ -2770,3 +2770,87 @@ corfunction(cl = "K562", resolution = "100kb")
 
 ```
 
+
+#### Specific correlations
+
+##### GM12878
+
+######10kb
+
+```{r}
+cl = "GM12878"; resolution = "10kb";
+
+vars1 <- c("02WeakPromoter", "06WeakEnhancer", "H2az", "H3k4me2", "H3k4me3", "H3k27ac", "H3k9ac", "DNase", "Runx3sc101553", "11WeakTxn", "07WeakEnhancer", "H3k4me1")
+
+vars2 <- c("08Insulator", "Ctcf", "Ctcfsc15914c20", "Rad21", "Smc3ab9263", "Yy1sc281", "Znf143166181ap")
+
+corrdata1 <- corrdata[which(rownames(corrdata) %in% vars1), which(colnames(corrdata) %in% vars1)]
+colnames(corrdata1) <- rownames(corrdata1) <- colnames(corrdata1)[c(1,2,11,10,8,3,6,12,4,5,7,9)]
+
+corrplot(corrdata1,
+         method="number",
+         type="upper", 
+         #order="hclust", 
+         tl.col="black", 
+         #tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+corrdata2 <- corrdata[which(rownames(corrdata) %in% vars2), which(colnames(corrdata) %in% vars2)]
+colnames(corrdata2) <- rownames(corrdata2) <- colnames(corrdata2)[c(1,2,3,4,5,6,7)]
+
+corrplot(corrdata2,
+         method="number",
+         type="upper", 
+         #order="hclust", 
+         tl.col="black", 
+         #tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+```
+
+
+##### K562
+
+######10kb
+
+```{r}
+cl = "K562"; resolution = "10kb";
+
+vars1 <- c("Ctcflsc98982", "Rad21", "Ctcfb", "Ctcf", "Ctcfc", "Smc3ab9263", "Znf143", "Cebpb")
+
+vars2 <- c("Corestsc30189", "Mazab85725", "DNase", "H3k4me1", "H3k4me2", "H3k4me3", "Egr1", "Elf1sc631", "Zbtb7asc34508", "E2f6", "Max", "H2az", "02WeakPromoter", "06WeakEnhancer")
+
+corrdata1 <- corrdata[which(rownames(corrdata) %in% vars1), which(colnames(corrdata) %in% vars1)]
+colnames(corrdata1) <- rownames(corrdata1) <- colnames(corrdata1)[c(4,7,3,6,2,8,1,5)]
+
+corrplot(corrdata1,
+         method="number",
+         type="lower", 
+         #order="hclust", 
+         tl.col="black", 
+         #tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+corrdata2 <- corrdata[which(rownames(corrdata) %in% vars2), which(colnames(corrdata) %in% vars2)]
+colnames(corrdata2) <- rownames(corrdata2) <- colnames(corrdata2)[c(3,13,4,9:11,6,7,14,5,12,8,1,2)]
+
+corrplot(corrdata2,
+         method="number",
+         type="lower", 
+         #order="hclust", 
+         tl.col="black", 
+         #tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+```
+
