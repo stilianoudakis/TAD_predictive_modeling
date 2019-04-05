@@ -2596,8 +2596,18 @@ p.k.ros <- p.k.ros #+ ylim(0,.85)
 p.k.rus <- p.k.rus #+ ylim(0,.85)
 p.k.smote <- p.k.smote #+ ylim(0,.85)
 
-figure <- ggarrange(p.g.ros,p.g.rus,p.g.smote,
-                    p.k.ros,p.k.rus,p.k.smote,ncol = 3, nrow = 2, common.legend = TRUE, legend = "top")
+figure <- ggarrange(p.g.none,p.g.none,
+                p.g.ros,p.k.ros,
+                p.g.rus,p.k.rus,
+                p.g.smote,p.k.smote,
+                ncol = 2, nrow = 4, 
+                common.legend = TRUE, 
+                legend = "top",
+                labels = c("A","",
+                           "B","",
+                           "C","",
+                           "D",""),
+                font.label = list(size=20))
 figure
 annotate_figure(figure,
     bottom = text_grob("Resampling Technique", color = "black", size = 20),
