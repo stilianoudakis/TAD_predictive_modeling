@@ -3661,7 +3661,7 @@ pcaplotfunction <- function(cl, resolution){
     distdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", resolution, "_dist.rds",
                     sep="")
   }else{
-      countdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_count.rds",
+    countdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_count.rds",
                     sep="")
     percdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_perc.rds",
                     sep="")

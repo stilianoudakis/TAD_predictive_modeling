@@ -2470,7 +2470,7 @@ corrplot(cormat,
 
 ```{r}
 
-corfunction <- function(cl, resolution, predictortype, annotation){
+corfunction <- function(cl, resolution){
   #set up variable names to subset
   chromstatevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/BroadHMM"))
   histonevars <- gsub(".bed","",list.files("Z:/TAD_data_analysis/annotations/HistoneModifications"))
@@ -2608,6 +2608,100 @@ corfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", annota
 
 ```
 
+#### Saving GM12878 Correlation Plots (unseparated)
+
+```{r}
+corfunction <- function(cl, resolution){
+  
+  if(cl=="GM12878"){
+    countdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", 
+                     resolution, 
+                     "_count.rds",
+                    sep="")
+    percdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", 
+                    resolution,
+                    "_perc.rds",
+                    sep="")
+    distdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", 
+                    resolution, 
+                    "_dist.rds",
+                    sep="")
+  }else{
+    countdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
+                     resolution,
+                     "_count.rds",
+                    sep="")
+    percdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
+                    resolution,
+                    "_perc.rds",
+                    sep="")
+    distdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
+                    resolution,
+                    "_dist.rds",
+                    sep="")
+    }
+  
+  countdata <- readRDS(countdir)
+  percdata <- readRDS(percdir)
+  distdata <- readRDS(distdir)
+  
+  #performing log2 transformation on distances
+  distdata <- apply(distdata,2,function(x){log(x + 1, base=2)})
+  
+  if(cl=="K562"){
+    countdata <- countdata[,-grep("Znf274", colnames(countdata))]
+    percdata <- percdata[,-grep("Znf274", colnames(percdata))]
+    distdata <- distdata[,-grep("Znf274", colnames(distdata))]
+  }
+
+  corrcount <- cor(countdata, method = "spearman")
+  corrperc <- cor(percdata, method = "spearman")
+  corrdist <- cor(distdata, method = "pearson")
+  
+  corrdata <- (corrcount + corrperc + corrdist)/3
+  
+  colnames(corrdata) <- rownames(corrdata) <- gsub(paste(c("Gm12878", "K562",
+                                 "-",
+                                 "_",
+                                 "Haib",
+                                 "Sydh",
+                                 "Uta",
+                                 "Uw",
+                                 "Broad",
+                                 "Uchicago",
+                                 "count",
+                                 "perc",
+                                 "dist"), collapse = "|"),"", colnames(corrdata))
+  
+  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/correlation_plots_unseparated/", 
+                       cl, resolution,
+                       ".png", sep=""),
+      width=11, height=8, units="in", res = 300)
+  corrplot(corrdata,
+         method="color",
+         type="lower", 
+         order="hclust", 
+         tl.col="black", 
+         #tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("blue", "white", "red"))(20),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+  dev.off()
+
+}
+
+
+corfunction(cl = "GM12878", resolution = "10kb")
+
+corfunction(cl = "GM12878", resolution = "25kb")
+
+corfunction(cl = "GM12878", resolution = "50kb")
+
+corfunction(cl = "GM12878", resolution = "100kb")
+
+```
+
 
 #### Saving K562 Correlation Plots
 
@@ -2659,6 +2753,20 @@ corfunction(cl = "K562", resolution = "100kb", predictortype = "perc", annotatio
 corfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "chromstates")
 corfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "histones")
 corfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annotation = "tfbs")
+
+```
+
+
+#### Saving K562 Correlation Plots (unseparated)
+
+```{r}
+corfunction(cl = "K562", resolution = "10kb")
+
+corfunction(cl = "K562", resolution = "25kb")
+
+corfunction(cl = "K562", resolution = "50kb")
+
+corfunction(cl = "K562", resolution = "100kb")
 
 ```
 
