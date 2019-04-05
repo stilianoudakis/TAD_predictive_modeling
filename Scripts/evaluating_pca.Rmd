@@ -3428,7 +3428,7 @@ autoplot(kmeans(pcadat_K562_100kb_dist_tfbs, 5, nstart=25, iter.max = 1000),
 
 
 
-## Saving clustered annotation plots
+## Clustering annotations
 
 ```{r}
 pcaplotfunction <- function(cl, resolution, predictortype, annotation){
@@ -3539,8 +3539,9 @@ pcaplotfunction <- function(cl, resolution, predictortype, annotation){
 
 ```
 
+###Saving clustering annotations plots
 
-###GM12878
+####GM12878
 
 ```{r}
 pcaplotfunction(cl = "GM12878", resolution = "10kb", predictortype = "count", annotation = "chromstates")
@@ -3593,7 +3594,7 @@ pcaplotfunction(cl = "GM12878", resolution = "100kb", predictortype = "dist", an
 
 ```
 
-###K562
+####K562
 
 ```{r}
 pcaplotfunction(cl = "K562", resolution = "10kb", predictortype = "count", annotation = "chromstates")
@@ -3647,8 +3648,97 @@ pcaplotfunction(cl = "K562", resolution = "100kb", predictortype = "dist", annot
 ```
 
 
+## Clustering annotations (unseparated)
 
-# Clustering TADs
+```{r}
+pcaplotfunction <- function(cl, resolution){
+  
+  if(cl=="GM12878"){
+    countdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", resolution, "_count.rds",
+                    sep="")
+    percdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", resolution, "_perc.rds",
+                    sep="")
+    distdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", resolution, "_dist.rds",
+                    sep="")
+  }else{
+      countdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_count.rds",
+                    sep="")
+    percdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_perc.rds",
+                    sep="")
+    distdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_dist.rds",
+                    sep="")
+    }
+  
+  countdata <- readRDS(countdir)
+  percdata <- readRDS(percdir)
+  distdata <- readRDS(distdir)
+  
+  #performing log2 transformation on distances
+  distdata <- apply(distdata,2,function(x){log(x + 1, base=2)})
+  
+  data <- (countdata + percdata + distdata)/3
+  
+  colnames(data) <- gsub(paste(c("Gm12878", "K562",
+                                 "-",
+                                 "_",
+                                 "Haib",
+                                 "Sydh",
+                                 "Uta",
+                                 "Uw",
+                                 "Broad",
+                                 "Uchicago",
+                                 "count",
+                                 "perc",
+                                 "dist"), collapse = "|"),"", colnames(data))
+  
+  data <- t(data)
+  
+  #determine optimal number of clusters
+  pamk.best <- pamk(data)
+  
+  #perform PAM clustering
+  pam.med <- pam(data, k = pamk.best$nc, diss = FALSE,
+                 metric = "manhattan", 
+                 #medoids = NULL, 
+                 #stand = FALSE, 
+                 cluster.only = FALSE,
+                 do.swap = TRUE,
+                 keep.diss = FALSE,
+                 keep.data = FALSE,
+                 pamonce = FALSE, 
+                 trace.lev = 0)
+  
+  data <- data.frame(data)
+  data$Cluster <- factor(pam.med$clustering)
+  data$Medoid <- factor(ifelse(rownames(data) %in% rownames(pam.med$medoids), "Center", "Other"),
+                        levels=c("Other", "Center"))
+  
+  
+  png(filename = paste("C:/Users/stili/Documents/TAD_miscellaneous/figures/pca_plots/cluster_by_annotation/", 
+                       cl, resolution, predictortype, annotation,
+                       ".png", sep=""),
+      width=11, height=8, units="in", res = 300)
+  print({
+    autoplot(prcomp(data[,-c(dim(data)[2]-1,dim(data)[2])]),
+           data=data,
+           #loadings = TRUE,
+           label = TRUE, 
+           label.size = 3,
+           label.repel=T, 
+           colour="Cluster",
+           shape="Medoid",
+           label.show.legend = FALSE) +
+    theme_bw()
+  })
+  dev.off()
+  
+}
+
+```
+
+
+
+## Clustering TADs
 
 ```{r}
 tadclusterplotfunction <- function(cl, resolution, predictortype, cluster){
