@@ -2618,47 +2618,48 @@ corfunction <- function(cl, resolution){
                      resolution, 
                      "_count.rds",
                     sep="")
-    percdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", 
-                    resolution,
-                    "_perc.rds",
-                    sep="")
-    distdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", 
-                    resolution, 
-                    "_dist.rds",
-                    sep="")
+    #percdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", 
+    #                resolution,
+    #                "_perc.rds",
+    #                sep="")
+    #distdir = paste("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/PCA/pcadat_gm12878_", 
+    #                resolution, 
+    #                "_dist.rds",
+    #                sep="")
   }else{
     countdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
                      resolution,
                      "_count.rds",
                     sep="")
-    percdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
-                    resolution,
-                    "_perc.rds",
-                    sep="")
-    distdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
-                    resolution,
-                    "_dist.rds",
-                    sep="")
+    #percdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
+    #                resolution,
+    #                "_perc.rds",
+    #                sep="")
+    #distdir = paste("Z:/TAD_data_analysis/K562/", resolution, "/Ensemble/PCA/pcadat_K562_",
+    #                resolution,
+    #                "_dist.rds",
+    #                sep="")
     }
   
   countdata <- readRDS(countdir)
-  percdata <- readRDS(percdir)
-  distdata <- readRDS(distdir)
+  #percdata <- readRDS(percdir)
+  #distdata <- readRDS(distdir)
   
   #performing log2 transformation on distances
-  distdata <- apply(distdata,2,function(x){log(x + 1, base=2)})
+  #distdata <- apply(distdata,2,function(x){log(x + 1, base=2)})
   
   if(cl=="K562"){
     countdata <- countdata[,-grep("Znf274", colnames(countdata))]
-    percdata <- percdata[,-grep("Znf274", colnames(percdata))]
-    distdata <- distdata[,-grep("Znf274", colnames(distdata))]
+    #percdata <- percdata[,-grep("Znf274", colnames(percdata))]
+    #distdata <- distdata[,-grep("Znf274", colnames(distdata))]
   }
 
   corrcount <- cor(countdata, method = "spearman")
-  corrperc <- cor(percdata, method = "spearman")
-  corrdist <- cor(distdata, method = "pearson")
+  #corrperc <- cor(percdata, method = "spearman")
+  #corrdist <- cor(distdata, method = "pearson")
   
-  corrdata <- (corrcount + corrperc + corrdist)/3
+  #corrdata <- (corrcount + corrperc + corrdist)/3
+  corrdata <- corrcount
   
   colnames(corrdata) <- rownames(corrdata) <- gsub(paste(c("Gm12878", "K562",
                                  "-",
@@ -2679,7 +2680,7 @@ corfunction <- function(cl, resolution){
       width=11, height=8, units="in", res = 300)
   corrplot(corrdata,
          method="color",
-         type="lower", 
+         type="upper", 
          order="hclust", 
          tl.col="black", 
          #tl.srt=90,
@@ -2771,7 +2772,7 @@ corfunction(cl = "K562", resolution = "100kb")
 ```
 
 
-#### Specific correlations
+#### Count overlap correlations
 
 ##### GM12878
 

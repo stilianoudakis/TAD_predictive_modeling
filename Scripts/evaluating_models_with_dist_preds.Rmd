@@ -50,397 +50,921 @@ library(RColorBrewer)
 
 # Comparing models with distance type predictors
 
-## SMOTE
-
-### GM12878
+##gm12878
 
 ```{r}
+#OC
+##None
+rfperf_gm12878_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
 
-###10kb
-rfperf_gm12878_10kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+#OP
+##None
+rfperf_gm12878_10kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
 
-###25kb
-rfperf_gm12878_25kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
-
-###50kb
-rfperf_gm12878_50kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
-
-###100kb
-rfperf_gm12878_100kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
-
-
-```
-
-### K562
-
-```{r}
-
-###10kb
-rfperf_k562_10kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
-
-###25kb
-rfperf_k562_25kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
-
-###50kb
-rfperf_k562_50kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
-
-###100kb
-rfperf_k562_100kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+#Distance
+##None
+rfperf_gm12878_10kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
 
 
-```
+#OC
+##None
+rfperf_gm12878_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
 
-### Combined F1 and MCC and balanced acc
+#OP
+##None
+rfperf_gm12878_25kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
 
-```{r}
-all_smote_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_smote_dist[16,2],
-                                              rfperf_gm12878_10kb_smote_dist[15,2],
-                                              (rfperf_gm12878_10kb_smote_dist[6,2] + rfperf_gm12878_10kb_smote_dist[7,2])/2,
-                                              rfperf_gm12878_25kb_smote_dist[16,2],
-                                              rfperf_gm12878_25kb_smote_dist[15,2],
-                                              (rfperf_gm12878_25kb_smote_dist[6,2] + rfperf_gm12878_25kb_smote_dist[7,2])/2,
-                                              rfperf_gm12878_50kb_smote_dist[16,2],
-                                              rfperf_gm12878_50kb_smote_dist[15,2],
-                                              (rfperf_gm12878_50kb_smote_dist[6,2] + rfperf_gm12878_50kb_smote_dist[7,2])/2,
-                                              rfperf_gm12878_100kb_smote_dist[16,2],
-                                              rfperf_gm12878_100kb_smote_dist[15,2],
-                                              (rfperf_gm12878_100kb_smote_dist[6,2] + rfperf_gm12878_100kb_smote_dist[7,2])/2,
-                                              rfperf_k562_10kb_smote_dist[16,2],
-                                              rfperf_k562_10kb_smote_dist[15,2],
-                                              (rfperf_k562_10kb_smote_dist[6,2] + rfperf_k562_10kb_smote_dist[7,2])/2,
-                                              rfperf_k562_25kb_smote_dist[16,2],
-                                              rfperf_k562_25kb_smote_dist[15,2],
-                                              (rfperf_k562_25kb_smote_dist[6,2] + rfperf_k562_25kb_smote_dist[7,2])/2,
-                                              rfperf_k562_50kb_smote_dist[16,2],
-                                              rfperf_k562_50kb_smote_dist[15,2],
-                                              (rfperf_k562_50kb_smote_dist[6,2] + rfperf_k562_50kb_smote_dist[7,2])/2,
-                                              rfperf_k562_100kb_smote_dist[16,2],
-                                              rfperf_k562_100kb_smote_dist[15,2],
-                                              (rfperf_k562_100kb_smote_dist[6,2] + rfperf_k562_100kb_smote_dist[7,2])/2),
-                              CL = c(rep("GM12878", 12),
-                                     rep("K562", 12)),
-                              Resolution = rep(c(rep("10 kb", 3),
-                                             rep("25 kb", 3),
-                                             rep("50 kb", 3),
-                                             rep("100 kb", 3)), 2),
-                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
-
-all_smote_perfs$CL <- factor(all_smote_perfs$CL, levels=c("GM12878", "K562"))
-all_smote_perfs$Resolution <- factor(all_smote_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
-all_smote_perfs$Metric <- factor(all_smote_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
-
-ggplot(all_smote_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
-  geom_line(aes(linetype=CL))+
-  geom_point(aes(shape=CL))+
-  facet_grid(~ Metric)+
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Cell Line")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15
-	                                 #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-	                                 ),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
-```
+#Distance
+##None
+rfperf_gm12878_25kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
 
 
-## None
+#OC
+##None
+rfperf_gm12878_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
 
-### GM12878
+#OP
+##None
+rfperf_gm12878_50kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
 
-```{r}
-
-###10kb
-rfperf_gm12878_10kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
-
-###25kb
-rfperf_gm12878_25kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
-
-###50kb
-rfperf_gm12878_50kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
-
-###100kb
-rfperf_gm12878_100kb_None_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+#Distance
+##None
+rfperf_gm12878_50kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
 
 
-```
+#OC
+##None
+rfperf_gm12878_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
 
-### K562
+#OP
+##None
+rfperf_gm12878_100kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
 
-```{r}
+#Distance
+##None
+rfperf_gm12878_100kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
 
-###10kb
-rfperf_k562_10kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
-
-###25kb
-rfperf_k562_25kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
-
-###50kb
-rfperf_k562_50kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
-
-###100kb
-rfperf_k562_100kb_None_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
-
-
-```
-
-### Combined F1 and MCC and balanced acc
-
-```{r}
-all_None_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_None_dist[16,2],
-                                              rfperf_gm12878_10kb_None_dist[15,2],
-                                              (rfperf_gm12878_10kb_None_dist[6,2] + rfperf_gm12878_10kb_None_dist[7,2])/2,
-                                              rfperf_gm12878_25kb_None_dist[16,2],
-                                              rfperf_gm12878_25kb_None_dist[15,2],
-                                              (rfperf_gm12878_25kb_None_dist[6,2] + rfperf_gm12878_25kb_None_dist[7,2])/2,
-                                              rfperf_gm12878_50kb_None_dist[16,2],
-                                              rfperf_gm12878_50kb_None_dist[15,2],
-                                              (rfperf_gm12878_50kb_None_dist[6,2] + rfperf_gm12878_50kb_None_dist[7,2])/2,
-                                              rfperf_gm12878_100kb_None_dist[16,2],
-                                              rfperf_gm12878_100kb_None_dist[15,2],
-                                              (rfperf_gm12878_100kb_None_dist[6,2] + rfperf_gm12878_100kb_None_dist[7,2])/2,
-                                              rfperf_k562_10kb_None_dist[16,2],
-                                              rfperf_k562_10kb_None_dist[15,2],
-                                              (rfperf_k562_10kb_None_dist[6,2] + rfperf_k562_10kb_None_dist[7,2])/2,
-                                              rfperf_k562_25kb_None_dist[16,2],
-                                              rfperf_k562_25kb_None_dist[15,2],
-                                              (rfperf_k562_25kb_None_dist[6,2] + rfperf_k562_25kb_None_dist[7,2])/2,
-                                              rfperf_k562_50kb_None_dist[16,2],
-                                              rfperf_k562_50kb_None_dist[15,2],
-                                              (rfperf_k562_50kb_None_dist[6,2] + rfperf_k562_50kb_None_dist[7,2])/2,
-                                              rfperf_k562_100kb_None_dist[16,2],
-                                              rfperf_k562_100kb_None_dist[15,2],
-                                              (rfperf_k562_100kb_None_dist[6,2] + rfperf_k562_100kb_None_dist[7,2])/2),
-                              CL = c(rep("GM12878", 12),
-                                     rep("K562", 12)),
-                              Resolution = rep(c(rep("10 kb", 3),
-                                             rep("25 kb", 3),
-                                             rep("50 kb", 3),
-                                             rep("100 kb", 3)), 2),
-                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
-
-all_None_perfs$CL <- factor(all_None_perfs$CL, levels=c("GM12878", "K562"))
-all_None_perfs$Resolution <- factor(all_None_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
-all_None_perfs$Metric <- factor(all_None_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
-
-ggplot(all_None_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
-  geom_line(aes(linetype=CL))+
-  geom_point(aes(shape=CL))+
-  facet_grid(~ Metric)+
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Cell Line")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15
-	                                 #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-	                                 ),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
-```
-
-
+#OC
 ##ROS
+rfperf_gm12878_10kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
 
-### GM12878
+#OP
+##ROS
+rfperf_gm12878_10kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
 
-```{r}
-
-###10kb
+#Distance
+##ROS
 rfperf_gm12878_10kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
 
-###25kb
+
+#OC
+##ROS
+rfperf_gm12878_25kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_25kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
 rfperf_gm12878_25kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
 
-###50kb
+
+#OC
+##ROS
+rfperf_gm12878_50kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_50kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
 rfperf_gm12878_50kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
 
-###100kb
+
+#OC
+##ROS
+rfperf_gm12878_100kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_100kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
 rfperf_gm12878_100kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
 
-
-```
-
-### K562
-
-```{r}
-
-###10kb
-rfperf_k562_10kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
-
-###25kb
-rfperf_k562_25kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
-
-###50kb
-rfperf_k562_50kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
-
-###100kb
-rfperf_k562_100kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
-
-
-```
-
-### Combined F1 and MCC and balanced acc
-
-```{r}
-all_ROS_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_ROS_dist[16,2],
-                                              rfperf_gm12878_10kb_ROS_dist[15,2],
-                                              (rfperf_gm12878_10kb_ROS_dist[6,2] + rfperf_gm12878_10kb_ROS_dist[7,2])/2,
-                                              rfperf_gm12878_25kb_ROS_dist[16,2],
-                                              rfperf_gm12878_25kb_ROS_dist[15,2],
-                                              (rfperf_gm12878_25kb_ROS_dist[6,2] + rfperf_gm12878_25kb_ROS_dist[7,2])/2,
-                                              rfperf_gm12878_50kb_ROS_dist[16,2],
-                                              rfperf_gm12878_50kb_ROS_dist[15,2],
-                                              (rfperf_gm12878_50kb_ROS_dist[6,2] + rfperf_gm12878_50kb_ROS_dist[7,2])/2,
-                                              rfperf_gm12878_100kb_ROS_dist[16,2],
-                                              rfperf_gm12878_100kb_ROS_dist[15,2],
-                                              (rfperf_gm12878_100kb_ROS_dist[6,2] + rfperf_gm12878_100kb_ROS_dist[7,2])/2,
-                                              rfperf_k562_10kb_ROS_dist[16,2],
-                                              rfperf_k562_10kb_ROS_dist[15,2],
-                                              (rfperf_k562_10kb_ROS_dist[6,2] + rfperf_k562_10kb_ROS_dist[7,2])/2,
-                                              rfperf_k562_25kb_ROS_dist[16,2],
-                                              rfperf_k562_25kb_ROS_dist[15,2],
-                                              (rfperf_k562_25kb_ROS_dist[6,2] + rfperf_k562_25kb_ROS_dist[7,2])/2,
-                                              rfperf_k562_50kb_ROS_dist[16,2],
-                                              rfperf_k562_50kb_ROS_dist[15,2],
-                                              (rfperf_k562_50kb_ROS_dist[6,2] + rfperf_k562_50kb_ROS_dist[7,2])/2,
-                                              rfperf_k562_100kb_ROS_dist[16,2],
-                                              rfperf_k562_100kb_ROS_dist[15,2],
-                                              (rfperf_k562_100kb_ROS_dist[6,2] + rfperf_k562_100kb_ROS_dist[7,2])/2),
-                              CL = c(rep("GM12878", 12),
-                                     rep("K562", 12)),
-                              Resolution = rep(c(rep("10 kb", 3),
-                                             rep("25 kb", 3),
-                                             rep("50 kb", 3),
-                                             rep("100 kb", 3)), 2),
-                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
-
-all_ROS_perfs$CL <- factor(all_ROS_perfs$CL, levels=c("GM12878", "K562"))
-all_ROS_perfs$Resolution <- factor(all_ROS_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
-all_ROS_perfs$Metric <- factor(all_ROS_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
-
-ggplot(all_ROS_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
-  geom_line(aes(linetype=CL))+
-  geom_point(aes(shape=CL))+
-  facet_grid(~ Metric)+
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Cell Line")+
-  #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15
-	                                 #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-	                                 ),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
-```
-
+#OC
 ##RUS
+rfperf_gm12878_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
 
-### GM12878
+#OP
+##RUS
+rfperf_gm12878_10kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
 
-```{r}
-
-###10kb
+#Distance
+##RUS
 rfperf_gm12878_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
 
-###25kb
+
+#OC
+##RUS
+rfperf_gm12878_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_25kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
 rfperf_gm12878_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
 
-###50kb
+
+#OC
+##RUS
+rfperf_gm12878_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_50kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
 rfperf_gm12878_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
 
-###100kb
+
+#OC
+##RUS
+rfperf_gm12878_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_100kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
 rfperf_gm12878_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
 
 
+#OC
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+all_rfperfs_gm12878 <- data.frame(Resolution=rep(c(rep("10 kb", 12),
+                                                        rep("25 kb", 12),
+                                                        rep("50 kb", 12),
+                                                        rep("100 kb", 12)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),64),
+                                       Metric=c(rep("AUC",48),
+                                                rep("AUPRC",48),
+                                                rep("F1-Score",48), 
+                                                rep("MCC",48)),
+                                       Resampling=rep(c(rep("None",3),
+                                                    rep("ROS",3),
+                                                    rep("RUS",3),
+                                                    rep("SMOTE",3)),16))
+all_rfperfs_gm12878$Resolution <- factor(all_rfperfs_gm12878$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_gm12878$Predictor <- factor(all_rfperfs_gm12878$Predictor, levels=c("OC", "OP", "Distance"))
+all_rfperfs_gm12878$Metric <- factor(all_rfperfs_gm12878$Metric, levels=c("AUC", "AUPRC", "F1-Score", "MCC"))
+all_rfperfs_gm12878$Resampling <- factor(all_rfperfs_gm12878$Resampling, levels=c("None", "ROS", "RUS", "SMOTE"))
+
+
+all_rfperfs_gm12878$Performance <- c(round(rfperf_gm12878_10kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_none_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_10kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     round(rfperf_gm12878_25kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_none_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_25kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     round(rfperf_gm12878_50kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_none_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_50kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     round(rfperf_gm12878_100kb_none_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_none_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_none_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_gm12878_100kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     
+                                     round(rfperf_gm12878_10kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_none_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_10kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     round(rfperf_gm12878_25kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_none_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_25kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     round(rfperf_gm12878_50kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_none_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_50kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     round(rfperf_gm12878_100kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_none_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_gm12878_100kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     
+                                     round(rfperf_gm12878_10kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_none_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_10kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     round(rfperf_gm12878_25kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_none_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_25kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     round(rfperf_gm12878_50kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_none_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_50kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     round(rfperf_gm12878_100kb_none_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_none_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_none_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_gm12878_100kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     
+                                     round(rfperf_gm12878_10kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_10kb_SMOTE_dist[15,2],2), #mcc
+                                     
+                                     round(rfperf_gm12878_25kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_25kb_SMOTE_dist[15,2],2), #mcc
+                                     
+                                     round(rfperf_gm12878_50kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_50kb_SMOTE_dist[15,2],2), #mcc
+                                     
+                                     round(rfperf_gm12878_100kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_none_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_gm12878_100kb_SMOTE_dist[15,2],2) #mcc
+)
+
+p1 <- ggplot(all_rfperfs_gm12878[which(all_rfperfs_gm12878$Predictor=="Distance"),], aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
+    geom_line(size=2)+
+    geom_point(size=5)+
+    facet_grid(~ Metric)+
+    theme_minimal() +
+    theme_bw()+
+    xlab("") + ylab("") +
+  scale_color_discrete(name="Re-Sampling Technique")+
+	theme(axis.text.x = element_text(size=15,
+	                                 angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1
+	                                 ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+	      plot.title = element_text(size=20))
+
 ```
 
-### K562
+##k562
 
 ```{r}
+#OC
+##None
+rfperf_K562_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
 
-###10kb
-rfperf_k562_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+#OP
+##None
+rfperf_K562_10kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
 
-###25kb
-rfperf_k562_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
-
-###50kb
-rfperf_k562_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
-
-###100kb
-rfperf_k562_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+#Distance
+##None
+rfperf_K562_10kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
 
 
-```
+#OC
+##None
+rfperf_K562_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
 
-### Combined F1 and MCC and balanced acc
+#OP
+##None
+rfperf_K562_25kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
 
-```{r}
-all_RUS_perfs <- data.frame(Performance = c(rfperf_gm12878_10kb_RUS_dist[16,2],
-                                              rfperf_gm12878_10kb_RUS_dist[15,2],
-                                              (rfperf_gm12878_10kb_RUS_dist[6,2] + rfperf_gm12878_10kb_RUS_dist[7,2])/2,
-                                              rfperf_gm12878_25kb_RUS_dist[16,2],
-                                              rfperf_gm12878_25kb_RUS_dist[15,2],
-                                              (rfperf_gm12878_25kb_RUS_dist[6,2] + rfperf_gm12878_25kb_RUS_dist[7,2])/2,
-                                              rfperf_gm12878_50kb_RUS_dist[16,2],
-                                              rfperf_gm12878_50kb_RUS_dist[15,2],
-                                              (rfperf_gm12878_50kb_RUS_dist[6,2] + rfperf_gm12878_50kb_RUS_dist[7,2])/2,
-                                              rfperf_gm12878_100kb_RUS_dist[16,2],
-                                              rfperf_gm12878_100kb_RUS_dist[15,2],
-                                              (rfperf_gm12878_100kb_RUS_dist[6,2] + rfperf_gm12878_100kb_RUS_dist[7,2])/2,
-                                              rfperf_k562_10kb_RUS_dist[16,2],
-                                              rfperf_k562_10kb_RUS_dist[15,2],
-                                              (rfperf_k562_10kb_RUS_dist[6,2] + rfperf_k562_10kb_RUS_dist[7,2])/2,
-                                              rfperf_k562_25kb_RUS_dist[16,2],
-                                              rfperf_k562_25kb_RUS_dist[15,2],
-                                              (rfperf_k562_25kb_RUS_dist[6,2] + rfperf_k562_25kb_RUS_dist[7,2])/2,
-                                              rfperf_k562_50kb_RUS_dist[16,2],
-                                              rfperf_k562_50kb_RUS_dist[15,2],
-                                              (rfperf_k562_50kb_RUS_dist[6,2] + rfperf_k562_50kb_RUS_dist[7,2])/2,
-                                              rfperf_k562_100kb_RUS_dist[16,2],
-                                              rfperf_k562_100kb_RUS_dist[15,2],
-                                              (rfperf_k562_100kb_RUS_dist[6,2] + rfperf_k562_100kb_RUS_dist[7,2])/2),
-                              CL = c(rep("GM12878", 12),
-                                     rep("K562", 12)),
-                              Resolution = rep(c(rep("10 kb", 3),
-                                             rep("25 kb", 3),
-                                             rep("50 kb", 3),
-                                             rep("100 kb", 3)), 2),
-                              Metric = rep(c("F1-Score", "MCC", "Balanced Acc"), 8))
+#Distance
+##None
+rfperf_K562_25kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
 
-all_RUS_perfs$CL <- factor(all_RUS_perfs$CL, levels=c("GM12878", "K562"))
-all_RUS_perfs$Resolution <- factor(all_RUS_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
-all_RUS_perfs$Metric <- factor(all_RUS_perfs$Metric, levels=c("F1-Score", "MCC", "Balanced Acc"))
 
-ggplot(all_RUS_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
-  geom_line(aes(linetype=CL))+
-  geom_point(aes(shape=CL))+
-  facet_grid(~ Metric)+
+#OC
+##None
+rfperf_K562_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_50kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_50kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_100kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_100kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##ROS
+rfperf_K562_10kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_10kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_10kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_K562_25kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_25kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_25kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_K562_50kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_50kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_50kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_K562_100kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_100kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_100kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##RUS
+rfperf_K562_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_10kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_K562_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_25kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_K562_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_50kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_K562_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_100kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_10kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_10kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_25kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_25kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_50kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_50kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_100kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_100kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+all_rfperfs_K562 <- data.frame(Resolution=rep(c(rep("10 kb", 12),
+                                                        rep("25 kb", 12),
+                                                        rep("50 kb", 12),
+                                                        rep("100 kb", 12)),4),
+                                       Predictor=rep(c("OC","OP","Distance"),64),
+                                       Metric=c(rep("AUC",48),
+                                                rep("AUPRC",48),
+                                                rep("F1-Score",48), 
+                                                rep("MCC",48)),
+                                       Resampling=rep(c(rep("None",3),
+                                                    rep("ROS",3),
+                                                    rep("RUS",3),
+                                                    rep("SMOTE",3)),16))
+all_rfperfs_K562$Resolution <- factor(all_rfperfs_K562$Resolution, levels=c("10 kb","25 kb","50 kb","100 kb"))
+all_rfperfs_K562$Predictor <- factor(all_rfperfs_K562$Predictor, levels=c("OC", "OP", "Distance"))
+all_rfperfs_K562$Metric <- factor(all_rfperfs_K562$Metric, levels=c("AUC", "AUPRC", "F1-Score", "MCC"))
+all_rfperfs_K562$Resampling <- factor(all_rfperfs_K562$Resampling, levels=c("None", "ROS", "RUS", "SMOTE"))
+
+
+all_rfperfs_K562$Performance <- c(round(rfperf_K562_10kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_none_dist[17,2],2), #auc
+                                          round(rfperf_K562_10kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_K562_10kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_K562_10kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_10kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_10kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     round(rfperf_K562_25kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_none_dist[17,2],2), #auc
+                                          round(rfperf_K562_25kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_K562_25kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_K562_25kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_25kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_25kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     round(rfperf_K562_50kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_none_dist[17,2],2), #auc
+                                          round(rfperf_K562_50kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_K562_50kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_K562_50kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_50kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_50kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     round(rfperf_K562_100kb_none_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_none_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_none_dist[17,2],2), #auc
+                                          round(rfperf_K562_100kb_ROS_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_ROS_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_ROS_dist[17,2],2), #auc
+                                          round(rfperf_K562_100kb_RUS_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_RUS_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_RUS_dist[17,2],2), #auc
+                                          round(rfperf_K562_100kb_SMOTE_oc[17,2],2), #auc
+                                          round(rfperf_K562_100kb_SMOTE_op[17,2],2), #auc
+                                          round(rfperf_K562_100kb_SMOTE_dist[17,2],2), #auc
+                                     
+                                     
+                                     round(rfperf_K562_10kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_none_op[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_K562_10kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     round(rfperf_K562_25kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_none_op[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_K562_25kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     round(rfperf_K562_50kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_none_op[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_K562_50kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     round(rfperf_K562_100kb_none_oc[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_none_op[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_none_dist[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_ROS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_ROS_op[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_ROS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_RUS_oc[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_RUS_op[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_RUS_dist[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_SMOTE_oc[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_SMOTE_op[19,2],2), #auprc
+                                          round(rfperf_K562_100kb_SMOTE_dist[19,2],2), #auprc
+                                     
+                                     
+                                     round(rfperf_K562_10kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_none_dist[16,2],2), #f1
+                                          round(rfperf_K562_10kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_K562_10kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_K562_10kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_10kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_10kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     round(rfperf_K562_25kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_none_dist[16,2],2), #f1
+                                          round(rfperf_K562_25kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_K562_25kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_K562_25kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_25kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_25kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     round(rfperf_K562_50kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_none_dist[16,2],2), #f1
+                                          round(rfperf_K562_50kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_K562_50kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_K562_50kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_50kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_50kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     round(rfperf_K562_100kb_none_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_none_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_none_dist[16,2],2), #f1
+                                          round(rfperf_K562_100kb_ROS_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_ROS_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_ROS_dist[16,2],2), #f1
+                                          round(rfperf_K562_100kb_RUS_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_RUS_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_RUS_dist[16,2],2), #f1
+                                          round(rfperf_K562_100kb_SMOTE_oc[16,2],2), #f1
+                                          round(rfperf_K562_100kb_SMOTE_op[16,2],2), #f1
+                                          round(rfperf_K562_100kb_SMOTE_dist[16,2],2), #f1
+                                     
+                                     
+                                     round(rfperf_K562_10kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_10kb_SMOTE_dist[15,2],2), #mcc
+                                     
+                                     round(rfperf_K562_25kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_25kb_SMOTE_dist[15,2],2), #mcc
+                                     
+                                     round(rfperf_K562_50kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_50kb_SMOTE_dist[15,2],2), #mcc
+                                     
+                                     round(rfperf_K562_100kb_none_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_none_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_none_dist[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_ROS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_ROS_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_ROS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_RUS_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_RUS_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_RUS_dist[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_SMOTE_oc[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_SMOTE_op[15,2],2), #mcc
+                                          round(rfperf_K562_100kb_SMOTE_dist[15,2],2) #mcc
+)
+
+p2 <- ggplot(all_rfperfs_K562,
+       aes(x=Resolution, y=Performance, fill=Predictor)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(Metric ~ Resampling) +
+  xlab("") + ylab("") +
   theme_minimal() +
   theme_bw() +
-  scale_fill_discrete(name="Cell Line")+
+  scale_fill_discrete(name="Predictor Type")+
   #guides(fill=FALSE)+
-	theme(axis.text.x = element_text(size=15
-	                                 #angle = 45, 
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
                                    #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-	                                 ),
+                                   hjust = 1),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
@@ -449,85 +973,27 @@ ggplot(all_RUS_perfs, aes(x=Resolution, y=Performance, group=CL, color=CL)) +
 ```
 
 
-```{r}
-figure <- ggarrange(p.none, p.ros, p.rus, 
-          ncol=1, nrow=3, 
-          common.legend = TRUE, 
-          legend="top",
-          labels="AUTO",
-          font.label = list(size=20))
-figure
-annotate_figure(figure,
-    bottom = text_grob("Resampling Technique", color = "black", size = 20),
-    left = text_grob("Performance", color = "black", rot = 90, size=20)
-)
 
-```
+
+##Plots
 
 ```{r}
-all_perfs <- rbind.data.frame(all_None_perfs,
-                              all_ROS_perfs,
-                              all_RUS_perfs,
-                              all_smote_perfs)
-all_perfs$Resampling <- c(rep("None",24),
-                          rep("ROS",24),
-                          rep("RUS",24),
-                          rep("SMOTE",24))
-all_perfs$CL <- factor(all_perfs$CL, levels=c("GM12878","K562"))
-all_perfs$Resolution <- factor(all_perfs$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
-all_perfs$Metric <- factor(all_perfs$Metric, levels=c("Balanced Acc", "F1-Score", "MCC"))
-all_perfs$Resampling <- factor(all_perfs$Resampling, levels = c("None", "ROS", "RUS", "SMOTE"))
+p1 <- p1 + labs(title = "GM12878") + theme(plot.title = element_text(size=20))
+p2 <- p2 + labs(title = "K562") + theme(plot.title = element_text(size=20))
 
-#gm12878
-p1 <- ggplot(all_perfs[which(all_perfs$CL=="GM12878"),], aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
-    geom_line(size=2)+
-    geom_point(size=5)+
-    facet_grid(~ Metric)+
-    theme_minimal() +
-    theme_bw()+
-    xlab("") + ylab("") +
-    ggtitle("GM12878") +
-  scale_color_discrete(name="Re-Sampling Technique")+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1
-	                                 ),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-	      plot.title = element_text(size=20))
-
-#k562
-p2 <- ggplot(all_perfs[which(all_perfs$CL=="K562"),], aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
-    geom_line(size=2)+
-    geom_point(size=5)+
-    facet_grid(~ Metric)+
-    theme_minimal() +
-    theme_bw()+
-    xlab("") + ylab("") +
-    ggtitle("K562") +
-  scale_color_discrete(name="Re-Sampling Technique")+
-	theme(axis.text.x = element_text(size=15,
-	                                 angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1
-	                                 ),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-	      plot.title = element_text(size=20))
-
-figure <- ggarrange(p1,p2,ncol = 2, nrow=1, common.legend = TRUE, legend = "top")
+figure <- ggarrange(p1,p2,
+                ncol = 2, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "top",
+                labels = "AUTO",
+                font.label = list(size=20))
 figure
 annotate_figure(figure,
     bottom = text_grob("Resolution", color = "black", size = 20),
     left = text_grob("Performance", color = "black", rot = 90, size=20)
 )
 
-```
 
+
+
+```
