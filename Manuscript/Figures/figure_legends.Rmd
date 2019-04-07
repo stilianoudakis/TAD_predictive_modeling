@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 **Figure 4. Data summaries in the form of barplots for the GM12878 (red) and K562 (blue) cell lines.** (A) The total number of genomic bins created by partitioning the linear genome into unit intervals corresponding to the resolution of the relevant domain data. (B) Subsequent imbalance ratios, defined as the ratio of the number of bins that overlapped with a flanked TAD boundary to the number of bins that did not overlap with a flanked TAD boundary.
 
 
-**Figure 7. Evaluating effect of class imbalance on model performance.** 
+**Figure 5. Evaluating effect of class imbalance and feature engineering on model performance.** 
 
 <!--
 **Figure 4. Barplots comparing model performance for each predictor type.** Model performances were evaluated using F1-score, MCC, and balanced accuracy for each of the 4 resampling techniques, across both the GM12878 (A) and K562 (B) cell lines. The results presented are for models applied to 10 kb resolution data.
