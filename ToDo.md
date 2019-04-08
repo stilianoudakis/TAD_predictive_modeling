@@ -1,5 +1,8 @@
 ## ToDo
 - look at distributions of TAD lengths
++ make table of full performance metrics results for supplementary
++ create better version figure 5 (main results)
++ cluster variable importances by rankings
 
 - what to do about top important features in k562 that were not provided in the gm12878 cell line
 - compare results from rfe method with enet method
