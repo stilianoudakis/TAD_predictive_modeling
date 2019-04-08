@@ -1,24 +1,9 @@
 ## ToDo
+- what to do about top important features in k562 that were not provided in the gm12878 cell line?
 - look at distributions of TAD lengths
 + make table of full performance metrics results for supplementary
 + create better version figure 5 (main results)
 + cluster variable importances by rankings
-
-- what to do about top important features in k562 that were not provided in the gm12878 cell line
-- compare results from rfe method with enet method
-- quantify correlations in table
-   - think abount other ways to present (plots etc)
-- break correlation heatmaps into different categories
-   - remove rows with all NAs (to fix clustering issue)
-+ plot clustered heatmaps and score plots from pca for different predictor types
-+ fix supp fig 3; add lables to x axis; order by resamp technique
-   + look at using coefficients instead of 0/1
-   + using coefficients makes heatmap too cluttered
-   + the range of coefficients is very large; so colot scheme is uninformative
-   + coefficients can be positive or negative; raises issue of whether or not to use absolute value
-   + there are instances where all rows are regularized (0 coef); so clustering is not possible
-+fix fig 4 and supp fig 4; put common x and y axis labels using annotate_figure()
-+fix supp fig 5; put common x and y axis labels using annotate_figure()
 
 
 ## Ideas
