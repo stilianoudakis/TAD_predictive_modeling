@@ -1,26 +1,21 @@
 ## ToDo
-- what to do about top important features in k562 that were not provided in the gm12878 cell line?
+- make figure 5 more compact; include other metrics as supplementary
+- compute average rankings across resolutions and present by heatmap
 - look at distributions of TAD lengths
-+ make table of full performance metrics results for supplementary
-+ create better version figure 5 (main results)
-+ cluster variable importances by rankings
-
 
 ## Ideas
 
 - How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks only, 2) TFs only, 3) chromatin states only.
-
-- Use SpectralTAD to detect hierarchical TAD boundaries. Goal - predict level 1, 2, and 3 hierarchical boundaries, identify common and hierarchy-specific predictive features. 
-    - Before predicting hierarchical boundaries separately, use combined set of TADs
+    - start with tfbs
 
 - Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
+    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
+    - cross section with tad lengths
 
 - Train the best model in one cell type, apply to other cell types, compare performance.
 
-- Train the best models separately for each cell type, compare the most important features
-
 - Distance is the most important predictor. Thus, distance distributions
-
+    - test if different compared to random bins; stratify by annotation type
 
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
 
@@ -31,6 +26,9 @@
 - Add more classifiers: GBM, SVM, Naive Bayes, neural network, MLR, Elastic-Net 
 
 - Explore https://github.com/scikit-learn-contrib/imbalanced-learn - A Python Package to Tackle the Curse of Imbalanced Datasets in Machine Learning http://imbalanced-learn.org
+
+- Use SpectralTAD to detect hierarchical TAD boundaries. Goal - predict level 1, 2, and 3 hierarchical boundaries, identify common and hierarchy-specific predictive features. 
+    - Before predicting hierarchical boundaries separately, use combined set of TADs
 
 
 
