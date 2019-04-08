@@ -1738,216 +1738,216 @@ all_rfperfs_gm12878$Metric <- factor(all_rfperfs_gm12878$Metric, levels=c("AUC",
 all_rfperfs_gm12878$Resampling <- factor(all_rfperfs_gm12878$Resampling, levels=c("None", "ROS", "RUS", "SMOTE"))
 
 
-all_rfperfs_gm12878$Performance <- c(round(rfperf_gm12878_10kb_none_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_none_op[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_none_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_gm12878_10kb_SMOTE_dist[17,2],2), #auc
+all_rfperfs_gm12878$Performance <- c(rfperf_gm12878_10kb_none_oc[17,2], #auc
+                                          rfperf_gm12878_10kb_none_op[17,2], #auc
+                                          rfperf_gm12878_10kb_none_dist[17,2], #auc
+                                          rfperf_gm12878_10kb_ROS_oc[17,2], #auc
+                                          rfperf_gm12878_10kb_ROS_op[17,2], #auc
+                                          rfperf_gm12878_10kb_ROS_dist[17,2], #auc
+                                          rfperf_gm12878_10kb_RUS_oc[17,2], #auc
+                                          rfperf_gm12878_10kb_RUS_op[17,2], #auc
+                                          rfperf_gm12878_10kb_RUS_dist[17,2], #auc
+                                          rfperf_gm12878_10kb_SMOTE_oc[17,2], #auc
+                                          rfperf_gm12878_10kb_SMOTE_op[17,2], #auc
+                                          rfperf_gm12878_10kb_SMOTE_dist[17,2], #auc
                                      
-                                     round(rfperf_gm12878_25kb_none_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_none_op[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_none_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_gm12878_25kb_SMOTE_dist[17,2],2), #auc
+                                     rfperf_gm12878_25kb_none_oc[17,2], #auc
+                                          rfperf_gm12878_25kb_none_op[17,2], #auc
+                                          rfperf_gm12878_25kb_none_dist[17,2], #auc
+                                          rfperf_gm12878_25kb_ROS_oc[17,2], #auc
+                                          rfperf_gm12878_25kb_ROS_op[17,2], #auc
+                                          rfperf_gm12878_25kb_ROS_dist[17,2], #auc
+                                          rfperf_gm12878_25kb_RUS_oc[17,2], #auc
+                                          rfperf_gm12878_25kb_RUS_op[17,2], #auc
+                                          rfperf_gm12878_25kb_RUS_dist[17,2], #auc
+                                          rfperf_gm12878_25kb_SMOTE_oc[17,2], #auc
+                                          rfperf_gm12878_25kb_SMOTE_op[17,2], #auc
+                                          rfperf_gm12878_25kb_SMOTE_dist[17,2], #auc
                                      
-                                     round(rfperf_gm12878_50kb_none_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_none_op[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_none_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_gm12878_50kb_SMOTE_dist[17,2],2), #auc
+                                     rfperf_gm12878_50kb_none_oc[17,2], #auc
+                                          rfperf_gm12878_50kb_none_op[17,2], #auc
+                                          rfperf_gm12878_50kb_none_dist[17,2], #auc
+                                          rfperf_gm12878_50kb_ROS_oc[17,2], #auc
+                                          rfperf_gm12878_50kb_ROS_op[17,2], #auc
+                                          rfperf_gm12878_50kb_ROS_dist[17,2], #auc
+                                          rfperf_gm12878_50kb_RUS_oc[17,2], #auc
+                                          rfperf_gm12878_50kb_RUS_op[17,2], #auc
+                                          rfperf_gm12878_50kb_RUS_dist[17,2], #auc
+                                          rfperf_gm12878_50kb_SMOTE_oc[17,2], #auc
+                                          rfperf_gm12878_50kb_SMOTE_op[17,2], #auc
+                                          rfperf_gm12878_50kb_SMOTE_dist[17,2], #auc
                                      
-                                     round(rfperf_gm12878_100kb_none_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_none_op[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_none_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_gm12878_100kb_SMOTE_dist[17,2],2), #auc
-                                     
-                                     
-                                     round(rfperf_gm12878_10kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_none_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_10kb_SMOTE_dist[19,2],2), #auprc
-                                     
-                                     round(rfperf_gm12878_25kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_none_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_25kb_SMOTE_dist[19,2],2), #auprc
-                                     
-                                     round(rfperf_gm12878_50kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_none_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_50kb_SMOTE_dist[19,2],2), #auprc
-                                     
-                                     round(rfperf_gm12878_100kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_none_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_gm12878_100kb_SMOTE_dist[19,2],2), #auprc
+                                     rfperf_gm12878_100kb_none_oc[17,2], #auc
+                                          rfperf_gm12878_100kb_none_op[17,2], #auc
+                                          rfperf_gm12878_100kb_none_dist[17,2], #auc
+                                          rfperf_gm12878_100kb_ROS_oc[17,2], #auc
+                                          rfperf_gm12878_100kb_ROS_op[17,2], #auc
+                                          rfperf_gm12878_100kb_ROS_dist[17,2], #auc
+                                          rfperf_gm12878_100kb_RUS_oc[17,2], #auc
+                                          rfperf_gm12878_100kb_RUS_op[17,2], #auc
+                                          rfperf_gm12878_100kb_RUS_dist[17,2], #auc
+                                          rfperf_gm12878_100kb_SMOTE_oc[17,2], #auc
+                                          rfperf_gm12878_100kb_SMOTE_op[17,2], #auc
+                                          rfperf_gm12878_100kb_SMOTE_dist[17,2], #auc
                                      
                                      
-                                     round(rfperf_gm12878_10kb_none_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_none_op[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_none_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_gm12878_10kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_gm12878_10kb_none_oc[19,2], #auprc
+                                          rfperf_gm12878_10kb_none_op[19,2], #auprc
+                                          rfperf_gm12878_10kb_none_dist[19,2], #auprc
+                                          rfperf_gm12878_10kb_ROS_oc[19,2], #auprc
+                                          rfperf_gm12878_10kb_ROS_op[19,2], #auprc
+                                          rfperf_gm12878_10kb_ROS_dist[19,2], #auprc
+                                          rfperf_gm12878_10kb_RUS_oc[19,2], #auprc
+                                          rfperf_gm12878_10kb_RUS_op[19,2], #auprc
+                                          rfperf_gm12878_10kb_RUS_dist[19,2], #auprc
+                                          rfperf_gm12878_10kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_gm12878_10kb_SMOTE_op[19,2], #auprc
+                                          rfperf_gm12878_10kb_SMOTE_dist[19,2], #auprc
                                      
-                                     round(rfperf_gm12878_25kb_none_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_none_op[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_none_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_gm12878_25kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_gm12878_25kb_none_oc[19,2], #auprc
+                                          rfperf_gm12878_25kb_none_op[19,2], #auprc
+                                          rfperf_gm12878_25kb_none_dist[19,2], #auprc
+                                          rfperf_gm12878_25kb_ROS_oc[19,2], #auprc
+                                          rfperf_gm12878_25kb_ROS_op[19,2], #auprc
+                                          rfperf_gm12878_25kb_ROS_dist[19,2], #auprc
+                                          rfperf_gm12878_25kb_RUS_oc[19,2], #auprc
+                                          rfperf_gm12878_25kb_RUS_op[19,2], #auprc
+                                          rfperf_gm12878_25kb_RUS_dist[19,2], #auprc
+                                          rfperf_gm12878_25kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_gm12878_25kb_SMOTE_op[19,2], #auprc
+                                          rfperf_gm12878_25kb_SMOTE_dist[19,2], #auprc
                                      
-                                     round(rfperf_gm12878_50kb_none_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_none_op[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_none_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_gm12878_50kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_gm12878_50kb_none_oc[19,2], #auprc
+                                          rfperf_gm12878_50kb_none_op[19,2], #auprc
+                                          rfperf_gm12878_50kb_none_dist[19,2], #auprc
+                                          rfperf_gm12878_50kb_ROS_oc[19,2], #auprc
+                                          rfperf_gm12878_50kb_ROS_op[19,2], #auprc
+                                          rfperf_gm12878_50kb_ROS_dist[19,2], #auprc
+                                          rfperf_gm12878_50kb_RUS_oc[19,2], #auprc
+                                          rfperf_gm12878_50kb_RUS_op[19,2], #auprc
+                                          rfperf_gm12878_50kb_RUS_dist[19,2], #auprc
+                                          rfperf_gm12878_50kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_gm12878_50kb_SMOTE_op[19,2], #auprc
+                                          rfperf_gm12878_50kb_SMOTE_dist[19,2], #auprc
                                      
-                                     round(rfperf_gm12878_100kb_none_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_none_op[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_none_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_gm12878_100kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_gm12878_100kb_none_oc[19,2], #auprc
+                                          rfperf_gm12878_100kb_none_op[19,2], #auprc
+                                          rfperf_gm12878_100kb_none_dist[19,2], #auprc
+                                          rfperf_gm12878_100kb_ROS_oc[19,2], #auprc
+                                          rfperf_gm12878_100kb_ROS_op[19,2], #auprc
+                                          rfperf_gm12878_100kb_ROS_dist[19,2], #auprc
+                                          rfperf_gm12878_100kb_RUS_oc[19,2], #auprc
+                                          rfperf_gm12878_100kb_RUS_op[19,2], #auprc
+                                          rfperf_gm12878_100kb_RUS_dist[19,2], #auprc
+                                          rfperf_gm12878_100kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_gm12878_100kb_SMOTE_op[19,2], #auprc
+                                          rfperf_gm12878_100kb_SMOTE_dist[19,2], #auprc
                                      
                                      
-                                     round(rfperf_gm12878_10kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_none_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_10kb_SMOTE_dist[15,2],2), #mcc
+                                     rfperf_gm12878_10kb_none_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_none_op[16,2], #f1
+                                          rfperf_gm12878_10kb_none_dist[16,2], #f1
+                                          rfperf_gm12878_10kb_ROS_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_ROS_op[16,2], #f1
+                                          rfperf_gm12878_10kb_ROS_dist[16,2], #f1
+                                          rfperf_gm12878_10kb_RUS_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_RUS_op[16,2], #f1
+                                          rfperf_gm12878_10kb_RUS_dist[16,2], #f1
+                                          rfperf_gm12878_10kb_SMOTE_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_SMOTE_op[16,2], #f1
+                                          rfperf_gm12878_10kb_SMOTE_dist[16,2], #f1
                                      
-                                     round(rfperf_gm12878_25kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_none_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_25kb_SMOTE_dist[15,2],2), #mcc
+                                     rfperf_gm12878_25kb_none_oc[16,2], #f1
+                                          rfperf_gm12878_25kb_none_op[16,2], #f1
+                                          rfperf_gm12878_25kb_none_dist[16,2], #f1
+                                          rfperf_gm12878_25kb_ROS_oc[16,2], #f1
+                                          rfperf_gm12878_25kb_ROS_op[16,2], #f1
+                                          rfperf_gm12878_25kb_ROS_dist[16,2], #f1
+                                          rfperf_gm12878_25kb_RUS_oc[16,2], #f1
+                                          rfperf_gm12878_25kb_RUS_op[16,2], #f1
+                                          rfperf_gm12878_25kb_RUS_dist[16,2], #f1
+                                          rfperf_gm12878_25kb_SMOTE_oc[16,2], #f1
+                                          rfperf_gm12878_25kb_SMOTE_op[16,2], #f1
+                                          rfperf_gm12878_25kb_SMOTE_dist[16,2], #f1
                                      
-                                     round(rfperf_gm12878_50kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_none_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_50kb_SMOTE_dist[15,2],2), #mcc
+                                     rfperf_gm12878_50kb_none_oc[16,2], #f1
+                                          rfperf_gm12878_50kb_none_op[16,2], #f1
+                                          rfperf_gm12878_50kb_none_dist[16,2], #f1
+                                          rfperf_gm12878_50kb_ROS_oc[16,2], #f1
+                                          rfperf_gm12878_50kb_ROS_op[16,2], #f1
+                                          rfperf_gm12878_50kb_ROS_dist[16,2], #f1
+                                          rfperf_gm12878_50kb_RUS_oc[16,2], #f1
+                                          rfperf_gm12878_50kb_RUS_op[16,2], #f1
+                                          rfperf_gm12878_50kb_RUS_dist[16,2], #f1
+                                          rfperf_gm12878_50kb_SMOTE_oc[16,2], #f1
+                                          rfperf_gm12878_50kb_SMOTE_op[16,2], #f1
+                                          rfperf_gm12878_50kb_SMOTE_dist[16,2], #f1
                                      
-                                     round(rfperf_gm12878_100kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_none_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_gm12878_100kb_SMOTE_dist[15,2],2) #mcc
+                                     rfperf_gm12878_100kb_none_oc[16,2], #f1
+                                          rfperf_gm12878_100kb_none_op[16,2], #f1
+                                          rfperf_gm12878_100kb_none_dist[16,2], #f1
+                                          rfperf_gm12878_100kb_ROS_oc[16,2], #f1
+                                          rfperf_gm12878_100kb_ROS_op[16,2], #f1
+                                          rfperf_gm12878_100kb_ROS_dist[16,2], #f1
+                                          rfperf_gm12878_100kb_RUS_oc[16,2], #f1
+                                          rfperf_gm12878_100kb_RUS_op[16,2], #f1
+                                          rfperf_gm12878_100kb_RUS_dist[16,2], #f1
+                                          rfperf_gm12878_100kb_SMOTE_oc[16,2], #f1
+                                          rfperf_gm12878_100kb_SMOTE_op[16,2], #f1
+                                          rfperf_gm12878_100kb_SMOTE_dist[16,2], #f1
+                                     
+                                     
+                                     rfperf_gm12878_10kb_none_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_none_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_none_dist[15,2], #mcc
+                                          rfperf_gm12878_10kb_ROS_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_ROS_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_ROS_dist[15,2], #mcc
+                                          rfperf_gm12878_10kb_RUS_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_RUS_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_RUS_dist[15,2], #mcc
+                                          rfperf_gm12878_10kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_SMOTE_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_SMOTE_dist[15,2], #mcc
+                                     
+                                     rfperf_gm12878_25kb_none_oc[15,2], #mcc
+                                          rfperf_gm12878_25kb_none_op[15,2], #mcc
+                                          rfperf_gm12878_25kb_none_dist[15,2], #mcc
+                                          rfperf_gm12878_25kb_ROS_oc[15,2], #mcc
+                                          rfperf_gm12878_25kb_ROS_op[15,2], #mcc
+                                          rfperf_gm12878_25kb_ROS_dist[15,2], #mcc
+                                          rfperf_gm12878_25kb_RUS_oc[15,2], #mcc
+                                          rfperf_gm12878_25kb_RUS_op[15,2], #mcc
+                                          rfperf_gm12878_25kb_RUS_dist[15,2], #mcc
+                                          rfperf_gm12878_25kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_gm12878_25kb_SMOTE_op[15,2], #mcc
+                                          rfperf_gm12878_25kb_SMOTE_dist[15,2], #mcc
+                                     
+                                     rfperf_gm12878_50kb_none_oc[15,2], #mcc
+                                          rfperf_gm12878_50kb_none_op[15,2], #mcc
+                                          rfperf_gm12878_50kb_none_dist[15,2], #mcc
+                                          rfperf_gm12878_50kb_ROS_oc[15,2], #mcc
+                                          rfperf_gm12878_50kb_ROS_op[15,2], #mcc
+                                          rfperf_gm12878_50kb_ROS_dist[15,2], #mcc
+                                          rfperf_gm12878_50kb_RUS_oc[15,2], #mcc
+                                          rfperf_gm12878_50kb_RUS_op[15,2], #mcc
+                                          rfperf_gm12878_50kb_RUS_dist[15,2], #mcc
+                                          rfperf_gm12878_50kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_gm12878_50kb_SMOTE_op[15,2], #mcc
+                                          rfperf_gm12878_50kb_SMOTE_dist[15,2], #mcc
+                                     
+                                     rfperf_gm12878_100kb_none_oc[15,2], #mcc
+                                          rfperf_gm12878_100kb_none_op[15,2], #mcc
+                                          rfperf_gm12878_100kb_none_dist[15,2], #mcc
+                                          rfperf_gm12878_100kb_ROS_oc[15,2], #mcc
+                                          rfperf_gm12878_100kb_ROS_op[15,2], #mcc
+                                          rfperf_gm12878_100kb_ROS_dist[15,2], #mcc
+                                          rfperf_gm12878_100kb_RUS_oc[15,2], #mcc
+                                          rfperf_gm12878_100kb_RUS_op[15,2], #mcc
+                                          rfperf_gm12878_100kb_RUS_dist[15,2], #mcc
+                                          rfperf_gm12878_100kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_gm12878_100kb_SMOTE_op[15,2], #mcc
+                                          rfperf_gm12878_100kb_SMOTE_dist[15,2] #mcc
 )
 
 p1 <- ggplot(all_rfperfs_gm12878,
@@ -2198,217 +2198,218 @@ all_rfperfs_K562$Metric <- factor(all_rfperfs_K562$Metric, levels=c("AUC", "AUPR
 all_rfperfs_K562$Resampling <- factor(all_rfperfs_K562$Resampling, levels=c("None", "ROS", "RUS", "SMOTE"))
 
 
-all_rfperfs_K562$Performance <- c(round(rfperf_K562_10kb_none_oc[17,2],2), #auc
-                                          round(rfperf_K562_10kb_none_op[17,2],2), #auc
-                                          round(rfperf_K562_10kb_none_dist[17,2],2), #auc
-                                          round(rfperf_K562_10kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_K562_10kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_K562_10kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_K562_10kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_K562_10kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_K562_10kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_K562_10kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_K562_10kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_K562_10kb_SMOTE_dist[17,2],2), #auc
+all_rfperfs_K562$Performance <- c(rfperf_K562_10kb_none_oc[17,2], #auc
+                                          rfperf_K562_10kb_none_op[17,2], #auc
+                                          rfperf_K562_10kb_none_dist[17,2], #auc
+                                          rfperf_K562_10kb_ROS_oc[17,2], #auc
+                                          rfperf_K562_10kb_ROS_op[17,2], #auc
+                                          rfperf_K562_10kb_ROS_dist[17,2], #auc
+                                          rfperf_K562_10kb_RUS_oc[17,2], #auc
+                                          rfperf_K562_10kb_RUS_op[17,2], #auc
+                                          rfperf_K562_10kb_RUS_dist[17,2], #auc
+                                          rfperf_K562_10kb_SMOTE_oc[17,2], #auc
+                                          rfperf_K562_10kb_SMOTE_op[17,2], #auc
+                                          rfperf_K562_10kb_SMOTE_dist[17,2], #auc
                                      
-                                     round(rfperf_K562_25kb_none_oc[17,2],2), #auc
-                                          round(rfperf_K562_25kb_none_op[17,2],2), #auc
-                                          round(rfperf_K562_25kb_none_dist[17,2],2), #auc
-                                          round(rfperf_K562_25kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_K562_25kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_K562_25kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_K562_25kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_K562_25kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_K562_25kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_K562_25kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_K562_25kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_K562_25kb_SMOTE_dist[17,2],2), #auc
+                                     rfperf_K562_25kb_none_oc[17,2], #auc
+                                          rfperf_K562_25kb_none_op[17,2], #auc
+                                          rfperf_K562_25kb_none_dist[17,2], #auc
+                                          rfperf_K562_25kb_ROS_oc[17,2], #auc
+                                          rfperf_K562_25kb_ROS_op[17,2], #auc
+                                          rfperf_K562_25kb_ROS_dist[17,2], #auc
+                                          rfperf_K562_25kb_RUS_oc[17,2], #auc
+                                          rfperf_K562_25kb_RUS_op[17,2], #auc
+                                          rfperf_K562_25kb_RUS_dist[17,2], #auc
+                                          rfperf_K562_25kb_SMOTE_oc[17,2], #auc
+                                          rfperf_K562_25kb_SMOTE_op[17,2], #auc
+                                          rfperf_K562_25kb_SMOTE_dist[17,2], #auc
                                      
-                                     round(rfperf_K562_50kb_none_oc[17,2],2), #auc
-                                          round(rfperf_K562_50kb_none_op[17,2],2), #auc
-                                          round(rfperf_K562_50kb_none_dist[17,2],2), #auc
-                                          round(rfperf_K562_50kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_K562_50kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_K562_50kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_K562_50kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_K562_50kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_K562_50kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_K562_50kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_K562_50kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_K562_50kb_SMOTE_dist[17,2],2), #auc
+                                     rfperf_K562_50kb_none_oc[17,2], #auc
+                                          rfperf_K562_50kb_none_op[17,2], #auc
+                                          rfperf_K562_50kb_none_dist[17,2], #auc
+                                          rfperf_K562_50kb_ROS_oc[17,2], #auc
+                                          rfperf_K562_50kb_ROS_op[17,2], #auc
+                                          rfperf_K562_50kb_ROS_dist[17,2], #auc
+                                          rfperf_K562_50kb_RUS_oc[17,2], #auc
+                                          rfperf_K562_50kb_RUS_op[17,2], #auc
+                                          rfperf_K562_50kb_RUS_dist[17,2], #auc
+                                          rfperf_K562_50kb_SMOTE_oc[17,2], #auc
+                                          rfperf_K562_50kb_SMOTE_op[17,2], #auc
+                                          rfperf_K562_50kb_SMOTE_dist[17,2], #auc
                                      
-                                     round(rfperf_K562_100kb_none_oc[17,2],2), #auc
-                                          round(rfperf_K562_100kb_none_op[17,2],2), #auc
-                                          round(rfperf_K562_100kb_none_dist[17,2],2), #auc
-                                          round(rfperf_K562_100kb_ROS_oc[17,2],2), #auc
-                                          round(rfperf_K562_100kb_ROS_op[17,2],2), #auc
-                                          round(rfperf_K562_100kb_ROS_dist[17,2],2), #auc
-                                          round(rfperf_K562_100kb_RUS_oc[17,2],2), #auc
-                                          round(rfperf_K562_100kb_RUS_op[17,2],2), #auc
-                                          round(rfperf_K562_100kb_RUS_dist[17,2],2), #auc
-                                          round(rfperf_K562_100kb_SMOTE_oc[17,2],2), #auc
-                                          round(rfperf_K562_100kb_SMOTE_op[17,2],2), #auc
-                                          round(rfperf_K562_100kb_SMOTE_dist[17,2],2), #auc
-                                     
-                                     
-                                     round(rfperf_K562_10kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_none_op[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_K562_10kb_SMOTE_dist[19,2],2), #auprc
-                                     
-                                     round(rfperf_K562_25kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_none_op[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_K562_25kb_SMOTE_dist[19,2],2), #auprc
-                                     
-                                     round(rfperf_K562_50kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_none_op[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_K562_50kb_SMOTE_dist[19,2],2), #auprc
-                                     
-                                     round(rfperf_K562_100kb_none_oc[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_none_op[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_none_dist[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_ROS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_ROS_op[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_ROS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_RUS_oc[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_RUS_op[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_RUS_dist[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_SMOTE_oc[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_SMOTE_op[19,2],2), #auprc
-                                          round(rfperf_K562_100kb_SMOTE_dist[19,2],2), #auprc
+                                     rfperf_K562_100kb_none_oc[17,2], #auc
+                                          rfperf_K562_100kb_none_op[17,2], #auc
+                                          rfperf_K562_100kb_none_dist[17,2], #auc
+                                          rfperf_K562_100kb_ROS_oc[17,2], #auc
+                                          rfperf_K562_100kb_ROS_op[17,2], #auc
+                                          rfperf_K562_100kb_ROS_dist[17,2], #auc
+                                          rfperf_K562_100kb_RUS_oc[17,2], #auc
+                                          rfperf_K562_100kb_RUS_op[17,2], #auc
+                                          rfperf_K562_100kb_RUS_dist[17,2], #auc
+                                          rfperf_K562_100kb_SMOTE_oc[17,2], #auc
+                                          rfperf_K562_100kb_SMOTE_op[17,2], #auc
+                                          rfperf_K562_100kb_SMOTE_dist[17,2], #auc
                                      
                                      
-                                     round(rfperf_K562_10kb_none_oc[16,2],2), #f1
-                                          round(rfperf_K562_10kb_none_op[16,2],2), #f1
-                                          round(rfperf_K562_10kb_none_dist[16,2],2), #f1
-                                          round(rfperf_K562_10kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_K562_10kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_K562_10kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_K562_10kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_K562_10kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_K562_10kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_K562_10kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_K562_10kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_K562_10kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_K562_10kb_none_oc[19,2], #auprc
+                                          rfperf_K562_10kb_none_op[19,2], #auprc
+                                          rfperf_K562_10kb_none_dist[19,2], #auprc
+                                          rfperf_K562_10kb_ROS_oc[19,2], #auprc
+                                          rfperf_K562_10kb_ROS_op[19,2], #auprc
+                                          rfperf_K562_10kb_ROS_dist[19,2], #auprc
+                                          rfperf_K562_10kb_RUS_oc[19,2], #auprc
+                                          rfperf_K562_10kb_RUS_op[19,2], #auprc
+                                          rfperf_K562_10kb_RUS_dist[19,2], #auprc
+                                          rfperf_K562_10kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_K562_10kb_SMOTE_op[19,2], #auprc
+                                          rfperf_K562_10kb_SMOTE_dist[19,2], #auprc
                                      
-                                     round(rfperf_K562_25kb_none_oc[16,2],2), #f1
-                                          round(rfperf_K562_25kb_none_op[16,2],2), #f1
-                                          round(rfperf_K562_25kb_none_dist[16,2],2), #f1
-                                          round(rfperf_K562_25kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_K562_25kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_K562_25kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_K562_25kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_K562_25kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_K562_25kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_K562_25kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_K562_25kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_K562_25kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_K562_25kb_none_oc[19,2], #auprc
+                                          rfperf_K562_25kb_none_op[19,2], #auprc
+                                          rfperf_K562_25kb_none_dist[19,2], #auprc
+                                          rfperf_K562_25kb_ROS_oc[19,2], #auprc
+                                          rfperf_K562_25kb_ROS_op[19,2], #auprc
+                                          rfperf_K562_25kb_ROS_dist[19,2], #auprc
+                                          rfperf_K562_25kb_RUS_oc[19,2], #auprc
+                                          rfperf_K562_25kb_RUS_op[19,2], #auprc
+                                          rfperf_K562_25kb_RUS_dist[19,2], #auprc
+                                          rfperf_K562_25kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_K562_25kb_SMOTE_op[19,2], #auprc
+                                          rfperf_K562_25kb_SMOTE_dist[19,2], #auprc
                                      
-                                     round(rfperf_K562_50kb_none_oc[16,2],2), #f1
-                                          round(rfperf_K562_50kb_none_op[16,2],2), #f1
-                                          round(rfperf_K562_50kb_none_dist[16,2],2), #f1
-                                          round(rfperf_K562_50kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_K562_50kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_K562_50kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_K562_50kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_K562_50kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_K562_50kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_K562_50kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_K562_50kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_K562_50kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_K562_50kb_none_oc[19,2], #auprc
+                                          rfperf_K562_50kb_none_op[19,2], #auprc
+                                          rfperf_K562_50kb_none_dist[19,2], #auprc
+                                          rfperf_K562_50kb_ROS_oc[19,2], #auprc
+                                          rfperf_K562_50kb_ROS_op[19,2], #auprc
+                                          rfperf_K562_50kb_ROS_dist[19,2], #auprc
+                                          rfperf_K562_50kb_RUS_oc[19,2], #auprc
+                                          rfperf_K562_50kb_RUS_op[19,2], #auprc
+                                          rfperf_K562_50kb_RUS_dist[19,2], #auprc
+                                          rfperf_K562_50kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_K562_50kb_SMOTE_op[19,2], #auprc
+                                          rfperf_K562_50kb_SMOTE_dist[19,2], #auprc
                                      
-                                     round(rfperf_K562_100kb_none_oc[16,2],2), #f1
-                                          round(rfperf_K562_100kb_none_op[16,2],2), #f1
-                                          round(rfperf_K562_100kb_none_dist[16,2],2), #f1
-                                          round(rfperf_K562_100kb_ROS_oc[16,2],2), #f1
-                                          round(rfperf_K562_100kb_ROS_op[16,2],2), #f1
-                                          round(rfperf_K562_100kb_ROS_dist[16,2],2), #f1
-                                          round(rfperf_K562_100kb_RUS_oc[16,2],2), #f1
-                                          round(rfperf_K562_100kb_RUS_op[16,2],2), #f1
-                                          round(rfperf_K562_100kb_RUS_dist[16,2],2), #f1
-                                          round(rfperf_K562_100kb_SMOTE_oc[16,2],2), #f1
-                                          round(rfperf_K562_100kb_SMOTE_op[16,2],2), #f1
-                                          round(rfperf_K562_100kb_SMOTE_dist[16,2],2), #f1
+                                     rfperf_K562_100kb_none_oc[19,2], #auprc
+                                          rfperf_K562_100kb_none_op[19,2], #auprc
+                                          rfperf_K562_100kb_none_dist[19,2], #auprc
+                                          rfperf_K562_100kb_ROS_oc[19,2], #auprc
+                                          rfperf_K562_100kb_ROS_op[19,2], #auprc
+                                          rfperf_K562_100kb_ROS_dist[19,2], #auprc
+                                          rfperf_K562_100kb_RUS_oc[19,2], #auprc
+                                          rfperf_K562_100kb_RUS_op[19,2], #auprc
+                                          rfperf_K562_100kb_RUS_dist[19,2], #auprc
+                                          rfperf_K562_100kb_SMOTE_oc[19,2], #auprc
+                                          rfperf_K562_100kb_SMOTE_op[19,2], #auprc
+                                          rfperf_K562_100kb_SMOTE_dist[19,2], #auprc
                                      
                                      
-                                     round(rfperf_K562_10kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_none_op[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_K562_10kb_SMOTE_dist[15,2],2), #mcc
+                                     rfperf_K562_10kb_none_oc[16,2], #f1
+                                          rfperf_K562_10kb_none_op[16,2], #f1
+                                          rfperf_K562_10kb_none_dist[16,2], #f1
+                                          rfperf_K562_10kb_ROS_oc[16,2], #f1
+                                          rfperf_K562_10kb_ROS_op[16,2], #f1
+                                          rfperf_K562_10kb_ROS_dist[16,2], #f1
+                                          rfperf_K562_10kb_RUS_oc[16,2], #f1
+                                          rfperf_K562_10kb_RUS_op[16,2], #f1
+                                          rfperf_K562_10kb_RUS_dist[16,2], #f1
+                                          rfperf_K562_10kb_SMOTE_oc[16,2], #f1
+                                          rfperf_K562_10kb_SMOTE_op[16,2], #f1
+                                          rfperf_K562_10kb_SMOTE_dist[16,2], #f1
                                      
-                                     round(rfperf_K562_25kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_none_op[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_K562_25kb_SMOTE_dist[15,2],2), #mcc
+                                     rfperf_K562_25kb_none_oc[16,2], #f1
+                                          rfperf_K562_25kb_none_op[16,2], #f1
+                                          rfperf_K562_25kb_none_dist[16,2], #f1
+                                          rfperf_K562_25kb_ROS_oc[16,2], #f1
+                                          rfperf_K562_25kb_ROS_op[16,2], #f1
+                                          rfperf_K562_25kb_ROS_dist[16,2], #f1
+                                          rfperf_K562_25kb_RUS_oc[16,2], #f1
+                                          rfperf_K562_25kb_RUS_op[16,2], #f1
+                                          rfperf_K562_25kb_RUS_dist[16,2], #f1
+                                          rfperf_K562_25kb_SMOTE_oc[16,2], #f1
+                                          rfperf_K562_25kb_SMOTE_op[16,2], #f1
+                                          rfperf_K562_25kb_SMOTE_dist[16,2], #f1
                                      
-                                     round(rfperf_K562_50kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_none_op[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_K562_50kb_SMOTE_dist[15,2],2), #mcc
+                                     rfperf_K562_50kb_none_oc[16,2], #f1
+                                          rfperf_K562_50kb_none_op[16,2], #f1
+                                          rfperf_K562_50kb_none_dist[16,2], #f1
+                                          rfperf_K562_50kb_ROS_oc[16,2], #f1
+                                          rfperf_K562_50kb_ROS_op[16,2], #f1
+                                          rfperf_K562_50kb_ROS_dist[16,2], #f1
+                                          rfperf_K562_50kb_RUS_oc[16,2], #f1
+                                          rfperf_K562_50kb_RUS_op[16,2], #f1
+                                          rfperf_K562_50kb_RUS_dist[16,2], #f1
+                                          rfperf_K562_50kb_SMOTE_oc[16,2], #f1
+                                          rfperf_K562_50kb_SMOTE_op[16,2], #f1
+                                          rfperf_K562_50kb_SMOTE_dist[16,2], #f1
                                      
-                                     round(rfperf_K562_100kb_none_oc[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_none_op[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_none_dist[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_ROS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_ROS_op[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_ROS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_RUS_oc[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_RUS_op[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_RUS_dist[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_SMOTE_oc[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_SMOTE_op[15,2],2), #mcc
-                                          round(rfperf_K562_100kb_SMOTE_dist[15,2],2) #mcc
+                                     rfperf_K562_100kb_none_oc[16,2], #f1
+                                          rfperf_K562_100kb_none_op[16,2], #f1
+                                          rfperf_K562_100kb_none_dist[16,2], #f1
+                                          rfperf_K562_100kb_ROS_oc[16,2], #f1
+                                          rfperf_K562_100kb_ROS_op[16,2], #f1
+                                          rfperf_K562_100kb_ROS_dist[16,2], #f1
+                                          rfperf_K562_100kb_RUS_oc[16,2], #f1
+                                          rfperf_K562_100kb_RUS_op[16,2], #f1
+                                          rfperf_K562_100kb_RUS_dist[16,2], #f1
+                                          rfperf_K562_100kb_SMOTE_oc[16,2], #f1
+                                          rfperf_K562_100kb_SMOTE_op[16,2], #f1
+                                          rfperf_K562_100kb_SMOTE_dist[16,2], #f1
+                                     
+                                     
+                                     rfperf_K562_10kb_none_oc[15,2], #mcc
+                                          rfperf_K562_10kb_none_op[15,2], #mcc
+                                          rfperf_K562_10kb_none_dist[15,2], #mcc
+                                          rfperf_K562_10kb_ROS_oc[15,2], #mcc
+                                          rfperf_K562_10kb_ROS_op[15,2], #mcc
+                                          rfperf_K562_10kb_ROS_dist[15,2], #mcc
+                                          rfperf_K562_10kb_RUS_oc[15,2], #mcc
+                                          rfperf_K562_10kb_RUS_op[15,2], #mcc
+                                          rfperf_K562_10kb_RUS_dist[15,2], #mcc
+                                          rfperf_K562_10kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_K562_10kb_SMOTE_op[15,2], #mcc
+                                          rfperf_K562_10kb_SMOTE_dist[15,2], #mcc
+                                     
+                                     rfperf_K562_25kb_none_oc[15,2], #mcc
+                                          rfperf_K562_25kb_none_op[15,2], #mcc
+                                          rfperf_K562_25kb_none_dist[15,2], #mcc
+                                          rfperf_K562_25kb_ROS_oc[15,2], #mcc
+                                          rfperf_K562_25kb_ROS_op[15,2], #mcc
+                                          rfperf_K562_25kb_ROS_dist[15,2], #mcc
+                                          rfperf_K562_25kb_RUS_oc[15,2], #mcc
+                                          rfperf_K562_25kb_RUS_op[15,2], #mcc
+                                          rfperf_K562_25kb_RUS_dist[15,2], #mcc
+                                          rfperf_K562_25kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_K562_25kb_SMOTE_op[15,2], #mcc
+                                          rfperf_K562_25kb_SMOTE_dist[15,2], #mcc
+                                     
+                                     rfperf_K562_50kb_none_oc[15,2], #mcc
+                                          rfperf_K562_50kb_none_op[15,2], #mcc
+                                          rfperf_K562_50kb_none_dist[15,2], #mcc
+                                          rfperf_K562_50kb_ROS_oc[15,2], #mcc
+                                          rfperf_K562_50kb_ROS_op[15,2], #mcc
+                                          rfperf_K562_50kb_ROS_dist[15,2], #mcc
+                                          rfperf_K562_50kb_RUS_oc[15,2], #mcc
+                                          rfperf_K562_50kb_RUS_op[15,2], #mcc
+                                          rfperf_K562_50kb_RUS_dist[15,2], #mcc
+                                          rfperf_K562_50kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_K562_50kb_SMOTE_op[15,2], #mcc
+                                          rfperf_K562_50kb_SMOTE_dist[15,2], #mcc
+                                     
+                                     rfperf_K562_100kb_none_oc[15,2], #mcc
+                                          rfperf_K562_100kb_none_op[15,2], #mcc
+                                          rfperf_K562_100kb_none_dist[15,2], #mcc
+                                          rfperf_K562_100kb_ROS_oc[15,2], #mcc
+                                          rfperf_K562_100kb_ROS_op[15,2], #mcc
+                                          rfperf_K562_100kb_ROS_dist[15,2], #mcc
+                                          rfperf_K562_100kb_RUS_oc[15,2], #mcc
+                                          rfperf_K562_100kb_RUS_op[15,2], #mcc
+                                          rfperf_K562_100kb_RUS_dist[15,2], #mcc
+                                          rfperf_K562_100kb_SMOTE_oc[15,2], #mcc
+                                          rfperf_K562_100kb_SMOTE_op[15,2], #mcc
+                                          rfperf_K562_100kb_SMOTE_dist[15,2] #mcc
 )
+
 
 p2 <- ggplot(all_rfperfs_K562,
        aes(x=Resolution, y=Performance, fill=Predictor)) +
@@ -2530,6 +2531,91 @@ figure <- ggarrange(c,p,d,
                 legend = "top",
                 labels = "AUTO",
                 font.label = list(size=20))
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Performance", color = "black", rot = 90, size=20)
+)
+
+```
+
+
+##Plots
+
+```{r}
+all_rfperfs <- rbind.data.frame(all_rfperfs_gm12878, all_rfperfs_K562)
+all_rfperfs$CL <- c(rep("GM12878", dim(all_rfperfs_gm12878)[1]), rep("K562", dim(all_rfperfs_K562)[1]))
+
+c <- ggplot(all_rfperfs[which(all_rfperfs$Predictor=="OC" & (all_rfperfs$Metric=="F1-Score" | all_rfperfs$Metric=="MCC")),], aes(x=Resolution, y=Performance, color=CL, group=CL, linetype=CL)) +
+     geom_line(size=1)+
+     geom_point(size=2)+
+     facet_grid(Resampling ~ Metric)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("") + ylab("") + ylim(-.05,.5) +
+     ggtitle("Overlap Counts") +
+     scale_color_discrete(name="Cell Line")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=10,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 10),
+     axis.title.x = element_text(size = 15),
+     axis.title.y = element_text(size = 15),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=15),
+     plot.title = element_text(size=15))
+
+p <- ggplot(all_rfperfs[which(all_rfperfs$Predictor=="OP" & (all_rfperfs$Metric=="F1-Score" | all_rfperfs$Metric=="MCC")),], aes(x=Resolution, y=Performance, color=CL, group=CL, linetype=CL)) +
+     geom_line(size=1)+
+     geom_point(size=2)+
+     facet_grid(Resampling ~ Metric)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("") + ylab("") + ylim(-.05,.5) +
+     ggtitle("Overlap Percents") +
+     scale_color_discrete(name="Cell Line")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=10,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 10),
+     axis.title.x = element_text(size = 15),
+     axis.title.y = element_text(size = 15),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=15),
+     plot.title = element_text(size=15))
+
+d <- ggplot(all_rfperfs[which(all_rfperfs$Predictor=="Distance" & (all_rfperfs$Metric=="F1-Score" | all_rfperfs$Metric=="MCC")),], aes(x=Resolution, y=Performance, color=CL, group=CL, linetype=CL)) +
+     geom_line(size=1)+
+     geom_point(size=2)+
+     facet_grid(Resampling ~ Metric)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("") + ylab("") + ylim(-.05,.5) +
+     ggtitle("Distance") +
+     scale_color_discrete(name="Cell Line")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=10,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 10),
+     axis.title.x = element_text(size = 15),
+     axis.title.y = element_text(size = 15),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=15),
+     plot.title = element_text(size=15))
+
+figure <- ggarrange(c,p,d,
+                ncol = 3, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "top")
 figure
 annotate_figure(figure,
     bottom = text_grob("Resolution", color = "black", size = 20),
