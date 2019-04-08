@@ -60,11 +60,11 @@ In this study, we have developed an ensemble framework for predicting TAD bounda
 
 ## DOMAIN DATA
 
-Replicate Hi-C data for the GM12878 and K562 cell lines were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 4). The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. The start and end coordinates of all TADs were concatenated, sorted, and unique TAD boundary points were obtained. 
+Replicate Hi-C data for the GM12878 and K562 cell lines were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1). The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. The start and end coordinates of all TADs were concatenated, sorted, and unique TAD boundary points were obtained. 
 
 ## GENOMIC ANNOTATION DATA
 
-Genomic annotation data in the form of cell type specific chromatin states, histone marks, and transcription factor binding sites (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 1).
+Genomic annotation data in the form of cell type specific chromatin states, histone marks, and transcription factor binding sites (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 2).
 
 
 ## MODEL CONSTRUCTION
