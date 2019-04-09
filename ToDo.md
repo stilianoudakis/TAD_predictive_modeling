@@ -1,6 +1,7 @@
 ## ToDo
-- make figure 5 more compact; include other metrics as supplementary
-- compute average rankings across resolutions and present by heatmap
++ make figure 5 more compact; include other metrics as supplementary
++ compute average rankings across resolutions and present by heatmap for best model
+    - put other models in supplementary (including k562)
 - look at distributions of TAD lengths
 
 ## Ideas
