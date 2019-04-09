@@ -1,0 +1,546 @@
+---
+title: "Creating Supplementary Table of all Performances"
+author: "Spiro Stilianoudakis"
+date: "April 8, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Reading in all model results in the ensemble framework
+
+```{r}
+#OC
+##None
+rfperf_gm12878_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_10kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_10kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_gm12878_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_25kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_25kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_gm12878_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_50kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_50kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_gm12878_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_100kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_100kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##ROS
+rfperf_gm12878_10kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_10kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_gm12878_10kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_gm12878_25kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_25kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_gm12878_25kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_gm12878_50kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_50kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_gm12878_50kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_gm12878_100kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_100kb_ROS_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_gm12878_100kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##RUS
+rfperf_gm12878_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_10kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_gm12878_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_gm12878_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_25kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_gm12878_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_gm12878_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_50kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_gm12878_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_gm12878_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_100kb_RUS_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_gm12878_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_10kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_25kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_50kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_100kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_10kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_10kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_25kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_25kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_50kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_50kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##None
+rfperf_K562_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_K562_100kb_none_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_K562_100kb_none_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##ROS
+rfperf_K562_10kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_10kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_10kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_K562_25kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_25kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_25kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_K562_50kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_50kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_50kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##ROS
+rfperf_K562_100kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_K562_100kb_ROS_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_K562_100kb_ROS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##RUS
+rfperf_K562_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_10kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_10kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_K562_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_25kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_25kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_K562_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_50kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_50kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##RUS
+rfperf_K562_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_K562_100kb_RUS_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_K562_100kb_RUS_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_10kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_10kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_25kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_25kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_50kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_50kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+#OC
+##SMOTE
+rfperf_K562_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_K562_100kb_SMOTE_op <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_K562_100kb_SMOTE_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+```
+
+
+# Creating and saving table with all results
+
+```{r}
+all_rfperfs_df <- rbind.data.frame(rfperf_gm12878_10kb_none_oc,
+                                   rfperf_gm12878_10kb_none_op,
+                                   rfperf_gm12878_10kb_none_dist,
+                                   rfperf_gm12878_25kb_none_oc,
+                                   rfperf_gm12878_25kb_none_op,
+                                   rfperf_gm12878_25kb_none_dist,
+                                   rfperf_gm12878_50kb_none_oc,
+                                   rfperf_gm12878_50kb_none_op,
+                                   rfperf_gm12878_50kb_none_dist,
+                                   rfperf_gm12878_100kb_none_oc,
+                                   rfperf_gm12878_100kb_none_op,
+                                   rfperf_gm12878_100kb_none_dist,
+                                   
+                                   rfperf_gm12878_10kb_ROS_oc,
+                                   rfperf_gm12878_10kb_ROS_op,
+                                   rfperf_gm12878_10kb_ROS_dist,
+                                   rfperf_gm12878_25kb_ROS_oc,
+                                   rfperf_gm12878_25kb_ROS_op,
+                                   rfperf_gm12878_25kb_ROS_dist,
+                                   rfperf_gm12878_50kb_ROS_oc,
+                                   rfperf_gm12878_50kb_ROS_op,
+                                   rfperf_gm12878_50kb_ROS_dist,
+                                   rfperf_gm12878_100kb_ROS_oc,
+                                   rfperf_gm12878_100kb_ROS_op,
+                                   rfperf_gm12878_100kb_ROS_dist,
+                                   
+                                   rfperf_gm12878_10kb_RUS_oc,
+                                   rfperf_gm12878_10kb_RUS_op,
+                                   rfperf_gm12878_10kb_RUS_dist,
+                                   rfperf_gm12878_25kb_RUS_oc,
+                                   rfperf_gm12878_25kb_RUS_op,
+                                   rfperf_gm12878_25kb_RUS_dist,
+                                   rfperf_gm12878_50kb_RUS_oc,
+                                   rfperf_gm12878_50kb_RUS_op,
+                                   rfperf_gm12878_50kb_RUS_dist,
+                                   rfperf_gm12878_100kb_RUS_oc,
+                                   rfperf_gm12878_100kb_RUS_op,
+                                   rfperf_gm12878_100kb_RUS_dist,
+                                   
+                                   rfperf_gm12878_10kb_SMOTE_oc,
+                                   rfperf_gm12878_10kb_SMOTE_op,
+                                   rfperf_gm12878_10kb_SMOTE_dist,
+                                   rfperf_gm12878_25kb_SMOTE_oc,
+                                   rfperf_gm12878_25kb_SMOTE_op,
+                                   rfperf_gm12878_25kb_SMOTE_dist,
+                                   rfperf_gm12878_50kb_SMOTE_oc,
+                                   rfperf_gm12878_50kb_SMOTE_op,
+                                   rfperf_gm12878_50kb_SMOTE_dist,
+                                   rfperf_gm12878_100kb_SMOTE_oc,
+                                   rfperf_gm12878_100kb_SMOTE_op,
+                                   rfperf_gm12878_100kb_SMOTE_dist,
+                                   
+                                   rfperf_K562_10kb_none_oc,
+                                   rfperf_K562_10kb_none_op,
+                                   rfperf_K562_10kb_none_dist,
+                                   rfperf_K562_25kb_none_oc,
+                                   rfperf_K562_25kb_none_op,
+                                   rfperf_K562_25kb_none_dist,
+                                   rfperf_K562_50kb_none_oc,
+                                   rfperf_K562_50kb_none_op,
+                                   rfperf_K562_50kb_none_dist,
+                                   rfperf_K562_100kb_none_oc,
+                                   rfperf_K562_100kb_none_op,
+                                   rfperf_K562_100kb_none_dist,
+                                   
+                                   rfperf_K562_10kb_ROS_oc,
+                                   rfperf_K562_10kb_ROS_op,
+                                   rfperf_K562_10kb_ROS_dist,
+                                   rfperf_K562_25kb_ROS_oc,
+                                   rfperf_K562_25kb_ROS_op,
+                                   rfperf_K562_25kb_ROS_dist,
+                                   rfperf_K562_50kb_ROS_oc,
+                                   rfperf_K562_50kb_ROS_op,
+                                   rfperf_K562_50kb_ROS_dist,
+                                   rfperf_K562_100kb_ROS_oc,
+                                   rfperf_K562_100kb_ROS_op,
+                                   rfperf_K562_100kb_ROS_dist,
+                                   
+                                   rfperf_K562_10kb_RUS_oc,
+                                   rfperf_K562_10kb_RUS_op,
+                                   rfperf_K562_10kb_RUS_dist,
+                                   rfperf_K562_25kb_RUS_oc,
+                                   rfperf_K562_25kb_RUS_op,
+                                   rfperf_K562_25kb_RUS_dist,
+                                   rfperf_K562_50kb_RUS_oc,
+                                   rfperf_K562_50kb_RUS_op,
+                                   rfperf_K562_50kb_RUS_dist,
+                                   rfperf_K562_100kb_RUS_oc,
+                                   rfperf_K562_100kb_RUS_op,
+                                   rfperf_K562_100kb_RUS_dist,
+                                   
+                                   rfperf_K562_10kb_SMOTE_oc,
+                                   rfperf_K562_10kb_SMOTE_op,
+                                   rfperf_K562_10kb_SMOTE_dist,
+                                   rfperf_K562_25kb_SMOTE_oc,
+                                   rfperf_K562_25kb_SMOTE_op,
+                                   rfperf_K562_25kb_SMOTE_dist,
+                                   rfperf_K562_50kb_SMOTE_oc,
+                                   rfperf_K562_50kb_SMOTE_op,
+                                   rfperf_K562_50kb_SMOTE_dist,
+                                   rfperf_K562_100kb_SMOTE_oc,
+                                   rfperf_K562_100kb_SMOTE_op,
+                                   rfperf_K562_100kb_SMOTE_dist)
+
+all_rfperfs_df$CellLine <- c(rep("GM12878",19*48),rep("K562",19*48))
+all_rfperfs_df$Resolution <- rep(c(rep("10 kb", 19*3),rep("25 kb", 19*3),rep("50 kb", 19*3),rep("100 kb", 19*3)),8)
+all_rfperfs_df$Resampling <- rep(c(rep("None",19*12),rep("ROS",19*12),rep("RUS",19*12),rep("SMOTE",19*12)), 2)
+all_rfperfs_df$PredictorType <- rep(c("OC", "OP", "Distance"),19*32)
+
+all_rfperfs_df <- all_rfperfs_df[,c(3,4,5,6,1,2)]
+all_rfperfs_df$Performance <- round(all_rfperfs_df$Performance, 3)
+
+write.csv(all_rfperfs_df, "C:/Users/stili/Downloads/table3_all_model_performances.csv")
+```
+
