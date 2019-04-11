@@ -1,8 +1,9 @@
 ## ToDo
 + make figure 5 more compact; include other metrics as supplementary
 + compute average rankings across resolutions and present by heatmap for best model
-    - put other models in supplementary (including k562)
-- look at distributions of TAD lengths
+    - talk about different versions in meeting
++ look at distributions of TAD lengths
+    - discuss table and figure (important note: K562; 10kb; chr 9 has no TADs)
 
 ## Ideas
 
