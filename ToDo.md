@@ -1,14 +1,17 @@
 ## ToDo
+- fix supplementary table 3 with all model performances (order predictor type column)
 + make figure 5 more compact; include other metrics as supplementary
 + compute average rankings across resolutions and present by heatmap for best model
     - talk about different versions in meeting
+    - put in a table
 + look at distributions of TAD lengths
     - discuss table and figure (important note: K562; 10kb; chr 9 has no TADs)
 
 ## Ideas
 
-- How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks only, 2) TFs only, 3) chromatin states only.
-    - start with tfbs
++ How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks only, 2) TFs only, 3) chromatin states only.
+    + start with tfbs
+    - discuss figure: most cases all annotations is better; but only marginally; enough to conclude to just stick with tfbs?
 
 - Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
