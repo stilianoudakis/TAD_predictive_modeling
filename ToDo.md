@@ -13,8 +13,8 @@
     + start with tfbs
     - discuss figure: most cases all annotations is better; but only marginally; enough to conclude to just stick with tfbs?
 
-- Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
-    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
++ Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
+    + look at profiles of annotations for tads that cant be predicted; wilcoxon tests
     - cross section with tad lengths
 
 - Train the best model in one cell type, apply to other cell types, compare performance.
