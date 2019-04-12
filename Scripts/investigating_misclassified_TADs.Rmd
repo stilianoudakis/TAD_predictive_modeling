@@ -1,0 +1,202 @@
+---
+title: "Determining what makes some TADs unpredictable"
+author: "Spiro Stilianoudakis"
+date: "April 11, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+
+```
+
+# Evaluating Missclassified TAD boundaries from best performing model
+
+## SMOTE; distance-type predictors
+
+### GM12878
+
+####10kb
+
+```{r}
+#reading in test data and reducing
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/test.rds")
+names(test) <- gsub(paste(c("`", 
+                            "Gm12878", 
+                            "-", 
+                            #"_", 
+                            #"dist", "count", "perc",
+                            "Haib", 
+                            "Sydh",
+                            "Uta",
+                            "Uw",
+                            "Broad",
+                            "Uchicago"), collapse = "|"), "", names(test))
+enetcoefs <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+test <- test[,c(1,which(names(test) %in% enetcoefs))]
+
+#reading in model and making predictions
+rfmodel_gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+predictions <- predict(rfmodel_gm12878_10kb, newdata=test)
+preddata <- cbind.data.frame(Prediction = predictions, True=test$y)
+
+#subset the false negatives (bins that were predicted as not overlapping with flanked TAD boundary but really were)
+FNdata <- test[which(preddata$Prediction=="No" & preddata$True=="Yes"),]
+FNdatamelt <- melt(FNdata[,-1])
+FNdatamelt$Prediction <- "False Negatives"
+
+#subset the true positives (bins that were predicted as overlapping with flanked TAD boundary and truely were)
+TPdata <- test[which(preddata$Prediction=="Yes" & preddata$True=="Yes"),]
+TPdatamelt <- melt(TPdata[,-1])
+TPdatamelt$Prediction <- "True Positives"
+
+predictiondata_gm12878_10kb <- rbind.data.frame(FNdatamelt,TPdatamelt)
+predictiondata_gm12878_10kb$Prediction <- factor(predictiondata_gm12878_10kb$Prediction, levels=c("False Negatives","True Positives"))
+
+ggplot(predictiondata_gm12878_10kb, aes(x=value, color=Prediction)) +
+  geom_density() +
+  scale_color_discrete(name="Prediction Class") +
+  ylab("Frequency") +
+  xlab("Log2 Distance") +
+  #ylab("") +
+  #xlab("") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+#looking at specific annotations
+##Ctcf
+ggplot(predictiondata_gm12878_10kb[grep("Ctcf_dist",predictiondata_gm12878_10kb$variable),], aes(x=value, color=Prediction)) +
+  geom_density() +
+  scale_color_discrete(name="Prediction Class") +
+  ylab("Frequency") +
+  xlab("Log2 Distance") +
+  #ylab("") +
+  #xlab("") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+##ZNF143
+ggplot(predictiondata_gm12878_10kb[grep("Znf143166181ap_dist",predictiondata_gm12878_10kb$variable),], aes(x=value, color=Prediction)) +
+  geom_density() +
+  scale_color_discrete(name="Prediction Class") +
+  ylab("Frequency") +
+  xlab("Log2 Distance") +
+  #ylab("") +
+  #xlab("") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+##SMC3a
+ggplot(predictiondata_gm12878_10kb[grep("Smc3ab9263_dist",predictiondata_gm12878_10kb$variable),], aes(x=value, color=Prediction)) +
+  geom_density() +
+  scale_color_discrete(name="Prediction Class") +
+  ylab("Frequency") +
+  xlab("Log2 Distance") +
+  #ylab("") +
+  #xlab("") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+##Rad21
+ggplot(predictiondata_gm12878_10kb[grep("Rad21_dist",predictiondata_gm12878_10kb$variable),], aes(x=value, color=Prediction)) +
+  geom_density() +
+  scale_color_discrete(name="Prediction Class") +
+  ylab("Frequency") +
+  xlab("Log2 Distance") +
+  #ylab("") +
+  #xlab("") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+
+```
+
+
