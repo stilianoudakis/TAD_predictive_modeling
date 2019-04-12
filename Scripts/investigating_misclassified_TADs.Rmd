@@ -88,9 +88,21 @@ TPdata <- test[which(preddata$Prediction=="Yes" & preddata$True=="Yes"),]
 TPdatamelt <- melt(TPdata[,-1])
 TPdatamelt$Prediction <- "True Positives"
 
+#Wilcoxon test on differences in distances between FN and TP
+FNdata <- FNdata[,-1]
+TPdata <- TPdata[,-1]
+wilcoxon.results <- numeric(length(colnames(FNdata)))
+for(i in 1:length(colnames(FNdata))){
+ wilcoxon.results[i] <- wilcox.test(FNdata[,i],TPdata[,i])$p.value
+}
+wilcox.table <- cbind.data.frame(Annotation=gsub("_dist","",colnames(FNdata)), Wilcoxon.PValue=wilcoxon.results)
+wilcox.table <- wilcox.table[order(wilcox.table$Wilcoxon.PValue, decreasing = FALSE),]
+wilcox.table$Wilcoxon.PValue <- round(wilcox.table$Wilcoxon.PValue,7)
+
 predictiondata_gm12878_10kb <- rbind.data.frame(FNdatamelt,TPdatamelt)
 predictiondata_gm12878_10kb$Prediction <- factor(predictiondata_gm12878_10kb$Prediction, levels=c("False Negatives","True Positives"))
 
+#Ploting densities
 ggplot(predictiondata_gm12878_10kb, aes(x=value, color=Prediction)) +
   geom_density() +
   scale_color_discrete(name="Prediction Class") +
