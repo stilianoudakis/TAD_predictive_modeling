@@ -1,0 +1,280 @@
+---
+title: "Investigating TFBS Specific Model Performances"
+author: "Spiro Stilianoudakis"
+date: "April 11, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+
+```
+
+# TFBS Specific Model Performances
+
+## GM12878
+
+### 10 kb
+
+```{r}
+#OC
+##None
+rfperf_gm12878_10kb_none_oc_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/tfbs/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_10kb_none_op_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/tfbs/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_10kb_none_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/tfbs/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##ROS
+rfperf_gm12878_10kb_ros_oc_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/tfbs/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_10kb_ros_op_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/tfbs/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_gm12878_10kb_ros_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/tfbs/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##RUS
+rfperf_gm12878_10kb_rus_oc_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/tfbs/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_10kb_rus_op_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/tfbs/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_gm12878_10kb_rus_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/tfbs/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##SMOTE
+rfperf_gm12878_10kb_smote_oc_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/tfbs/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_10kb_smote_op_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/tfbs/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_10kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+
+
+all_rfperfs_gm12878_tfbs <- data.frame(Resampling=rep(c(rep("None",3),
+                                                    rep("ROS",3),
+                                                    rep("RUS",3),
+                                                    rep("SMOTE",3)),2),
+                                       Predictor=rep(c("OC","OP","Distance"),8),
+                                       Metric=c(rep("F1-Score",12), 
+                                                rep("MCC",12)),
+                                       Annotations=rep("TFBS Only",24)
+                                       )
+
+all_rfperfs_gm12878_tfbs$Predictor <- factor(all_rfperfs_gm12878_tfbs$Predictor, levels=c("OC", "OP", "Distance"))
+all_rfperfs_gm12878_tfbs$Metric <- factor(all_rfperfs_gm12878_tfbs$Metric, levels=c("F1-Score", "MCC"))
+all_rfperfs_gm12878_tfbs$Resampling <- factor(all_rfperfs_gm12878_tfbs$Resampling, levels=c("None", "ROS", "RUS", "SMOTE"))
+
+all_rfperfs_gm12878_tfbs$Performance <- c(rfperf_gm12878_10kb_none_oc_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_none_op_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_none_dist_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_ros_oc_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_ros_op_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_ros_dist_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_rus_oc_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_rus_op_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_rus_dist_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_smote_oc_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_smote_op_tfbs[16,2], #f1
+                                          rfperf_gm12878_10kb_smote_dist_tfbs[16,2], #f1
+                                     
+                                     rfperf_gm12878_10kb_none_oc_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_none_op_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_none_dist_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_ros_oc_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_ros_op_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_ros_dist_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_rus_oc_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_rus_op_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_rus_dist_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_smote_oc_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_smote_op_tfbs[15,2], #mcc
+                                          rfperf_gm12878_10kb_smote_dist_tfbs[15,2] #mcc
+                                     
+                                     )
+
+```
+
+# All Annotations
+
+## GM12878
+
+### 10 kb
+
+```{r}
+#OC
+##None
+rfperf_gm12878_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/RF/rfperf.rds")
+
+#OP
+##None
+rfperf_gm12878_10kb_none_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##None
+rfperf_gm12878_10kb_none_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##ROS
+rfperf_gm12878_10kb_ros_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##ROS
+rfperf_gm12878_10kb_ros_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##ROS
+rfperf_gm12878_10kb_ros_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##RUS
+rfperf_gm12878_10kb_rus_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/RF/rfperf.rds")
+
+#OP
+##RUS
+rfperf_gm12878_10kb_rus_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##RUS
+rfperf_gm12878_10kb_rus_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/RF/rfperf.rds")
+
+#OC
+##SMOTE
+rfperf_gm12878_10kb_smote_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/RF/rfperf.rds")
+
+#OP
+##SMOTE
+rfperf_gm12878_10kb_smote_op <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/RF/rfperf.rds")
+
+#Distance
+##SMOTE
+rfperf_gm12878_10kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+all_rfperfs_gm12878 <- data.frame(Resampling=rep(c(rep("None",3),
+                                                    rep("ROS",3),
+                                                    rep("RUS",3),
+                                                    rep("SMOTE",3)),2),
+                                       Predictor=rep(c("OC","OP","Distance"),8),
+                                       Metric=c(rep("F1-Score",12), 
+                                                rep("MCC",12)),
+                                       Annotations=rep("ALL Types",24)
+                                       )
+
+all_rfperfs_gm12878$Predictor <- factor(all_rfperfs_gm12878$Predictor, levels=c("OC", "OP", "Distance"))
+all_rfperfs_gm12878$Metric <- factor(all_rfperfs_gm12878$Metric, levels=c("F1-Score", "MCC"))
+all_rfperfs_gm12878$Resampling <- factor(all_rfperfs_gm12878$Resampling, levels=c("None", "ROS", "RUS", "SMOTE"))
+
+all_rfperfs_gm12878$Performance <- c(rfperf_gm12878_10kb_none_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_none_op[16,2], #f1
+                                          rfperf_gm12878_10kb_none_dist[16,2], #f1
+                                          rfperf_gm12878_10kb_ros_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_ros_op[16,2], #f1
+                                          rfperf_gm12878_10kb_ros_dist[16,2], #f1
+                                          rfperf_gm12878_10kb_rus_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_rus_op[16,2], #f1
+                                          rfperf_gm12878_10kb_rus_dist[16,2], #f1
+                                          rfperf_gm12878_10kb_smote_oc[16,2], #f1
+                                          rfperf_gm12878_10kb_smote_op[16,2], #f1
+                                          rfperf_gm12878_10kb_smote_dist[16,2], #f1
+                                     
+                                     rfperf_gm12878_10kb_none_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_none_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_none_dist[15,2], #mcc
+                                          rfperf_gm12878_10kb_ros_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_ros_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_ros_dist[15,2], #mcc
+                                          rfperf_gm12878_10kb_rus_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_rus_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_rus_dist[15,2], #mcc
+                                          rfperf_gm12878_10kb_smote_oc[15,2], #mcc
+                                          rfperf_gm12878_10kb_smote_op[15,2], #mcc
+                                          rfperf_gm12878_10kb_smote_dist[15,2] #mcc
+                                     
+                                     )
+
+```
+
+
+# Plots
+
+## Comparing 10 kb
+
+```{r}
+all_rfperfs_gm12878_allvtfbs <- rbind.data.frame(all_rfperfs_gm12878,all_rfperfs_gm12878_tfbs)
+all_rfperfs_gm12878_allvtfbs$Annotations <- factor(all_rfperfs_gm12878_allvtfbs$Annotations, levels=c("ALL Types", "TFBS Only"))
+
+ggplot(all_rfperfs_gm12878_allvtfbs,
+       aes(x=Resampling, y=Performance, fill=Annotations)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid( ~ Predictor + Metric) +
+  #xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Feature Space")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+```
+
