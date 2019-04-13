@@ -6,6 +6,7 @@
     - put in a table
 + look at distributions of TAD lengths
     - discuss table and figure (important note: K562; 10kb; chr 9 has no TADs)
+- What are the parameters of elastic net? Visual justification of the selected parameters?
 
 ## Ideas
 
