@@ -19,8 +19,9 @@
 
 - Train the best model in one cell type, apply to other cell types, compare performance.
 
-- Distance is the most important predictor. Thus, distance distributions
+- Distance is the most important predictor. Thus, distance distributions for the most predictive features should be significantly different (KS-test?) from random
     - test if different compared to random bins; stratify by annotation type
+    - Is distance universally good for all genomic annotations? Test each annotation using OC, OP, and distance as an individual model, check what type of precictor has the highest variable importance. Start with CTCF and down the list.
 
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
 
