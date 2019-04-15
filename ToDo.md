@@ -9,6 +9,9 @@
 
 ## Ideas
 
+- Use stacking/ensemble model building techniques and compare performances with RF, GBM, etc
+   - "Comparison of Bagging, Boosting and Stacking Ensembles Applied to Real Estate Appraisal" shows that stacking outperforms other aggregation techniques like additive regression and bagging
+
 + How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks only, 2) TFs only, 3) chromatin states only.
     + start with tfbs
     - discuss figure: most cases all annotations is better; but only marginally; enough to conclude to just stick with tfbs?
@@ -17,7 +20,9 @@
     + look at profiles of annotations for tads that cant be predicted; wilcoxon tests
     - cross section with tad lengths
 
-- Train the best model in one cell type, apply to other cell types, compare performance.
++ Train the best model in one cell type, apply to other cell types, compare performance.
+   - problem here in that reduced annotations don't necessarily match up between one cell line and the other
+   - would have to rerun models on clustered TFBS
 
 - Distance is the most important predictor. Thus, distance distributions
     - test if different compared to random bins; stratify by annotation type
