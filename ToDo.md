@@ -8,22 +8,20 @@
 
 - Distance is the most important predictor. Thus, distance distributions for the most predictive features should be significantly different (KS-test?) from random
     - test if different compared to random bins; stratify by annotation type
-    - Is distance universally good for all genomic annotations? Test each annotation using OC, OP, and distance as an individual model, check 
 
 + How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks (+ DNAse I hypersensitive sites) only, 2) TFs only, 3) chromatin states only.
     + start with tfbs
     - discuss figure: most cases all annotations is better; but only marginally; enough to conclude to just stick with tfbs?
     
-- What type of precictor has the highest variable importance. Start with CTCF and down the list.
-    - Perform model one annotation at a time? or sort by variable importance?
++ What type of precictor has the highest variable importance. Start with CTCF and down the list.
+    + Is distance universally good for all genomic annotations? Test each annotation using OC, OP, and distance as an individual model, check
 
 + Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     + look at profiles of annotations for tads that cant be predicted; wilcoxon tests
     - cross section with tad lengths
 
 - Train the best model in one cell type, apply to other cell types, compare performance.
-   - problem here in that reduced annotations don't necessarily match up between one cell line and the other
-   - would have to rerun models on clustered TFBS
+    - rerun models on clustered TFBS
   
    
 
