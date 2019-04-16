@@ -153,6 +153,751 @@ for(i in 0:106){
 	rfimpvarsmat_gm12878_10kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
 }
 
+write.csv(t(rfimpvarsmat_gm12878_10kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_gm12878_10kb.csv")
 
 ```
 
+
+##25kb
+
+###One annotation at a time RF
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds")
+train <- train[,-grep("_binary", names(train))]
+
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+#Randomly shuffle the data
+set.seed(123)
+train_smote <- train_smote[sample(nrow(train_smote)),]
+
+#Perform RF with 10 fold cross validation
+tunegrid <- expand.grid(mtry=ceiling(sqrt(3)))
+#modellist <- list()
+#for (ntree in c(50,200,500,1000)) {
+#  print(ntree)
+#  set.seed(333)
+#  fit <- train(y~., data=train_smote, 
+#               method="rf", 
+#               metric="Accuracy",
+#               tuneGrid=tunegrid,  
+#               ntree=ntree)
+#  key <- toString(ntree)
+#  modellist[[key]] <- fit
+#}
+# compare results
+#results <- resamples(modellist)
+#summary(results)
+#dotplot(results)
+#results <- data.frame(summary(results)[3]$statistics$Accuracy)
+#results <- results[order(results$Mean, decreasing = TRUE),]
+
+##defining function to extract AUPR curve
+auprcSummary <- function(data, lev = NULL, model = NULL){
+  lvls <- levels(data$obs) #take the probability of good class
+  prob_good <- data[,lvls[2]] 
+  the_curve <- pr.curve(scores.class0 = prob_good,
+                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+                        curve = FALSE)
+  out <- the_curve$auc.integral
+  names(out) <- "AUPRC"
+  out
+}
+
+####set tuning parameters
+####set seeds for each cross fols
+set.seed(123)
+#length is = (n_repeats*nresampling)+1
+seeds <- vector(mode = "list", length = 11)
+#(1 is the number of tuning parameter lambda
+for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 1)
+#for the last model
+seeds[[11]]<-sample.int(1000, 1)
+
+fitControl <- trainControl(seeds = seeds,
+                           method = "cv",
+                           number = 10,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           #summaryFunction = auprcSummary,
+						   summaryFunction = twoClassSummary)
+
+rfimpvarsmat_gm12878_25kb <- matrix(nrow=3, ncol=107,
+				dimnames=list("Predictor Type"=c("OC",
+												 "Distance",
+												 "OP"),
+							  "Annotation"=unique(gsub(paste0(c("Gm12878", 
+																"_count", 
+																"_perc", 
+																"_dist",
+																"-",
+																"Haib", 
+																"Sydh",
+																"Uta",
+																"Uw",
+																"Broad",
+																"Uchicago"), collapse = "|"), "", names(train_smote)[-1]))))
+
+for(i in 0:106){
+  print(names(train_smote)[(i*3+2):(i*3+4)])
+	rfModel <- train(y~., data=train_smote[,c(1, (i*3+2):(i*3+4))], 
+                 method="rf", 
+                 metric="ROC", 
+                 tuneGrid=tunegrid, 
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+	
+	#rfimpvars <- data.frame(Feature=rownames(varImp(rfModel)$importance), Importance=varImp(rfModel)$importance[,1])
+	#rfimpvars <- rfimpvars[order(rfimpvars$Importance, decreasing=TRUE),]
+	
+	rfimpvarsmat_gm12878_25kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
+}
+
+write.csv(t(rfimpvarsmat_gm12878_25kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_gm12878_25kb.csv")
+```
+
+
+##50kb
+
+###One annotation at a time RF
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds")
+train <- train[,-grep("_binary", names(train))]
+
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+#Randomly shuffle the data
+set.seed(123)
+train_smote <- train_smote[sample(nrow(train_smote)),]
+
+#Perform RF with 10 fold cross validation
+tunegrid <- expand.grid(mtry=ceiling(sqrt(3)))
+#modellist <- list()
+#for (ntree in c(50,200,500,1000)) {
+#  print(ntree)
+#  set.seed(333)
+#  fit <- train(y~., data=train_smote, 
+#               method="rf", 
+#               metric="Accuracy",
+#               tuneGrid=tunegrid,  
+#               ntree=ntree)
+#  key <- toString(ntree)
+#  modellist[[key]] <- fit
+#}
+# compare results
+#results <- resamples(modellist)
+#summary(results)
+#dotplot(results)
+#results <- data.frame(summary(results)[3]$statistics$Accuracy)
+#results <- results[order(results$Mean, decreasing = TRUE),]
+
+##defining function to extract AUPR curve
+auprcSummary <- function(data, lev = NULL, model = NULL){
+  lvls <- levels(data$obs) #take the probability of good class
+  prob_good <- data[,lvls[2]] 
+  the_curve <- pr.curve(scores.class0 = prob_good,
+                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+                        curve = FALSE)
+  out <- the_curve$auc.integral
+  names(out) <- "AUPRC"
+  out
+}
+
+####set tuning parameters
+####set seeds for each cross fols
+set.seed(123)
+#length is = (n_repeats*nresampling)+1
+seeds <- vector(mode = "list", length = 11)
+#(1 is the number of tuning parameter lambda
+for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 1)
+#for the last model
+seeds[[11]]<-sample.int(1000, 1)
+
+fitControl <- trainControl(seeds = seeds,
+                           method = "cv",
+                           number = 10,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           #summaryFunction = auprcSummary,
+						   summaryFunction = twoClassSummary)
+
+rfimpvarsmat_gm12878_50kb <- matrix(nrow=3, ncol=107,
+				dimnames=list("Predictor Type"=c("OC",
+												 "Distance",
+												 "OP"),
+							  "Annotation"=unique(gsub(paste0(c("Gm12878", 
+																"_count", 
+																"_perc", 
+																"_dist",
+																"-",
+																"Haib", 
+																"Sydh",
+																"Uta",
+																"Uw",
+																"Broad",
+																"Uchicago"), collapse = "|"), "", names(train_smote)[-1]))))
+
+for(i in 0:106){
+  print(names(train_smote)[(i*3+2):(i*3+4)])
+	rfModel <- train(y~., data=train_smote[,c(1, (i*3+2):(i*3+4))], 
+                 method="rf", 
+                 metric="ROC", 
+                 tuneGrid=tunegrid, 
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+	
+	#rfimpvars <- data.frame(Feature=rownames(varImp(rfModel)$importance), Importance=varImp(rfModel)$importance[,1])
+	#rfimpvars <- rfimpvars[order(rfimpvars$Importance, decreasing=TRUE),]
+	
+	rfimpvarsmat_gm12878_50kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
+}
+
+write.csv(t(rfimpvarsmat_gm12878_50kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_gm12878_50kb.csv")
+```
+
+
+##100kb
+
+###One annotation at a time RF
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds")
+train <- train[,-grep("_binary", names(train))]
+
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+#Randomly shuffle the data
+set.seed(123)
+train_smote <- train_smote[sample(nrow(train_smote)),]
+
+#Perform RF with 10 fold cross validation
+tunegrid <- expand.grid(mtry=ceiling(sqrt(3)))
+#modellist <- list()
+#for (ntree in c(50,200,500,1000)) {
+#  print(ntree)
+#  set.seed(333)
+#  fit <- train(y~., data=train_smote, 
+#               method="rf", 
+#               metric="Accuracy",
+#               tuneGrid=tunegrid,  
+#               ntree=ntree)
+#  key <- toString(ntree)
+#  modellist[[key]] <- fit
+#}
+# compare results
+#results <- resamples(modellist)
+#summary(results)
+#dotplot(results)
+#results <- data.frame(summary(results)[3]$statistics$Accuracy)
+#results <- results[order(results$Mean, decreasing = TRUE),]
+
+##defining function to extract AUPR curve
+auprcSummary <- function(data, lev = NULL, model = NULL){
+  lvls <- levels(data$obs) #take the probability of good class
+  prob_good <- data[,lvls[2]] 
+  the_curve <- pr.curve(scores.class0 = prob_good,
+                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+                        curve = FALSE)
+  out <- the_curve$auc.integral
+  names(out) <- "AUPRC"
+  out
+}
+
+####set tuning parameters
+####set seeds for each cross fols
+set.seed(123)
+#length is = (n_repeats*nresampling)+1
+seeds <- vector(mode = "list", length = 11)
+#(1 is the number of tuning parameter lambda
+for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 1)
+#for the last model
+seeds[[11]]<-sample.int(1000, 1)
+
+fitControl <- trainControl(seeds = seeds,
+                           method = "cv",
+                           number = 10,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           #summaryFunction = auprcSummary,
+						   summaryFunction = twoClassSummary)
+
+rfimpvarsmat_gm12878_100kb <- matrix(nrow=3, ncol=107,
+				dimnames=list("Predictor Type"=c("OC",
+												 "Distance",
+												 "OP"),
+							  "Annotation"=unique(gsub(paste0(c("Gm12878", 
+																"_count", 
+																"_perc", 
+																"_dist",
+																"-",
+																"Haib", 
+																"Sydh",
+																"Uta",
+																"Uw",
+																"Broad",
+																"Uchicago"), collapse = "|"), "", names(train_smote)[-1]))))
+
+for(i in 0:106){
+  print(names(train_smote)[(i*3+2):(i*3+4)])
+	rfModel <- train(y~., data=train_smote[,c(1, (i*3+2):(i*3+4))], 
+                 method="rf", 
+                 metric="ROC", 
+                 tuneGrid=tunegrid, 
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+	
+	#rfimpvars <- data.frame(Feature=rownames(varImp(rfModel)$importance), Importance=varImp(rfModel)$importance[,1])
+	#rfimpvars <- rfimpvars[order(rfimpvars$Importance, decreasing=TRUE),]
+	
+	rfimpvarsmat_gm12878_100kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
+}
+
+write.csv(t(rfimpvarsmat_gm12878_100kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_gm12878_100kb.csv")
+```
+
+
+# K562
+
+##10kb
+
+###One annotation at a time RF
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds")
+train <- train[,-grep("_binary", names(train))]
+
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+#Randomly shuffle the data
+set.seed(123)
+train_smote <- train_smote[sample(nrow(train_smote)),]
+
+#Perform RF with 10 fold cross validation
+tunegrid <- expand.grid(mtry=ceiling(sqrt(3)))
+#modellist <- list()
+#for (ntree in c(50,200,500,1000)) {
+#  print(ntree)
+#  set.seed(333)
+#  fit <- train(y~., data=train_smote, 
+#               method="rf", 
+#               metric="Accuracy",
+#               tuneGrid=tunegrid,  
+#               ntree=ntree)
+#  key <- toString(ntree)
+#  modellist[[key]] <- fit
+#}
+# compare results
+#results <- resamples(modellist)
+#summary(results)
+#dotplot(results)
+#results <- data.frame(summary(results)[3]$statistics$Accuracy)
+#results <- results[order(results$Mean, decreasing = TRUE),]
+
+##defining function to extract AUPR curve
+auprcSummary <- function(data, lev = NULL, model = NULL){
+  lvls <- levels(data$obs) #take the probability of good class
+  prob_good <- data[,lvls[2]] 
+  the_curve <- pr.curve(scores.class0 = prob_good,
+                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+                        curve = FALSE)
+  out <- the_curve$auc.integral
+  names(out) <- "AUPRC"
+  out
+}
+
+####set tuning parameters
+####set seeds for each cross fols
+set.seed(123)
+#length is = (n_repeats*nresampling)+1
+seeds <- vector(mode = "list", length = 11)
+#(1 is the number of tuning parameter lambda
+for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 1)
+#for the last model
+seeds[[11]]<-sample.int(1000, 1)
+
+fitControl <- trainControl(seeds = seeds,
+                           method = "cv",
+                           number = 10,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           #summaryFunction = auprcSummary,
+						   summaryFunction = twoClassSummary)
+
+rfimpvarsmat_K562_10kb <- matrix(nrow=3, ncol=141,
+				dimnames=list("Predictor Type"=c("OC",
+												 "Distance",
+												 "OP"),
+							  "Annotation"=unique(gsub(paste0(c("K562", 
+																"_count", 
+																"_perc", 
+																"_dist",
+																"-",
+																"Haib", 
+																"Sydh",
+																"Uta",
+																"Uw",
+																"Broad",
+																"Uchicago"), collapse = "|"), "", names(train_smote)[-1]))))
+
+for(i in 0:140){
+  print(names(train_smote)[(i*3+2):(i*3+4)])
+	rfModel <- train(y~., data=train_smote[,c(1, (i*3+2):(i*3+4))], 
+                 method="rf", 
+                 metric="ROC", 
+                 tuneGrid=tunegrid, 
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+	
+	#rfimpvars <- data.frame(Feature=rownames(varImp(rfModel)$importance), Importance=varImp(rfModel)$importance[,1])
+	#rfimpvars <- rfimpvars[order(rfimpvars$Importance, decreasing=TRUE),]
+	
+	rfimpvarsmat_K562_10kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
+}
+
+write.csv(t(rfimpvarsmat_K562_10kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_K562_10kb.csv")
+
+```
+
+
+##25kb
+
+###One annotation at a time RF
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds")
+train <- train[,-grep("_binary", names(train))]
+
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+#Randomly shuffle the data
+set.seed(123)
+train_smote <- train_smote[sample(nrow(train_smote)),]
+
+#Perform RF with 10 fold cross validation
+tunegrid <- expand.grid(mtry=ceiling(sqrt(3)))
+#modellist <- list()
+#for (ntree in c(50,200,500,1000)) {
+#  print(ntree)
+#  set.seed(333)
+#  fit <- train(y~., data=train_smote, 
+#               method="rf", 
+#               metric="Accuracy",
+#               tuneGrid=tunegrid,  
+#               ntree=ntree)
+#  key <- toString(ntree)
+#  modellist[[key]] <- fit
+#}
+# compare results
+#results <- resamples(modellist)
+#summary(results)
+#dotplot(results)
+#results <- data.frame(summary(results)[3]$statistics$Accuracy)
+#results <- results[order(results$Mean, decreasing = TRUE),]
+
+##defining function to extract AUPR curve
+auprcSummary <- function(data, lev = NULL, model = NULL){
+  lvls <- levels(data$obs) #take the probability of good class
+  prob_good <- data[,lvls[2]] 
+  the_curve <- pr.curve(scores.class0 = prob_good,
+                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+                        curve = FALSE)
+  out <- the_curve$auc.integral
+  names(out) <- "AUPRC"
+  out
+}
+
+####set tuning parameters
+####set seeds for each cross fols
+set.seed(123)
+#length is = (n_repeats*nresampling)+1
+seeds <- vector(mode = "list", length = 11)
+#(1 is the number of tuning parameter lambda
+for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 1)
+#for the last model
+seeds[[11]]<-sample.int(1000, 1)
+
+fitControl <- trainControl(seeds = seeds,
+                           method = "cv",
+                           number = 10,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           #summaryFunction = auprcSummary,
+						   summaryFunction = twoClassSummary)
+
+rfimpvarsmat_K562_25kb <- matrix(nrow=3, ncol=141,
+				dimnames=list("Predictor Type"=c("OC",
+												 "Distance",
+												 "OP"),
+							  "Annotation"=unique(gsub(paste0(c("K562", 
+																"_count", 
+																"_perc", 
+																"_dist",
+																"-",
+																"Haib", 
+																"Sydh",
+																"Uta",
+																"Uw",
+																"Broad",
+																"Uchicago"), collapse = "|"), "", names(train_smote)[-1]))))
+
+for(i in 0:140){
+  print(names(train_smote)[(i*3+2):(i*3+4)])
+	rfModel <- train(y~., data=train_smote[,c(1, (i*3+2):(i*3+4))], 
+                 method="rf", 
+                 metric="ROC", 
+                 tuneGrid=tunegrid, 
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+	
+	#rfimpvars <- data.frame(Feature=rownames(varImp(rfModel)$importance), Importance=varImp(rfModel)$importance[,1])
+	#rfimpvars <- rfimpvars[order(rfimpvars$Importance, decreasing=TRUE),]
+	
+	rfimpvarsmat_K562_25kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
+}
+
+write.csv(t(rfimpvarsmat_K562_25kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_K562_25kb.csv")
+```
+
+
+##50kb
+
+###One annotation at a time RF
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds")
+train <- train[,-grep("_binary", names(train))]
+
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+#Randomly shuffle the data
+set.seed(123)
+train_smote <- train_smote[sample(nrow(train_smote)),]
+
+#Perform RF with 10 fold cross validation
+tunegrid <- expand.grid(mtry=ceiling(sqrt(3)))
+#modellist <- list()
+#for (ntree in c(50,200,500,1000)) {
+#  print(ntree)
+#  set.seed(333)
+#  fit <- train(y~., data=train_smote, 
+#               method="rf", 
+#               metric="Accuracy",
+#               tuneGrid=tunegrid,  
+#               ntree=ntree)
+#  key <- toString(ntree)
+#  modellist[[key]] <- fit
+#}
+# compare results
+#results <- resamples(modellist)
+#summary(results)
+#dotplot(results)
+#results <- data.frame(summary(results)[3]$statistics$Accuracy)
+#results <- results[order(results$Mean, decreasing = TRUE),]
+
+##defining function to extract AUPR curve
+auprcSummary <- function(data, lev = NULL, model = NULL){
+  lvls <- levels(data$obs) #take the probability of good class
+  prob_good <- data[,lvls[2]] 
+  the_curve <- pr.curve(scores.class0 = prob_good,
+                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+                        curve = FALSE)
+  out <- the_curve$auc.integral
+  names(out) <- "AUPRC"
+  out
+}
+
+####set tuning parameters
+####set seeds for each cross fols
+set.seed(123)
+#length is = (n_repeats*nresampling)+1
+seeds <- vector(mode = "list", length = 11)
+#(1 is the number of tuning parameter lambda
+for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 1)
+#for the last model
+seeds[[11]]<-sample.int(1000, 1)
+
+fitControl <- trainControl(seeds = seeds,
+                           method = "cv",
+                           number = 10,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           #summaryFunction = auprcSummary,
+						   summaryFunction = twoClassSummary)
+
+rfimpvarsmat_K562_50kb <- matrix(nrow=3, ncol=141,
+				dimnames=list("Predictor Type"=c("OC",
+												 "Distance",
+												 "OP"),
+							  "Annotation"=unique(gsub(paste0(c("K562", 
+																"_count", 
+																"_perc", 
+																"_dist",
+																"-",
+																"Haib", 
+																"Sydh",
+																"Uta",
+																"Uw",
+																"Broad",
+																"Uchicago"), collapse = "|"), "", names(train_smote)[-1]))))
+
+for(i in 0:140){
+  print(names(train_smote)[(i*3+2):(i*3+4)])
+	rfModel <- train(y~., data=train_smote[,c(1, (i*3+2):(i*3+4))], 
+                 method="rf", 
+                 metric="ROC", 
+                 tuneGrid=tunegrid, 
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+	
+	#rfimpvars <- data.frame(Feature=rownames(varImp(rfModel)$importance), Importance=varImp(rfModel)$importance[,1])
+	#rfimpvars <- rfimpvars[order(rfimpvars$Importance, decreasing=TRUE),]
+	
+	rfimpvarsmat_K562_50kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
+}
+
+write.csv(t(rfimpvarsmat_K562_50kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_K562_50kb.csv")
+```
+
+
+##100kb
+
+###One annotation at a time RF
+
+```{r}
+train <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds")
+train <- train[,-grep("_binary", names(train))]
+
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+
+#Randomly shuffle the data
+set.seed(123)
+train_smote <- train_smote[sample(nrow(train_smote)),]
+
+#Perform RF with 10 fold cross validation
+tunegrid <- expand.grid(mtry=ceiling(sqrt(3)))
+#modellist <- list()
+#for (ntree in c(50,200,500,1000)) {
+#  print(ntree)
+#  set.seed(333)
+#  fit <- train(y~., data=train_smote, 
+#               method="rf", 
+#               metric="Accuracy",
+#               tuneGrid=tunegrid,  
+#               ntree=ntree)
+#  key <- toString(ntree)
+#  modellist[[key]] <- fit
+#}
+# compare results
+#results <- resamples(modellist)
+#summary(results)
+#dotplot(results)
+#results <- data.frame(summary(results)[3]$statistics$Accuracy)
+#results <- results[order(results$Mean, decreasing = TRUE),]
+
+##defining function to extract AUPR curve
+auprcSummary <- function(data, lev = NULL, model = NULL){
+  lvls <- levels(data$obs) #take the probability of good class
+  prob_good <- data[,lvls[2]] 
+  the_curve <- pr.curve(scores.class0 = prob_good,
+                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+                        curve = FALSE)
+  out <- the_curve$auc.integral
+  names(out) <- "AUPRC"
+  out
+}
+
+####set tuning parameters
+####set seeds for each cross fols
+set.seed(123)
+#length is = (n_repeats*nresampling)+1
+seeds <- vector(mode = "list", length = 11)
+#(1 is the number of tuning parameter lambda
+for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 1)
+#for the last model
+seeds[[11]]<-sample.int(1000, 1)
+
+fitControl <- trainControl(seeds = seeds,
+                           method = "cv",
+                           number = 10,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           #summaryFunction = auprcSummary,
+						   summaryFunction = twoClassSummary)
+
+rfimpvarsmat_K562_100kb <- matrix(nrow=3, ncol=141,
+				dimnames=list("Predictor Type"=c("OC",
+												 "Distance",
+												 "OP"),
+							  "Annotation"=unique(gsub(paste0(c("K562", 
+																"_count", 
+																"_perc", 
+																"_dist",
+																"-",
+																"Haib", 
+																"Sydh",
+																"Uta",
+																"Uw",
+																"Broad",
+																"Uchicago"), collapse = "|"), "", names(train_smote)[-1]))))
+
+for(i in 0:140){
+  print(names(train_smote)[(i*3+2):(i*3+4)])
+	rfModel <- train(y~., data=train_smote[,c(1, (i*3+2):(i*3+4))], 
+                 method="rf", 
+                 metric="ROC", 
+                 tuneGrid=tunegrid, 
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+	
+	#rfimpvars <- data.frame(Feature=rownames(varImp(rfModel)$importance), Importance=varImp(rfModel)$importance[,1])
+	#rfimpvars <- rfimpvars[order(rfimpvars$Importance, decreasing=TRUE),]
+	
+	rfimpvarsmat_K562_100kb[,i+1] <- varImp(rfModel)$importance[,1][order(rownames(varImp(rfModel)$importance))]
+}
+
+write.csv(t(rfimpvarsmat_K562_100kb)[,c(1,3,2)], "C:/Users/stili/Documents/TAD_miscellaneous/tables/rfimpvarsmat_K562_100kb.csv")
+```
