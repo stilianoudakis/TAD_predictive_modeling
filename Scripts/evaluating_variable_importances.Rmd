@@ -161,7 +161,9 @@ rankdata <- cbind(vim.K562.smote.ranks$Rank.10kb,
 				  vim.K562.smote.ranks$Rank.50kb,
 				  vim.K562.smote.ranks$Rank.100kb)
 rownames(rankdata) <- vim.K562.smote.ranks$Feature
-colnames(rankdata) <- c("10 kb", "25 kb", "50 kb", "100 kb")	 			  
+colnames(rankdata) <- c("10 kb", "25 kb", "50 kb", "100 kb")
+rankdata <- rankdata[order(rankdata[,1], decreasing = FALSE),]
+rankdata <- rankdata[1:20,]
 				  
 #my_palette <- rev(colorRampPalette(brewer.pal(11, "RdBu"))(100)) 
 my_palette <- colorRampPalette(c("red", "white"))(nrow(rankdata))

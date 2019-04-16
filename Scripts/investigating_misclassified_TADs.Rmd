@@ -70,7 +70,7 @@ names(test) <- gsub(paste(c("`",
                             "Uw",
                             "Broad",
                             "Uchicago"), collapse = "|"), "", names(test))
-enetcoefs <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
+enetcoefs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds")
 test <- test[,c(1,which(names(test) %in% enetcoefs))]
 
 #reading in model and making predictions
