@@ -1,39 +1,37 @@
-## ToDo
-+ look at distributions of TAD lengths
-    - discuss table and figure (important note: K562; 10kb; chr 9 has no TADs)
+# ToDo
+
 - fix supplementary table 3 with all model performances (order predictor type column)
 - What are the parameters of elastic net? Visual justification of the selected parameters?
 
 ## Main Ideas
 
-+ Distance is the most important predictor. Thus, distance distributions for the most predictive features should be significantly different (KS-test?) from random
-    + test if different compared to random bins; stratify by annotation type
-
-+ How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks (+ DNAse I hypersensitive sites) only, 2) TFs only, 3) chromatin states only.
-    + start with tfbs
-    - discuss figure: most cases all annotations is better; but only marginally; enough to conclude to just stick with tfbs?
-    
 + What type of precictor has the highest variable importance. Start with CTCF and down the list.
     + Is distance universally good for all genomic annotations? Test each annotation using OC, OP, and distance as an individual model, check
+    
++ How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks (+ DNAse I hypersensitive sites) only, 2) TFs only, 3) chromatin states only.
+    + start with tfbs
 
-+ Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
-    + look at profiles of annotations for tads that cant be predicted; wilcoxon tests
-    - cross section with tad lengths
-
-- Train the best model in one cell type, apply to other cell types, compare performance.
-    - rerun models on clustered TFBS
++ Distance is the most important predictor. Thus, distance distributions for the most predictive features should be significantly different (KS-test?) from random
+    + test if different compared to random bins; stratify by annotation type
+    
++ Train the best model in one cell type, apply to other cell types
+    + rerun models on clustered TFBS
+    - compare performance
   
-   
-
-## Secondary Ideas
-
-- Consider filtering out TAD boundaries that form TADs greater than 2mb bp in length prior to modelling and compare
-
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
     - wait with chromstates and histone modifications
     - use common flanked TADs between two cell lines; how many are common?
-    
+  
+
+## Secondary Ideas
+
+- Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
+    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
+    - cross section with tad lengths
+
+- Consider filtering out TAD boundaries that form TADs greater than 2mb bp in length prior to modelling and compare
+
 - Use stacking/ensemble model building techniques and compare performances with RF, GBM, etc
     - "Comparison of Bagging, Boosting and Stacking Ensembles Applied to Real Estate Appraisal" shows that stacking outperforms other aggregation techniques like additive regression and bagging
 
