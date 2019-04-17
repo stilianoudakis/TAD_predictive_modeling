@@ -1,0 +1,264 @@
+---
+title: "Comparing distance distributions for top predictive features between bins with and without TADs"
+author: "Spiro Stilianoudakis"
+date: "April 15, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(coin)
+```
+
+
+# GM12878
+
+## Function for ploting distance densities between bins with and without TAD boundaries
+
+```{r}
+distplotsfunc <- function(cl, resolution, annotation){
+  train <- readRDS(paste0("Z:/TAD_data_analysis/", cl, "/", resolution, "/training_testing/train.rds"))
+  data <- train[, c(1, which(names(train)==annotation))]
+  
+  set.seed(123)
+  majorityids <- sample(x=which(data$y=="No"), size=length(which(data$y=="Yes")))
+  annotdata <- rbind.data.frame(data[which(data$y=="Yes"),],
+                                data[majorityids,])
+  
+  #ks.test(annotdata[which(annotdata$y=="No"),2], annotdata[which(annotdata$y=="Yes"),2], alternative = "two.sided")
+  
+  perm.pval <- pvalue(oneway_test(annotdata[,2] ~ annotdata[,1],
+                     data=annotdata,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+  if(perm.pval==0){perm.pval="< 0.0001"}
+  
+  plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          annotation))
+  
+  
+  p <- ggplot(annotdata, aes(x=annotdata[,2], color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("Frequency") +
+    xlab("Log2 Distance") +
+    ggtitle(paste(plottitle)) +
+    annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20,
+                               hjust=.5))
+  
+  ggsave(p, 
+         filename = paste0("C:/Users/stili/Documents/TAD_miscellaneous/figures/comparing_distance_by_bin_class/", 
+                           cl, 
+                           "_", 
+                           resolution, 
+                           "_", 
+                           plottitle, 
+                           ".png"),
+         width=10,
+         height=10,
+         units="in")
+}
+
+
+```
+
+
+### 10kb
+
+#### Top Annotations
+
+```{r}
+#### CTCF
+
+distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Ctcf-Broad_dist")
+
+#### Smc3ab9263
+
+distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
+
+#### Znf143166181ap
+
+distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
+
+#### Rad21
+
+distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Rad21-Haib_dist")
+
+#### 08Insulator
+
+distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-08Insulator_dist")
+
+#### Yy1sc281
+
+distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Yy1sc281-Haib_dist")
+
+#### DNase
+
+distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-DNase_dist")
+```
+
+### 25kb
+
+#### Top Annotations
+
+```{r}
+#### CTCF
+
+distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Ctcf-Broad_dist")
+
+#### Smc3ab9263
+
+distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
+
+#### Znf143166181ap
+
+distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
+
+#### Rad21
+
+distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Rad21-Haib_dist")
+
+#### 08Insulator
+
+distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-08Insulator_dist")
+
+#### Yy1sc281
+
+distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Yy1sc281-Haib_dist")
+
+#### DNase
+
+distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-DNase_dist")
+```
+
+
+### 50kb
+
+#### Top Annotations
+
+```{r}
+#### CTCF
+
+distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Ctcf-Broad_dist")
+
+#### Smc3ab9263
+
+distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
+
+#### Znf143166181ap
+
+distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
+
+#### Rad21
+
+distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Rad21-Haib_dist")
+
+#### 08Insulator
+
+distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-08Insulator_dist")
+
+#### Yy1sc281
+
+distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Yy1sc281-Haib_dist")
+
+#### DNase
+
+distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-DNase_dist")
+```
+
+
+### 100kb
+
+#### Top Annotations
+
+```{r}
+#### CTCF
+
+distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Ctcf-Broad_dist")
+
+#### Smc3ab9263
+
+distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
+
+#### Znf143166181ap
+
+distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
+
+#### Rad21
+
+distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Rad21-Haib_dist")
+
+#### 08Insulator
+
+distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-08Insulator_dist")
+
+#### Yy1sc281
+
+distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Yy1sc281-Haib_dist")
+
+#### DNase
+
+distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-DNase_dist")
+```
