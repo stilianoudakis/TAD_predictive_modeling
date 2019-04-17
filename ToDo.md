@@ -6,8 +6,8 @@
 
 ## Main Ideas
 
-- Distance is the most important predictor. Thus, distance distributions for the most predictive features should be significantly different (KS-test?) from random
-    - test if different compared to random bins; stratify by annotation type
++ Distance is the most important predictor. Thus, distance distributions for the most predictive features should be significantly different (KS-test?) from random
+    + test if different compared to random bins; stratify by annotation type
 
 + How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks (+ DNAse I hypersensitive sites) only, 2) TFs only, 3) chromatin states only.
     + start with tfbs
@@ -26,6 +26,8 @@
    
 
 ## Secondary Ideas
+
+- Consider filtering out TAD boundaries that form TADs greater than 2mb bp in length prior to modelling and compare
 
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
