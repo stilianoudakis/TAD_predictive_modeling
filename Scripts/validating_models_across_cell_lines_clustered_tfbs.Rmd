@@ -1,0 +1,810 @@
+---
+title: "Training and validating models across cell lines using clustered TFBS"
+author: "Spiro Stilianoudakis"
+date: "April 17, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(PRROC)
+```
+
+
+# Reading in GM12878; smote; distance types
+
+## Validating on GM12878
+
+```{r}
+#10kb
+rfperf_gm12878_10kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+#25kb
+rfperf_gm12878_25kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+#50kb
+rfperf_gm12878_50kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+#100kb
+rfperf_gm12878_100kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+
+```
+
+## Validating on K562
+
+```{r}
+#10kb
+rfmodel_gm12878_10kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for K562
+test <- readRDS("Z:/TAD_data_analysis/K562/10kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for K562
+vars <- rfmodel_gm12878_10kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_K562_10kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_gm12878_10kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_gm12878_10kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_K562_10kb_clustered_smote_dist[1,2] <- TN
+rfperf_K562_10kb_clustered_smote_dist[2,2] <- FN
+rfperf_K562_10kb_clustered_smote_dist[3,2] <- FP
+rfperf_K562_10kb_clustered_smote_dist[4,2] <- TP
+rfperf_K562_10kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_K562_10kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_K562_10kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_K562_10kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_K562_10kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_K562_10kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_K562_10kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_K562_10kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_K562_10kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_K562_10kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_K562_10kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_K562_10kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_K562_10kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_K562_10kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_K562_10kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+
+#25kb
+rfmodel_gm12878_25kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for K562
+test <- readRDS("Z:/TAD_data_analysis/K562/25kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for K562
+vars <- rfmodel_gm12878_25kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_K562_25kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_gm12878_25kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_gm12878_25kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_K562_25kb_clustered_smote_dist[1,2] <- TN
+rfperf_K562_25kb_clustered_smote_dist[2,2] <- FN
+rfperf_K562_25kb_clustered_smote_dist[3,2] <- FP
+rfperf_K562_25kb_clustered_smote_dist[4,2] <- TP
+rfperf_K562_25kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_K562_25kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_K562_25kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_K562_25kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_K562_25kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_K562_25kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_K562_25kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_K562_25kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_K562_25kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_K562_25kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_K562_25kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_K562_25kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_K562_25kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_K562_25kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_K562_25kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+
+#50kb
+rfmodel_gm12878_50kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for K562
+test <- readRDS("Z:/TAD_data_analysis/K562/50kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for K562
+vars <- rfmodel_gm12878_50kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_K562_50kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_gm12878_50kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_gm12878_50kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_K562_50kb_clustered_smote_dist[1,2] <- TN
+rfperf_K562_50kb_clustered_smote_dist[2,2] <- FN
+rfperf_K562_50kb_clustered_smote_dist[3,2] <- FP
+rfperf_K562_50kb_clustered_smote_dist[4,2] <- TP
+rfperf_K562_50kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_K562_50kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_K562_50kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_K562_50kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_K562_50kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_K562_50kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_K562_50kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_K562_50kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_K562_50kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_K562_50kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_K562_50kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_K562_50kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_K562_50kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_K562_50kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_K562_50kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+
+#100kb
+rfmodel_gm12878_100kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for K562
+test <- readRDS("Z:/TAD_data_analysis/K562/100kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for K562
+vars <- rfmodel_gm12878_100kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_K562_100kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_gm12878_100kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_gm12878_100kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_K562_100kb_clustered_smote_dist[1,2] <- TN
+rfperf_K562_100kb_clustered_smote_dist[2,2] <- FN
+rfperf_K562_100kb_clustered_smote_dist[3,2] <- FP
+rfperf_K562_100kb_clustered_smote_dist[4,2] <- TP
+rfperf_K562_100kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_K562_100kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_K562_100kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_K562_100kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_K562_100kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_K562_100kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_K562_100kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_K562_100kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_K562_100kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_K562_100kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_K562_100kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_K562_100kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_K562_100kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_K562_100kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_K562_100kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+```
+
+##Plots
+
+```{r}
+rfperf_gm12878_validatedon_k562 <- data.frame(Model.Validation=rep(c("GM12878 validated on GM12878", "GM12878 validated on K562"), 8),
+                                              Resolution=rep(c(rep("10 kb", 2),
+                                                           rep("25 kb", 2),
+                                                           rep("50 kb", 2),
+                                                           rep("100 kb", 2)), 2),
+                                              Metric=c(rep("F1-Score", 8),
+                                                       rep("MCC", 8)))
+
+rfperf_gm12878_validatedon_k562$Performance <- c(rfperf_gm12878_10kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_K562_10kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_gm12878_25kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_K562_25kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_gm12878_50kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_K562_50kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_gm12878_100kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_K562_100kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_gm12878_10kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_K562_10kb_clustered_smote_dist[15,2], #mcc
+                                                 
+                                                 rfperf_gm12878_25kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_K562_25kb_clustered_smote_dist[15,2], #mcc
+                                                 
+                                                 rfperf_gm12878_50kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_K562_50kb_clustered_smote_dist[15,2], #mcc
+                                                 
+                                                 rfperf_gm12878_100kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_K562_100kb_clustered_smote_dist[15,2] #mcc
+                                                 )
+
+rfperf_gm12878_validatedon_k562$Resolution <- factor(rfperf_gm12878_validatedon_k562$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+rfperf_gm12878_validatedon_k562$Metric <- factor(rfperf_gm12878_validatedon_k562$Metric, levels=c("F1-Score", "MCC"))
+rfperf_gm12878_validatedon_k562$Model.Validation <- factor(rfperf_gm12878_validatedon_k562$Model.Validation, levels=c("GM12878 validated on GM12878", "GM12878 validated on K562"))
+
+                                                 
+ggplot(rfperf_gm12878_validatedon_k562,
+       aes(x=Resolution, y=Performance, fill=Model.Validation)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid( ~ Metric) +
+  #xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Model Validation")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))                                                 
+```
+
+
+# Reading in K562; smote; distance types
+
+## Validating on K562
+
+```{r}
+#10kb
+rfperf_K562_10kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+#25kb
+rfperf_K562_25kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+#50kb
+rfperf_K562_50kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+#100kb
+rfperf_K562_100kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+
+```
+
+## Validating on GM12878
+
+```{r}
+#10kb
+rfmodel_K562_10kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for GM12878
+test <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for GM12878
+vars <- rfmodel_K562_10kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_GM12878_10kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_K562_10kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_K562_10kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_GM12878_10kb_clustered_smote_dist[1,2] <- TN
+rfperf_GM12878_10kb_clustered_smote_dist[2,2] <- FN
+rfperf_GM12878_10kb_clustered_smote_dist[3,2] <- FP
+rfperf_GM12878_10kb_clustered_smote_dist[4,2] <- TP
+rfperf_GM12878_10kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_GM12878_10kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_GM12878_10kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_GM12878_10kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_GM12878_10kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_GM12878_10kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_GM12878_10kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_GM12878_10kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_GM12878_10kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_GM12878_10kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_GM12878_10kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_GM12878_10kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_GM12878_10kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_GM12878_10kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_GM12878_10kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+
+#25kb
+rfmodel_K562_25kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for GM12878
+test <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for GM12878
+vars <- rfmodel_K562_25kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_GM12878_25kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_K562_25kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_K562_25kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_GM12878_25kb_clustered_smote_dist[1,2] <- TN
+rfperf_GM12878_25kb_clustered_smote_dist[2,2] <- FN
+rfperf_GM12878_25kb_clustered_smote_dist[3,2] <- FP
+rfperf_GM12878_25kb_clustered_smote_dist[4,2] <- TP
+rfperf_GM12878_25kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_GM12878_25kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_GM12878_25kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_GM12878_25kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_GM12878_25kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_GM12878_25kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_GM12878_25kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_GM12878_25kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_GM12878_25kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_GM12878_25kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_GM12878_25kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_GM12878_25kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_GM12878_25kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_GM12878_25kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_GM12878_25kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+
+#50kb
+rfmodel_K562_50kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for GM12878
+test <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for GM12878
+vars <- rfmodel_K562_50kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_GM12878_50kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_K562_50kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_K562_50kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_GM12878_50kb_clustered_smote_dist[1,2] <- TN
+rfperf_GM12878_50kb_clustered_smote_dist[2,2] <- FN
+rfperf_GM12878_50kb_clustered_smote_dist[3,2] <- FP
+rfperf_GM12878_50kb_clustered_smote_dist[4,2] <- TP
+rfperf_GM12878_50kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_GM12878_50kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_GM12878_50kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_GM12878_50kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_GM12878_50kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_GM12878_50kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_GM12878_50kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_GM12878_50kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_GM12878_50kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_GM12878_50kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_GM12878_50kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_GM12878_50kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_GM12878_50kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_GM12878_50kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_GM12878_50kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+
+#100kb
+rfmodel_K562_100kb_clustered_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/clustered/Ensemble/SMOTE/Distance/ENET/RF/rfModel.rds")
+####reading in test data for GM12878
+test <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/clustered/training_testing/test.rds")
+####reading in enetcoefs for GM12878
+vars <- rfmodel_K562_100kb_clustered_smote_dist$finalModel$xNames
+####reduce test data to match train data
+names(test) <- gsub(paste(c("`", 
+                          "Clustered", 
+                          "-", 
+                          #"_", 
+                          #"dist", "count", "perc",
+                          "TfbsV3"), collapse = "|"), "", names(test))
+test <- test[,c(1,which(names(test) %in% vars))]
+rfperf_GM12878_100kb_clustered_smote_dist <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+pred.rfModel <- as.vector(predict(rfmodel_K562_100kb_clustered_smote_dist, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+fg <- pred.rfModel[test$y == "Yes"]
+bg <- pred.rfModel[test$y == "No"]
+pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+pred.rfModel2 <- predict(rfmodel_K562_100kb_clustered_smote_dist,
+                         newdata=test,
+                         type="raw")
+
+
+confMat <- confusionMatrix(data=pred.rfModel2, test$y, positive="Yes")
+TN = as.numeric(confMat$table[1,1])
+FN = as.numeric(confMat$table[1,2])
+FP = as.numeric(confMat$table[2,1])
+TP = as.numeric(confMat$table[2,2])
+rfperf_GM12878_100kb_clustered_smote_dist[1,2] <- TN
+rfperf_GM12878_100kb_clustered_smote_dist[2,2] <- FN
+rfperf_GM12878_100kb_clustered_smote_dist[3,2] <- FP
+rfperf_GM12878_100kb_clustered_smote_dist[4,2] <- TP
+rfperf_GM12878_100kb_clustered_smote_dist[5,2] <- sum(confMat$table)
+rfperf_GM12878_100kb_clustered_smote_dist[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+rfperf_GM12878_100kb_clustered_smote_dist[7,2] <- as.vector(confMat$byClass["Specificity"])
+rfperf_GM12878_100kb_clustered_smote_dist[8,2] <- as.vector(confMat$overall["Kappa"])
+rfperf_GM12878_100kb_clustered_smote_dist[9,2] <- as.vector(confMat$overall["Accuracy"])
+rfperf_GM12878_100kb_clustered_smote_dist[10,2] <- TP/(TP+FP)
+rfperf_GM12878_100kb_clustered_smote_dist[11,2] <- FP/(FP+TN)
+rfperf_GM12878_100kb_clustered_smote_dist[12,2] <- FN/(FN+TN)
+rfperf_GM12878_100kb_clustered_smote_dist[13,2] <- FN/(FN+TN)
+rfperf_GM12878_100kb_clustered_smote_dist[14,2] <- TN/(TN+FN)
+rfperf_GM12878_100kb_clustered_smote_dist[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+rfperf_GM12878_100kb_clustered_smote_dist[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+rfperf_GM12878_100kb_clustered_smote_dist[17,2] <- pROC::auc(pROC::roc(test$y, pred.rfModel))			
+rfperf_GM12878_100kb_clustered_smote_dist[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+rfperf_GM12878_100kb_clustered_smote_dist[19,2] <- pr$auc.integral
+
+
+
+```
+
+
+## Plots
+
+```{r}
+rfperf_k562_validatedon_gm12878 <- data.frame(Model.Validation=rep(c("K562 validated on K562", "K562 validated on GM12878"), 8),
+                                              Resolution=rep(c(rep("10 kb", 2),
+                                                           rep("25 kb", 2),
+                                                           rep("50 kb", 2),
+                                                           rep("100 kb", 2)), 2),
+                                              Metric=c(rep("F1-Score", 8),
+                                                       rep("MCC", 8)))
+
+rfperf_k562_validatedon_gm12878$Performance <- c(rfperf_K562_10kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_GM12878_10kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_K562_25kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_GM12878_25kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_K562_50kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_GM12878_50kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_K562_100kb_clustered_smote_dist[16,2], #f1
+                                                 rfperf_GM12878_100kb_clustered_smote_dist[16,2], #f1
+                                                 
+                                                 rfperf_K562_10kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_GM12878_10kb_clustered_smote_dist[15,2], #mcc
+                                                 
+                                                 rfperf_K562_25kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_GM12878_25kb_clustered_smote_dist[15,2], #mcc
+                                                 
+                                                 rfperf_K562_50kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_GM12878_50kb_clustered_smote_dist[15,2], #mcc
+                                                 
+                                                 rfperf_K562_100kb_clustered_smote_dist[15,2], #mcc
+                                                 rfperf_GM12878_100kb_clustered_smote_dist[15,2] #mcc
+                                                 )
+
+rfperf_k562_validatedon_gm12878$Resolution <- factor(rfperf_k562_validatedon_gm12878$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+rfperf_k562_validatedon_gm12878$Metric <- factor(rfperf_k562_validatedon_gm12878$Metric, levels=c("F1-Score", "MCC"))
+rfperf_k562_validatedon_gm12878$Model.Validation <- factor(rfperf_k562_validatedon_gm12878$Model.Validation, levels=c("K562 validated on K562", "K562 validated on GM12878"))
+
+                                                 
+ggplot(rfperf_k562_validatedon_gm12878,
+       aes(x=Resolution, y=Performance, fill=Model.Validation)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid( ~ Metric) +
+  #xlab("") + ylab("") +
+  theme_minimal() +
+  theme_bw() +
+  scale_fill_discrete(name="Model Validation")+
+  #guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))   
+```
+
