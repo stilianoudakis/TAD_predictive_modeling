@@ -536,7 +536,10 @@ all_rfperfs_df <- rbind.data.frame(rfperf_gm12878_10kb_none_oc,
 all_rfperfs_df$CellLine <- c(rep("GM12878",19*48),rep("K562",19*48))
 all_rfperfs_df$Resolution <- rep(c(rep("10 kb", 19*3),rep("25 kb", 19*3),rep("50 kb", 19*3),rep("100 kb", 19*3)),8)
 all_rfperfs_df$Resampling <- rep(c(rep("None",19*12),rep("ROS",19*12),rep("RUS",19*12),rep("SMOTE",19*12)), 2)
-all_rfperfs_df$PredictorType <- rep(c("OC", "OP", "Distance"),19*32)
+all_rfperfs_df$PredictorType <- rep(c(rep("OC",19),
+                                      rep("OP", 19),
+                                      rep("Distance",19)),4*8)
+
 
 all_rfperfs_df <- all_rfperfs_df[,c(3,4,5,6,1,2)]
 all_rfperfs_df$Performance <- round(all_rfperfs_df$Performance, 3)
