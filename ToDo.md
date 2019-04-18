@@ -3,7 +3,7 @@
 + fix supplementary table 3 with all model performances (order predictor type column)
 - What are the parameters of elastic net? 
     - Visual justification of the selected parameters?
-    - table of alpha/lambda values
+    * plot of all alpha by lambda values creates to cluttered of a plot; discuss further in meeting
 
 ## Main Ideas
 
