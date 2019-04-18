@@ -1,7 +1,9 @@
 # ToDo
 
-- fix supplementary table 3 with all model performances (order predictor type column)
-- What are the parameters of elastic net? Visual justification of the selected parameters?
++ fix supplementary table 3 with all model performances (order predictor type column)
+- What are the parameters of elastic net? 
+    - Visual justification of the selected parameters?
+    - table of alpha/lambda values
 
 ## Main Ideas
 
@@ -16,12 +18,13 @@
     
 + Train the best model in one cell type, apply to other cell types
     + rerun models on clustered TFBS
-    - compare performance
+    + compare performance
   
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
     - wait with chromstates and histone modifications
     - use common flanked TADs between two cell lines; how many are common?
+    * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
   
 
 ## Secondary Ideas
