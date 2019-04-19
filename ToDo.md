@@ -23,6 +23,7 @@
 + Train the best model in one cell type, apply to other cell types
     + rerun models on clustered TFBS
     + compare performance
+    - results not included in the manuscript yet
   
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
