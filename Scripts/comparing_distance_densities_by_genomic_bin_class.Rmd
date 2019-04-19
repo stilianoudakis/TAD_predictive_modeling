@@ -51,15 +51,14 @@ library(coin)
 
 # GM12878
 
-## Function for ploting distance densities between bins with and without TAD boundaries from SMOTE resampled data
+## 10kb
 
 ```{r}
-distplotsfunc <- function(cl, resolution, annotation){
-  train <- readRDS(paste0("Z:/TAD_data_analysis/", cl, "/", resolution, "/training_testing/train.rds"))
+train <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds"))
   
-  enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
  
-  names(train) <- gsub(paste(c("`", 
+names(train) <- gsub(paste(c("`", 
                              "Gm12878", 
                              "-", 
                              #"_", 
@@ -70,16 +69,25 @@ distplotsfunc <- function(cl, resolution, annotation){
                              "Uw",
                              "Broad",
                              "Uchicago"), collapse = "|"), "", names(train))
-  train <- train[,c(1,which(names(train) %in% enetcoefs))]
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
 
   
-  set.seed(123)
-  train_smote <- SMOTE(y ~ ., 
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
                      data=train, 
                      perc.over = 100, 
                      perc.under = 200)
   
-  annotname <- gsub(paste(c("`", 
+  
+```
+
+
+### Top Annotations
+
+####SMC
+
+```{r}
+annotname <- gsub(paste(c("`", 
              "Gm12878", 
              "-", 
              #"_", 
@@ -89,27 +97,20 @@ distplotsfunc <- function(cl, resolution, annotation){
              "Uta",
              "Uw",
              "Broad",
-             "Uchicago"), collapse = "|"), "", annotation)
+             "Uchicago"), collapse = "|"), "", "Gm12878-Smc3ab9263-Sydh_dist")
   
-  #data <- train[, c(1, which(names(train)==annotname))]
-  #
-  #set.seed(123)
-  #majorityids <- sample(x=which(data$y=="No"), size=length(which(data$y=="Yes")))
-  #annotdata <- rbind.data.frame(data[which(data$y=="Yes"),],
-  #                              data[majorityids,])
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
   
-  annotdata <- train_smote[, c(1, which(names(train_smote)==annotname))]
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
   
-  #ks.test(annotdata[which(annotdata$y=="No"),2], annotdata[which(annotdata$y=="Yes"),2], alternative = "two.sided")
-  
-  perm.pval <- pvalue(oneway_test(annotdata[,2] ~ annotdata[,1],
-                     data=annotdata,
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
                      alternative="greater", 
                      distribution=approximate(B=10000)))[1]
   
-  perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
   
-  plottitle <- paste(gsub(paste(c("Gm12878",
+plottitle <- paste(gsub(paste(c("Gm12878",
                                   "-","_",
                                   "dist","perc","count",
                                   "Haib",
@@ -120,198 +121,1085 @@ distplotsfunc <- function(cl, resolution, annotation){
                                   "Uchicago"), 
                                 collapse = "|"), 
                           "",
-                          annotation))
+                          "Gm12878-Smc3ab9263-Sydh_dist"))
   
-  
-  p <- ggplot(annotdata, aes(x=annotdata[,2], color=y)) +
+p.gm12878.10kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
     geom_density() +
     scale_color_discrete(name="Class of\nGenomic Bin",
                          labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
-    ylab("Frequency") +
-    xlab("Log2 Distance") +
-    ggtitle(paste(plottitle)) +
-    annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
     theme_bw() +
     theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20,
-                               hjust=.5))
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####ZNF143
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Znf143166181ap-Sydh_dist")
   
-  ggsave(p, 
-         filename = paste0("C:/Users/stili/Documents/TAD_miscellaneous/figures/comparing_distance_by_bin_class/", 
-                           cl, 
-                           "_", 
-                           resolution, 
-                           "_", 
-                           plottitle, 
-                           ".png"),
-         width=10,
-         height=10,
-         units="in")
-}
-
-
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Znf143166181ap-Sydh_dist"))
+  
+p.gm12878.10kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143166181ap_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
 ```
 
 
-### 10kb
-
-#### Top Annotations
+####CTCF
 
 ```{r}
-#### CTCF
-
-distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Ctcf-Broad_dist")
-
-#### Smc3ab9263
-
-distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
-
-#### Znf143166181ap
-
-distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
-
-#### Rad21
-
-distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Rad21-Haib_dist")
-
-#### 08Insulator
-
-#distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-08Insulator_dist")
-
-#### Yy1sc281
-
-distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-Yy1sc281-Haib_dist")
-
-#### DNase
-
-distplotsfunc(cl="GM12878", resolution="10kb", annotation="Gm12878-DNase_dist")
-```
-
-### 25kb
-
-#### Top Annotations
-
-```{r}
-#### CTCF
-
-distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Ctcf-Broad_dist")
-
-#### Smc3ab9263
-
-distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
-
-#### Znf143166181ap
-
-distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
-
-#### Rad21
-
-distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Rad21-Haib_dist")
-
-#### 08Insulator
-
-#distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-08Insulator_dist")
-
-#### Yy1sc281
-
-distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-Yy1sc281-Haib_dist")
-
-#### DNase
-
-distplotsfunc(cl="GM12878", resolution="25kb", annotation="Gm12878-DNase_dist")
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Ctcf-Broad_dist"))
+  
+p.gm12878.10kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
 ```
 
 
-### 50kb
-
-#### Top Annotations
+####RAD21
 
 ```{r}
-#### CTCF
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Rad21-Haib_dist"))
+  
+p.gm12878.10kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Ctcf-Broad_dist")
+## 25kb
 
-#### Smc3ab9263
+```{r}
+train <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/training_testing/train.rds"))
+  
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+ 
+names(train) <- gsub(paste(c("`", 
+                             "Gm12878", 
+                             "-", 
+                             #"_", 
+                             #"dist", "count", "perc",
+                             "Haib", 
+                             "Sydh",
+                             "Uta",
+                             "Uw",
+                             "Broad",
+                             "Uchicago"), collapse = "|"), "", names(train))
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
 
-distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
-
-#### Znf143166181ap
-
-distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
-
-#### Rad21
-
-distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Rad21-Haib_dist")
-
-#### 08Insulator
-
-#distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-08Insulator_dist")
-
-#### Yy1sc281
-
-distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-Yy1sc281-Haib_dist")
-
-#### DNase
-
-distplotsfunc(cl="GM12878", resolution="50kb", annotation="Gm12878-DNase_dist")
+  
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+  
+  
 ```
 
 
-### 100kb
+### Top Annotations
 
-#### Top Annotations
+####SMC
 
 ```{r}
-#### CTCF
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Smc3ab9263-Sydh_dist")
+  
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Smc3ab9263-Sydh_dist"))
+  
+p.gm12878.25kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Ctcf-Broad_dist")
 
-#### Smc3ab9263
+####ZNF143
 
-distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Smc3ab9263-Sydh_dist")
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Znf143166181ap-Sydh_dist")
+  
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Znf143166181ap-Sydh_dist"))
+  
+p.gm12878.25kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143166181ap_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-#### Znf143166181ap
 
-distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Znf143166181ap-Sydh_dist")
+####CTCF
 
-#### Rad21
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Ctcf-Broad_dist"))
+  
+p.gm12878.25kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Rad21-Haib_dist")
 
-#### 08Insulator
+####RAD21
 
-#distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-08Insulator_dist")
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Rad21-Haib_dist"))
+  
+p.gm12878.25kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-#### Yy1sc281
 
-distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-Yy1sc281-Haib_dist")
+## 50kb
 
-#### DNase
+```{r}
+train <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/training_testing/train.rds"))
+  
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+ 
+names(train) <- gsub(paste(c("`", 
+                             "Gm12878", 
+                             "-", 
+                             #"_", 
+                             #"dist", "count", "perc",
+                             "Haib", 
+                             "Sydh",
+                             "Uta",
+                             "Uw",
+                             "Broad",
+                             "Uchicago"), collapse = "|"), "", names(train))
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
 
-distplotsfunc(cl="GM12878", resolution="100kb", annotation="Gm12878-DNase_dist")
+  
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+  
+  
+```
+
+
+### Top Annotations
+
+####SMC
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Smc3ab9263-Sydh_dist")
+  
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Smc3ab9263-Sydh_dist"))
+  
+p.gm12878.50kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####ZNF143
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Znf143166181ap-Sydh_dist")
+  
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Znf143166181ap-Sydh_dist"))
+  
+p.gm12878.50kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143166181ap_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####CTCF
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Ctcf-Broad_dist"))
+  
+p.gm12878.50kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####RAD21
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Rad21-Haib_dist"))
+  
+p.gm12878.50kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+## 100kb
+
+```{r}
+train <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/training_testing/train.rds"))
+  
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+ 
+names(train) <- gsub(paste(c("`", 
+                             "Gm12878", 
+                             "-", 
+                             #"_", 
+                             #"dist", "count", "perc",
+                             "Haib", 
+                             "Sydh",
+                             "Uta",
+                             "Uw",
+                             "Broad",
+                             "Uchicago"), collapse = "|"), "", names(train))
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
+
+  
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+  
+  
+```
+
+
+### Top Annotations
+
+####SMC
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Smc3ab9263-Sydh_dist")
+  
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Smc3ab9263-Sydh_dist"))
+  
+p.gm12878.100kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####ZNF143
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Znf143166181ap-Sydh_dist")
+  
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Znf143166181ap-Sydh_dist"))
+  
+p.gm12878.100kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143166181ap_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####CTCF
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Ctcf-Broad_dist"))
+  
+p.gm12878.100kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####RAD21
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Rad21-Haib_dist"))
+  
+p.gm12878.100kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
 ```
 
 
 # K562
 
-## Function for ploting distance densities between bins with and without TAD boundaries from SMOTE resampled data
+## 10kb
 
 ```{r}
-distplotsfunc <- function(cl, resolution, annotation){
-  train <- readRDS(paste0("Z:/TAD_data_analysis/", cl, "/", resolution, "/training_testing/train.rds"))
+train <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/training_testing/train.rds"))
   
-  enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/", cl, "/", resolution, "/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
  
-  names(train) <- gsub(paste(c("`", 
+names(train) <- gsub(paste(c("`", 
                              "K562", 
                              "-", 
                              #"_", 
@@ -322,16 +1210,25 @@ distplotsfunc <- function(cl, resolution, annotation){
                              "Uw",
                              "Broad",
                              "Uchicago"), collapse = "|"), "", names(train))
-  train <- train[,c(1,which(names(train) %in% enetcoefs))]
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
 
   
-  set.seed(123)
-  train_smote <- SMOTE(y ~ ., 
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
                      data=train, 
                      perc.over = 100, 
                      perc.under = 200)
   
-  annotname <- gsub(paste(c("`", 
+  
+```
+
+
+### Top Annotations
+
+####SMC
+
+```{r}
+annotname <- gsub(paste(c("`", 
              "K562", 
              "-", 
              #"_", 
@@ -341,27 +1238,20 @@ distplotsfunc <- function(cl, resolution, annotation){
              "Uta",
              "Uw",
              "Broad",
-             "Uchicago"), collapse = "|"), "", annotation)
+             "Uchicago"), collapse = "|"), "", "K562-Smc3ab9263-Sydh_dist")
   
-  #data <- train[, c(1, which(names(train)==annotname))]
-  #
-  #set.seed(123)
-  #majorityids <- sample(x=which(data$y=="No"), size=length(which(data$y=="Yes")))
-  #annotdata <- rbind.data.frame(data[which(data$y=="Yes"),],
-  #                              data[majorityids,])
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
   
-  annotdata <- train_smote[, c(1, which(names(train_smote)==annotname))]
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
   
-  #ks.test(annotdata[which(annotdata$y=="No"),2], annotdata[which(annotdata$y=="Yes"),2], alternative = "two.sided")
-  
-  perm.pval <- pvalue(oneway_test(annotdata[,2] ~ annotdata[,1],
-                     data=annotdata,
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
                      alternative="greater", 
                      distribution=approximate(B=10000)))[1]
   
-  perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
   
-  plottitle <- paste(gsub(paste(c("K562",
+plottitle <- paste(gsub(paste(c("K562",
                                   "-","_",
                                   "dist","perc","count",
                                   "Haib",
@@ -372,182 +1262,1070 @@ distplotsfunc <- function(cl, resolution, annotation){
                                   "Uchicago"), 
                                 collapse = "|"), 
                           "",
-                          annotation))
+                          "K562-Smc3ab9263-Sydh_dist"))
   
-  
-  p <- ggplot(annotdata, aes(x=annotdata[,2], color=y)) +
+p.K562.10kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
     geom_density() +
     scale_color_discrete(name="Class of\nGenomic Bin",
                          labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
-    ylab("Frequency") +
-    xlab("Log2 Distance") +
-    ggtitle(paste(plottitle)) +
-    annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
     theme_bw() +
     theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20,
-                               hjust=.5))
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####ZNF143
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Znf143-Sydh_dist")
   
-  ggsave(p, 
-         filename = paste0("C:/Users/stili/Documents/TAD_miscellaneous/figures/comparing_distance_by_bin_class/", 
-                           cl, 
-                           "_", 
-                           resolution, 
-                           "_", 
-                           plottitle, 
-                           ".png"),
-         width=10,
-         height=10,
-         units="in")
-}
-
-
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Znf143-Sydh_dist"))
+  
+p.K562.10kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
 ```
 
 
-### 10kb
-
-#### Top Annotations
+####CTCF
 
 ```{r}
-#### CTCF
-
-distplotsfunc(cl="K562", resolution="10kb", annotation="K562-Ctcf-Broad_dist")
-
-#### Smc3ab9263
-
-distplotsfunc(cl="K562", resolution="10kb", annotation="K562-Smc3ab9263-Sydh_dist")
-
-#### Znf143166181ap
-
-distplotsfunc(cl="K562", resolution="10kb", annotation="K562-Znf143166181ap-Sydh_dist")
-
-#### Rad21
-
-distplotsfunc(cl="K562", resolution="10kb", annotation="K562-Rad21-Haib_dist")
-
-#### 08Insulator
-
-#distplotsfunc(cl="K562", resolution="10kb", annotation="K562-08Insulator_dist")
-
-#### Yy1sc281
-
-distplotsfunc(cl="K562", resolution="10kb", annotation="K562-Yy1sc281-Haib_dist")
-
-#### DNase
-
-distplotsfunc(cl="K562", resolution="10kb", annotation="K562-DNase_dist")
-```
-
-### 25kb
-
-#### Top Annotations
-
-```{r}
-#### CTCF
-
-distplotsfunc(cl="K562", resolution="25kb", annotation="K562-Ctcf-Broad_dist")
-
-#### Smc3ab9263
-
-distplotsfunc(cl="K562", resolution="25kb", annotation="K562-Smc3ab9263-Sydh_dist")
-
-#### Znf143166181ap
-
-distplotsfunc(cl="K562", resolution="25kb", annotation="K562-Znf143166181ap-Sydh_dist")
-
-#### Rad21
-
-distplotsfunc(cl="K562", resolution="25kb", annotation="K562-Rad21-Haib_dist")
-
-#### 08Insulator
-
-#distplotsfunc(cl="K562", resolution="25kb", annotation="K562-08Insulator_dist")
-
-#### Yy1sc281
-
-distplotsfunc(cl="K562", resolution="25kb", annotation="K562-Yy1sc281-Haib_dist")
-
-#### DNase
-
-distplotsfunc(cl="K562", resolution="25kb", annotation="K562-DNase_dist")
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Ctcf-Broad_dist"))
+  
+p.K562.10kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
 ```
 
 
-### 50kb
-
-#### Top Annotations
+####RAD21
 
 ```{r}
-#### CTCF
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Rad21-Haib_dist"))
+  
+p.K562.10kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-distplotsfunc(cl="K562", resolution="50kb", annotation="K562-Ctcf-Broad_dist")
+## 25kb
 
-#### Smc3ab9263
+```{r}
+train <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/training_testing/train.rds"))
+  
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+ 
+names(train) <- gsub(paste(c("`", 
+                             "K562", 
+                             "-", 
+                             #"_", 
+                             #"dist", "count", "perc",
+                             "Haib", 
+                             "Sydh",
+                             "Uta",
+                             "Uw",
+                             "Broad",
+                             "Uchicago"), collapse = "|"), "", names(train))
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
 
-distplotsfunc(cl="K562", resolution="50kb", annotation="K562-Smc3ab9263-Sydh_dist")
-
-#### Znf143166181ap
-
-distplotsfunc(cl="K562", resolution="50kb", annotation="K562-Znf143166181ap-Sydh_dist")
-
-#### Rad21
-
-distplotsfunc(cl="K562", resolution="50kb", annotation="K562-Rad21-Haib_dist")
-
-#### 08Insulator
-
-#distplotsfunc(cl="K562", resolution="50kb", annotation="K562-08Insulator_dist")
-
-#### Yy1sc281
-
-distplotsfunc(cl="K562", resolution="50kb", annotation="K562-Yy1sc281-Haib_dist")
-
-#### DNase
-
-distplotsfunc(cl="K562", resolution="50kb", annotation="K562-DNase_dist")
+  
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+  
+  
 ```
 
 
-### 100kb
+### Top Annotations
 
-#### Top Annotations
+####SMC
 
 ```{r}
-#### CTCF
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Smc3ab9263-Sydh_dist")
+  
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Smc3ab9263-Sydh_dist"))
+  
+p.K562.25kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-distplotsfunc(cl="K562", resolution="100kb", annotation="K562-Ctcf-Broad_dist")
 
-#### Smc3ab9263
+####ZNF143
 
-distplotsfunc(cl="K562", resolution="100kb", annotation="K562-Smc3ab9263-Sydh_dist")
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Znf143-Sydh_dist")
+  
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Znf143-Sydh_dist"))
+  
+p.K562.25kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-#### Znf143166181ap
 
-distplotsfunc(cl="K562", resolution="100kb", annotation="K562-Znf143166181ap-Sydh_dist")
+####CTCF
 
-#### Rad21
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Ctcf-Broad_dist"))
+  
+p.K562.25kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-distplotsfunc(cl="K562", resolution="100kb", annotation="K562-Rad21-Haib_dist")
 
-#### 08Insulator
+####RAD21
 
-#distplotsfunc(cl="K562", resolution="100kb", annotation="K562-08Insulator_dist")
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Rad21-Haib_dist"))
+  
+p.K562.25kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
 
-#### Yy1sc281
 
-distplotsfunc(cl="K562", resolution="100kb", annotation="K562-Yy1sc281-Haib_dist")
+## 50kb
 
-#### DNase
+```{r}
+train <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/training_testing/train.rds"))
+  
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+ 
+names(train) <- gsub(paste(c("`", 
+                             "K562", 
+                             "-", 
+                             #"_", 
+                             #"dist", "count", "perc",
+                             "Haib", 
+                             "Sydh",
+                             "Uta",
+                             "Uw",
+                             "Broad",
+                             "Uchicago"), collapse = "|"), "", names(train))
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
 
-distplotsfunc(cl="K562", resolution="100kb", annotation="K562-DNase_dist")
+  
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+  
+  
+```
+
+
+### Top Annotations
+
+####SMC
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Smc3ab9263-Sydh_dist")
+  
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Smc3ab9263-Sydh_dist"))
+  
+p.K562.50kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####ZNF143
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Znf143-Sydh_dist")
+  
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Znf143-Sydh_dist"))
+  
+p.K562.50kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####CTCF
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Ctcf-Broad_dist"))
+  
+p.K562.50kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####RAD21
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Rad21-Haib_dist"))
+  
+p.K562.50kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+## 100kb
+
+```{r}
+train <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/training_testing/train.rds"))
+  
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+ 
+names(train) <- gsub(paste(c("`", 
+                             "K562", 
+                             "-", 
+                             #"_", 
+                             #"dist", "count", "perc",
+                             "Haib", 
+                             "Sydh",
+                             "Uta",
+                             "Uw",
+                             "Broad",
+                             "Uchicago"), collapse = "|"), "", names(train))
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
+
+  
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+  
+  
+```
+
+
+### Top Annotations
+
+####SMC
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Smc3ab9263-Sydh_dist")
+  
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Smc3ab9263-Sydh_dist"))
+  
+p.K562.100kb.smc <- ggplot(annotdata.smc, aes(x=Smc3ab9263_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("SMC3a\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####ZNF143
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Znf143-Sydh_dist")
+  
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Znf143-Sydh_dist"))
+  
+p.K562.100kb.znf143 <- ggplot(annotdata.znf143, aes(x=Znf143_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("ZNF143\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####CTCF
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Ctcf-Broad_dist"))
+  
+p.K562.100kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("CTCF\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+```
+
+
+####RAD21
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "K562", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "K562-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("K562",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "K562-Rad21-Haib_dist"))
+  
+p.K562.100kb.rad21 <- ggplot(annotdata.rad21, aes(x=Rad21_dist, color=y)) +
+    geom_density() +
+    scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
+    ylab("") +
+    xlab("") +
+    ggtitle("RAD21\nPermutation P-Value: < 0.0001") +
+    #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15 #,
+                                     #angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     #hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
 ```
