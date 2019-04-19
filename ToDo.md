@@ -1,4 +1,10 @@
-# ToDo
+# Legend
+
+- To do items
++ Completed to do items (awaiting discussion)
+* Outstanding questions
+
+## ToDo
 
 * Problem with ranking variable importances
    * more regularized features (contribute as NA in ranking) artificially inflate rankings (K562 cell line)
@@ -12,7 +18,7 @@
     - Visual justification of the selected parameters?
     * plot of all alpha by lambda values creates to cluttered of a plot; discuss further in meeting
 
-## Main Ideas
+### Main Ideas
 
 + What type of precictor has the highest variable importance. Start with CTCF and down the list.
     + Is distance universally good for all genomic annotations? Test each annotation using OC, OP, and distance as an individual model, check
@@ -35,7 +41,7 @@
     * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
   
 
-## Secondary Ideas
+### Secondary Ideas
 
 - Look into using grouped lasso to see if a particular group of annotations get regularized 
 
@@ -61,7 +67,7 @@
 
 
 
-## TBD 
+### TBD 
 
 - directly compare mourad using percent predictor types
 - directly compare hong using count predictor types
@@ -77,7 +83,7 @@
    * For human analysis, we used publicly available ChIP-seq peaks of 69 chromatin proteins (ATF2, ATF3, BATF, BCL11A, BCL3,            BCLAF1, BHLHE40,       BRCA1, CEBPB, CHD1, CHD2, CTCF, E2F4, EBF1, EGR1, ELF1, ELK1, ETS1, EZH2, FOS, FOXM1, IKZF1, IRF3,          IRF4, JUND, MAFK, MAX, MAZ, MEF2A,          MEF2C, MTA3, MXI1, MYC, NFATC1, NFE2, NFIC, NFYA, NFYB, NRF1, P300, PAX5, PBX3,        PIGG, PML, POU2F2, RAD21, REST, RFX5, RUNX3, RXRA, SIN3A,      SIX5, SP1, SRF, STAT1, STAT3, STAT5A, TAF1, TCF12, TCF3, USF1,      USF2, YY1, ZBTB33, ZEB1, ZNF143, ZNF274, ZNF384 and ZZZ3) of GM12878 cells      from ENCODE 
 
 
-# Papers to describe and cite (bold highlights relevant point)
+### Papers to describe and cite (bold highlights relevant point)
 
 - Dixon, Jesse R., Inkyung Jung, Siddarth Selvaraj, Yin Shen, Jessica E. Antosiewicz-Bourget, Ah Young Lee, Zhen Ye, et al. “Chromatin Architecture Reorganization during Stem Cell Differentiation.” Nature 518, no. 7539 (February 19, 2015): 331–36. https://doi.org/10.1038/nature14222. - Reorganization of the 3D genome during human embryonic stem cell differentiation. ~36% of active/inactive A/B compartments change. Fig. 1 - how to compare PC1 vectors. Gene expression changes in compartments that switch states (up/down in B to A vs. A to B switching), small but significant. Changes in _interaction frequency_ (increase/decrease - switch from B to A vs. A to B), correlated positively with activating epigenomic marks H3K27ac, DNAse hypersensitive sites, CTCF, negatively with repressive marks H3K27me3 and H3K9me3. **Random Forest to select epigenomic features classifying changes in interaction frequency - H3K4me1 enhancer mark**. Haplotype-resolved Hi-C maps are similar.
 
