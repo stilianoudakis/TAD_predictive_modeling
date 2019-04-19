@@ -1,5 +1,8 @@
 # ToDo
 
+* Problem with ranking variable importances
+   * more regularized features (contribute as NA in ranking) artificially inflate rankings (K562 cell line)
+
 * Discuss order of new results
    * Might make sense to report variable importances for only TFBS specific models
 
