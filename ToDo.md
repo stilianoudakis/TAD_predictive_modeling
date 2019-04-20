@@ -6,17 +6,20 @@
 
 ## ToDo
 
+- implement shift function for figure 7; put k562 in supplementary
+
+- Make manuscript more of a story
+
 * Problem with ranking variable importances
    * more regularized features (contribute as NA in ranking) artificially inflate rankings (K562 cell line)
-
-* Discuss order of new results
-   * Might make sense to report variable importances for only TFBS specific models
+   - present as heatmap sorted by 10 kb
 
 + fix supplementary table 3 with all model performances (order predictor type column)
 
 - What are the parameters of elastic net? 
     - Visual justification of the selected parameters?
     * plot of all alpha by lambda values creates to cluttered of a plot; discuss further in meeting
+    - create table of final alpha, lambda parameters
 
 ### Main Ideas
 
@@ -33,15 +36,21 @@
     + rerun models on clustered TFBS
     + compare performance
     - results not included in the manuscript yet
-  
+    
+- directly compare hong using count predictor types
+    
+- directly compare mourad using percent predictor types
+
+- Compare proteins used by Mourad with our tfbs 
+
+
+### Secondary Ideas
+
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
     - wait with chromstates and histone modifications
     - use common flanked TADs between two cell lines; how many are common?
     * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
-  
-
-### Secondary Ideas
 
 - Look into using grouped lasso to see if a particular group of annotations get regularized 
 
@@ -69,9 +78,6 @@
 
 ### TBD 
 
-- directly compare mourad using percent predictor types
-- directly compare hong using count predictor types
-- Compare proteins used by Mourad with our tfbs 
 - investigate what features mourad used
    * We simulated data that were similar to real ChIP-seq data (see Subsection Materials and
      Methods, Data simulation, first paragraph). Both genomic coordinate data (e.g., ChIP-seq peak
