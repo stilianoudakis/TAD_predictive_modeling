@@ -6,20 +6,26 @@
 
 ## ToDo
 
+- directly compare hong using count predictor types
+    
+- directly compare mourad using percent predictor types
+
+- Compare proteins used by Mourad with our tfbs 
+
 - implement shift function for figure 7; put k562 in supplementary
 
 - Make manuscript more of a story
 
 * Problem with ranking variable importances
    * more regularized features (contribute as NA in ranking) artificially inflate rankings (K562 cell line)
-   - present as heatmap sorted by 10 kb
+   + present as heatmap sorted by 10 kb
 
 + fix supplementary table 3 with all model performances (order predictor type column)
 
-- What are the parameters of elastic net? 
-    - Visual justification of the selected parameters?
++ What are the parameters of elastic net? 
+    + Visual justification of the selected parameters?
     * plot of all alpha by lambda values creates to cluttered of a plot; discuss further in meeting
-    - create table of final alpha, lambda parameters
+    + create table of final alpha, lambda parameters
 
 ### Main Ideas
 
@@ -37,12 +43,6 @@
     + compare performance
     - results not included in the manuscript yet
     
-- directly compare hong using count predictor types
-    
-- directly compare mourad using percent predictor types
-
-- Compare proteins used by Mourad with our tfbs 
-
 
 ### Secondary Ideas
 
