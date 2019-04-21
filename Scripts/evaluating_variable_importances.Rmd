@@ -291,3 +291,117 @@ icc(vim.gm12878.smote, model = "twoway", type = "agreement")
 
 ```
 
+
+#Variable Importance Heatmaps (actual importance values)
+
+## SMOTE; distance types
+
+### GM12878
+
+```{r}
+rfimpvars_gm12878_10kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+rfimpvars_gm12878_25kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+rfimpvars_gm12878_50kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+rfimpvars_gm12878_100kb_SMOTE <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+
+rfimpvars_gm12878_10kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_gm12878_10kb_SMOTE$Feature)
+rfimpvars_gm12878_25kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_gm12878_25kb_SMOTE$Feature)
+rfimpvars_gm12878_50kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_gm12878_50kb_SMOTE$Feature)
+rfimpvars_gm12878_100kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_gm12878_100kb_SMOTE$Feature)
+
+unionannots <- union(rfimpvars_gm12878_10kb_SMOTE$Feature,
+                     union(rfimpvars_gm12878_25kb_SMOTE$Feature,
+                           union(rfimpvars_gm12878_50kb_SMOTE$Feature,rfimpvars_gm12878_100kb_SMOTE$Feature)))
+unionannots <- sort(unionannots)
+
+vim.gm12878.smote <- data.frame(Feature=unionannots)
+
+vim.gm12878.smote <- left_join(left_join(left_join(left_join(vim.gm12878.smote,rfimpvars_gm12878_10kb_SMOTE, by="Feature"),
+                                                   rfimpvars_gm12878_25kb_SMOTE, by="Feature"),
+                                         rfimpvars_gm12878_50kb_SMOTE, by="Feature"),
+                               rfimpvars_gm12878_100kb_SMOTE, by="Feature")
+names(vim.gm12878.smote) <- c("Feature","Importance.10kb","Importance.25kb","Importance.50kb","Importance.100kb")
+
+vim.gm12878.smote <- vim.gm12878.smote[order(vim.gm12878.smote$Importance.10kb, decreasing = TRUE),]
+
+vim.gm12878.smote.melt <- melt(vim.gm12878.smote)
+vim.gm12878.smote.melt$Feature <- factor(vim.gm12878.smote.melt$Feature, levels = vim.gm12878.smote$Feature)
+
+p.vim.gm12878 <- ggplot(vim.gm12878.smote.melt, aes(variable, 
+                                                    ordered(Feature, levels=rev(unique(Feature))))) + 
+  geom_tile(aes(fill = value), colour = "white") + 
+  xlab("Resolution") +
+  ylab("Genomic Annotation") +
+  scale_fill_gradient2(low = "white",
+                      mid = "pink",
+                      midpoint = 50,
+                      high = muted("red"),
+                      na.value = "grey50",
+                      name="Predictive\nImportance") +
+  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 5),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+
+### K562
+
+```{r}
+rfimpvars_K562_10kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+rfimpvars_K562_25kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+rfimpvars_K562_50kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+rfimpvars_K562_100kb_SMOTE <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfimpvars.rds")
+
+rfimpvars_K562_10kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_K562_10kb_SMOTE$Feature)
+rfimpvars_K562_25kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_K562_25kb_SMOTE$Feature)
+rfimpvars_K562_50kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_K562_50kb_SMOTE$Feature)
+rfimpvars_K562_100kb_SMOTE$Feature <- gsub(paste(c("`","_dist"),sep="", collapse="|"),"", rfimpvars_K562_100kb_SMOTE$Feature)
+
+unionannots <- union(rfimpvars_K562_10kb_SMOTE$Feature,
+                     union(rfimpvars_K562_25kb_SMOTE$Feature,
+                           union(rfimpvars_K562_50kb_SMOTE$Feature,rfimpvars_K562_100kb_SMOTE$Feature)))
+unionannots <- sort(unionannots)
+
+vim.K562.smote <- data.frame(Feature=unionannots)
+
+vim.K562.smote <- left_join(left_join(left_join(left_join(vim.K562.smote,rfimpvars_K562_10kb_SMOTE, by="Feature"),
+                                                   rfimpvars_K562_25kb_SMOTE, by="Feature"),
+                                         rfimpvars_K562_50kb_SMOTE, by="Feature"),
+                               rfimpvars_K562_100kb_SMOTE, by="Feature")
+names(vim.K562.smote) <- c("Feature","Importance.10kb","Importance.25kb","Importance.50kb","Importance.100kb")
+
+vim.K562.smote <- vim.K562.smote[order(vim.K562.smote$Importance.10kb, decreasing = TRUE),]
+
+vim.K562.smote.melt <- melt(vim.K562.smote)
+vim.K562.smote.melt$Feature <- factor(vim.K562.smote.melt$Feature, levels = vim.K562.smote$Feature)
+
+p.vim.K562 <- ggplot(vim.K562.smote.melt, aes(variable, 
+                                                    ordered(Feature, levels=rev(unique(Feature))))) + 
+  geom_tile(aes(fill = value), colour = "white") + 
+  xlab("Resolution") +
+  ylab("Genomic Annotation") +
+  scale_fill_gradient2(low = "white",
+                      mid = "pink",
+                      midpoint = 50,
+                      high = muted("red"),
+                      na.value = "grey50",
+                      name="Predictive\nImportance") +
+  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 5),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+

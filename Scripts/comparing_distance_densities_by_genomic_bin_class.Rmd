@@ -1364,7 +1364,7 @@ annotname <- gsub(paste(c("`",
              "Uta",
              "Uw",
              "Broad",
-             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+             "Uchicago"), collapse = "|"), "", "K562-Ctcfc-Broad_dist")
   
 annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
   
@@ -1388,9 +1388,9 @@ plottitle <- paste(gsub(paste(c("K562",
                                   "Uchicago"), 
                                 collapse = "|"), 
                           "",
-                          "K562-Ctcf-Broad_dist"))
+                          "K562-Ctcfc-Broad_dist"))
   
-p.K562.10kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+p.K562.10kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcfc_dist, color=y)) +
     geom_density() +
     scale_color_discrete(name="Class of\nGenomic Bin",
                          labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
@@ -1648,7 +1648,7 @@ annotname <- gsub(paste(c("`",
              "Uta",
              "Uw",
              "Broad",
-             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+             "Uchicago"), collapse = "|"), "", "K562-Ctcfc-Broad_dist")
   
 annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
   
@@ -1672,9 +1672,9 @@ plottitle <- paste(gsub(paste(c("K562",
                                   "Uchicago"), 
                                 collapse = "|"), 
                           "",
-                          "K562-Ctcf-Broad_dist"))
+                          "K562-Ctcfc-Broad_dist"))
   
-p.K562.25kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+p.K562.25kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcfc_dist, color=y)) +
     geom_density() +
     scale_color_discrete(name="Class of\nGenomic Bin",
                          labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
@@ -1933,7 +1933,7 @@ annotname <- gsub(paste(c("`",
              "Uta",
              "Uw",
              "Broad",
-             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+             "Uchicago"), collapse = "|"), "", "K562-Ctcfc-Broad_dist")
   
 annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
   
@@ -1957,9 +1957,9 @@ plottitle <- paste(gsub(paste(c("K562",
                                   "Uchicago"), 
                                 collapse = "|"), 
                           "",
-                          "K562-Ctcf-Broad_dist"))
+                          "K562-Ctcfc-Broad_dist"))
   
-p.K562.50kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+p.K562.50kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcfc_dist, color=y)) +
     geom_density() +
     scale_color_discrete(name="Class of\nGenomic Bin",
                          labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
@@ -2218,7 +2218,7 @@ annotname <- gsub(paste(c("`",
              "Uta",
              "Uw",
              "Broad",
-             "Uchicago"), collapse = "|"), "", "K562-Ctcf-Broad_dist")
+             "Uchicago"), collapse = "|"), "", "K562-Ctcfc-Broad_dist")
   
 annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
   
@@ -2242,9 +2242,9 @@ plottitle <- paste(gsub(paste(c("K562",
                                   "Uchicago"), 
                                 collapse = "|"), 
                           "",
-                          "K562-Ctcf-Broad_dist"))
+                          "K562-Ctcfc-Broad_dist"))
   
-p.K562.100kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcf_dist, color=y)) +
+p.K562.100kb.ctcf <- ggplot(annotdata.ctcf, aes(x=Ctcfc_dist, color=y)) +
     geom_density() +
     scale_color_discrete(name="Class of\nGenomic Bin",
                          labels=c("Does not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary")) +
