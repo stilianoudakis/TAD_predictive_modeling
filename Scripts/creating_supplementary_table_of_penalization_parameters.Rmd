@@ -1,0 +1,1168 @@
+---
+title: "Creating Tables of Elastic Net Parameters"
+author: "Spiro Stilianoudakis"
+date: "April 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Extracting alpha and lambda penalty parameters from elastic net
+
+## GM12878
+
+### 10kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_gm12878_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_none_oc_alpha <- as.numeric(eNetModel_gm12878_10kb_none_oc$bestTune[1])
+eNetModel_gm12878_10kb_none_oc_lambda <- as.numeric(eNetModel_gm12878_10kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_10kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_none_OP_alpha <- as.numeric(eNetModel_gm12878_10kb_none_OP$bestTune[1])
+eNetModel_gm12878_10kb_none_OP_lambda <- as.numeric(eNetModel_gm12878_10kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_10kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_none_Distance_alpha <- as.numeric(eNetModel_gm12878_10kb_none_Distance$bestTune[1])
+eNetModel_gm12878_10kb_none_Distance_lambda <- as.numeric(eNetModel_gm12878_10kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_10kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_ROS_oc_alpha <- as.numeric(eNetModel_gm12878_10kb_ROS_oc$bestTune[1])
+eNetModel_gm12878_10kb_ROS_oc_lambda <- as.numeric(eNetModel_gm12878_10kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_10kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_ROS_OP_alpha <- as.numeric(eNetModel_gm12878_10kb_ROS_OP$bestTune[1])
+eNetModel_gm12878_10kb_ROS_OP_lambda <- as.numeric(eNetModel_gm12878_10kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_10kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_ROS_Distance_alpha <- as.numeric(eNetModel_gm12878_10kb_ROS_Distance$bestTune[1])
+eNetModel_gm12878_10kb_ROS_Distance_lambda <- as.numeric(eNetModel_gm12878_10kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_RUS_oc_alpha <- as.numeric(eNetModel_gm12878_10kb_RUS_oc$bestTune[1])
+eNetModel_gm12878_10kb_RUS_oc_lambda <- as.numeric(eNetModel_gm12878_10kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_10kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_RUS_OP_alpha <- as.numeric(eNetModel_gm12878_10kb_RUS_OP$bestTune[1])
+eNetModel_gm12878_10kb_RUS_OP_lambda <- as.numeric(eNetModel_gm12878_10kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_10kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_RUS_Distance_alpha <- as.numeric(eNetModel_gm12878_10kb_RUS_Distance$bestTune[1])
+eNetModel_gm12878_10kb_RUS_Distance_lambda <- as.numeric(eNetModel_gm12878_10kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_gm12878_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_SMOTE_oc_alpha <- as.numeric(eNetModel_gm12878_10kb_SMOTE_oc$bestTune[1])
+eNetModel_gm12878_10kb_SMOTE_oc_lambda <- as.numeric(eNetModel_gm12878_10kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_10kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_SMOTE_OP_alpha <- as.numeric(eNetModel_gm12878_10kb_SMOTE_OP$bestTune[1])
+eNetModel_gm12878_10kb_SMOTE_OP_lambda <- as.numeric(eNetModel_gm12878_10kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_10kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_10kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_gm12878_10kb_SMOTE_Distance$bestTune[1])
+eNetModel_gm12878_10kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_gm12878_10kb_SMOTE_Distance$bestTune[2])
+```
+
+
+### 25kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_gm12878_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_none_oc_alpha <- as.numeric(eNetModel_gm12878_25kb_none_oc$bestTune[1])
+eNetModel_gm12878_25kb_none_oc_lambda <- as.numeric(eNetModel_gm12878_25kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_25kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_none_OP_alpha <- as.numeric(eNetModel_gm12878_25kb_none_OP$bestTune[1])
+eNetModel_gm12878_25kb_none_OP_lambda <- as.numeric(eNetModel_gm12878_25kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_25kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_none_Distance_alpha <- as.numeric(eNetModel_gm12878_25kb_none_Distance$bestTune[1])
+eNetModel_gm12878_25kb_none_Distance_lambda <- as.numeric(eNetModel_gm12878_25kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_25kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_ROS_oc_alpha <- as.numeric(eNetModel_gm12878_25kb_ROS_oc$bestTune[1])
+eNetModel_gm12878_25kb_ROS_oc_lambda <- as.numeric(eNetModel_gm12878_25kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_25kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_ROS_OP_alpha <- as.numeric(eNetModel_gm12878_25kb_ROS_OP$bestTune[1])
+eNetModel_gm12878_25kb_ROS_OP_lambda <- as.numeric(eNetModel_gm12878_25kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_25kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_ROS_Distance_alpha <- as.numeric(eNetModel_gm12878_25kb_ROS_Distance$bestTune[1])
+eNetModel_gm12878_25kb_ROS_Distance_lambda <- as.numeric(eNetModel_gm12878_25kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_RUS_oc_alpha <- as.numeric(eNetModel_gm12878_25kb_RUS_oc$bestTune[1])
+eNetModel_gm12878_25kb_RUS_oc_lambda <- as.numeric(eNetModel_gm12878_25kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_25kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_RUS_OP_alpha <- as.numeric(eNetModel_gm12878_25kb_RUS_OP$bestTune[1])
+eNetModel_gm12878_25kb_RUS_OP_lambda <- as.numeric(eNetModel_gm12878_25kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_25kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_RUS_Distance_alpha <- as.numeric(eNetModel_gm12878_25kb_RUS_Distance$bestTune[1])
+eNetModel_gm12878_25kb_RUS_Distance_lambda <- as.numeric(eNetModel_gm12878_25kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_gm12878_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_SMOTE_oc_alpha <- as.numeric(eNetModel_gm12878_25kb_SMOTE_oc$bestTune[1])
+eNetModel_gm12878_25kb_SMOTE_oc_lambda <- as.numeric(eNetModel_gm12878_25kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_25kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_SMOTE_OP_alpha <- as.numeric(eNetModel_gm12878_25kb_SMOTE_OP$bestTune[1])
+eNetModel_gm12878_25kb_SMOTE_OP_lambda <- as.numeric(eNetModel_gm12878_25kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_25kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_25kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_gm12878_25kb_SMOTE_Distance$bestTune[1])
+eNetModel_gm12878_25kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_gm12878_25kb_SMOTE_Distance$bestTune[2])
+```
+
+
+### 50kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_gm12878_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_none_oc_alpha <- as.numeric(eNetModel_gm12878_50kb_none_oc$bestTune[1])
+eNetModel_gm12878_50kb_none_oc_lambda <- as.numeric(eNetModel_gm12878_50kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_50kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_none_OP_alpha <- as.numeric(eNetModel_gm12878_50kb_none_OP$bestTune[1])
+eNetModel_gm12878_50kb_none_OP_lambda <- as.numeric(eNetModel_gm12878_50kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_50kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_none_Distance_alpha <- as.numeric(eNetModel_gm12878_50kb_none_Distance$bestTune[1])
+eNetModel_gm12878_50kb_none_Distance_lambda <- as.numeric(eNetModel_gm12878_50kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_50kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_ROS_oc_alpha <- as.numeric(eNetModel_gm12878_50kb_ROS_oc$bestTune[1])
+eNetModel_gm12878_50kb_ROS_oc_lambda <- as.numeric(eNetModel_gm12878_50kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_50kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_ROS_OP_alpha <- as.numeric(eNetModel_gm12878_50kb_ROS_OP$bestTune[1])
+eNetModel_gm12878_50kb_ROS_OP_lambda <- as.numeric(eNetModel_gm12878_50kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_50kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_ROS_Distance_alpha <- as.numeric(eNetModel_gm12878_50kb_ROS_Distance$bestTune[1])
+eNetModel_gm12878_50kb_ROS_Distance_lambda <- as.numeric(eNetModel_gm12878_50kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_RUS_oc_alpha <- as.numeric(eNetModel_gm12878_50kb_RUS_oc$bestTune[1])
+eNetModel_gm12878_50kb_RUS_oc_lambda <- as.numeric(eNetModel_gm12878_50kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_50kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_RUS_OP_alpha <- as.numeric(eNetModel_gm12878_50kb_RUS_OP$bestTune[1])
+eNetModel_gm12878_50kb_RUS_OP_lambda <- as.numeric(eNetModel_gm12878_50kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_50kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_RUS_Distance_alpha <- as.numeric(eNetModel_gm12878_50kb_RUS_Distance$bestTune[1])
+eNetModel_gm12878_50kb_RUS_Distance_lambda <- as.numeric(eNetModel_gm12878_50kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_gm12878_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_SMOTE_oc_alpha <- as.numeric(eNetModel_gm12878_50kb_SMOTE_oc$bestTune[1])
+eNetModel_gm12878_50kb_SMOTE_oc_lambda <- as.numeric(eNetModel_gm12878_50kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_50kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_SMOTE_OP_alpha <- as.numeric(eNetModel_gm12878_50kb_SMOTE_OP$bestTune[1])
+eNetModel_gm12878_50kb_SMOTE_OP_lambda <- as.numeric(eNetModel_gm12878_50kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_50kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_50kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_gm12878_50kb_SMOTE_Distance$bestTune[1])
+eNetModel_gm12878_50kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_gm12878_50kb_SMOTE_Distance$bestTune[2])
+```
+
+
+### 100kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_gm12878_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_none_oc_alpha <- as.numeric(eNetModel_gm12878_100kb_none_oc$bestTune[1])
+eNetModel_gm12878_100kb_none_oc_lambda <- as.numeric(eNetModel_gm12878_100kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_100kb_none_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_none_OP_alpha <- as.numeric(eNetModel_gm12878_100kb_none_OP$bestTune[1])
+eNetModel_gm12878_100kb_none_OP_lambda <- as.numeric(eNetModel_gm12878_100kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_100kb_none_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_none_Distance_alpha <- as.numeric(eNetModel_gm12878_100kb_none_Distance$bestTune[1])
+eNetModel_gm12878_100kb_none_Distance_lambda <- as.numeric(eNetModel_gm12878_100kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_100kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_ROS_oc_alpha <- as.numeric(eNetModel_gm12878_100kb_ROS_oc$bestTune[1])
+eNetModel_gm12878_100kb_ROS_oc_lambda <- as.numeric(eNetModel_gm12878_100kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_100kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_ROS_OP_alpha <- as.numeric(eNetModel_gm12878_100kb_ROS_OP$bestTune[1])
+eNetModel_gm12878_100kb_ROS_OP_lambda <- as.numeric(eNetModel_gm12878_100kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_100kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_ROS_Distance_alpha <- as.numeric(eNetModel_gm12878_100kb_ROS_Distance$bestTune[1])
+eNetModel_gm12878_100kb_ROS_Distance_lambda <- as.numeric(eNetModel_gm12878_100kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_gm12878_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_RUS_oc_alpha <- as.numeric(eNetModel_gm12878_100kb_RUS_oc$bestTune[1])
+eNetModel_gm12878_100kb_RUS_oc_lambda <- as.numeric(eNetModel_gm12878_100kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_100kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_RUS_OP_alpha <- as.numeric(eNetModel_gm12878_100kb_RUS_OP$bestTune[1])
+eNetModel_gm12878_100kb_RUS_OP_lambda <- as.numeric(eNetModel_gm12878_100kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_100kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_RUS_Distance_alpha <- as.numeric(eNetModel_gm12878_100kb_RUS_Distance$bestTune[1])
+eNetModel_gm12878_100kb_RUS_Distance_lambda <- as.numeric(eNetModel_gm12878_100kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_gm12878_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_SMOTE_oc_alpha <- as.numeric(eNetModel_gm12878_100kb_SMOTE_oc$bestTune[1])
+eNetModel_gm12878_100kb_SMOTE_oc_lambda <- as.numeric(eNetModel_gm12878_100kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_gm12878_100kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_SMOTE_OP_alpha <- as.numeric(eNetModel_gm12878_100kb_SMOTE_OP$bestTune[1])
+eNetModel_gm12878_100kb_SMOTE_OP_lambda <- as.numeric(eNetModel_gm12878_100kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_gm12878_100kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_gm12878_100kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_gm12878_100kb_SMOTE_Distance$bestTune[1])
+eNetModel_gm12878_100kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_gm12878_100kb_SMOTE_Distance$bestTune[2])
+```
+
+## Creating Table
+
+```{r}
+eNetModel_gm12878_parameter_tab <- data.frame(Alpha=c(eNetModel_gm12878_10kb_none_oc_alpha,
+                                                      eNetModel_gm12878_10kb_none_OP_alpha,
+                                                      eNetModel_gm12878_10kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_10kb_ROS_oc_alpha,
+                                                      eNetModel_gm12878_10kb_ROS_OP_alpha,
+                                                      eNetModel_gm12878_10kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_10kb_RUS_oc_alpha,
+                                                      eNetModel_gm12878_10kb_RUS_OP_alpha,
+                                                      eNetModel_gm12878_10kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_10kb_SMOTE_oc_alpha,
+                                                      eNetModel_gm12878_10kb_SMOTE_OP_alpha,
+                                                      eNetModel_gm12878_10kb_SMOTE_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_25kb_none_oc_alpha,
+                                                      eNetModel_gm12878_25kb_none_OP_alpha,
+                                                      eNetModel_gm12878_25kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_25kb_ROS_oc_alpha,
+                                                      eNetModel_gm12878_25kb_ROS_OP_alpha,
+                                                      eNetModel_gm12878_25kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_25kb_RUS_oc_alpha,
+                                                      eNetModel_gm12878_25kb_RUS_OP_alpha,
+                                                      eNetModel_gm12878_25kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_25kb_SMOTE_oc_alpha,
+                                                      eNetModel_gm12878_25kb_SMOTE_OP_alpha,
+                                                      eNetModel_gm12878_25kb_SMOTE_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_50kb_none_oc_alpha,
+                                                      eNetModel_gm12878_50kb_none_OP_alpha,
+                                                      eNetModel_gm12878_50kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_50kb_ROS_oc_alpha,
+                                                      eNetModel_gm12878_50kb_ROS_OP_alpha,
+                                                      eNetModel_gm12878_50kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_50kb_RUS_oc_alpha,
+                                                      eNetModel_gm12878_50kb_RUS_OP_alpha,
+                                                      eNetModel_gm12878_50kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_50kb_SMOTE_oc_alpha,
+                                                      eNetModel_gm12878_50kb_SMOTE_OP_alpha,
+                                                      eNetModel_gm12878_50kb_SMOTE_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_100kb_none_oc_alpha,
+                                                      eNetModel_gm12878_100kb_none_OP_alpha,
+                                                      eNetModel_gm12878_100kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_100kb_ROS_oc_alpha,
+                                                      eNetModel_gm12878_100kb_ROS_OP_alpha,
+                                                      eNetModel_gm12878_100kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_100kb_RUS_oc_alpha,
+                                                      eNetModel_gm12878_100kb_RUS_OP_alpha,
+                                                      eNetModel_gm12878_100kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_gm12878_100kb_SMOTE_oc_alpha,
+                                                      eNetModel_gm12878_100kb_SMOTE_OP_alpha,
+                                                      eNetModel_gm12878_100kb_SMOTE_Distance_alpha),
+                                              Lambda=c(eNetModel_gm12878_10kb_none_oc_lambda,
+                                                      eNetModel_gm12878_10kb_none_OP_lambda,
+                                                      eNetModel_gm12878_10kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_10kb_ROS_oc_lambda,
+                                                      eNetModel_gm12878_10kb_ROS_OP_lambda,
+                                                      eNetModel_gm12878_10kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_10kb_RUS_oc_lambda,
+                                                      eNetModel_gm12878_10kb_RUS_OP_lambda,
+                                                      eNetModel_gm12878_10kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_10kb_SMOTE_oc_lambda,
+                                                      eNetModel_gm12878_10kb_SMOTE_OP_lambda,
+                                                      eNetModel_gm12878_10kb_SMOTE_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_25kb_none_oc_lambda,
+                                                      eNetModel_gm12878_25kb_none_OP_lambda,
+                                                      eNetModel_gm12878_25kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_25kb_ROS_oc_lambda,
+                                                      eNetModel_gm12878_25kb_ROS_OP_lambda,
+                                                      eNetModel_gm12878_25kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_25kb_RUS_oc_lambda,
+                                                      eNetModel_gm12878_25kb_RUS_OP_lambda,
+                                                      eNetModel_gm12878_25kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_25kb_SMOTE_oc_lambda,
+                                                      eNetModel_gm12878_25kb_SMOTE_OP_lambda,
+                                                      eNetModel_gm12878_25kb_SMOTE_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_50kb_none_oc_lambda,
+                                                      eNetModel_gm12878_50kb_none_OP_lambda,
+                                                      eNetModel_gm12878_50kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_50kb_ROS_oc_lambda,
+                                                      eNetModel_gm12878_50kb_ROS_OP_lambda,
+                                                      eNetModel_gm12878_50kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_50kb_RUS_oc_lambda,
+                                                      eNetModel_gm12878_50kb_RUS_OP_lambda,
+                                                      eNetModel_gm12878_50kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_50kb_SMOTE_oc_lambda,
+                                                      eNetModel_gm12878_50kb_SMOTE_OP_lambda,
+                                                      eNetModel_gm12878_50kb_SMOTE_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_100kb_none_oc_lambda,
+                                                      eNetModel_gm12878_100kb_none_OP_lambda,
+                                                      eNetModel_gm12878_100kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_100kb_ROS_oc_lambda,
+                                                      eNetModel_gm12878_100kb_ROS_OP_lambda,
+                                                      eNetModel_gm12878_100kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_100kb_RUS_oc_lambda,
+                                                      eNetModel_gm12878_100kb_RUS_OP_lambda,
+                                                      eNetModel_gm12878_100kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_gm12878_100kb_SMOTE_oc_lambda,
+                                                      eNetModel_gm12878_100kb_SMOTE_OP_lambda,
+                                                      eNetModel_gm12878_100kb_SMOTE_Distance_lambda))
+
+eNetModel_gm12878_parameter_tab$CL <- "GM12878"
+eNetModel_gm12878_parameter_tab$Resolution <- c(rep("10 kb", 12),
+                                                rep("25 kb", 12),
+                                                rep("50 kb", 12),
+                                                rep("100 kb", 12))
+eNetModel_gm12878_parameter_tab$PredictorType <- rep(c("OC","OP","Distance"),16)
+eNetModel_gm12878_parameter_tab <- eNetModel_gm12878_parameter_tab[,c(3:5,1:2)]
+```
+
+
+## K562
+
+### 10kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_K562_10kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_K562_10kb_none_oc_alpha <- as.numeric(eNetModel_K562_10kb_none_oc$bestTune[1])
+eNetModel_K562_10kb_none_oc_lambda <- as.numeric(eNetModel_K562_10kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_10kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_K562_10kb_none_OP_alpha <- as.numeric(eNetModel_K562_10kb_none_OP$bestTune[1])
+eNetModel_K562_10kb_none_OP_lambda <- as.numeric(eNetModel_K562_10kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_10kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_K562_10kb_none_Distance_alpha <- as.numeric(eNetModel_K562_10kb_none_Distance$bestTune[1])
+eNetModel_K562_10kb_none_Distance_lambda <- as.numeric(eNetModel_K562_10kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_K562_10kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_K562_10kb_ROS_oc_alpha <- as.numeric(eNetModel_K562_10kb_ROS_oc$bestTune[1])
+eNetModel_K562_10kb_ROS_oc_lambda <- as.numeric(eNetModel_K562_10kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_10kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_K562_10kb_ROS_OP_alpha <- as.numeric(eNetModel_K562_10kb_ROS_OP$bestTune[1])
+eNetModel_K562_10kb_ROS_OP_lambda <- as.numeric(eNetModel_K562_10kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_10kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_10kb_ROS_Distance_alpha <- as.numeric(eNetModel_K562_10kb_ROS_Distance$bestTune[1])
+eNetModel_K562_10kb_ROS_Distance_lambda <- as.numeric(eNetModel_K562_10kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_K562_10kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_K562_10kb_RUS_oc_alpha <- as.numeric(eNetModel_K562_10kb_RUS_oc$bestTune[1])
+eNetModel_K562_10kb_RUS_oc_lambda <- as.numeric(eNetModel_K562_10kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_10kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_K562_10kb_RUS_OP_alpha <- as.numeric(eNetModel_K562_10kb_RUS_OP$bestTune[1])
+eNetModel_K562_10kb_RUS_OP_lambda <- as.numeric(eNetModel_K562_10kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_10kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_10kb_RUS_Distance_alpha <- as.numeric(eNetModel_K562_10kb_RUS_Distance$bestTune[1])
+eNetModel_K562_10kb_RUS_Distance_lambda <- as.numeric(eNetModel_K562_10kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_K562_10kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_K562_10kb_SMOTE_oc_alpha <- as.numeric(eNetModel_K562_10kb_SMOTE_oc$bestTune[1])
+eNetModel_K562_10kb_SMOTE_oc_lambda <- as.numeric(eNetModel_K562_10kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_10kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_K562_10kb_SMOTE_OP_alpha <- as.numeric(eNetModel_K562_10kb_SMOTE_OP$bestTune[1])
+eNetModel_K562_10kb_SMOTE_OP_lambda <- as.numeric(eNetModel_K562_10kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_10kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_K562_10kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_K562_10kb_SMOTE_Distance$bestTune[1])
+eNetModel_K562_10kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_K562_10kb_SMOTE_Distance$bestTune[2])
+```
+
+
+### 25kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_K562_25kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_K562_25kb_none_oc_alpha <- as.numeric(eNetModel_K562_25kb_none_oc$bestTune[1])
+eNetModel_K562_25kb_none_oc_lambda <- as.numeric(eNetModel_K562_25kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_25kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_K562_25kb_none_OP_alpha <- as.numeric(eNetModel_K562_25kb_none_OP$bestTune[1])
+eNetModel_K562_25kb_none_OP_lambda <- as.numeric(eNetModel_K562_25kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_25kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_K562_25kb_none_Distance_alpha <- as.numeric(eNetModel_K562_25kb_none_Distance$bestTune[1])
+eNetModel_K562_25kb_none_Distance_lambda <- as.numeric(eNetModel_K562_25kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_K562_25kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_K562_25kb_ROS_oc_alpha <- as.numeric(eNetModel_K562_25kb_ROS_oc$bestTune[1])
+eNetModel_K562_25kb_ROS_oc_lambda <- as.numeric(eNetModel_K562_25kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_25kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_K562_25kb_ROS_OP_alpha <- as.numeric(eNetModel_K562_25kb_ROS_OP$bestTune[1])
+eNetModel_K562_25kb_ROS_OP_lambda <- as.numeric(eNetModel_K562_25kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_25kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_25kb_ROS_Distance_alpha <- as.numeric(eNetModel_K562_25kb_ROS_Distance$bestTune[1])
+eNetModel_K562_25kb_ROS_Distance_lambda <- as.numeric(eNetModel_K562_25kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_K562_25kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_K562_25kb_RUS_oc_alpha <- as.numeric(eNetModel_K562_25kb_RUS_oc$bestTune[1])
+eNetModel_K562_25kb_RUS_oc_lambda <- as.numeric(eNetModel_K562_25kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_25kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_K562_25kb_RUS_OP_alpha <- as.numeric(eNetModel_K562_25kb_RUS_OP$bestTune[1])
+eNetModel_K562_25kb_RUS_OP_lambda <- as.numeric(eNetModel_K562_25kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_25kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_25kb_RUS_Distance_alpha <- as.numeric(eNetModel_K562_25kb_RUS_Distance$bestTune[1])
+eNetModel_K562_25kb_RUS_Distance_lambda <- as.numeric(eNetModel_K562_25kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_K562_25kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_K562_25kb_SMOTE_oc_alpha <- as.numeric(eNetModel_K562_25kb_SMOTE_oc$bestTune[1])
+eNetModel_K562_25kb_SMOTE_oc_lambda <- as.numeric(eNetModel_K562_25kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_25kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_K562_25kb_SMOTE_OP_alpha <- as.numeric(eNetModel_K562_25kb_SMOTE_OP$bestTune[1])
+eNetModel_K562_25kb_SMOTE_OP_lambda <- as.numeric(eNetModel_K562_25kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_25kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_K562_25kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_K562_25kb_SMOTE_Distance$bestTune[1])
+eNetModel_K562_25kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_K562_25kb_SMOTE_Distance$bestTune[2])
+```
+
+
+### 50kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_K562_50kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_K562_50kb_none_oc_alpha <- as.numeric(eNetModel_K562_50kb_none_oc$bestTune[1])
+eNetModel_K562_50kb_none_oc_lambda <- as.numeric(eNetModel_K562_50kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_50kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_K562_50kb_none_OP_alpha <- as.numeric(eNetModel_K562_50kb_none_OP$bestTune[1])
+eNetModel_K562_50kb_none_OP_lambda <- as.numeric(eNetModel_K562_50kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_50kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_K562_50kb_none_Distance_alpha <- as.numeric(eNetModel_K562_50kb_none_Distance$bestTune[1])
+eNetModel_K562_50kb_none_Distance_lambda <- as.numeric(eNetModel_K562_50kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_K562_50kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_K562_50kb_ROS_oc_alpha <- as.numeric(eNetModel_K562_50kb_ROS_oc$bestTune[1])
+eNetModel_K562_50kb_ROS_oc_lambda <- as.numeric(eNetModel_K562_50kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_50kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_K562_50kb_ROS_OP_alpha <- as.numeric(eNetModel_K562_50kb_ROS_OP$bestTune[1])
+eNetModel_K562_50kb_ROS_OP_lambda <- as.numeric(eNetModel_K562_50kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_50kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_50kb_ROS_Distance_alpha <- as.numeric(eNetModel_K562_50kb_ROS_Distance$bestTune[1])
+eNetModel_K562_50kb_ROS_Distance_lambda <- as.numeric(eNetModel_K562_50kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_K562_50kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_K562_50kb_RUS_oc_alpha <- as.numeric(eNetModel_K562_50kb_RUS_oc$bestTune[1])
+eNetModel_K562_50kb_RUS_oc_lambda <- as.numeric(eNetModel_K562_50kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_50kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_K562_50kb_RUS_OP_alpha <- as.numeric(eNetModel_K562_50kb_RUS_OP$bestTune[1])
+eNetModel_K562_50kb_RUS_OP_lambda <- as.numeric(eNetModel_K562_50kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_50kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_50kb_RUS_Distance_alpha <- as.numeric(eNetModel_K562_50kb_RUS_Distance$bestTune[1])
+eNetModel_K562_50kb_RUS_Distance_lambda <- as.numeric(eNetModel_K562_50kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_K562_50kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_K562_50kb_SMOTE_oc_alpha <- as.numeric(eNetModel_K562_50kb_SMOTE_oc$bestTune[1])
+eNetModel_K562_50kb_SMOTE_oc_lambda <- as.numeric(eNetModel_K562_50kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_50kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_K562_50kb_SMOTE_OP_alpha <- as.numeric(eNetModel_K562_50kb_SMOTE_OP$bestTune[1])
+eNetModel_K562_50kb_SMOTE_OP_lambda <- as.numeric(eNetModel_K562_50kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_50kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_K562_50kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_K562_50kb_SMOTE_Distance$bestTune[1])
+eNetModel_K562_50kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_K562_50kb_SMOTE_Distance$bestTune[2])
+```
+
+
+### 100kb
+
+#### none
+
+##### OC
+
+```{r}
+eNetModel_K562_100kb_none_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OC/ENET/eNetModel.rds")
+eNetModel_K562_100kb_none_oc_alpha <- as.numeric(eNetModel_K562_100kb_none_oc$bestTune[1])
+eNetModel_K562_100kb_none_oc_lambda <- as.numeric(eNetModel_K562_100kb_none_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_100kb_none_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/OP/ENET/eNetModel.rds")
+eNetModel_K562_100kb_none_OP_alpha <- as.numeric(eNetModel_K562_100kb_none_OP$bestTune[1])
+eNetModel_K562_100kb_none_OP_lambda <- as.numeric(eNetModel_K562_100kb_none_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_100kb_none_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/None/Distance/ENET/eNetModel.rds")
+eNetModel_K562_100kb_none_Distance_alpha <- as.numeric(eNetModel_K562_100kb_none_Distance$bestTune[1])
+eNetModel_K562_100kb_none_Distance_lambda <- as.numeric(eNetModel_K562_100kb_none_Distance$bestTune[2])
+```
+
+#### ROS
+
+##### OC
+
+```{r}
+eNetModel_K562_100kb_ROS_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OC/ENET/eNetModel.rds")
+eNetModel_K562_100kb_ROS_oc_alpha <- as.numeric(eNetModel_K562_100kb_ROS_oc$bestTune[1])
+eNetModel_K562_100kb_ROS_oc_lambda <- as.numeric(eNetModel_K562_100kb_ROS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_100kb_ROS_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/OP/ENET/eNetModel.rds")
+eNetModel_K562_100kb_ROS_OP_alpha <- as.numeric(eNetModel_K562_100kb_ROS_OP$bestTune[1])
+eNetModel_K562_100kb_ROS_OP_lambda <- as.numeric(eNetModel_K562_100kb_ROS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_100kb_ROS_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/ROS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_100kb_ROS_Distance_alpha <- as.numeric(eNetModel_K562_100kb_ROS_Distance$bestTune[1])
+eNetModel_K562_100kb_ROS_Distance_lambda <- as.numeric(eNetModel_K562_100kb_ROS_Distance$bestTune[2])
+```
+
+
+#### RUS
+
+##### OC
+
+```{r}
+eNetModel_K562_100kb_RUS_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OC/ENET/eNetModel.rds")
+eNetModel_K562_100kb_RUS_oc_alpha <- as.numeric(eNetModel_K562_100kb_RUS_oc$bestTune[1])
+eNetModel_K562_100kb_RUS_oc_lambda <- as.numeric(eNetModel_K562_100kb_RUS_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_100kb_RUS_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/OP/ENET/eNetModel.rds")
+eNetModel_K562_100kb_RUS_OP_alpha <- as.numeric(eNetModel_K562_100kb_RUS_OP$bestTune[1])
+eNetModel_K562_100kb_RUS_OP_lambda <- as.numeric(eNetModel_K562_100kb_RUS_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_100kb_RUS_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/RUS/Distance/ENET/eNetModel.rds")
+eNetModel_K562_100kb_RUS_Distance_alpha <- as.numeric(eNetModel_K562_100kb_RUS_Distance$bestTune[1])
+eNetModel_K562_100kb_RUS_Distance_lambda <- as.numeric(eNetModel_K562_100kb_RUS_Distance$bestTune[2])
+```
+
+#### SMOTE
+
+##### OC
+
+```{r}
+eNetModel_K562_100kb_SMOTE_oc <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OC/ENET/eNetModel.rds")
+eNetModel_K562_100kb_SMOTE_oc_alpha <- as.numeric(eNetModel_K562_100kb_SMOTE_oc$bestTune[1])
+eNetModel_K562_100kb_SMOTE_oc_lambda <- as.numeric(eNetModel_K562_100kb_SMOTE_oc$bestTune[2])
+```
+
+##### OP
+
+```{r}
+eNetModel_K562_100kb_SMOTE_OP <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/OP/ENET/eNetModel.rds")
+eNetModel_K562_100kb_SMOTE_OP_alpha <- as.numeric(eNetModel_K562_100kb_SMOTE_OP$bestTune[1])
+eNetModel_K562_100kb_SMOTE_OP_lambda <- as.numeric(eNetModel_K562_100kb_SMOTE_OP$bestTune[2])
+```
+
+##### Distance
+
+```{r}
+eNetModel_K562_100kb_SMOTE_Distance <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/eNetModel.rds")
+eNetModel_K562_100kb_SMOTE_Distance_alpha <- as.numeric(eNetModel_K562_100kb_SMOTE_Distance$bestTune[1])
+eNetModel_K562_100kb_SMOTE_Distance_lambda <- as.numeric(eNetModel_K562_100kb_SMOTE_Distance$bestTune[2])
+```
+
+## Creating Table
+
+```{r}
+eNetModel_K562_parameter_tab <- data.frame(Alpha=c(eNetModel_K562_10kb_none_oc_alpha,
+                                                      eNetModel_K562_10kb_none_OP_alpha,
+                                                      eNetModel_K562_10kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_10kb_ROS_oc_alpha,
+                                                      eNetModel_K562_10kb_ROS_OP_alpha,
+                                                      eNetModel_K562_10kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_10kb_RUS_oc_alpha,
+                                                      eNetModel_K562_10kb_RUS_OP_alpha,
+                                                      eNetModel_K562_10kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_10kb_SMOTE_oc_alpha,
+                                                      eNetModel_K562_10kb_SMOTE_OP_alpha,
+                                                      eNetModel_K562_10kb_SMOTE_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_25kb_none_oc_alpha,
+                                                      eNetModel_K562_25kb_none_OP_alpha,
+                                                      eNetModel_K562_25kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_25kb_ROS_oc_alpha,
+                                                      eNetModel_K562_25kb_ROS_OP_alpha,
+                                                      eNetModel_K562_25kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_25kb_RUS_oc_alpha,
+                                                      eNetModel_K562_25kb_RUS_OP_alpha,
+                                                      eNetModel_K562_25kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_25kb_SMOTE_oc_alpha,
+                                                      eNetModel_K562_25kb_SMOTE_OP_alpha,
+                                                      eNetModel_K562_25kb_SMOTE_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_50kb_none_oc_alpha,
+                                                      eNetModel_K562_50kb_none_OP_alpha,
+                                                      eNetModel_K562_50kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_50kb_ROS_oc_alpha,
+                                                      eNetModel_K562_50kb_ROS_OP_alpha,
+                                                      eNetModel_K562_50kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_50kb_RUS_oc_alpha,
+                                                      eNetModel_K562_50kb_RUS_OP_alpha,
+                                                      eNetModel_K562_50kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_50kb_SMOTE_oc_alpha,
+                                                      eNetModel_K562_50kb_SMOTE_OP_alpha,
+                                                      eNetModel_K562_50kb_SMOTE_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_100kb_none_oc_alpha,
+                                                      eNetModel_K562_100kb_none_OP_alpha,
+                                                      eNetModel_K562_100kb_none_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_100kb_ROS_oc_alpha,
+                                                      eNetModel_K562_100kb_ROS_OP_alpha,
+                                                      eNetModel_K562_100kb_ROS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_100kb_RUS_oc_alpha,
+                                                      eNetModel_K562_100kb_RUS_OP_alpha,
+                                                      eNetModel_K562_100kb_RUS_Distance_alpha,
+                                                      
+                                                      eNetModel_K562_100kb_SMOTE_oc_alpha,
+                                                      eNetModel_K562_100kb_SMOTE_OP_alpha,
+                                                      eNetModel_K562_100kb_SMOTE_Distance_alpha),
+                                              Lambda=c(eNetModel_K562_10kb_none_oc_lambda,
+                                                      eNetModel_K562_10kb_none_OP_lambda,
+                                                      eNetModel_K562_10kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_10kb_ROS_oc_lambda,
+                                                      eNetModel_K562_10kb_ROS_OP_lambda,
+                                                      eNetModel_K562_10kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_10kb_RUS_oc_lambda,
+                                                      eNetModel_K562_10kb_RUS_OP_lambda,
+                                                      eNetModel_K562_10kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_10kb_SMOTE_oc_lambda,
+                                                      eNetModel_K562_10kb_SMOTE_OP_lambda,
+                                                      eNetModel_K562_10kb_SMOTE_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_25kb_none_oc_lambda,
+                                                      eNetModel_K562_25kb_none_OP_lambda,
+                                                      eNetModel_K562_25kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_25kb_ROS_oc_lambda,
+                                                      eNetModel_K562_25kb_ROS_OP_lambda,
+                                                      eNetModel_K562_25kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_25kb_RUS_oc_lambda,
+                                                      eNetModel_K562_25kb_RUS_OP_lambda,
+                                                      eNetModel_K562_25kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_25kb_SMOTE_oc_lambda,
+                                                      eNetModel_K562_25kb_SMOTE_OP_lambda,
+                                                      eNetModel_K562_25kb_SMOTE_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_50kb_none_oc_lambda,
+                                                      eNetModel_K562_50kb_none_OP_lambda,
+                                                      eNetModel_K562_50kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_50kb_ROS_oc_lambda,
+                                                      eNetModel_K562_50kb_ROS_OP_lambda,
+                                                      eNetModel_K562_50kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_50kb_RUS_oc_lambda,
+                                                      eNetModel_K562_50kb_RUS_OP_lambda,
+                                                      eNetModel_K562_50kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_50kb_SMOTE_oc_lambda,
+                                                      eNetModel_K562_50kb_SMOTE_OP_lambda,
+                                                      eNetModel_K562_50kb_SMOTE_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_100kb_none_oc_lambda,
+                                                      eNetModel_K562_100kb_none_OP_lambda,
+                                                      eNetModel_K562_100kb_none_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_100kb_ROS_oc_lambda,
+                                                      eNetModel_K562_100kb_ROS_OP_lambda,
+                                                      eNetModel_K562_100kb_ROS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_100kb_RUS_oc_lambda,
+                                                      eNetModel_K562_100kb_RUS_OP_lambda,
+                                                      eNetModel_K562_100kb_RUS_Distance_lambda,
+                                                      
+                                                      eNetModel_K562_100kb_SMOTE_oc_lambda,
+                                                      eNetModel_K562_100kb_SMOTE_OP_lambda,
+                                                      eNetModel_K562_100kb_SMOTE_Distance_lambda))
+
+eNetModel_K562_parameter_tab$CL <- "K562"
+eNetModel_K562_parameter_tab$Resolution <- c(rep("10 kb", 12),
+                                                rep("25 kb", 12),
+                                                rep("50 kb", 12),
+                                                rep("100 kb", 12))
+eNetModel_K562_parameter_tab$PredictorType <- rep(c("OC","OP","Distance"),16)
+eNetModel_K562_parameter_tab <- eNetModel_K562_parameter_tab[,c(3:5,1:2)]
+```
+
+
+#All cell lines
+
+```{r}
+eNetModel_parameters_table <- rbind.data.frame(eNetModel_gm12878_parameter_tab,
+                                               eNetModel_K562_parameter_tab)
+
+write.csv(eNetModel_parameters_table, "C:/Users/stili/Downloads/eNetModel_parameters_table.csv")
+```
+
