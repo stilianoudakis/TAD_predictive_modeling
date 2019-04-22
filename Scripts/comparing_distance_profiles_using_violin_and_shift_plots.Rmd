@@ -1,0 +1,192 @@
+---
+title: "Comparing Distance Profiles Using Violin Plots and Shift Function"
+author: "Spiro Stilianoudakis"
+date: "April 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(coin)
+library(cowplot)
+```
+
+# Functions for shift function
+
+```{r}
+setwd("C:/Users/stili/Documents/TAD_miscellaneous/shift_function")
+ 
+source("Rallfun-v30.txt")
+source("wilcox_modified.txt")
+source("rgar_visualisation.txt")
+source("rgar_utils.txt")
+
+```
+
+
+# GM12878
+
+## 10kb
+
+```{r}
+train <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/training_testing/train.rds"))
+  
+enetcoefs <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/enetcoefs.rds"))
+ 
+names(train) <- gsub(paste(c("`", 
+                             "Gm12878", 
+                             "-", 
+                             #"_", 
+                             #"dist", "count", "perc",
+                             "Haib", 
+                             "Sydh",
+                             "Uta",
+                             "Uw",
+                             "Broad",
+                             "Uchicago"), collapse = "|"), "", names(train))
+train <- train[,c(1,which(names(train) %in% enetcoefs))]
+
+  
+set.seed(123)
+train_smote <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+  
+  
+```
+
+
+### Top Annotations
+
+####SMC
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Smc3ab9263-Sydh_dist")
+  
+annotdata.smc <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.smc[which(annotdata.smc$y=="No"),2], annotdata.smc[which(annotdata.smc$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.smc[,2] ~ annotdata.smc[,1],
+                     data=annotdata.smc,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Smc3ab9263-Sydh_dist"))
+  
+violin.gm12878.10kb.smc <- ggplot(annotdata.smc, aes(x=ordered(y, levels=rev(unique(y))), y=Smc3ab9263_dist, color=y)) + 
+  geom_violin(trim=FALSE)+
+  geom_boxplot(width=0.1, fill="white")+
+  coord_flip() +
+  scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Did not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary"))+
+  xlab("Class of Genomic Bin") +
+  ylab("Log2 Distance") +
+  ggtitle("SMC3") +
+  #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 15),
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20,
+                              hjust=.5))
+
+
+out <- shifthd(annotdata.smc$Smc3ab9263_dist[which(annotdata.smc$y=="No")],
+               annotdata.smc$Smc3ab9263_dist[which(annotdata.smc$y=="Yes")],
+               nboot=200)
+
+ylim <- max(max(abs(out$ci_upper)),max(abs(out$ci_lower)))
+ylim <- c(-ylim,ylim)
+xintercept <- as.numeric(out[5,1]) # get median of group 1
+#xbreaks <- out[,1] # get deciles of group 1
+xplot = names(out)[1]
+
+shift.gm12878.10kb.smc <- ggplot(out, aes_string(x=xplot, y="difference")) +
+  geom_hline(yintercept=0,linetype=2,alpha=0.5) + # x=0 reference line
+  geom_vline(xintercept=xintercept,linetype=2,alpha=0.5) + # y=median reference line
+  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), colour="black", width=.15) +
+  geom_line(colour="black", linetype="solid", size=1.5) +
+  geom_point(colour="black", size=4, shape=21, fill="white") + #999999
+  xlab("Quantiles for bins that\nOverlapped w/flanked TAD boundaries") +
+  ylab("Quantile differences between bin class") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=14),
+        axis.text.y = element_text(size=14),
+        axis.title.x = element_text(size=16,face="bold"),
+        axis.title.y = element_text(size=16,face="bold")) +
+  scale_y_continuous(limits = ylim)
+
+ggarrange(violin.gm12878.10kb.smc,
+          shift.gm12878.10kb.smc,
+          ncol=1,
+          nrow=2,
+          common.legend = TRUE,
+          legend = "top")
+```
+
