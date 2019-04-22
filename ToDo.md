@@ -6,16 +6,17 @@
 
 ## ToDo
 
+- Make manuscript more of a story
+
 - directly compare hong using count predictor types
     
 - directly compare mourad using percent predictor types
 
 - Compare proteins used by Mourad with our tfbs 
 
-- implement shift function for figure 7; put k562 in supplementary
++ implement shift function for figure 7; put k562 in supplementary
    * For densities; perform resampling first? or sample from majority class?
-
-- Make manuscript more of a story
+   * Compare these plots with the density plots (different versions of Figure 7)
 
 * Problem with ranking variable importances
    * more regularized features (contribute as NA in ranking) artificially inflate rankings (K562 cell line)
