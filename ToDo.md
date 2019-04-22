@@ -13,6 +13,7 @@
 - Compare proteins used by Mourad with our tfbs 
 
 - implement shift function for figure 7; put k562 in supplementary
+   * For densities; perform resampling first? or sample from majority class?
 
 - Make manuscript more of a story
 
