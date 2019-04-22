@@ -142,17 +142,17 @@ violin.gm12878.10kb.smc <- ggplot(annotdata.smc, aes(x=ordered(y, levels=rev(uni
   coord_flip() +
   scale_color_discrete(name="Class of\nGenomic Bin",
                          labels=c("Did not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary"))+
-  xlab("Class of Genomic Bin") +
-  ylab("Log2 Distance") +
+  xlab("Class of genomic bin") +
+  ylab("Log2 distance") +
   ggtitle("SMC3") +
-  #annotate("text", x=7, y=.2, label= paste("P-Value:", perm.pval, sep = " "), size=5) +
   theme_bw() +
   theme(axis.text.x = element_text(size = 15),
     axis.text.y = element_blank(),
-    axis.title.x = element_text(size = 20),
-    axis.title.y = element_text(size = 20),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
     legend.text=element_text(size=15),
-    legend.title=element_text(size=20),
+    legend.title=element_text(size=15),
+    legend.position="top",
     plot.title = element_text(size=20,
                               hjust=.5))
 
@@ -170,23 +170,293 @@ xplot = names(out)[1]
 shift.gm12878.10kb.smc <- ggplot(out, aes_string(x=xplot, y="difference")) +
   geom_hline(yintercept=0,linetype=2,alpha=0.5) + # x=0 reference line
   geom_vline(xintercept=xintercept,linetype=2,alpha=0.5) + # y=median reference line
-  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), colour="black", width=.15) +
+  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), colour="black", width=.10) +
   geom_line(colour="black", linetype="solid", size=1.5) +
   geom_point(colour="black", size=4, shape=21, fill="white") + #999999
-  xlab("Quantiles for bins that\nOverlapped w/flanked TAD boundaries") +
-  ylab("Quantile differences between bin class") +
+  xlab("Quantiles for bins that Overlapped\nw/flanked TAD boundaries") +
+  ylab("Quantile differences") +
   theme_bw() +
-  theme(axis.text.x = element_text(size=14),
-        axis.text.y = element_text(size=14),
-        axis.title.x = element_text(size=16,face="bold"),
-        axis.title.y = element_text(size=16,face="bold")) +
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size=15),
+        axis.title.x = element_text(size=15),
+        axis.title.y = element_text(size=15)) +
   scale_y_continuous(limits = ylim)
 
-ggarrange(violin.gm12878.10kb.smc,
-          shift.gm12878.10kb.smc,
-          ncol=1,
+```
+
+####ZNF143
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Znf143166181ap-Sydh_dist")
+  
+annotdata.znf143 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.znf143[which(annotdata.znf143$y=="No"),2], annotdata.znf143[which(annotdata.znf143$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.znf143[,2] ~ annotdata.znf143[,1],
+                     data=annotdata.znf143,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Znf143166181ap-Sydh_dist"))
+  
+violin.gm12878.10kb.znf143 <- ggplot(annotdata.znf143, aes(x=ordered(y, levels=rev(unique(y))), y=Znf143166181ap_dist, color=y)) + 
+  geom_violin(trim=FALSE)+
+  geom_boxplot(width=0.1, fill="white")+
+  coord_flip() +
+  scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Did not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary"))+
+  xlab("Class of genomic bin") +
+  ylab("Log2 distance") +
+  ggtitle("ZNF143") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 15),
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=15),
+    legend.position="top",
+    plot.title = element_text(size=20,
+                              hjust=.5))
+
+
+out <- shifthd(annotdata.znf143$Znf143166181ap_dist[which(annotdata.znf143$y=="No")],
+               annotdata.znf143$Znf143166181ap_dist[which(annotdata.znf143$y=="Yes")],
+               nboot=200)
+
+ylim <- max(max(abs(out$ci_upper)),max(abs(out$ci_lower)))
+ylim <- c(-ylim,ylim)
+xintercept <- as.numeric(out[5,1]) # get median of group 1
+#xbreaks <- out[,1] # get deciles of group 1
+xplot = names(out)[1]
+
+shift.gm12878.10kb.znf143 <- ggplot(out, aes_string(x=xplot, y="difference")) +
+  geom_hline(yintercept=0,linetype=2,alpha=0.5) + # x=0 reference line
+  geom_vline(xintercept=xintercept,linetype=2,alpha=0.5) + # y=median reference line
+  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), colour="black", width=.10) +
+  geom_line(colour="black", linetype="solid", size=1.5) +
+  geom_point(colour="black", size=4, shape=21, fill="white") + #999999
+  xlab("Quantiles for bins that Overlapped\nw/flanked TAD boundaries") +
+  ylab("Quantile differences") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size=15),
+        axis.title.x = element_text(size=15),
+        axis.title.y = element_text(size=15)) +
+  scale_y_continuous(limits = ylim)
+
+```
+
+####CTCF
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Ctcf-Broad_dist")
+  
+annotdata.ctcf <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.ctcf[which(annotdata.ctcf$y=="No"),2], annotdata.ctcf[which(annotdata.ctcf$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.ctcf[,2] ~ annotdata.ctcf[,1],
+                     data=annotdata.ctcf,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Ctcf-Broad_dist"))
+  
+violin.gm12878.10kb.ctcf <- ggplot(annotdata.ctcf, aes(x=ordered(y, levels=rev(unique(y))), y=Ctcf_dist, color=y)) + 
+  geom_violin(trim=FALSE)+
+  geom_boxplot(width=0.1, fill="white")+
+  coord_flip() +
+  scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Did not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary"))+
+  xlab("Class of genomic bin") +
+  ylab("Log2 distance") +
+  ggtitle("CTCF") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 15),
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=15),
+    legend.position="top",
+    plot.title = element_text(size=20,
+                              hjust=.5))
+
+
+out <- shifthd(annotdata.ctcf$Ctcf_dist[which(annotdata.ctcf$y=="No")],
+               annotdata.ctcf$Ctcf_dist[which(annotdata.ctcf$y=="Yes")],
+               nboot=200)
+
+ylim <- max(max(abs(out$ci_upper)),max(abs(out$ci_lower)))
+ylim <- c(-ylim,ylim)
+xintercept <- as.numeric(out[5,1]) # get median of group 1
+#xbreaks <- out[,1] # get deciles of group 1
+xplot = names(out)[1]
+
+shift.gm12878.10kb.ctcf <- ggplot(out, aes_string(x=xplot, y="difference")) +
+  geom_hline(yintercept=0,linetype=2,alpha=0.5) + # x=0 reference line
+  geom_vline(xintercept=xintercept,linetype=2,alpha=0.5) + # y=median reference line
+  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), colour="black", width=.10) +
+  geom_line(colour="black", linetype="solid", size=1.5) +
+  geom_point(colour="black", size=4, shape=21, fill="white") + #999999
+  xlab("Quantiles for bins that Overlapped\nw/flanked TAD boundaries") +
+  ylab("Quantile differences") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size=15),
+        axis.title.x = element_text(size=15),
+        axis.title.y = element_text(size=15)) +
+  scale_y_continuous(limits = ylim)
+
+```
+
+
+####RAD21
+
+```{r}
+annotname <- gsub(paste(c("`", 
+             "Gm12878", 
+             "-", 
+             #"_", 
+             #"dist", "count", "perc",
+             "Haib", 
+             "Sydh",
+             "Uta",
+             "Uw",
+             "Broad",
+             "Uchicago"), collapse = "|"), "", "Gm12878-Rad21-Haib_dist")
+  
+annotdata.rad21 <- train_smote[, c(1, which(names(train_smote)==annotname))]
+  
+#ks.test(annotdata.rad21[which(annotdata.rad21$y=="No"),2], annotdata.rad21[which(annotdata.rad21$y=="Yes"),2], alternative = "two.sided")
+  
+perm.pval <- pvalue(oneway_test(annotdata.rad21[,2] ~ annotdata.rad21[,1],
+                     data=annotdata.rad21,
+                     alternative="greater", 
+                     distribution=approximate(B=10000)))[1]
+  
+perm.pval <- ifelse(perm.pval==0,"< 0.0001", as.character(round(perm.pval,4)))
+  
+plottitle <- paste(gsub(paste(c("Gm12878",
+                                  "-","_",
+                                  "dist","perc","count",
+                                  "Haib",
+                                  "Sydh",
+                                  "Uta",
+                                  "Uw",
+                                  "Broad",
+                                  "Uchicago"), 
+                                collapse = "|"), 
+                          "",
+                          "Gm12878-Rad21-Haib_dist"))
+  
+violin.gm12878.10kb.rad21 <- ggplot(annotdata.rad21, aes(x=ordered(y, levels=rev(unique(y))), y=Rad21_dist, color=y)) + 
+  geom_violin(trim=FALSE)+
+  geom_boxplot(width=0.1, fill="white")+
+  coord_flip() +
+  scale_color_discrete(name="Class of\nGenomic Bin",
+                         labels=c("Did not overlap\nw/ flanked TAD boundary", "Overlapped w/\nflanked TAD boundary"))+
+  xlab("Class of genomic bin") +
+  ylab("Log2 distance") +
+  ggtitle("RAD21") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size = 15),
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=15),
+    legend.position="top",
+    plot.title = element_text(size=20,
+                              hjust=.5))
+
+
+out <- shifthd(annotdata.rad21$Rad21_dist[which(annotdata.rad21$y=="No")],
+               annotdata.rad21$Rad21_dist[which(annotdata.rad21$y=="Yes")],
+               nboot=200)
+
+ylim <- max(max(abs(out$ci_upper)),max(abs(out$ci_lower)))
+ylim <- c(-ylim,ylim)
+xintercept <- as.numeric(out[5,1]) # get median of group 1
+#xbreaks <- out[,1] # get deciles of group 1
+xplot = names(out)[1]
+
+shift.gm12878.10kb.rad21 <- ggplot(out, aes_string(x=xplot, y="difference")) +
+  geom_hline(yintercept=0,linetype=2,alpha=0.5) + # x=0 reference line
+  geom_vline(xintercept=xintercept,linetype=2,alpha=0.5) + # y=median reference line
+  geom_errorbar(aes(ymin=ci_lower, ymax=ci_upper), colour="black", width=.10) +
+  geom_line(colour="black", linetype="solid", size=1.5) +
+  geom_point(colour="black", size=4, shape=21, fill="white") + #999999
+  xlab("Quantiles for bins that Overlapped\nw/flanked TAD boundaries") +
+  ylab("Quantile differences") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size=15),
+        axis.title.x = element_text(size=15),
+        axis.title.y = element_text(size=15)) +
+  scale_y_continuous(limits = ylim)
+
+```
+
+###Plots
+
+```{r}
+ggarrange(violin.gm12878.10kb.smc,violin.gm12878.10kb.znf143,violin.gm12878.10kb.ctcf,violin.gm12878.10kb.rad21,
+          shift.gm12878.10kb.smc,shift.gm12878.10kb.znf143,shift.gm12878.10kb.ctcf,shift.gm12878.10kb.rad21,
+          ncol=4,
           nrow=2,
           common.legend = TRUE,
-          legend = "top")
+          legend = "top",
+          labels = c("A","B","C","D","","","",""),
+          font.label = list(size=20))
+
 ```
 
