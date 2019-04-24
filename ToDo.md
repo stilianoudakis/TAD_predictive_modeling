@@ -6,6 +6,26 @@
 
 ## ToDo
 
+- put na category in figure legend in variable importance plots
+
+- only present to 10/20 importance feature plots; put rest in a table
+
+- remove "none" category from figure 5/10(supplementary)
+
+- only show results for F1 score; leave all other metrics as supplementary table
+
+- clear up justification of methods
+
+- define imbalance ratio in methods as well
+
+- summarize figure 4 into tables
+
+- separate plots for supplementary figure 1
+
+- look into why TADs were not called for chr9 on k562
+
+- remove bin component for correlation heatmaps; use jaccard statistic for comparing annotations
+
 - Make manuscript more of a story
 
 - directly compare hong using count predictor types
