@@ -6,6 +6,14 @@
 
 ## ToDo
 
+- Make manuscript more of a story
+
+- directly compare hong using count predictor types
+    
+- directly compare mourad using percent predictor types
+
+- Compare proteins used by Mourad with our tfbs 
+
 - put na category in figure legend in variable importance plots
 
 - only present to 10/20 importance feature plots; put rest in a table
@@ -22,17 +30,9 @@
 
 - separate plots for supplementary figure 1
 
-- look into why TADs were not called for chr9 on k562
++ look into why TADs were not called for chr9 on k562
 
 - remove bin component for correlation heatmaps; use jaccard statistic for comparing annotations
-
-- Make manuscript more of a story
-
-- directly compare hong using count predictor types
-    
-- directly compare mourad using percent predictor types
-
-- Compare proteins used by Mourad with our tfbs 
 
 + implement shift function for figure 7; put k562 in supplementary
    * For densities; perform resampling first? or sample from majority class?
