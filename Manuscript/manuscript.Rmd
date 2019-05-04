@@ -68,16 +68,9 @@ Replicate Hi-C data for the GM12878 and K562 cell lines were downloaded from GEO
 
 Genomic annotation data in the form of cell type specific chromatin states, histone marks, and transcription factor binding sites (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 2).
 
-
 ## MODEL CONSTRUCTION
 
-To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution for the corresponding contact matrix (Figure 1). For example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. For the boundary data, in order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. For example, for 10 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was then labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0). The process was repeat for each subsequent resolution.
-
-## ENSEMBLE FRAMEWORK
-
-An ensemble of models was established for the purposes of systematically comparing the performances of different parameters in the framework (Figure 2). Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type for the feature space.
-
-The data sets used for modeling were composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the minority and majority sets respectively. The data was then split into a 7:3 ratio of training to testing sets. Each training and testing set was composed of a similar majority to minority class ratio as the full data set. For the task of performance evaluation and prediction, the test set remained constant for all ensemble systems to account for an unbiased comparison.
+To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution for the corresponding contact matrix (Figure 1). As an example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. For the boundary data, in order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. That is, for 10 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was then labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0). The process was repeated for each subsequent resolution.
 
 ### FEATURE ENGINEERING 
 
@@ -91,7 +84,7 @@ Using the sets of genomic annotations, we created three types of predictors that
 
 ### DATA RE-SAMPLING
 
-In order to assess the influence of imbalanced classes, we then evaluated four re-sampling techniques (in addition to no re-sampling), composed of data from each predictor type. Each re-sampling technique is described in detail below.
+In order to assess the influence of imbalanced classes, we then evaluated four re-sampling techniques (in addition to no re-sampling), composed of the genomic bin class and data from each predictor type. The re-sampling techniques considered are described in detail below.
 
 1. **No Sampling**: All of the data points from the majority and minority class of the training set were used.
 
@@ -107,7 +100,7 @@ In order to assess the influence of imbalanced classes, we then evaluated four r
 
 ### FEATURE REDUCTION
 
-A regularization technique using a combination of the $l_{1}$ and $l_{2}$ penalties, known as the elastic-net, was used to reduce the feature space. The elastic-net was chosen in order to suitably reduce the feature space while also maintaining the inclusion of multiple correlated predictors. For each elastic-net regularization, 10-fold cross-validation was used to tune the parameters that controlled the penalty terms. All elastic-net algorithms were implemented in R using the `caret` package version 6.0 [@kuhn2012caret].
+A regularization technique using a combination of the $l_{1}$ and $l_{2}$ penalties, known as the elastic-net, was used to reduce the feature space. The elastic-net was chosen in order to suitably reduce the feature space while also maintaining the inclusion of multiple correlated predictors. For each elastic-net regularization, 10-fold cross-validation was used to tune the parameters that controlled the penalty terms. The parameters that maximized the mean AUPRC across each cross-fold was chosen. All elastic-net algorithms were implemented in R using the `caret` package version 6.0 [@kuhn2012caret]. 
 
 <!--
 Recursive feature elimination (RFE) was then used to determine the optimal number of features for models with the best performing predictor type. For each set of predictor type, random forest models were performed recursively on subsets of the feature space. The specific subsets of features were chosen as powers of 2 for computational efficiency. Model performance for each subset was evaluated using AUPRC. The optimal set of featues to include in downstream analyses was determined to be the subset in which the AUPRC leveled off. Again, to confirm that results were consistent, the reduction process was repeated for each combination of re-sampling technique, resolution, and cell line. 
@@ -115,11 +108,13 @@ Recursive feature elimination (RFE) was then used to determine the optimal numbe
 
 ### FINAL MODEL ASSESSMENT AND PERFORMANCE
 
-Once the appropriate predictor type and set of features were determined, a final set of random forest classification models were performed to fully compare re-sampling techniques. To reduce bias due to random dataset generation, 10-fold cross validation was used <!--to tune the number of features to consider at each node and the number of ensemble trees to aggregate-->. The default number of features to consider at each node of the random forest algorithm was set as the square root of the number of features in the model. Likewise, the number of ensemble trees to aggregate was set at 500. All random forest algorithms were implemented in R using the `caret` package version 6.0 [@kuhn2012caret]. Once the model was implemented, it was assessed using the test set, and performance metrics were recorded. 
+Once the appropriate predictor type and set of features were determined, a final set of random forest classification models were performed to compare model performances between re-sampling techniques and predictor types. <!--To reduce bias due to random dataset generation, 10-fold cross validation was used to tune the number of features to consider at each node and the number of ensemble trees to aggregate-->. The default number of features to consider at each node of the random forest algorithm was set as the square root of the number of features in the model. Likewise, the number of ensemble trees to aggregate was set at 500. All random forest algorithms were implemented in R using the `caret` package version 6.0 [@kuhn2012caret]. Once the model was implemented, it was validated on the test set. 
 
-The efficacy of each ensemble system in the framework was compared using composite metrics including F1-score and MCC. These metrics are defined as follows:
+The performance of each ensemble system in the framework was compared using the composite metric, Matthew's Correlation Coefficient. The MCC is defined as follows:
 
+<!--
 $$F1 - Score = \frac{2TP}{2TP + FP + FN}$$
+-->
 
 $$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{ (TP + FP)(TP+FN)(TN+FP)(TN+FN) }}$$
 <!--
@@ -137,6 +132,13 @@ Here, TP refers to the number of bins correctly identified as containing a TAD b
 <!--
 Lastly, for the task of identifying the genomic annotations that were most predictive of the formation of TAD boundaries, we ranked the variable importances associated with each feature of the ensemble system-specific random forest model. To calculate variable importances for each model, the F1-Score on the out-of-bag portion of the data within each tree was recorded. Then the same was done after permuting each predictor variable. The difference between the two AUPRC values was then averaged over all trees, and normalized by the standard error of the differences. Annotations with low rankings correspond to functional epigenomic features that are either positively or negatively enriched near TAD boundaries, and thus, better allow the model to discriminate between genomic bins that overlap with flanked TAD boundaries.
 -->
+
+## ENSEMBLE FRAMEWORK
+
+An ensemble of models was established for the purposes of systematically comparing the performances of different parameters in the framework (Figure 2). Each system in the framework is assumed to be composed of a model constructed from a particular data resolution, with a particular predictor type for the feature space.
+
+The data sets used for modeling were composed of the full set of genomic bins that either overlapped with a flanked TAD boundary or did not. These two classes made up the minority and majority sets respectively. The data was then split into a 7:3 ratio of training to testing sets. Each training and testing set was composed of a similar majority to minority class ratio as the full data set. For the task of performance evaluation and prediction, the test set remained constant for all ensemble systems to account for an unbiased comparison.
+
 
 # RESULTS
 
@@ -156,7 +158,7 @@ By isolating flanked TAD boundaries and, in turn, counting the instances in whic
 The high correlations among many of the genomic annotations gave precedent for the use of an elastic-net regularization algorithm in order to suitably reduce the feature space while retaining possibly correlated annotations that could be predictive of TAD boundary formation. For each model created from the ensemble framework, the alpha and lambda were tuned over a grid of values using 10-fold cross validation (Supplementary Table 7).
 -->
 
-## CLASS IMBALANCE SEVERELY IMPACTS PERFORMANCE AMONG ALL CLASSES OF MODELS
+## CLASS IMBALANCE SEVERELY IMPACTS MODEL PERFORMANCE
 
 In order to set a baseline in performance, we first evaluated the least granular model, that is one implemented using OC predictor types, without data re-sampling. In evaluating such composite metrics like F1-Score and MCC, we found that for the GM12878 cell line, these models exhibited poor performances across all resolutions (Figure 5A). <!--The average F1-Score and MCC across resolution was found to be 0.04 and 0.07 respectively.--> 
 
@@ -164,7 +166,7 @@ We then gradually increased the granularity in the characteristics of the model 
 
 Importantly, when validating these 3 models built on fully imbalanced datasets, the F1-Score and MCC could not be determined at lower resolutions given by the model's complete inability to correctly classify any genomic bins that overlapped with flanked TAD boundaries in the test data, thereby resulting in 0 true positives. Furthermore, we found that evaluating models using conventional metrics, such as AUC or accuracy, did not depict the true severity in performance (Supplementary Table 3). <!--The average AUC across resolutions for the OC, OP, and distance type predictors was 0.65, 0.66, and 0.85 respectively, where as the average accuracies were 0.89, 0.89, and 0.90 respectively (Supplementary Table 3).--> Results were found to be consistently poor across resolutions for the K562 cell line (Supplementary Figure 10). Similarly, many of the performance metrics at higher resolutions were also unable to be reported due to the models inability to produce any true positive cases.
 
-## DATA RE-SAMPLING COUPLED WITH THE INCLUSION OF A DISTANCE-TYPE FEATURE SPACE IMPROVED PERFORMANCES AMONG ALL CLASSES OF MODELS 
+## DATA RE-SAMPLING COUPLED WITH THE INCLUSION OF A DISTANCE-TYPE FEATURE SPACE SUBSTANTIALLY IMPROVED MODEL PERFORMANCE
 
 Comparisons of the effects of the various resampling techniques were then made. When models were built on randomly oversampled (ROS) data, we found a substantial increase in F1-Score and MCC for the GM12878 cell line (Figure 5). The biggest improvement in performance was seen at the 10 kb resolution, with a downward trend as resolutions decreased. Although performances were low at lower resolutions, both F1-Scores and MCC values were able to be obtained, contrary to models built on completely unbalanced data as seen before. Distance-type predictors were found to offer the highest F1-Scores and MCCs for ROS data, across all resolutions. Similar results were obtained when applying ROS to the K562 cell line (Supplementary Figure 10). Here, a much sharper negative trend was featured for both F1-Score and MCC and resolution decreased, than in the GM12878 cell line.
 
