@@ -25,7 +25,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Figure 6. Comparing category-specific random forest models implemented on SMOTE re-sampled data with distance-type predictors for GM12878.** Performances, separated by F1-Score and MCC, were compared for models using specific categories of annotations as the feature space including: histone modifications (red), chromatin state segmentations (green), transcription factor binding sites, and a feature space containing all 3 types combined (purple). 
 
+<!--
 **Figure 7. Comparing $log_{2}$ distance profiles of top predictive transcription factor binding sites by bin class for 10 kb resolution, on GM12878.** Violin plots (top) and plots of differences in quantiles (bottom) between genomic bin class for 4 of the top predictive TFBS determined by the best performing model, including: SMC3 (A), ZNF143 (B), CTCF (C), and RAD21 (D). For the plots of differences in quantiles, the reference group are the genomic bins that did not overlap with a flanked TAD boundary. That is, quantile differences above 0 indicate that bins that overlapped with flanked TAD boundaries exhibited smaller quantiles.
+-->
 
 <!--
 **Figure 4. Barplots comparing model performance for each predictor type.** Model performances were evaluated using F1-score, MCC, and balanced accuracy for each of the 4 resampling techniques, across both the GM12878 (A) and K562 (B) cell lines. The results presented are for models applied to 10 kb resolution data.
