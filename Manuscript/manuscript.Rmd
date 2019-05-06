@@ -171,9 +171,9 @@ In order to assess the predictive capabilities of specific types of annotations,
 
 As an external method of validation, we also investigated the predictive importance of the annotations that our top performing models were built on. We found that specific TFBS, including SMC3ab, ZNF143, CTCF, and RAD21, were given consistently high predictive importance in the models built on the GM12878 cell line, across all resolutions (Figure 8). These are known factors associated with the hypothesized loop extrusion model [@sanborn2015chromatin; @fudenberg2016formation; @alipour2012self] and were found to yield consistently high predictive importance on the K562 cell line as well, with similar profiles across resolutions (Supplementary Figure 15). [???mention additional tfbs when full results ready]
 
+<!--
 ## DISTANCE PROFILES HIGHLIGHT THE RELATIONSHIP BETWEEN KEY TFBS AND TAD BOUNDARIES
 
-<!--
 When evaluating the 10 kb data resolution, on GM12878, the distance profiles (on a $log_{2}$ scale) were found to be smaller for top predictive TFBS annotations in relation to genomic bins that overlapped with flanked TAD boundaries, when compared to bins that did not overlap with a flanked TAD boundary (Figure 7). At the same resolution and cell line, direct comparisons of quantiles obtained from the distribution of distances for the transcription factors SMC3a, ZNF143, CTCF, and RAD21, led to the the conclusion that these TFBS were more often located near TAD boundaries on the linear genome, as can be seen from the shifted quantile differences (Figure 7). Similar distance profiles for the same TFBS were obtained when assessed at lower resolutions, across both cell lines (Supplementary Figures 12-17 A-D).
 -->
 
