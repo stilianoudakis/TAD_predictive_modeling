@@ -16,15 +16,13 @@
 
 - put na category in figure legend in variable importance plots
 
-- only present to 10/20 importance feature plots; put rest in a table
+- only present to 10/20 importance feature heatmaps; put rest in a table
+   - run of tfbs specific models
+   - put other strata in supplementary
 
 - remove "none" category from figure 5/10(supplementary)
 
 - only show results for MCC score; leave all other metrics as supplementary table
-
-- clear up justification of methods
-
-- define imbalance ratio in methods as well
 
 - summarize figure 4 into tables
 
@@ -36,10 +34,6 @@
 + implement shift function for figure 7; put k562 in supplementary
    * For densities; perform resampling first? or sample from majority class?
    * Compare these plots with the density plots (different versions of Figure 7)
-
-* Problem with ranking variable importances
-   * more regularized features (contribute as NA in ranking) artificially inflate rankings (K562 cell line)
-   + present as heatmap sorted by 10 kb
 
 
 ### Main Ideas
