@@ -6,26 +6,6 @@
 
 ## ToDo
 
-- put na category in figure legend in variable importance plots
-
-- only present to 10/20 importance feature plots; put rest in a table
-
-- remove "none" category from figure 5/10(supplementary)
-
-- only show results for F1 score; leave all other metrics as supplementary table
-
-- clear up justification of methods
-
-- define imbalance ratio in methods as well
-
-- summarize figure 4 into tables
-
-- separate plots for supplementary figure 1
-
-- look into why TADs were not called for chr9 on k562
-
-- remove bin component for correlation heatmaps; use jaccard statistic for comparing annotations
-
 - Make manuscript more of a story
 
 - directly compare hong using count predictor types
@@ -34,39 +14,38 @@
 
 - Compare proteins used by Mourad with our tfbs 
 
+- put na category in figure legend in variable importance plots
+
+- only present to 10/20 importance feature heatmaps; put rest in a table
+   - run of tfbs specific models
+   - put other strata in supplementary
+
+- remove "none" category from figure 5/10(supplementary)
+
+- only show results for MCC score; leave all other metrics as supplementary table
+
+- summarize figure 4 into tables
+
+- separate plots for supplementary figure 1
+
++ remove bin component for correlation heatmaps; use jaccard statistic for comparing annotations
+   - results are conflicting with bedtools; get one pairwise jaccard > 1 
+
 + implement shift function for figure 7; put k562 in supplementary
    * For densities; perform resampling first? or sample from majority class?
    * Compare these plots with the density plots (different versions of Figure 7)
 
-* Problem with ranking variable importances
-   * more regularized features (contribute as NA in ranking) artificially inflate rankings (K562 cell line)
-   + present as heatmap sorted by 10 kb
-
-+ fix supplementary table 3 with all model performances (order predictor type column)
-
-+ What are the parameters of elastic net? 
-    + Visual justification of the selected parameters?
-    * plot of all alpha by lambda values creates to cluttered of a plot; discuss further in meeting
-    + create table of final alpha, lambda parameters
 
 ### Main Ideas
 
-+ What type of precictor has the highest variable importance. Start with CTCF and down the list.
-    + Is distance universally good for all genomic annotations? Test each annotation using OC, OP, and distance as an individual model, check
-    
-+ How model performance depend on the type of genomic annotations? Evaluate the performance when using 1) histone marks (+ DNAse I hypersensitive sites) only, 2) TFs only, 3) chromatin states only.
-    + start with tfbs
-
-+ Distance is the most important predictor. Thus, distance distributions for the most predictive features should be significantly different (KS-test?) from random
-    + test if different compared to random bins; stratify by annotation type
-    
 + Train the best model in one cell type, apply to other cell types
     + rerun models on clustered TFBS
     + compare performance
     - results not included in the manuscript yet
     
-
 ### Secondary Ideas
+
+- Use chromosome separation as natural cross validation; i.e. 21-fold cross-validation (omitting chr9)
 
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS

@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Figure 3. The three predictor types.** Three separate types of predictors were considered when quantifying the association between TAD boundaries and genomic annotations. Each predictor type was used to build the feature space of specific models in the ensemble framework. The _overlap count_ (OC) predictors consider the total number of genomic features that overlapped with each genomic bin. The _overlap percent_ (OP) predictors were calculated by dividing the sum of all feature widths within each specific bin by the total bin width. The _distance_ ($log_{2}$ transformed) predictors were calculated by measuring the distance (in bases) from the center of each genomic bin to the center of the nearest genomic feature. [???should I include ABC here?]
 
+<!--
 **Figure 4. Resolution-specific data summaries.** (A) The total number of genomic bins created by partitioning the linear genome into unit intervals corresponding to the resolution of the relevant domain data for the GM12878 (red) and K562 (blue) cell line. (B) Subsequent imbalance ratios created when labelling bin class, defined as the ratio of the number of bins that overlapped with a flanked TAD boundary to the number of bins that did not overlap with a flanked TAD boundary.
+-->
 
 **Figure 5. Comparing ensemble system specific model performances for GM12878.** Performances, separated by F1-Score and MCC, of random forest classification models built on each of the 3 predictor types: OC (A), OP (B), and Distance (C). Within each predictor type, and across resolution, F1-Scores and MCCs metrics were recorded for models subsequently implemented on re-sampled data using the 4 re-sampling techniques: None (red), ROS (green), RUS (blue), and SMOTE (purple).
 
@@ -23,7 +25,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Figure 6. Comparing category-specific random forest models implemented on SMOTE re-sampled data with distance-type predictors for GM12878.** Performances, separated by F1-Score and MCC, were compared for models using specific categories of annotations as the feature space including: histone modifications (red), chromatin state segmentations (green), transcription factor binding sites, and a feature space containing all 3 types combined (purple). 
 
+<!--
 **Figure 7. Comparing $log_{2}$ distance profiles of top predictive transcription factor binding sites by bin class for 10 kb resolution, on GM12878.** Violin plots (top) and plots of differences in quantiles (bottom) between genomic bin class for 4 of the top predictive TFBS determined by the best performing model, including: SMC3 (A), ZNF143 (B), CTCF (C), and RAD21 (D). For the plots of differences in quantiles, the reference group are the genomic bins that did not overlap with a flanked TAD boundary. That is, quantile differences above 0 indicate that bins that overlapped with flanked TAD boundaries exhibited smaller quantiles.
+-->
 
 <!--
 **Figure 4. Barplots comparing model performance for each predictor type.** Model performances were evaluated using F1-score, MCC, and balanced accuracy for each of the 4 resampling techniques, across both the GM12878 (A) and K562 (B) cell lines. The results presented are for models applied to 10 kb resolution data.
