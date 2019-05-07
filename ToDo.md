@@ -6,6 +6,10 @@
 
 ## ToDo
 
+- Read all papers in the Papers.Rmd file
+
+- Replace Latex formatting with Markdown
+
 - Figure 5 and 6 have F1 and MCC. Describe both, justify the use of one, show results using one on the main figures (Figure 5 and 6 currently) and the other in the supplemental.
 
 - Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
@@ -42,6 +46,7 @@
    * Compare these plots with the density plots (different versions of Figure 7)
    - This figure does not exist
 
+- Comparison with Mourad? Hong?
 
 ### Main Ideas
 
