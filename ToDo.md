@@ -6,30 +6,41 @@
 
 ## ToDo
 
+- Figure 5 and 6 have F1 and MCC. Describe both, justify the use of one, show results using one on the main figures (Figure 5 and 6 currently) and the other in the supplemental.
+
+- Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
+
+- Table legend is missing. Supplementary legends are in disarray. Organize.
+
+- Figure 8 is unreadable. Present as table. Sort by average importance across resolutions. Structure by types of annotations (TFBSs, histone, chrom states)
+
+- Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
+    - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
+    - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
+    - Call TADs in individual replicates.
+
+- For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
+
+- Use one replicate at a time for training, others for testing. Report average +/- SD model performance
+
+- Make a data summary table. For each resolution, cell line, how many bins total? TADs total? Average TAD size? Imbalance ratio? Some of it is in the Methods section now, but should be table of results.
+
 - technical or biological replicates for hic data?
 
 - reference mentioning tads can't be longer than 2 mb?
 
 - put na category in figure legend in variable importance plots
 
-- only present to 10/20 importance feature heatmaps; put rest in a table
-   - run of tfbs specific models
-   - put other strata in supplementary
-
-- remove "none" category from figure 5/10(supplementary)
-
-- only show results for MCC score; leave all other metrics as supplementary table
-
-- summarize figure 4 into tables
-
 - separate plots for supplementary figure 1
 
 + remove bin component for correlation heatmaps; use jaccard statistic for comparing annotations
    - results are conflicting with bedtools; get one pairwise jaccard > 1 
+   - This figure does not exist
 
 + implement shift function for figure 7; put k562 in supplementary
    * For densities; perform resampling first? or sample from majority class?
    * Compare these plots with the density plots (different versions of Figure 7)
+   - This figure does not exist
 
 
 ### Main Ideas
@@ -38,10 +49,15 @@
     + rerun models on clustered TFBS
     + compare performance
     - results not included in the manuscript yet
+
+- Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
+    - Use one chromosome
+    - Make finer bins (e.g., 100 bases)
+    - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
+    - Predict which bins are TAD boundaries
+    - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
     
 ### Secondary Ideas
-
-- Use chromosome separation as natural cross validation; i.e. 21-fold cross-validation (omitting chr9)
 
 - Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
