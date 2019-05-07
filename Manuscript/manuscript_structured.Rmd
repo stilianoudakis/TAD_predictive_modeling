@@ -1,0 +1,54 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+# Abstract
+
+**Background.** Topologically Associated Domains (TADs) represent fundamental building blocks of the 3D genome organization and regulation. Several epigenomic marks, such as CTCF and the members of Cohesin complex, were found to be enriched at TAD boundaries, suggesting a strong epigenetic component in TAD formation. Several methods for predicting TAD boundaries using epigenomic data overlooked key characteristics of genome annotation data, such as indirect associations between an annotation and a boundary. Furthermore, the number of regions containing TAD boundaries is typically much smaller than the rest of the genome, creating a class imbalance problem. 
+
+
+
+
+**Methods.** To address this, we proposed a novel ensemble framework in order to systematically compare the performances of random forest classifiers implemented on combinations of different Hi-C contact matrix resolutions, feature engineering strategies, and re-sampling techniques.
+
+**Results.** Using the GM12878 and K562 cell lines, we show that models built on SMOTE (Synthetic Minority Over-sampling TEchnique) re-sampled data out performed models built simply on random under- and over-sampled data, across all resolutions. Additionally, our results indicated that distances between annotations and TAD boundaries were more informative than other predictor-types used to build the feature space of models. We also observed that performances tended to degrade as data resolution decreased. Lastly, the most predictive annotations in the best performing models were found to be consistent across both cell line and resolution. They included well-known marks of TAD boundaries such as CTCF, SMC3, RAD21, and ZNF143, as well as lesser known transcription factors including P300 and NFKB. 
+
+**Conclusions.** The experiments derived from our ensemble framework provide a useful guide toward the exploration of chromatin organization, while highlighting the impact of both class imbalance and feature engineering in TAD boundary prediction. Our framework provides insight into the best set of parameters necessary for optimal performance.
+
+# Introduction
+
+## Importance
+
+## Problems and limitations
+
+### Hi-C data issues for TAD boundary identification
+
+Although Hi-C data allows for identification of TADs genome-wide, it has limitations. First, Hi-C requires a large amount of sequencing (one Hi-C experiment requires >20X sequencing of a typical RNA-seq experiment). Consequently, the cost of obtaining Hi-C data remains high and the data availability for various cell lines and tissues remain highly uneven. Second, resolution of Hi-C data, or the size of interacting genomic regions, remains relatively coarse (on the order of kilobases) as compared with transcription factor binding motifs (tenths bases) or ChIP-seq peaks (hundredths bases), and inconsistent across cell lines and tissues. Third, Hi-C data suffers from technology- and DNA-driven biases, sparsity (high proportion of missing values), and limited sequencing depth, adding to inconsistency to cell- and tissue type-specific Hi-C data availability. These factors hinder the consistent TAD boundary identification across tissues and cell types.
+
+### Genome annotation data opportunities
+
+In contrast, 1D genome annotation tracks assembled by the ENCODE and Roadmap consortia provide a fine-grained look at the genome in various tissues and cell types. Although the original genome annotation data was highly uneven (rich annotations available for select cell types while remaining sparse for others), recent genome annotation imputation methods fill the cell type-specific sparsity of genome annotations. Consequently, using existing and imputed genome annotations for TAD boundary predictions represent a viable way to identify TAD boundaries in any cell or tissue type.
+
+### Class imbalance
+
+### Prediction types
+
+
+## Previous works on solving problems
+
+### Resampling approaches
+
+### Models
+
+### Evaluation metrics
+
+
+## Pitfalls of previous works
+
+### Distance not considered
+
+
+## Our work on solving problems
+
+### Consider distance
