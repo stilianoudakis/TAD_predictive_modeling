@@ -6,6 +6,8 @@
 
 ## ToDo
 
+- technical or biological replicates for hic data?
+
 - reference mentioning tads can't be longer than 2 mb?
 
 - put na category in figure legend in variable importance plots
