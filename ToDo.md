@@ -6,13 +6,9 @@
 
 ## ToDo
 
-- Make manuscript more of a story
+- technical or biological replicates for hic data?
 
-- directly compare hong using count predictor types
-    
-- directly compare mourad using percent predictor types
-
-- Compare proteins used by Mourad with our tfbs 
+- reference mentioning tads can't be longer than 2 mb?
 
 - put na category in figure legend in variable importance plots
 
