@@ -30,6 +30,10 @@
 - Make a data summary table. For each resolution, cell line, how many bins total? TADs total? Average TAD size? Imbalance ratio? Some of it is in the Methods section now, but should be table of results.
 
 - technical or biological replicates for hic data?
+   + "Our largest map, in human GM12878 B-lymphoblastoid cells, aggregates the
+     results of nine biological replicate experiments derived from independent cell cultures."
+   + "We compared biological replicates in IMR90, HMEC, K562,
+     KBM7, and CH12-LX with similar results."
 
 - reference mentioning tads can't be longer than 2 mb?
 
