@@ -62,52 +62,12 @@ tad_gm12878_10kb <- tad_gm12878_10kb %>%
 
 tad_gm12878_10kb$V1 <- factor(tad_gm12878_10kb$V1, levels = c(1:22))
 
-tad_data <- tad_gm12878_10kb %>% 
+tad_data_gm12878_10kb <- tad_gm12878_10kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-gm12878_10kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 
-gm12878_10kb_tabdist <- ggplot(tad_gm12878_10kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
 
@@ -123,52 +83,12 @@ tad_gm12878_25kb <- tad_gm12878_25kb %>%
 
 tad_gm12878_25kb$V1 <- factor(tad_gm12878_25kb$V1, levels = c(1:22))
 
-tad_data <- tad_gm12878_25kb %>% 
+tad_data_gm12878_25kb <- tad_gm12878_25kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-gm12878_25kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 
-gm12878_25kb_tabdist <- ggplot(tad_gm12878_25kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
 
@@ -184,52 +104,12 @@ tad_gm12878_50kb <- tad_gm12878_50kb %>%
 
 tad_gm12878_50kb$V1 <- factor(tad_gm12878_50kb$V1, levels = c(1:22))
 
-tad_data <- tad_gm12878_50kb %>% 
+tad_data_gm12878_50kb <- tad_gm12878_50kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-gm12878_50kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 
-gm12878_50kb_tabdist <- ggplot(tad_gm12878_50kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
 
@@ -245,52 +125,12 @@ tad_gm12878_100kb <- tad_gm12878_100kb %>%
 
 tad_gm12878_100kb$V1 <- factor(tad_gm12878_100kb$V1, levels = c(1:22))
 
-tad_data <- tad_gm12878_100kb %>% 
+tad_data_gm12878_100kb <- tad_gm12878_100kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-gm12878_100kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 
-gm12878_100kb_tabdist <- ggplot(tad_gm12878_100kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
 
@@ -308,52 +148,12 @@ tad_K562_10kb <- tad_K562_10kb %>%
 
 tad_K562_10kb$V1 <- factor(tad_K562_10kb$V1, levels = c(1:22))
 
-tad_data <- tad_K562_10kb %>% 
+tad_data_K562_10kb <- tad_K562_10kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-K562_10kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 
-K562_10kb_tabdist <- ggplot(tad_K562_10kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
 
@@ -369,52 +169,12 @@ tad_K562_25kb <- tad_K562_25kb %>%
 
 tad_K562_25kb$V1 <- factor(tad_K562_25kb$V1, levels = c(1:22))
 
-tad_data <- tad_K562_25kb %>% 
+tad_data_K562_25kb <- tad_K562_25kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-K562_25kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 
-K562_25kb_tabdist <- ggplot(tad_K562_25kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
 
@@ -430,52 +190,12 @@ tad_K562_50kb <- tad_K562_50kb %>%
 
 tad_K562_50kb$V1 <- factor(tad_K562_50kb$V1, levels = c(1:22))
 
-tad_data <- tad_K562_50kb %>% 
+tad_data_K562_50kb <- tad_K562_50kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-K562_50kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 
-K562_50kb_tabdist <- ggplot(tad_K562_50kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
 
@@ -491,337 +211,49 @@ tad_K562_100kb <- tad_K562_100kb %>%
 
 tad_K562_100kb$V1 <- factor(tad_K562_100kb$V1, levels = c(1:22))
 
-tad_data <- tad_K562_100kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1))
-
-K562_100kb_tabnum <- ggplot(tad_data, aes(x=V1, y=Count, fill=V1))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Chromosome") +
-  guides(fill=FALSE) +
-  ylab("Number of TADs") +
-  xlab("Chromosome") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
-
-K562_100kb_tabdist <- ggplot(tad_K562_100kb, aes(x=Length, color=V1)) +
-  geom_density() +
-  scale_color_discrete(name="Chromosome") +
-  ylab("Count") +
-  xlab("Length of TAD") +
-  #ylab("") +
-  #xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
-```
-
-# Plots
-
-```{r}
-figure <- ggarrange(gm12878_10kb_tabnum,gm12878_10kb_tabdist,
-                    gm12878_25kb_tabnum,gm12878_25kb_tabdist,
-                    gm12878_50kb_tabnum,gm12878_50kb_tabdist,
-                    gm12878_100kb_tabnum,gm12878_100kb_tabdist,
-                    ncol=2,nrow=4,
-                    common.legend = TRUE,
-                    legend="right",
-                    labels = c("A", "","B", "","C", "","D", ""),
-                    font.label = list(size=20))
-
-
-
-figure <- ggarrange(K562_10kb_tabnum,K562_10kb_tabdist,
-                    K562_25kb_tabnum,K562_25kb_tabdist,
-                    K562_50kb_tabnum,K562_50kb_tabdist,
-                    K562_100kb_tabnum,K562_100kb_tabdist,
-                    ncol=2,nrow=4,
-                    common.legend = TRUE,
-                    legend="right",
-                    labels = "AUTO",
-                    font.label = list(size=20))
-```
-
-
-# Creating Table of Summaraies
-
-```{r}
-tad_gm12878_10kb$CL <- "GM12878"
-tad_gm12878_25kb$CL <- "GM12878"
-tad_gm12878_50kb$CL <- "GM12878"
-tad_gm12878_100kb$CL <- "GM12878"
-tad_K562_10kb$CL <- "K562"
-tad_K562_25kb$CL <- "K562"
-tad_K562_50kb$CL <- "K562"
-tad_K562_100kb$CL <- "K562"
-
-tad_data_summaries <- rbind.data.frame(aggregate(tad_gm12878_10kb$Length, by=list(tad_gm12878_10kb$V1), FUN=summary),
-                 aggregate(tad_gm12878_25kb$Length, by=list(tad_gm12878_25kb$V1), FUN=summary),
-                 aggregate(tad_gm12878_50kb$Length, by=list(tad_gm12878_50kb$V1), FUN=summary),
-                 aggregate(tad_gm12878_100kb$Length, by=list(tad_gm12878_100kb$V1), FUN=summary),
-                 aggregate(tad_K562_10kb$Length, by=list(tad_K562_10kb$V1), FUN=summary),
-                 aggregate(tad_K562_25kb$Length, by=list(tad_K562_25kb$V1), FUN=summary),
-                 aggregate(tad_K562_50kb$Length, by=list(tad_K562_50kb$V1), FUN=summary),
-                 aggregate(tad_K562_100kb$Length, by=list(tad_K562_100kb$V1), FUN=summary))
-
-#chr 9 for k562 at 10 kb has no tad boundaries
-
-tad_data_summaries$CL <- c(rep("GM12878", 22*4), rep("K562", 22*4-1))
-tad_data_summaries$Resolution <- c(rep("10 kb", 22),rep("25 kb", 22),rep("50 kb", 22),rep("100 kb", 22),
-                                   rep("10 kb", 21),rep("25 kb", 22),rep("50 kb", 22),rep("100 kb", 22))
-
-write.csv(tad_data_summaries, "C:/Users/stili/Downloads/tad_data_summaries.csv")
-```
-
-
-#Both cell lines together
-
-##10kb
-
-```{r}
-tad_gm12878_10kb <- read.table("Z:/TAD_data_analysis/GM12878/10kb/GM12878_domain_data_10000.b.txt")
-tad_gm12878_10kb <- tad_gm12878_10kb[,1:3]
-tad_gm12878_10kb <- tad_gm12878_10kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_gm12878_10kb$V1 <- factor(tad_gm12878_10kb$V1, levels = c(1:22))
-tad_data_gm12878_10kb <- tad_gm12878_10kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1)) 
-tad_data_gm12878_10kb$CL <- "GM12878"
-
-tad_K562_10kb <- read.table("Z:/TAD_data_analysis/K562/10kb/K562_domain_data_10000.b.txt")
-tad_K562_10kb <- tad_K562_10kb[,1:3]
-tad_K562_10kb <- tad_K562_10kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_K562_10kb$V1 <- factor(tad_K562_10kb$V1, levels = c(1:22))
-tad_data_K562_10kb <- tad_K562_10kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1))
-tad_data_K562_10kb$CL <- "K562"
-
-tad_data_10kb <- rbind.data.frame(tad_data_gm12878_10kb, tad_data_K562_10kb)
-tad_data_10kb$CL <- factor(tad_data_10kb$CL, levels=c("GM12878", "K562"))
-
-p_tadnum_10kb <- ggplot(tad_data_10kb, aes(x=V1, y=Count, fill=CL))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Cell Line") +
-  #guides(fill=FALSE) +
-  #ylab("Number of TADs") +
-  #xlab("Chromosome") +
-  ylab("") +
-  xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
-```
-
-##25kb
-
-```{r}
-tad_gm12878_25kb <- read.table("Z:/TAD_data_analysis/GM12878/25kb/GM12878_domain_data_25000.b.txt")
-tad_gm12878_25kb <- tad_gm12878_25kb[,1:3]
-tad_gm12878_25kb <- tad_gm12878_25kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_gm12878_25kb$V1 <- factor(tad_gm12878_25kb$V1, levels = c(1:22))
-tad_data_gm12878_25kb <- tad_gm12878_25kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1)) 
-tad_data_gm12878_25kb$CL <- "GM12878"
-
-tad_K562_25kb <- read.table("Z:/TAD_data_analysis/K562/25kb/K562_domain_data_25000.b.txt")
-tad_K562_25kb <- tad_K562_25kb[,1:3]
-tad_K562_25kb <- tad_K562_25kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_K562_25kb$V1 <- factor(tad_K562_25kb$V1, levels = c(1:22))
-tad_data_K562_25kb <- tad_K562_25kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1))
-tad_data_K562_25kb$CL <- "K562"
-
-tad_data_25kb <- rbind.data.frame(tad_data_gm12878_25kb, tad_data_K562_25kb)
-tad_data_25kb$CL <- factor(tad_data_25kb$CL, levels=c("GM12878", "K562"))
-
-p_tadnum_25kb <- ggplot(tad_data_25kb, aes(x=V1, y=Count, fill=CL))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Cell Line") +
-  #guides(fill=FALSE) +
-  #ylab("Number of TADs") +
-  #xlab("Chromosome") +
-  ylab("") +
-  xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
-```
-
-##50kb
-
-```{r}
-tad_gm12878_50kb <- read.table("Z:/TAD_data_analysis/GM12878/50kb/GM12878_domain_data_50000.b.txt")
-tad_gm12878_50kb <- tad_gm12878_50kb[,1:3]
-tad_gm12878_50kb <- tad_gm12878_50kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_gm12878_50kb$V1 <- factor(tad_gm12878_50kb$V1, levels = c(1:22))
-tad_data_gm12878_50kb <- tad_gm12878_50kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1)) 
-tad_data_gm12878_50kb$CL <- "GM12878"
-
-tad_K562_50kb <- read.table("Z:/TAD_data_analysis/K562/50kb/K562_domain_data_50000.b.txt")
-tad_K562_50kb <- tad_K562_50kb[,1:3]
-tad_K562_50kb <- tad_K562_50kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_K562_50kb$V1 <- factor(tad_K562_50kb$V1, levels = c(1:22))
-tad_data_K562_50kb <- tad_K562_50kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1))
-tad_data_K562_50kb$CL <- "K562"
-
-tad_data_50kb <- rbind.data.frame(tad_data_gm12878_50kb, tad_data_K562_50kb)
-tad_data_50kb$CL <- factor(tad_data_50kb$CL, levels=c("GM12878", "K562"))
-
-p_tadnum_50kb <- ggplot(tad_data_50kb, aes(x=V1, y=Count, fill=CL))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Cell Line") +
-  #guides(fill=FALSE) +
-  #ylab("Number of TADs") +
-  #xlab("Chromosome") +
-  ylab("") +
-  xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
-```
-
-
-##100kb
-
-```{r}
-tad_gm12878_100kb <- read.table("Z:/TAD_data_analysis/GM12878/100kb/GM12878_domain_data_100000.b.txt")
-tad_gm12878_100kb <- tad_gm12878_100kb[,1:3]
-tad_gm12878_100kb <- tad_gm12878_100kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_gm12878_100kb$V1 <- factor(tad_gm12878_100kb$V1, levels = c(1:22))
-tad_data_gm12878_100kb <- tad_gm12878_100kb %>% 
-  group_by(V1) %>% 
-  summarise(Count = length(V1)) 
-tad_data_gm12878_100kb$CL <- "GM12878"
-
-tad_K562_100kb <- read.table("Z:/TAD_data_analysis/K562/100kb/K562_domain_data_100000.b.txt")
-tad_K562_100kb <- tad_K562_100kb[,1:3]
-tad_K562_100kb <- tad_K562_100kb %>%
-  group_by(V1) %>%
-  mutate(Length = V3-V2)
-tad_K562_100kb$V1 <- factor(tad_K562_100kb$V1, levels = c(1:22))
 tad_data_K562_100kb <- tad_K562_100kb %>% 
   group_by(V1) %>% 
-  summarise(Count = length(V1))
-tad_data_K562_100kb$CL <- "K562"
+  summarise(Count = length(V1),
+            Length = mean(Length))
 
-tad_data_100kb <- rbind.data.frame(tad_data_gm12878_100kb, tad_data_K562_100kb)
-tad_data_100kb$CL <- factor(tad_data_100kb$CL, levels=c("GM12878", "K562"))
 
-p_tadnum_100kb <- ggplot(tad_data_100kb, aes(x=V1, y=Count, fill=CL))+
-  geom_bar(stat="identity") +
-  scale_fill_discrete(name="Cell Line") +
-  #guides(fill=FALSE) +
-  #ylab("Number of TADs") +
-  #xlab("Chromosome") +
-  ylab("") +
-  xlab("") +
-  theme_bw() +
-  theme(axis.text.x = element_text(size=15 #,
-                                      #angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      #hjust = 1
-     ),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
 ```
 
-##Plots
+# Tables
 
 ```{r}
-figure <- ggarrange(p_tadnum_10kb,
-                    p_tadnum_25kb,
-                    p_tadnum_50kb,
-                    p_tadnum_100kb,
-                    ncol=2,
-                    nrow=2,
-                    common.legend = TRUE,
-                    legend="top",
-                    labels = "AUTO",
-                    font.label = list(size=20))
-figure
-annotate_figure(figure,
-    bottom = text_grob("Chromosome", color = "black", size = 20),
-    left = text_grob("Number of TADs", color = "black", rot = 90, size=20)
-)
+combined <- rbind.data.frame(tad_data_gm12878_10kb,
+                             tad_data_gm12878_25kb,
+                             tad_data_gm12878_50kb,
+                             tad_data_gm12878_100kb,
+                             tad_data_K562_10kb,
+                             tad_data_K562_25kb,
+                             tad_data_K562_50kb,
+                             tad_data_K562_100kb)
 
+combined <- combined[-which(combined$V1==9),]
+combined$V1 <- factor(combined$V1)
+
+combined$CL <- c(rep("GM12878", 84), rep("K562", 84))
+combined$Resolution <- c(rep("10 kb", 21),
+                         rep("25 kb", 21),
+                         rep("50 kb", 21),
+                         rep("100 kb", 21),
+                         rep("10 kb", 21),
+                         rep("25 kb", 21),
+                         rep("50 kb", 21),
+                         rep("100 kb", 21))
+combined$CL <- factor(combined$CL)
+combined$Resolution <- factor(combined$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+summarytab <- combined %>% 
+  group_by(CL, Resolution) %>% 
+  summarise(AveNumber = mean(Count),
+            SDNumber = sd(Count),
+            AveLength = mean(Length),
+            SDLength = sd(Length))
+summarytab[,3:6] <- round(summarytab[,3:6], 1)
 ```
+
+
 
