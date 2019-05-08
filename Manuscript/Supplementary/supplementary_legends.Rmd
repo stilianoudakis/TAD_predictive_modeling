@@ -5,9 +5,7 @@ output: pdf_document
 
 **Supplementary Table 4. Hi-C data.** A complete list of the Hi-C data libraries used to obtain the locations of topologically associating domains.
 
-**Supplementary Figure 14. Number of TADs called throughout the genome.** TADs were called throughout each of the 22 autosomal chromosomes for cell lines GM12878 (red) and K562 (blue) using the Arrowhead algorithm [@durand2016juicebox], across each data resolution including 10 kb, 25 kb, 50 kb, and 100 kb (A-D) respectively. 
-
-**Supplementary Table 8. Summary statistics for TAD lengths.** The following summary statistics were recorded regarding lengths of TADs that were called and delineated into TAD boundaries including the minimum, 1st quartile, median, mean, 3rd quartile, and maximum TAD lengths (in basepairs). The summaries are provided for each cell line, resolution, and within each chromosome. [???should I leave space for 9th chromosome on k562 where no TADs were called?]
+**Supplementary Table 8. Summary statistics for called TADs.** The following summary statistics were recorded regarding the average number and length of TADs (along with standard deviations) that were called using the Arrowhead algorithm [@durand2016juicebox], across each of the autosomal chromosomes (excluding chromosome 9). 
 
 **Supplementary Table 2. Genomic annotations.** A complete list of the genomic annotations used to build the feature space for all downstream models. The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Available Cell Type" - the name of the cell type in which the annotation was available, "Cell Type-Specific Source" - download URL specific to the cell line (not all annotations were provided by the same institutions). 
 
