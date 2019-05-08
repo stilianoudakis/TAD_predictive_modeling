@@ -140,7 +140,7 @@ We compared the performances of random forest classification models implemented 
 
 ## IMBALANCE RATIOS REMAINED SEVERE AND CONSISTENT ACROSS RESOLUTIONS
 
-Results showed that the imbalance ratios were well below acceptable thresholds for both cell lines, and across the 4 resolutions . The low imbalance ratios indicated a wide disparity between the number of genomic bins that overlaped with a flanked TAD boundary and the much larger number that did not. While resolution certainly played a role in determining the number of observations included in datasets used in downstream modeling, as it determines the width of genomic bins and larger widths (lower resolutions) created less bins, we found that there was very little variation in imbalance ratios across resolution. 
+Results showed that the imbalance ratios were well below acceptable thresholds for both cell lines, and across the 4 resolutions (Figure 4). The low imbalance ratios indicated a wide disparity between the number of genomic bins that overlaped with a flanked TAD boundary and the much larger number that did not. Likewise, there was very little variation in imbalance ratios across resolution. The low IR indicate a necessary re-sampling technique that will suitably balance the majority and minority classes.
 
 <!--
 ## HIGH CORRRELATIONS IMPLY COLOCALIZATION OF MANY ANNOTATIONS AROUND TAD BOUNDARIES
