@@ -6,11 +6,13 @@
 
 ## ToDo
 
+- remove unnecessary figures from methods section
+
 - Read all papers in the Papers.Rmd file
 
 - Replace Latex formatting with Markdown
 
-- Figure 5 and 6 have F1 and MCC. Describe both, justify the use of one, show results using one on the main figures (Figure 5 and 6 currently) and the other in the supplemental.
++ Figure 5 and 6 have F1 and MCC. Describe both, justify the use of one, show results using one on the main figures (Figure 5 and 6 currently) and the other in the supplemental.
 
 - Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
 
@@ -28,6 +30,7 @@
 - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
 
 - Make a data summary table. For each resolution, cell line, how many bins total? TADs total? Average TAD size? Imbalance ratio? Some of it is in the Methods section now, but should be table of results.
+   - make figure 4 table
 
 - technical or biological replicates for hic data?
    + "Our largest map, in human GM12878 B-lymphoblastoid cells, aggregates the
