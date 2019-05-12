@@ -9,4 +9,4 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Table 1. Data Summaries.** The average number of genomic bins and corresponding imbalance ratios, across each of the autosomal chromosomes (omitting chromosome 9), stratified by resolution and cell line. The resolution of the Hi-C contact matrix dictated the width of each genomic bin, with lower resolutions corresponding to wider genomic bins. 
+**Table 1. Data Summaries.** The average number of genomic bins, TADs called, and the corresponding boundaries and imbalance ratios, across each of the autosomal chromosomes (omitting chromosome 9), stratified by resolution and cell line. The resolution of the Hi-C contact matrix dictated the width of each genomic bin, with lower resolutions corresponding to wider genomic bins. 
