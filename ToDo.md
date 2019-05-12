@@ -10,10 +10,6 @@
 
 - Read all papers in the Papers.Rmd file
 
-- Replace Latex formatting with Markdown
-
-+ Figure 5 and 6 have F1 and MCC. Describe both, justify the use of one, show results using one on the main figures (Figure 5 and 6 currently) and the other in the supplemental.
-
 - Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
 
 - Table legend is missing. Supplementary legends are in disarray. Organize.
@@ -29,29 +25,9 @@
 
 - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
 
-- Make a data summary table. For each resolution, cell line, how many bins total? TADs total? Average TAD size? Imbalance ratio? Some of it is in the Methods section now, but should be table of results.
-   - make figure 4 table
-
-- technical or biological replicates for hic data?
-   + "Our largest map, in human GM12878 B-lymphoblastoid cells, aggregates the
-     results of nine biological replicate experiments derived from independent cell cultures."
-   + "We compared biological replicates in IMR90, HMEC, K562,
-     KBM7, and CH12-LX with similar results."
-
 - reference mentioning tads can't be longer than 2 mb?
 
 - put na category in figure legend in variable importance plots
-
-- separate plots for supplementary figure 1
-
-+ remove bin component for correlation heatmaps; use jaccard statistic for comparing annotations
-   - results are conflicting with bedtools; get one pairwise jaccard > 1 
-   - This figure does not exist
-
-+ implement shift function for figure 7; put k562 in supplementary
-   * For densities; perform resampling first? or sample from majority class?
-   * Compare these plots with the density plots (different versions of Figure 7)
-   - This figure does not exist
 
 - Comparison with Mourad? Hong?
 
