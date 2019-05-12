@@ -7,14 +7,12 @@
 ## ToDo
 
 - remove unnecessary figures from methods section
+- Comparison with Mourad? Hong?
+
 
 - Read all papers in the Papers.Rmd file
 
 - Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
-
-- Table legend is missing. Supplementary legends are in disarray. Organize.
-
-- Figure 8 is unreadable. Present as table. Sort by average importance across resolutions. Structure by types of annotations (TFBSs, histone, chrom states)
 
 - Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
     - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
@@ -25,11 +23,6 @@
 
 - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
 
-- reference mentioning tads can't be longer than 2 mb?
-
-- put na category in figure legend in variable importance plots
-
-- Comparison with Mourad? Hong?
 
 ### Main Ideas
 
