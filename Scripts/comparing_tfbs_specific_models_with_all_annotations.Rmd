@@ -54,379 +54,317 @@ library(RColorBrewer)
 ## 10kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_10kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_gm12878_10kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_10kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_gm12878_10kb <- rbind(mccdata_gm12878_10kb,
+										  perfdata[15,2])
+		
+	}
+}
 
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_10kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_gm12878_10kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
 
 ```
 
 ## 25kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_25kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_gm12878_25kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_25kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_gm12878_25kb <- rbind(mccdata_gm12878_25kb,
+										  perfdata[15,2])
+		
+	}
+}
 
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_25kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_gm12878_25kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
 
 ```
-
 
 ## 50kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_50kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_gm12878_50kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_50kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
-
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_50kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_gm12878_50kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_gm12878_50kb <- rbind(mccdata_gm12878_50kb,
+										  perfdata[15,2])
+		
+	}
+}
 
 ```
 
 ## 100kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_100kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_gm12878_100kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_100kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
-
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_gm12878_100kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_gm12878_100kb_smote_dist <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_gm12878_100kb <- rbind(mccdata_gm12878_100kb,
+										  perfdata[15,2])
+		
+	}
+}
 
 ```
-
-# Plots
-
-```{r}
-all_rfperfs_gm12878 <- data.frame(Annotation=rep(c("TFBS", 
-                                               "Chromatin State Segmentations", 
-                                               "Histone Modifications", 
-                                               "All Combined"), 8),
-                                  Resolution=rep(c(rep("10 kb", 4),
-                                               rep("25 kb", 4),
-                                               rep("50 kb", 4),
-                                               rep("100 kb", 4)), 2),
-                                  Metric=c(rep("F1-Score", 16),
-                                           rep("MCC", 16))
-                                  )
-all_rfperfs_gm12878$Annotation <- factor(all_rfperfs_gm12878$Annotation, levels=c("Histone Modifications",
-                                                                                  "Chromatin State Segmentations",
-                                                                                  "TFBS",
-                                                                                  "All Combined"))
-all_rfperfs_gm12878$Resolution <- factor(all_rfperfs_gm12878$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
-all_rfperfs_gm12878$Metric <- factor(all_rfperfs_gm12878$Metric, levels=c("F1-Score", "MCC"))
-
-all_rfperfs_gm12878$Performance <- c(rfperf_gm12878_10kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_gm12878_10kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_gm12878_10kb_smote_dist_histones[16,2], #f1
-                                     rfperf_gm12878_10kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_gm12878_25kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_gm12878_25kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_gm12878_25kb_smote_dist_histones[16,2], #f1
-                                     rfperf_gm12878_25kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_gm12878_50kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_gm12878_50kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_gm12878_50kb_smote_dist_histones[16,2], #f1
-                                     rfperf_gm12878_50kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_gm12878_100kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_gm12878_100kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_gm12878_100kb_smote_dist_histones[16,2], #f1
-                                     rfperf_gm12878_100kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_gm12878_10kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_gm12878_10kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_gm12878_10kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_gm12878_10kb_smote_dist[15,2], #mcc
-                                     
-                                     rfperf_gm12878_25kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_gm12878_25kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_gm12878_25kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_gm12878_25kb_smote_dist[15,2], #mcc
-                                     
-                                     rfperf_gm12878_50kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_gm12878_50kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_gm12878_50kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_gm12878_50kb_smote_dist[15,2], #mcc
-                                     
-                                     rfperf_gm12878_100kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_gm12878_100kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_gm12878_100kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_gm12878_100kb_smote_dist[15,2] #mcc
-                                     )
-
-ggplot(all_rfperfs_gm12878,
-       aes(x=Resolution, y=Performance, fill=Annotation)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid( ~ Metric) +
-  #xlab("") + ylab("") +
-  theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Category of\nFeature Space",
-                      labels=c("Histone\nModifications",
-                               "Chromatin State\nSegmentations",
-                               "Transcription Factor\nBinding Sites",
-                               "All Combined"))+
-  #guides(fill=FALSE)+
-  theme(axis.text.x = element_text(size=15,
-                                   angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-        strip.text.x = element_text(size = 15))
-```
-
 
 # K562; smote; distance types
 
 ## 10kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_10kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_K562_10kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_10kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_K562_10kb <- rbind(mccdata_K562_10kb,
+										  perfdata[15,2])
+		
+	}
+}
 
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_10kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_K562_10kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/10kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
 
 ```
 
 ## 25kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_25kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_K562_25kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_25kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_K562_25kb <- rbind(mccdata_K562_25kb,
+										  perfdata[15,2])
+		
+	}
+}
 
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_25kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_K562_25kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/25kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
 
 ```
-
 
 ## 50kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_50kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_K562_50kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_50kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
-
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_50kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_K562_50kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/50kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_K562_50kb <- rbind(mccdata_K562_50kb,
+										  perfdata[15,2])
+		
+	}
+}
 
 ```
 
 ## 100kb
 
 ```{r}
-### TFBS Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_100kb_smote_dist_tfbs <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/tfbs/Distance/ENET/RF/rfperf.rds")
+mccdata_K562_100kb <- numeric()
 
-### Chromstates Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_100kb_smote_dist_chromstates <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/chromstates/Distance/ENET/RF/rfperf.rds")
-
-### Histones Specific Model Performances
-####SMOTE
-#####Distance
-rfperf_K562_100kb_smote_dist_histones <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/histones/Distance/ENET/RF/rfperf.rds")
-
-### All Annotations
-####SMOTE
-#####Distance
-rfperf_K562_100kb_smote_dist <- readRDS("Z:/TAD_data_analysis/K562/100kb/Ensemble/SMOTE/Distance/ENET/RF/rfperf.rds")
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf.rds"))
+	  }
+									   
+			mccdata_K562_100kb <- rbind(mccdata_K562_100kb,
+										  perfdata[15,2])
+		
+	}
+}
 
 ```
+
 
 # Plots
 
 ```{r}
-all_rfperfs_K562 <- data.frame(Annotation=rep(c("TFBS", 
-                                               "Chromatin State Segmentations", 
-                                               "Histone Modifications", 
-                                               "All Combined"), 8),
-                                  Resolution=rep(c(rep("10 kb", 4),
-                                               rep("25 kb", 4),
-                                               rep("50 kb", 4),
-                                               rep("100 kb", 4)), 2),
-                                  Metric=c(rep("F1-Score", 16),
-                                           rep("MCC", 16))
-                                  )
-all_rfperfs_K562$Annotation <- factor(all_rfperfs_K562$Annotation, levels=c("Histone Modifications",
-                                                                                  "Chromatin State Segmentations",
-                                                                                  "TFBS",
-                                                                                  "All Combined"))
-all_rfperfs_K562$Resolution <- factor(all_rfperfs_K562$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
-all_rfperfs_K562$Metric <- factor(all_rfperfs_K562$Metric, levels=c("F1-Score", "MCC"))
+all_rfperfs <- rbind.data.frame(mccdata_gm12878_10kb,
+                                mccdata_gm12878_25kb,
+                                mccdata_gm12878_50kb,
+                                mccdata_gm12878_100kb,
+                                mccdata_K562_10kb,
+                                mccdata_K562_25kb,
+                                mccdata_K562_50kb,
+                                mccdata_K562_100kb)
+all_rfperfs$CL <- c(rep("GM12878", length(mccdata_gm12878_10kb)*4), rep("K562", length(mccdata_K562_10kb)*4))
+all_rfperfs$Resolution <- rep(c(rep("10 kb", 84),
+                            rep("25 kb", 84),
+                            rep("50 kb", 84),
+                            rep("100 kb", 84)))
+all_rfperfs$Annotation <- rep(c("CSS","HM","TFBS","Combined"),168)
+all_rfperfs$Chromosome <- rep(c(rep("CHR1", 4),
+                            rep("CHR2", 4),
+                            rep("CHR3", 4),
+                            rep("CHR4", 4),
+                            rep("CHR5", 4),
+                            rep("CHR6", 4),
+                            rep("CHR7", 4),
+                            rep("CHR8", 4),
+                            rep("CHR10", 4),
+                            rep("CHR11", 4),
+                            rep("CHR12", 4),
+                            rep("CHR13", 4),
+                            rep("CHR14", 4),
+                            rep("CHR15", 4),
+                            rep("CHR16", 4),
+                            rep("CHR17", 4),
+                            rep("CHR18", 4),
+                            rep("CHR19", 4),
+                            rep("CHR20", 4),
+                            rep("CHR21", 4),
+                            rep("CHR22", 4)),8)
 
-all_rfperfs_K562$Performance <- c(rfperf_K562_10kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_K562_10kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_K562_10kb_smote_dist_histones[16,2], #f1
-                                     rfperf_K562_10kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_K562_25kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_K562_25kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_K562_25kb_smote_dist_histones[16,2], #f1
-                                     rfperf_K562_25kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_K562_50kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_K562_50kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_K562_50kb_smote_dist_histones[16,2], #f1
-                                     rfperf_K562_50kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_K562_100kb_smote_dist_tfbs[16,2], #f1
-                                     rfperf_K562_100kb_smote_dist_chromstates[16,2], #f1
-                                     rfperf_K562_100kb_smote_dist_histones[16,2], #f1
-                                     rfperf_K562_100kb_smote_dist[16,2], #f1
-                                     
-                                     rfperf_K562_10kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_K562_10kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_K562_10kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_K562_10kb_smote_dist[15,2], #mcc
-                                     
-                                     rfperf_K562_25kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_K562_25kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_K562_25kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_K562_25kb_smote_dist[15,2], #mcc
-                                     
-                                     rfperf_K562_50kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_K562_50kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_K562_50kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_K562_50kb_smote_dist[15,2], #mcc
-                                     
-                                     rfperf_K562_100kb_smote_dist_tfbs[15,2], #mcc
-                                     rfperf_K562_100kb_smote_dist_chromstates[15,2], #mcc
-                                     rfperf_K562_100kb_smote_dist_histones[15,2], #mcc
-                                     rfperf_K562_100kb_smote_dist[15,2] #mcc
-                                     )
+all_rfperfs$CL <- factor(all_rfperfs$CL, levels = c("GM12878", "K562"))
+all_rfperfs$Resolution <- factor(all_rfperfs$Resolution, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_rfperfs$Annotation <- factor(all_rfperfs$Annotation, levels = c("HM", "CSS", "TFBS", "Combined"))
+all_rfperfs$Chromosome <- factor(all_rfperfs$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
 
-ggplot(all_rfperfs_K562,
-       aes(x=Resolution, y=Performance, fill=Annotation)) +
-  geom_bar( stat="identity", position="dodge") +
-  facet_grid( ~ Metric) +
-  #xlab("") + ylab("") +
+all_rfperfs_mcc <- all_rfperfs %>%
+  dplyr::group_by(CL, Resolution, Annotation) %>%
+  dplyr::summarise(MCC = mean(V1, na.rm = TRUE),
+            MCCSD = sd(V1, na.rm = TRUE))
+
+#GM12878
+ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="GM12878"),], aes(x=Resolution, y=MCC, group=Annotation, fill=Annotation)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
-  theme_bw() +
-  scale_fill_discrete(name="Category of\nFeature Space",
-                      labels=c("Histone\nModifications",
-                               "Chromatin State\nSegmentations",
-                               "Transcription Factor\nBinding Sites",
-                               "All Combined"))+
-  #guides(fill=FALSE)+
+  theme_bw()+
+  #xlab("") + ylab("") + ylim(-.05,.5) +
+  scale_fill_discrete(name="Annotation\nGroup")+
+  guides(shape=FALSE, linetype=FALSE)+
   theme(axis.text.x = element_text(size=15,
-                                   angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-        strip.text.x = element_text(size = 15))
+                                  angle = 45, 
+                                  #margin = ggplot2::margin(t = 35),
+                                  hjust = 1
+  ),
+  axis.text.y = element_text(size = 15),
+  axis.title.x = element_text(size = 20),
+  axis.title.y = element_text(size = 20),
+  legend.text=element_text(size=15),
+  legend.title=element_text(size=20),
+  plot.title = element_text(size=20))
+
+#K562
+ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="K562"),], aes(x=Resolution, y=MCC, group=Annotation, fill=Annotation)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
+  theme_minimal() +
+  theme_bw()+
+  #xlab("") + ylab("") + ylim(-.05,.5) +
+  scale_fill_discrete(name="Annotation\nGroup")+
+  guides(shape=FALSE, linetype=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                  angle = 45, 
+                                  #margin = ggplot2::margin(t = 35),
+                                  hjust = 1
+  ),
+  axis.text.y = element_text(size = 15),
+  axis.title.x = element_text(size = 20),
+  axis.title.y = element_text(size = 20),
+  legend.text=element_text(size=15),
+  legend.title=element_text(size=20),
+  plot.title = element_text(size=20))
 ```
 

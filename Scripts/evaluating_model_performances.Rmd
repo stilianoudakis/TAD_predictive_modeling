@@ -301,8 +301,8 @@ all_rfperfs$Predictor <- factor(all_rfperfs$Predictor, levels = c("OC", "OP", "D
 all_rfperfs$Chromosome <- factor(all_rfperfs$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
 
 all_rfperfs_mcc <- all_rfperfs %>%
-  group_by(CL, Resolution, Resampling, Predictor) %>%
-  summarise(MCC = mean(V1, na.rm = TRUE),
+  dplyr::group_by(CL, Resolution, Resampling, Predictor) %>%
+  dplyr::summarise(MCC = mean(V1, na.rm = TRUE),
             MCCSD = sd(V1, na.rm = TRUE))
 
 #GM12878
