@@ -1,0 +1,257 @@
+---
+title: "Evaluating Jaccard Index Between Annotations"
+author: "Spiro Stilianoudakis"
+date: "April 29, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(cotools)
+library(HelloRanges)
+```
+
+# Function for calculating jaccard index between any two annotations
+
+```{r}
+#jaccard(A,B) = length of intersection between A and B (in base pairs)/(length of union between A and B - length of intersection between A and B)
+
+jaccard_func <- function(A, B){
+  #compute length of intersection between both annotations in base pairs (numerator)
+  l.i <- sum(width(pintersect(findOverlapPairs(A, B))))
+  
+  #compute length of union between both annotations in base pairs
+  l.u <- sum(width(A)) + sum(width(B))
+  
+  j <- l.i/(l.u-l.i)
+  
+  return(j)
+}
+
+```
+
+# Iterate through all annotation and calculate paiwise jaccard index
+
+## GM12878
+
+```{r}
+setwd("Z:/TAD_data_analysis/annotations/all_annotations/gm12878")
+temp = list.files()
+
+
+jaccard.mat <- matrix(nrow=length(temp), ncol=length(temp))
+colnames(jaccard.mat) <- rownames(jaccard.mat) <- gsub(paste(c("Gm12878", "K562", ".bed",
+                          "-",
+                          "_",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", temp)
+
+for(i in 27:length(temp)){
+  for(j in 1:length(temp)){
+    print(c(i,j))
+    annotA <- read.table(temp[i],header = FALSE, sep="\t")
+    annotA.gr <- GRanges(seqnames=annotA$V1,
+                     IRanges(start=annotA$V2, 
+                             end=annotA$V3))
+    
+    annotB <- read.table(temp[j],header = FALSE, sep="\t")
+    annotB.gr <- GRanges(seqnames=annotB$V1,
+                     IRanges(start=annotB$V2, 
+                             end=annotB$V3))
+    
+    if(i==j){jaccard.mat[i,j] <- 1}else{
+      code <- R_bedtools_jaccard(annotA.gr,annotB.gr)
+      eval.code <- eval(code)
+      jaccard.mat[i,j] <- eval.code@listData$jaccard
+    }
+  }
+}
+```
+
+###Plots
+
+####All
+```{r}
+jaccard.mat.gm12878 <- readRDS("Z:/TAD_data_analysis/jaccard/jaccard.mat.gm12878.rds")
+jaccard.mat.gm12878 <- jaccard.mat.gm12878[!duplicated(rownames(jaccard.mat.gm12878)), !duplicated(colnames(jaccard.mat.gm12878))]
+
+corrplot(jaccard.mat.gm12878, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+```
+
+####Chomatin States
+
+```{r}
+css <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
+css <- css[grep("Gm12878", css)]
+css <- gsub(paste(c("Gm12878-", ".bed"), collapse = "|"), "", css)
+jaccard.mat.gm12878.css <- jaccard.mat.gm12878[rownames(jaccard.mat.gm12878) %in% css, colnames(jaccard.mat.gm12878) %in% css]
+
+corrplot(jaccard.mat.gm12878.css, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+get_upper_tri <- function(cormat){
+     cormat[lower.tri(cormat)]<- NA
+     return(cormat)
+}
+
+upper_tri_css <- get_upper_tri(jaccard.mat.gm12878.css)
+melted_css <- reshape2::melt(upper_tri_css, na.rm = TRUE)
+melted_css <- melted_css[-which(melted_css$Var1==melted_css$Var2),]
+summary(melted_css$value)
+```
+
+####Histone Modifications
+
+```{r}
+hm <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
+hm <- hm[grep("Gm12878", hm)]
+hm <- gsub(paste(c("Gm12878-", ".bed"), collapse = "|"), "", hm)
+jaccard.mat.gm12878.hm <- jaccard.mat.gm12878[rownames(jaccard.mat.gm12878) %in% hm, colnames(jaccard.mat.gm12878) %in% hm]
+
+corrplot(jaccard.mat.gm12878.hm, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+get_upper_tri <- function(cormat){
+     cormat[lower.tri(cormat)]<- NA
+     return(cormat)
+}
+
+upper_tri_hm <- get_upper_tri(jaccard.mat.gm12878.hm)
+melted_hm <- reshape2::melt(upper_tri_hm, na.rm = TRUE)
+melted_hm <- melted_hm[-which(melted_hm$Var1==melted_hm$Var2),]
+summary(melted_hm$value)
+```
+
+####TFBS
+
+```{r}
+tfbs <- list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878")
+tfbs <- tfbs[grep("Gm12878", tfbs)]
+tfbs <- gsub(paste(c("Gm12878-", ".bed","-Haib","-Sydh","-Uta","-Uw","-Broad","-Uchicago"), collapse = "|"), "", tfbs)
+jaccard.mat.gm12878.tfbs <- jaccard.mat.gm12878[rownames(jaccard.mat.gm12878) %in% tfbs, colnames(jaccard.mat.gm12878) %in% tfbs]
+
+corrplot(jaccard.mat.gm12878.tfbs, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .7,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+get_upper_tri <- function(cormat){
+     cormat[lower.tri(cormat)]<- NA
+     return(cormat)
+}
+
+upper_tri_tfbs <- get_upper_tri(jaccard.mat.gm12878.tfbs)
+melted_tfbs <- reshape2::melt(upper_tri_tfbs, na.rm = TRUE)
+melted_tfbs <- melted_tfbs[-which(melted_tfbs$Var1==melted_tfbs$Var2),]
+summary(melted_tfbs$value)
+```
+
+## K562
+
+```{r}
+setwd("Z:/TAD_data_analysis/annotations/all_annotations/k562")
+temp = list.files()
+
+
+jaccard.mat <- matrix(nrow=length(temp), ncol=length(temp))
+colnames(jaccard.mat) <- rownames(jaccard.mat) <- gsub(paste(c("Gm12878", "K562", ".bed",
+                          "-",
+                          "_",
+                          "Haib",
+                          "Sydh",
+                          "Uta",
+                          "Uw",
+                          "Broad",
+                          "Uchicago"), collapse = "|"),"", temp)
+
+for(i in 1:length(temp)){
+  for(j in 1:length(temp)){
+    print(c(i,j))
+    annotA <- read.table(temp[i],header = FALSE, sep="\t")
+    annotA.gr <- GRanges(seqnames=annotA$V1,
+                     IRanges(start=annotA$V2, 
+                             end=annotA$V3))
+    
+    annotB <- read.table(temp[j],header = FALSE, sep="\t")
+    annotB.gr <- GRanges(seqnames=annotB$V1,
+                     IRanges(start=annotB$V2, 
+                             end=annotB$V3))
+    
+    if(i==j){jaccard.mat[i,j] <- 1}else{
+      code <- R_bedtools_jaccard(annotA.gr,annotB.gr)
+      eval.code <- eval(code)
+      jaccard.mat[i,j] <- eval.code@listData$jaccard
+    }
+  }
+}
+```
+
