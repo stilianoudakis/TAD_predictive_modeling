@@ -6,11 +6,15 @@
 
 ## ToDo
 
+* Use medians for table 1?
+* How to best specific cell line in table/figure legends? 
+
 - Comparison with Mourad? Hong?
 
 - Read all papers in the Papers.Rmd file
 
 - Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
+
 
 ### Main Ideas
 
