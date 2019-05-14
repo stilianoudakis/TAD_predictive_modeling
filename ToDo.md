@@ -7,13 +7,39 @@
 ## ToDo
 
 * Use medians for table 1?
-* How to best specific cell line in table/figure legends? 
+* How to best specific cell line in table/figure legends?
+
+- present supplementary table with all performance metrics
+   - include formulas
+
+- find reference citing how test set should be treated
+
+- make sure to understand what is going on with auprc
+
+- describe what happens with css and hm specific models
+
+- what is the behavior of misclassified tads
+
+- present figure showing difference in distance densities for important features
+
+- clarify message in legend title
 
 - Comparison with Mourad? Hong?
 
 - Read all papers in the Papers.Rmd file
 
 - Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
+
+- Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
+    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
+    - cross section with tad lengths
+    
+- Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
+    - Use one chromosome
+    - Make finer bins (e.g., 100 bases)
+    - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
+    - Predict which bins are TAD boundaries
+    - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
 
 
 ### Main Ideas
@@ -31,13 +57,6 @@
     + rerun models on clustered TFBS
     + compare performance
     - results not included in the manuscript yet
-
-- Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
-    - Use one chromosome
-    - Make finer bins (e.g., 100 bases)
-    - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
-    - Predict which bins are TAD boundaries
-    - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
     
 ### Secondary Ideas
 
@@ -48,10 +67,6 @@
     * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
 
 - Look into using grouped lasso to see if a particular group of annotations get regularized 
-
-- Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
-    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
-    - cross section with tad lengths
 
 - Consider filtering out TAD boundaries that form TADs greater than 2mb bp in length prior to modelling and compare
 
