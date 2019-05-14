@@ -6,13 +6,13 @@
 
 ## ToDo
 
-- remove unnecessary figures from methods section
 - Comparison with Mourad? Hong?
-
 
 - Read all papers in the Papers.Rmd file
 
 - Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
+
+### Main Ideas
 
 - Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
     - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
@@ -22,9 +22,6 @@
 - For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
 
 - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
-
-
-### Main Ideas
 
 + Train the best model in one cell type, apply to other cell types
     + rerun models on clustered TFBS
