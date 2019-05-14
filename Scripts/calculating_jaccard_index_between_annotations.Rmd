@@ -112,20 +112,10 @@ for(i in 27:length(temp)){
 
 ###Plots
 
-####All
 ```{r}
 jaccard.mat.gm12878 <- readRDS("Z:/TAD_data_analysis/jaccard/jaccard.mat.gm12878.rds")
 jaccard.mat.gm12878 <- jaccard.mat.gm12878[!duplicated(rownames(jaccard.mat.gm12878)), !duplicated(colnames(jaccard.mat.gm12878))]
 
-corrplot(jaccard.mat.gm12878, method = "square",
-         type="upper", 
-         order="hclust", 
-         tl.col="black", 
-         tl.srt=90,
-         tl.cex = .4,
-         col=colorRampPalette(c("white", "red"))(100),
-         cl.pos="n",
-         mar = c(0, 0, 0, 0))
 ```
 
 ####Chomatin States
@@ -214,6 +204,45 @@ melted_tfbs <- reshape2::melt(upper_tri_tfbs, na.rm = TRUE)
 melted_tfbs <- melted_tfbs[-which(melted_tfbs$Var1==melted_tfbs$Var2),]
 summary(melted_tfbs$value)
 ```
+
+####All
+
+```{r}
+corrplot(jaccard.mat.gm12878, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+all_melted_gm12878 <- rbind.data.frame(melted_css,
+                                       melted_hm,
+                                       melted_tfbs)
+all_melted_gm12878$annotation <- c(rep("CSS", length(melted_css$Var1)),
+                                   rep("HM", length(melted_hm$Var1)),
+                                   rep("TFBS", length(melted_tfbs$Var1)))
+all_melted_gm12878$annotation <- factor(all_melted_gm12878$annotation, levels=c("CSS", "HM", "TFBS"))
+
+ggplot(all_melted_gm12878[-which(all_melted_gm12878$annotation=="CSS"),], aes(x=value, group=annotation, color=annotation)) + 
+  geom_density(size=1) +
+  xlim(0,1) +
+  xlab("Jaccard Index") +
+  ylab("Density") +
+  scale_color_discrete(name="Annotation Group") +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15),
+     axis.text.y = element_text(size=15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+```
+
 
 ## K562
 
