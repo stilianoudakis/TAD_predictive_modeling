@@ -10,3 +10,5 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 **Table 1. Data Summaries.** The average number of genomic bins, TADs called, and the corresponding boundaries and imbalance ratios, across each of the autosomal chromosomes (omitting chromosome 9), stratified by resolution and cell line. The resolution of the Hi-C contact matrix dictated the width of each genomic bin, with lower resolutions corresponding to wider genomic bins. 
+
+**Table 2. Jaccard Indices.** The median (range) Jaccard index illustrating the pairwise similarity between annotations within specific groups, including chromatin segmentation states, histone modifications, and transcription factor binding sites. The Jaccard Index measures the ratio of the number of intersecting base pairs between any two sets, to the number of base pairs in the union of the two sets. The number of cell line specific annotations included within each group is also provided.
