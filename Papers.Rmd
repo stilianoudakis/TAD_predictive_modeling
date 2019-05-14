@@ -103,3 +103,4 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 - Idea that TAD boundaries may not be created equal. Huang, Jialiang, Kailong Li, Wenqing Cai, Xin Liu, Yuannyu Zhang, Stuart H. Orkin, Jian Xu, and Guo-Cheng Yuan. “Dissecting Super-Enhancer Hierarchy Based on Chromatin Interactions.” Nature Communications 9, no. 1 (05 2018): 943. https://doi.org/10.1038/s41467-018-03279-9. - Enhancers can be separated into super- (SE) and regular (RE) enhancers, SE further classified into hub and nonhub based on Hi-C interaction frequency. ROSE to identify enhancers from H3K27ac peaks. Characterization of SEs  - broader. Characterization of hubs - enriched in CTCF, cohesin, disease-associated variants, 
 
+- CTCF is not at TAD boundaries, but nearby. "only 15% CTCF sites are at the TAD boundary while 85% CTCF sites are inside the TAD [@Ong:2014aa]."
