@@ -1,7 +1,0 @@
-Cell Line,Annotation Group,N,Median Jaccard Index (range)
-GM12878,Chromatin State Segmentations,14,0 (0-0.001)
-GM12878,Histone Modifications,10,0.168 (0.022-0.539)
-GM12878,Transcription Factor Binding Sites,79,0.049 (0.0002-0.425)
-K562,Chromatin State Segmentations,,
-K562,Histone Modifications,,
-K562,Transcription Factor Binding Sites,,
