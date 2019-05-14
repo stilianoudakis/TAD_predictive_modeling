@@ -284,3 +284,137 @@ for(i in 1:length(temp)){
 }
 ```
 
+
+###Plots
+
+```{r}
+jaccard.mat.k562 <- readRDS("Z:/TAD_data_analysis/jaccard/jaccard.mat.k562.rds")
+jaccard.mat.k562 <- jaccard.mat.k562[!duplicated(rownames(jaccard.mat.k562)), !duplicated(colnames(jaccard.mat.k562))]
+
+```
+
+####Chomatin States
+
+```{r}
+css <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
+css <- css[grep("K562", css)]
+css <- gsub(paste(c("K562-", ".bed"), collapse = "|"), "", css)
+jaccard.mat.k562.css <- jaccard.mat.k562[rownames(jaccard.mat.k562) %in% css, colnames(jaccard.mat.k562) %in% css]
+
+corrplot(jaccard.mat.k562.css, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+get_upper_tri <- function(cormat){
+     cormat[lower.tri(cormat)]<- NA
+     return(cormat)
+}
+
+upper_tri_css <- get_upper_tri(jaccard.mat.k562.css)
+melted_css <- reshape2::melt(upper_tri_css, na.rm = TRUE)
+melted_css <- melted_css[-which(melted_css$Var1==melted_css$Var2),]
+summary(melted_css$value)
+```
+
+####Histone Modifications
+
+```{r}
+hm <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
+hm <- hm[grep("K562", hm)]
+hm <- gsub(paste(c("K562-", ".bed"), collapse = "|"), "", hm)
+jaccard.mat.k562.hm <- jaccard.mat.k562[rownames(jaccard.mat.k562) %in% hm, colnames(jaccard.mat.k562) %in% hm]
+
+corrplot(jaccard.mat.k562.hm, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         #tl.cex = .4,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+get_upper_tri <- function(cormat){
+     cormat[lower.tri(cormat)]<- NA
+     return(cormat)
+}
+
+upper_tri_hm <- get_upper_tri(jaccard.mat.k562.hm)
+melted_hm <- reshape2::melt(upper_tri_hm, na.rm = TRUE)
+melted_hm <- melted_hm[-which(melted_hm$Var1==melted_hm$Var2),]
+summary(melted_hm$value)
+```
+
+####TFBS
+
+```{r}
+tfbs <- list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/k562")
+tfbs <- tfbs[grep("K562", tfbs)]
+tfbs <- gsub(paste(c("K562-", ".bed","-Haib","-Sydh","-Uta","-Uw","-Broad","-Uchicago"), collapse = "|"), "", tfbs)
+jaccard.mat.k562.tfbs <- jaccard.mat.k562[rownames(jaccard.mat.k562) %in% tfbs, colnames(jaccard.mat.k562) %in% tfbs]
+
+corrplot(jaccard.mat.k562.tfbs, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .6,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+get_upper_tri <- function(cormat){
+     cormat[lower.tri(cormat)]<- NA
+     return(cormat)
+}
+
+upper_tri_tfbs <- get_upper_tri(jaccard.mat.k562.tfbs)
+melted_tfbs <- reshape2::melt(upper_tri_tfbs, na.rm = TRUE)
+melted_tfbs <- melted_tfbs[-which(melted_tfbs$Var1==melted_tfbs$Var2),]
+summary(melted_tfbs$value)
+```
+
+####All
+
+```{r}
+corrplot(jaccard.mat.k562, method = "square",
+         type="upper", 
+         order="hclust", 
+         tl.col="black", 
+         tl.srt=90,
+         tl.cex = .4,
+         col=colorRampPalette(c("white", "red"))(100),
+         cl.pos="n",
+         mar = c(0, 0, 0, 0))
+
+all_melted_k562 <- rbind.data.frame(melted_css,
+                                       melted_hm,
+                                       melted_tfbs)
+all_melted_k562$annotation <- c(rep("CSS", length(melted_css$Var1)),
+                                   rep("HM", length(melted_hm$Var1)),
+                                   rep("TFBS", length(melted_tfbs$Var1)))
+all_melted_k562$annotation <- factor(all_melted_k562$annotation, levels=c("CSS", "HM", "TFBS"))
+
+ggplot(all_melted_k562[-which(all_melted_k562$annotation=="CSS"),], aes(x=value, group=annotation, color=annotation)) + 
+  geom_density(size=1) +
+  xlim(0,1) +
+  xlab("Jaccard Index") +
+  ylab("Density") +
+  scale_color_discrete(name="Annotation Group") +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15),
+     axis.text.y = element_text(size=15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+```
+

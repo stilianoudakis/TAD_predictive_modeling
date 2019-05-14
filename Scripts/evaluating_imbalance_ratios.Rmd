@@ -44,6 +44,8 @@ library(lattice)
 ```
 
 #Evaluating Imbalance Ratios
+
+<!--
 ##GM12878
 ###10kb
 
@@ -222,7 +224,10 @@ for(i in 1:22){
 
 
 ```		
-	
+-->
+
+
+<!--	
 # Combined Plots
 
 ```{r}
@@ -268,6 +273,7 @@ ggplot(irtab, aes(x = Resolution, y = IR, fill = Resolution, color = Resolution)
   
   
 ```
+-->
 
 # Combined Tables
 
@@ -278,6 +284,7 @@ chr.per.chr <- character()
 bins.per.chr <- numeric()
 bounds.per.chr <- numeric()
 ir.per.chr <- numeric()
+tads.per.chr <- numeric()
 
 chrs <- paste0("chr", c(1:8,10:22))
 for(i in c("GM12878","K562")){
@@ -291,6 +298,11 @@ for(i in c("GM12878","K562")){
                                             gsub("kb","",j),
                                             "_center.rds"))
       
+      tad_dat <- read.table(paste0("Z:/TAD_data_analysis/GSE63525_data/arrowhead_output/",
+                                            i,
+                                            "/",
+                                            paste0(i,"_domain_data_", gsub("kb", "000", j), ".b.txt")))
+      
       cl.per.chr <- rbind(cl.per.chr, i)
       res.per.chr <- rbind(res.per.chr, j)
       chr.per.chr <- rbind(chr.per.chr, chrs[k])
@@ -301,6 +313,8 @@ for(i in c("GM12878","K562")){
       
       ir.per.chr <- rbind(ir.per.chr, table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[2]/table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[1])
       
+      tads.per.chr <- rbind(tads.per.chr, dim(tad_dat[which(tad_dat$V1==k),])[1])
+      
     }
   }
 }
@@ -309,17 +323,83 @@ irtab <- cbind.data.frame(cl.per.chr,
                           res.per.chr,
                           chr.per.chr,
                           bins.per.chr,
+                          tads.per.chr,
                           bounds.per.chr,
                           ir.per.chr)
-colnames(irtab) <- c("cl","res","chr","bins","bounds","ir")
+colnames(irtab) <- c("cl","res","chr","bins","tads","bounds","ir")
+irtab$res <- factor(irtab$res, levels=c("10kb","25kb","50kb","100kb"))
 
 irtab_summ <- irtab %>%
   group_by(cl, res) %>%
-  summarise(AveBins = mean(bins, na.rm = TRUE),
+  dplyr::summarise(AveBins = mean(bins, na.rm = TRUE),
             AveBinsSD = sd(bins, na.rm = TRUE),
+            AveTADs = mean(tads, na.rm = TRUE),
+            AveTADsSD = sd(tads, na.rm = TRUE),
             AveBounds = mean(bounds, na.rm = TRUE),
             AveBoundsSD = sd(bounds, na.rm = TRUE),
             AveIR = mean(ir, na.rm = TRUE),
             AveIRSD = sd(ir, na.rm = TRUE))
 ```
 
+# ICC
+
+## GM12878
+
+### Number of genomic bins
+
+```{r}
+gbins <- reshape(irtab[which(irtab$cl=="GM12878"),c(2,3,4)], idvar = "chr", timevar = "res", direction = "wide")
+icc(gbins[,-1], model="twoway")
+```
+
+### Number of TADs
+
+```{r}
+tads <- reshape(irtab[which(irtab$cl=="GM12878"),c(2,3,5)], idvar = "chr", timevar = "res", direction = "wide")
+icc(tads[,-1], model="twoway")
+```
+
+### Number of boundaries
+
+```{r}
+bounds <- reshape(irtab[which(irtab$cl=="GM12878"),c(2,3,6)], idvar = "chr", timevar = "res", direction = "wide")
+icc(bounds[,-1], model="twoway")
+```
+
+### IR
+
+```{r}
+imbratio <- reshape(irtab[which(irtab$cl=="GM12878"),c(2,3,7)], idvar = "chr", timevar = "res", direction = "wide")
+icc(imbratio[,-1], model="twoway")
+```
+
+
+## K562
+
+### Number of genomic bins
+
+```{r}
+gbins <- reshape(irtab[which(irtab$cl=="K562"),c(2,3,4)], idvar = "chr", timevar = "res", direction = "wide")
+icc(gbins[,-1], model="twoway")
+```
+
+### Number of TADs
+
+```{r}
+tads <- reshape(irtab[which(irtab$cl=="K562"),c(2,3,5)], idvar = "chr", timevar = "res", direction = "wide")
+icc(tads[,-1], model="twoway")
+```
+
+### Number of boundaries
+
+```{r}
+bounds <- reshape(irtab[which(irtab$cl=="K562"),c(2,3,6)], idvar = "chr", timevar = "res", direction = "wide")
+icc(bounds[,-1], model="twoway")
+```
+
+### IR
+
+```{r}
+imbratio <- reshape(irtab[which(irtab$cl=="K562"),c(2,3,7)], idvar = "chr", timevar = "res", direction = "wide")
+icc(imbratio[,-1], model="twoway")
+```
