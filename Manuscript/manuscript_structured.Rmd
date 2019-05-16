@@ -11,7 +11,7 @@ output: html_document
 
 **Results.** Using the GM12878 and K562 cell lines, we show that models built on SMOTE (Synthetic Minority Over-sampling TEchnique) re-sampled data out performed models built simply on random under- and over-sampled data, across all resolutions. Additionally, our results indicated that distances between annotations and TAD boundaries were more informative than other predictor-types used to build the feature space of models. We also observed that performances tended to degrade as data resolution decreased. Lastly, the most predictive annotations in the best performing models were found to be consistent across both cell line and resolution. They included well-known marks of TAD boundaries such as CTCF, SMC3, RAD21, and ZNF143, as well as lesser known transcription factors including RUNX3, ELF1, and the Myc-associated zinc finger protein. 
 
-**Conclusions.** The experiments derived from our ensemble framework provide a useful guide toward the exploration of chromatin organization, while highlighting the impact of both class imbalance and feature engineering in TAD boundary prediction. Our framework provides insight into the best set of parameters necessary for optimal performance.
+**Conclusions.** The experiments derived from our ensemble framework provide a useful guide toward the exploration of chromatin organization, while highlighting the impact of both class imbalance and feature engineering in TAD boundary prediction. Our framework provides insight into the best set of parameters necessary for optimal performance in identifying the complete set of genomic annotations associated with TAD boundary formation.
 
 # Introduction
 
