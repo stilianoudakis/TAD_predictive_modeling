@@ -161,6 +161,8 @@ Overall, SMOTE resampled data was found to yield the best MCCs among all classes
 
 ## MODELS IMPLEMENTED ON TRANSCRIPTION FACTOR BINDING SITES, USING OPTIMAL PARAMETERS, OUTPERFORM OTHER ANNOTATION-SPECIFIC MODELS
 
+After determining the optimal set of data level characteristics necessary for predicting TAD boundaries, we then aimed to identify the set of functional genomic elements that were most influential in predicting said boundaries. 
+
 In order to assess the predictive capabilities of specific types of annotations, we further compared the performances of annotation-specific models. Using the optimal set of characteristics obtained above (SMOTE re-sampling with distance-type predictors), random forest classifiers built on sets of cell line specific histone modifications, chromatin state segmentations, and transcription factor binding sites (TFBS) were compared to a model that included all three types together. For GM12878, models built simply on TFBS were found to perform consistently just as well as models that included all 3 sets of annotations, across resolution (Figure 6). Similar results were found when evaluating the K562 cell line (supplementary Figure 11). For both resolutions, models built on only histone modifications were found to have the lowest MCC, across resolutions, followed by models built on chromatin state segmentations. 
 
 ## PREDICTIVE IMPORTANCES CONFIRMED BIOLOGICAL FUNCTIONALITY OF KNOWN TRANSCRIPTION FACTOR BINDING SITES

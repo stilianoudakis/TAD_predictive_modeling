@@ -5,10 +5,7 @@ output: html_document
 
 # Abstract
 
-**Background.** Topologically Associated Domains (TADs) represent fundamental building blocks of the 3D genome organization and regulation. Several epigenomic marks, such as CTCF and the members of Cohesin complex, were found to be enriched at TAD boundaries, suggesting a strong epigenetic component in TAD formation. Several methods for predicting TAD boundaries using epigenomic data overlooked key characteristics of genome annotation data, such as indirect associations between an annotation and a boundary. Furthermore, the number of regions containing TAD boundaries is typically much smaller than the rest of the genome, creating a class imbalance problem. 
-
-
-
+**Background.** Topologically Associated Domains (TADs) represent fundamental building blocks of the 3D genome organization and regulation. Several epigenomic marks, such as CTCF and the members of Cohesin complex, were found to be enriched at TAD boundaries, suggesting a strong epigenetic component in TAD formation. Several methods for predicting TAD boundaries using epigenomic data have overlooked key characteristics of genome annotation data, such as indirect associations between an annotation and a boundary. Furthermore, the number of regions containing TAD boundaries is typically much smaller than the rest of the genome, creating a class imbalance problem. This can be further exacerbated by the particular resolution that TADs are called from. Higher resolution will typically result in more sparce data, but will likely capture the nuances between boundaries and annotation that could be missed at lower resolutions.
 
 **Methods.** To address this, we proposed a novel ensemble framework in order to systematically compare the performances of random forest classifiers implemented on combinations of different Hi-C contact matrix resolutions, feature engineering strategies, and re-sampling techniques.
 
