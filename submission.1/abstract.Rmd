@@ -1,0 +1,25 @@
+---
+title: Computational Prediction of 3D Genomic Domains using 1D Genome Annotations
+  in Class Imbalance Settings
+output:
+  word_document: default
+  pdf_document:
+    fig_caption: no
+fontsize: 11pt
+---
+
+Spiro Stilianoudakis^1,2^ (stilianoudasc@mymail.vcu.edu), Kellen G. Cresswell^1^ (cresswellkg@vcu.edu), Mikhail G. Dozmorov^1,2\*^ (mikhail.dozmorov@vcuhealth.org)
+
+^1^ Dept. of Biostatistics, Virginia Commonwealth University, Richmond, VA, 23298, USA  
+^2^ Equal contribution  
+^\*^ To whom correspondence should be addressed: Virginia Commonwealth University, Richmond, VA, 23298, 804-827-2055, mikhail.dozmorov@vcuhealth.org
+
+# Abstract
+
+**Background.** Topologically Associated Domains (TADs) represent fundamental building blocks of the three-dimensional (3D) genome organization and regulation. Several epigenetic marks, such as CTCF, are highly enriched at TAD boundaries, suggesting a strong epigenetic component of TAD boundary formation. Several methods have been developed to leverage the growing amount of (epi)genomic annotation data for predicting TAD boundaries; however, they overlooked key characteristics of the data, such as spatial associations between a genomic annotation and a boundary. Furthermore, the number of regions containing TAD boundaries is much smaller than the rest of the genome, creating a class imbalance problem. 
+
+**Methods.** To investigate the problem of spatial genomic relationships and class imbalance problem, we developed an ensemble framework for optimizing prediction of TAD boundaries. We utilized several resampling techniques (random over- and undersampling, Synthetic Minority Over-sampling TEchnique (SMOTE)) coupled with various metrics for classifier performance evaluation (Area Under Receiver Operating Characteristics (AUCROC) curve, Precision-Recall curve (AUPRC), F1, Matthew Correlation Coefficient (MCC), among others) to select the best predictive model in class imbalance settings.
+
+**Results.** Using different feature engineering and resampling strategies, coupled with elastic net-based feature selection, we systematically compared the performance of models predicting the location of TAD boundaries (Gm12878 and K562 Hi-C data at 10kb to 100kb resolutions). Precision-Recall curves were found to be best suited for evaluating model performance in class imbalance settings. Random undersampling and SMOTE-resampled data performed best for optimal parameter selection. Transcription Factor Binding Sites (TFBSs) were best type of genomic annotations for predicting TAD boundaries than histone modifications and chromatin states; we identified well-known CTCF, SMC3, RAD21, and several novel TFBSs as best predictors of TAD boundaries. Importantly, spatial relationships (distance between TAD boundaries and genomic annotations) were best predictors of TAD boundaries as compared with commonly used overlap counts or percent overlap measures.
+
+**Conclusions.** Our results outline strategies for predictive modeling of 3D genomic domains using 1D genome annotation data. The accurate modeling of TAD boundaries will improve our understanding of how epigenetics shapes the 3D structure of the genome.
