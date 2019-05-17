@@ -1,18 +1,30 @@
 ---
-title: "Untitled"
-output: html_document
+title: Computational Prediction of 3D Genomic Domains using 1D Genome Annotations
+  in Class Imbalance Settings
+output:
+  word_document: default
+  pdf_document:
+    fig_caption: no
+fontsize: 11pt
 ---
+
+Spiro Stilianoudakis^1,2^ (stilianoudasc@mymail.vcu.edu), Kellen G. Cresswell^1^ (cresswellkg@vcu.edu), Mikhail G. Dozmorov^1,2\*^ (mikhail.dozmorov@vcuhealth.org)
+
+^1^ Dept. of Biostatistics, Virginia Commonwealth University, Richmond, VA, 23298, USA  
+^2^ Equal contribution  
+^\*^ To whom correspondence should be addressed: Virginia Commonwealth University, Richmond, VA, 23298, 804-827-2055, mikhail.dozmorov@vcuhealth.org
 
 # Abstract
 
-**Background.** Topologically Associated Domains (TADs) represent fundamental building blocks of the 3D genome organization and regulation. Several epigenomic marks, such as CTCF and the members of Cohesin complex, were found to be enriched at TAD boundaries, suggesting a strong epigenetic component in TAD formation. Several methods for predicting TAD boundaries using epigenomic data have overlooked key characteristics of genome annotation data, such as indirect associations between an annotation and a boundary. Furthermore, the number of regions containing TAD boundaries is typically much smaller than the rest of the genome, creating a class imbalance problem. This can be further exacerbated by the particular resolution that TADs are called from. Higher resolution will typically result in more sparce data, but will likely capture the nuances between boundaries and annotation that could be missed at lower resolutions.
+**Background.** Topologically Associated Domains (TADs) represent fundamental building blocks of the three-dimensional (3D) genome organization and regulation. Several epigenetic marks, such as CTCF, are highly enriched at TAD boundaries, suggesting a strong epigenetic component of TAD boundary formation. Several methods have been developed to leverage the growing amount of (epi)genomic annotation data for predicting TAD boundaries; however, they overlooked key characteristics of the data, such as spatial associations between a genomic annotation and a boundary. Furthermore, the number of regions containing TAD boundaries is much smaller than the rest of the genome, creating a class imbalance problem. 
 
-**Methods.** To address this, we proposed a novel ensemble framework in order to systematically compare the performances of random forest classifiers implemented on combinations of different Hi-C contact matrix resolutions, feature engineering strategies, and re-sampling techniques.
+**Methods.** To investigate the problem of spatial genomic relationships and class imbalance problem, we developed an ensemble framework for optimizing prediction of TAD boundaries. We utilized several resampling techniques (random over- and undersampling, Synthetic Minority Over-sampling TEchnique (SMOTE)) coupled with various metrics for classifier performance evaluation (Area Under Receiver Operating Characteristics (AUCROC) curve, Precision-Recall curve (AUPRC), F1, Matthew Correlation Coefficient (MCC), among others) to select the best predictive model in class imbalance settings.
 
-**Results.** Using the GM12878 and K562 cell lines, we show that models built on SMOTE (Synthetic Minority Over-sampling TEchnique) re-sampled data out performed models built simply on random under- and over-sampled data, across all resolutions. Additionally, our results indicated that distances between annotations and TAD boundaries were more informative than other predictor-types used to build the feature space of models. We also observed that performances tended to degrade as data resolution decreased. Lastly, the most predictive annotations in the best performing models were found to be consistent across both cell line and resolution. They included well-known marks of TAD boundaries such as CTCF, SMC3, RAD21, and ZNF143, as well as lesser known transcription factors including RUNX3, ELF1, and the Myc-associated zinc finger protein. 
+**Results.** Using different feature engineering and resampling strategies, coupled with elastic net-based feature selection, we systematically compared the performance of models predicting the location of TAD boundaries (Gm12878 and K562 Hi-C data at 10kb to 100kb resolutions). Precision-Recall curves were found to be best suited for evaluating model performance in class imbalance settings. Random undersampling and SMOTE-resampled data performed best for optimal parameter selection. Transcription Factor Binding Sites (TFBSs) were best type of genomic annotations for predicting TAD boundaries than histone modifications and chromatin states; we identified well-known CTCF, SMC3, RAD21, and several novel TFBSs as best predictors of TAD boundaries. Importantly, spatial relationships (distance between TAD boundaries and genomic annotations) were best predictors of TAD boundaries as compared with commonly used overlap counts or percent overlap measures.
 
-**Conclusions.** The experiments derived from our ensemble framework provide a useful guide toward the exploration of chromatin organization, while highlighting the impact of both class imbalance and feature engineering in TAD boundary prediction. Our framework provides insight into the best set of parameters necessary for optimal performance in identifying the complete set of genomic annotations associated with TAD boundary formation.
+**Conclusions.** Our results outline strategies for predictive modeling of 3D genomic domains using 1D genome annotation data. The accurate modeling of TAD boundaries will improve our understanding of how epigenetics shapes the 3D structure of the genome.
 
+<!--
 # Introduction
 
 ## Importance
@@ -49,3 +61,4 @@ In contrast, 1D genome annotation tracks assembled by the ENCODE and Roadmap con
 ## Our work on solving problems
 
 ### Consider distance
+-->
