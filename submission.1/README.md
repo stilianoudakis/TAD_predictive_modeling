@@ -1,6 +1,30 @@
 
 - `abstract.Rmd` - submitted 2019-05-17. Developed in `Manuscript/manuscript_structured.Rmd`
 
+## 2019-05-17, Subhajyoti De <noreply@frontiersin.org>
+
+Dear Dr Dozmorov, 
+
+"We are pleased to inform you that the abstract ""Computational Prediction of 3D Genomic Domains using 1D Genome Annotations in Class Imbalance Settings"" has been accepted for the Research Topic below by the Guest Editors. We are looking forward to receiving your manuscript for peer review.
+
+Hosting Journal/Specialty: Frontiers in Genetics, section Bioinformatics and Computational Biology
+Research Topic Title: Genomic Colocalization and Enrichment Analyses
+Topic Editor(s): Geir Kjetil Sandve, Subhajyoti De, Ryan Matthew Layer, Eivind Hovig
+
+Please submit your manuscript no later than Sep 08, 2019 via the following link:
+http://www.frontiersin.org/Bioinformatics_and_Computational_Biology/researchtopics/Genomic_Colocalization_and_Enrichment_Analyses/9458
+
+If accepted, your article will be free to access for all readers, indexed in relevant repositories, and as an author in Frontiers you retain the copyright to your own papers and figures. You will also have access to advances article-level metrics to track your impact. Information on article fees can be accessed at:       
+http://www.frontiersin.org/Journal/Fees.aspx?s=1267&name=Bioinformatics_and_Computational_Biology           
+
+Should you have any questions, please do not hesitate to contact us.
+
+With best regards, 
+
+Subhajyoti De
+Guest Associate Editor, Bioinformatics and Computational Biology
+www.frontiersin.org"
+
 ## 2019-05-07, Geir Kjetil Sandve
 
 Dear Dr Dozmorov, 
