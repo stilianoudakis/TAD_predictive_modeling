@@ -9,16 +9,14 @@
 * Use medians for table 1?
 * How to best specific cell line in table/figure legends?
 
-- present supplementary table with all performance metrics
++ present supplementary table with all performance metrics
    - include formulas
 
-- find reference citing how test set should be treated
++ find reference citing how test set should be treated
 
-- make sure to understand what is going on with auprc
++ make sure to understand what is going on with auprc
 
 - describe what happens with css and hm specific models
-
-- what is the behavior of misclassified tads
 
 - present figure showing difference in distance densities for important features
 
@@ -28,7 +26,7 @@
 
 - Read all papers in the Papers.Rmd file
 
-- Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
++ Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
 
 - Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
