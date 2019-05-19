@@ -122,6 +122,26 @@ enet_ratios_gm12878_summ <- enet_ratios_gm12878 %>%
   dplyr::summarise(AveRatio = mean(Ratio, na.rm = TRUE),
             AveRatioSD = sd(Ratio, na.rm = TRUE))
 
+enet_ratios_gm12878_summ$Resolution <- factor(enet_ratios_gm12878_summ$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+
+ggplot(enet_ratios_gm12878_summ, aes(fill=Annotation, y=AveRatio, x=Resolution)) + 
+    geom_bar(stat="identity", position = position_dodge()) +
+    geom_errorbar(aes(ymin=AveRatio-AveRatioSD, ymax=AveRatio+AveRatioSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
+    xlab("Resolution") +
+    ylab("Proportion of Features in Final Model") +
+    scale_fill_discrete(name="Annotation\nGroup")+
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15,
+                                     angle = 45,
+                                     hjust = 1),
+          axis.text.y = element_text(size = 10),
+          axis.title.x = element_text(size = 20),
+          axis.title.y = element_text(size = 20),
+          legend.text=element_text(size=15),
+          legend.title=element_text(size=20))
+
+
 ```
 
 
