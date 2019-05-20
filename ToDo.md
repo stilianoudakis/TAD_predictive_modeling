@@ -6,6 +6,16 @@
 
 ## ToDo
 
+- Write each paragraph using the structure (https://github.com/mdozmorov/manuscript_template):
+    - What is the question?
+    - What data/methods are used?
+    - Any relevant details/results?
+    - What is the answer (take home message)?
+
+- Focus on Results. Define everything there. In Methods, keep only the technical details.
+
+- Do we need RF?
+
 * Use medians for table 1?
 * How to best specific cell line in table/figure legends?
 
