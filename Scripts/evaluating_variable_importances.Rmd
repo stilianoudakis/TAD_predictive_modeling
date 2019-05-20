@@ -49,7 +49,7 @@ library(RColorBrewer)
 ```
 
 
-# Variable Importance Heatmaps for models with distance type predictors with SMOTE resampling 
+# TFBS with distance type predictors with SMOTE resampling 
 
 ##GM12878
 
@@ -283,7 +283,8 @@ ggplot(all_varimps_gm12878, aes(variable, ordered(Feature, levels=rev(unique(Fea
   geom_tile(aes(fill = value), colour = "white") + 
   xlab("Resolution") +
   ylab("Transcription Factor") +
-  scale_fill_gradient2(low = "white",
+  scale_fill_gradient2(limits=c(0,100),
+                      low = "white",
                       mid = "pink",
                       midpoint = 50,
                       high = muted("red"),
@@ -315,7 +316,8 @@ ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Featur
   geom_tile(aes(fill = value), colour = "white") + 
   xlab("Resolution") +
   ylab("Transcription Factor") +
-  scale_fill_gradient2(low = "white",
+  scale_fill_gradient2(limits=c(0,100),
+                      low = "white",
                       mid = "pink",
                       midpoint = 50,
                       high = muted("red"),
@@ -333,3 +335,611 @@ ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Featur
         legend.title=element_text(size=20))
 ```
 
+# Chromstates with distance type predictors with SMOTE resampling
+
+##GM12878
+
+```{r}
+annots <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
+annots <- annots[grep("Gm12878", annots)]
+annots <- gsub(paste(c("Gm12878-",".bed"), collapse = "|"), "", annots)
+
+```
+
+###10kb
+
+```{r}
+varimp_gm12878_10kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_10kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_10kb <- data.frame(Feature = rownames(varimp_gm12878_10kb),
+                                  aveimp10kb = rowMeans(varimp_gm12878_10kb, na.rm = TRUE),
+                                  sdimp10kb = apply(varimp_gm12878_10kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_10kb) <- NULL
+
+
+```
+
+###25kb
+
+```{r}
+varimp_gm12878_25kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_25kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_25kb <- data.frame(Feature = rownames(varimp_gm12878_25kb),
+                                  aveimp25kb = rowMeans(varimp_gm12878_25kb, na.rm = TRUE),
+                                  sdimp25kb = apply(varimp_gm12878_25kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_25kb) <- NULL
+
+
+```
+
+###50kb
+
+```{r}
+varimp_gm12878_50kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_50kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_50kb <- data.frame(Feature = rownames(varimp_gm12878_50kb),
+                                  aveimp50kb = rowMeans(varimp_gm12878_50kb, na.rm = TRUE),
+                                  sdimp50kb = apply(varimp_gm12878_50kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_50kb) <- NULL
+
+
+```
+
+###100kb
+
+```{r}
+varimp_gm12878_100kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_100kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_100kb <- data.frame(Feature = rownames(varimp_gm12878_100kb),
+                                  aveimp100kb = rowMeans(varimp_gm12878_100kb, na.rm = TRUE),
+                                  sdimp100kb = apply(varimp_gm12878_100kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_100kb) <- NULL
+
+
+```
+
+##K562
+
+```{r}
+annots <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
+annots <- annots[grep("K562", annots)]
+annots <- gsub(paste(c("K562-",".bed"), collapse = "|"), "", annots)
+
+```
+
+###10kb
+
+```{r}
+varimp_K562_10kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_10kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_10kb <- data.frame(Feature = rownames(varimp_K562_10kb),
+                                  aveimp10kb = rowMeans(varimp_K562_10kb, na.rm = TRUE),
+                                  sdimp10kb = apply(varimp_K562_10kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_10kb) <- NULL
+
+
+```
+
+###25kb
+
+```{r}
+varimp_K562_25kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_25kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_25kb <- data.frame(Feature = rownames(varimp_K562_25kb),
+                                  aveimp25kb = rowMeans(varimp_K562_25kb, na.rm = TRUE),
+                                  sdimp25kb = apply(varimp_K562_25kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_25kb) <- NULL
+
+
+```
+
+###50kb
+
+```{r}
+varimp_K562_50kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_50kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_50kb <- data.frame(Feature = rownames(varimp_K562_50kb),
+                                  aveimp50kb = rowMeans(varimp_K562_50kb, na.rm = TRUE),
+                                  sdimp50kb = apply(varimp_K562_50kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_50kb) <- NULL
+
+
+```
+
+###100kb
+
+```{r}
+varimp_K562_100kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_100kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_100kb <- data.frame(Feature = rownames(varimp_K562_100kb),
+                                  aveimp100kb = rowMeans(varimp_K562_100kb, na.rm = TRUE),
+                                  sdimp100kb = apply(varimp_K562_100kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_100kb) <- NULL
+
+
+```
+
+##Plots
+
+```{r}
+#GM12878
+all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+                                        varimp_gm12878_10kb$aveimp10kb,
+                                        varimp_gm12878_25kb$aveimp25kb,
+                                        varimp_gm12878_50kb$aveimp50kb,
+                                        varimp_gm12878_100kb$aveimp100kb)
+names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_gm12878 <- all_varimps_gm12878[order(all_varimps_gm12878$ave10kb, decreasing = TRUE),]
+#all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
+all_varimps_gm12878 <- melt(all_varimps_gm12878)
+
+chromstates_gm12878_plot <- ggplot(all_varimps_gm12878, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+  geom_tile(aes(fill = value), colour = "white") + 
+  xlab("") +
+  ylab("") +
+  scale_fill_gradient2(limits=c(0,100),
+                      low = "white",
+                      mid = "pink",
+                      midpoint = 50,
+                      high = muted("red"),
+                      na.value = "grey50",
+                      name="Predictive\nImportance") +
+  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+#K562
+all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
+                                        varimp_K562_10kb$aveimp10kb,
+                                        varimp_K562_25kb$aveimp25kb,
+                                        varimp_K562_50kb$aveimp50kb,
+                                        varimp_K562_100kb$aveimp100kb)
+names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_K562 <- all_varimps_K562[order(all_varimps_K562$ave10kb, decreasing = TRUE),]
+#all_varimps_K562 <- all_varimps_K562[1:20,]
+all_varimps_K562 <- melt(all_varimps_K562)
+
+chromstates_K562_plot <- ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+  geom_tile(aes(fill = value), colour = "white") + 
+  xlab("") +
+  ylab("") +
+  scale_fill_gradient2(limits=c(0,100),
+                      low = "white",
+                      mid = "pink",
+                      midpoint = 50,
+                      high = muted("red"),
+                      na.value = "grey50",
+                      name="Predictive\nImportance") +
+  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+figure <- ggarrange(chromstates_gm12878_plot,
+                    chromstates_K562_plot,
+                ncol = 2, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "right",
+                labels = "AUTO",
+                font.label = list(size=20))
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Chromatin States", color = "black", rot = 90, size=20)
+)
+
+```
+
+
+# Histones with distance type predictors with SMOTE resampling
+
+##GM12878
+
+```{r}
+annots <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
+annots <- annots[grep("Gm12878", annots)]
+annots <- gsub(paste(c("Gm12878-",".bed"), collapse = "|"), "", annots)
+
+```
+
+###10kb
+
+```{r}
+varimp_gm12878_10kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_10kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_10kb <- data.frame(Feature = rownames(varimp_gm12878_10kb),
+                                  aveimp10kb = rowMeans(varimp_gm12878_10kb, na.rm = TRUE),
+                                  sdimp10kb = apply(varimp_gm12878_10kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_10kb) <- NULL
+
+
+```
+
+###25kb
+
+```{r}
+varimp_gm12878_25kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_25kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_25kb <- data.frame(Feature = rownames(varimp_gm12878_25kb),
+                                  aveimp25kb = rowMeans(varimp_gm12878_25kb, na.rm = TRUE),
+                                  sdimp25kb = apply(varimp_gm12878_25kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_25kb) <- NULL
+
+
+```
+
+###50kb
+
+```{r}
+varimp_gm12878_50kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_50kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_50kb <- data.frame(Feature = rownames(varimp_gm12878_50kb),
+                                  aveimp50kb = rowMeans(varimp_gm12878_50kb, na.rm = TRUE),
+                                  sdimp50kb = apply(varimp_gm12878_50kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_50kb) <- NULL
+
+
+```
+
+###100kb
+
+```{r}
+varimp_gm12878_100kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_100kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_100kb <- data.frame(Feature = rownames(varimp_gm12878_100kb),
+                                  aveimp100kb = rowMeans(varimp_gm12878_100kb, na.rm = TRUE),
+                                  sdimp100kb = apply(varimp_gm12878_100kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_100kb) <- NULL
+
+
+```
+
+##K562
+
+```{r}
+annots <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
+annots <- annots[grep("K562", annots)]
+annots <- gsub(paste(c("K562-",".bed"), collapse = "|"), "", annots)
+
+```
+
+###10kb
+
+```{r}
+varimp_K562_10kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_10kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_10kb <- data.frame(Feature = rownames(varimp_K562_10kb),
+                                  aveimp10kb = rowMeans(varimp_K562_10kb, na.rm = TRUE),
+                                  sdimp10kb = apply(varimp_K562_10kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_10kb) <- NULL
+
+
+```
+
+###25kb
+
+```{r}
+varimp_K562_25kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_25kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_25kb <- data.frame(Feature = rownames(varimp_K562_25kb),
+                                  aveimp25kb = rowMeans(varimp_K562_25kb, na.rm = TRUE),
+                                  sdimp25kb = apply(varimp_K562_25kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_25kb) <- NULL
+
+
+```
+
+###50kb
+
+```{r}
+varimp_K562_50kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_50kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_50kb <- data.frame(Feature = rownames(varimp_K562_50kb),
+                                  aveimp50kb = rowMeans(varimp_K562_50kb, na.rm = TRUE),
+                                  sdimp50kb = apply(varimp_K562_50kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_50kb) <- NULL
+
+
+```
+
+###100kb
+
+```{r}
+varimp_K562_100kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_100kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_100kb <- data.frame(Feature = rownames(varimp_K562_100kb),
+                                  aveimp100kb = rowMeans(varimp_K562_100kb, na.rm = TRUE),
+                                  sdimp100kb = apply(varimp_K562_100kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_100kb) <- NULL
+
+
+```
+
+##Plots
+
+```{r}
+#GM12878
+all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+                                        varimp_gm12878_10kb$aveimp10kb,
+                                        varimp_gm12878_25kb$aveimp25kb,
+                                        varimp_gm12878_50kb$aveimp50kb,
+                                        varimp_gm12878_100kb$aveimp100kb)
+names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_gm12878 <- all_varimps_gm12878[order(all_varimps_gm12878$ave10kb, decreasing = TRUE),]
+#all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
+all_varimps_gm12878 <- melt(all_varimps_gm12878)
+
+histones_gm12878_plot <- ggplot(all_varimps_gm12878, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+  geom_tile(aes(fill = value), colour = "white") + 
+  xlab("") +
+  ylab("") +
+  scale_fill_gradient2(limits=c(0,100),
+                      low = "white",
+                      mid = "pink",
+                      midpoint = 50,
+                      high = muted("red"),
+                      na.value = "grey50",
+                      name="Predictive\nImportance") +
+  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+#K562
+all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
+                                        varimp_K562_10kb$aveimp10kb,
+                                        varimp_K562_25kb$aveimp25kb,
+                                        varimp_K562_50kb$aveimp50kb,
+                                        varimp_K562_100kb$aveimp100kb)
+names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_K562 <- all_varimps_K562[order(all_varimps_K562$ave10kb, decreasing = TRUE),]
+#all_varimps_K562 <- all_varimps_K562[1:20,]
+all_varimps_K562 <- melt(all_varimps_K562)
+
+histones_K562_plot <- ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+  geom_tile(aes(fill = value), colour = "white") + 
+  xlab("") +
+  ylab("") +
+  scale_fill_gradient2(limits=c(0,100),
+                      low = "white",
+                      mid = "pink",
+                      midpoint = 50,
+                      high = muted("red"),
+                      na.value = "grey50",
+                      name="Predictive\nImportance") +
+  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+
+figure <- ggarrange(histones_gm12878_plot,
+                    histones_K562_plot,
+                ncol = 2, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "right",
+                labels = "AUTO",
+                font.label = list(size=20))
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("Histone Modifications", color = "black", rot = 90, size=20)
+)
+
+```
