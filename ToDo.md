@@ -16,9 +16,9 @@
 
 + make sure to understand what is going on with auprc
 
-- describe what happens with css and hm specific models
++ describe what happens with css and hm specific models
 
-- present figure showing difference in distance densities for important features
++ present figure showing difference in distance densities for important features
 
 - clarify message in legend title
 
