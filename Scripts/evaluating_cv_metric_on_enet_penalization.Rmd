@@ -1,0 +1,261 @@
+---
+title: "evaluating_cv_metric_on_enet_penalization"
+author: "Spiro Stilianoudakis"
+date: "May 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(ggplot2, lib.loc = "/home/R/Rlib-3.4.1-rh6/")
+library(caret, lib.loc = "/home/R/Rlib-3.4.1-rh6/")
+library(DMwR)
+#library(PRROC)
+library(ModelMetrics, lib.loc = "/home/R/Rlib-3.4.1-rh6/")
+
+```
+
+# Defining summary metric for cross validation
+
+```{r}
+#defining function to extract AUPRC
+#auprcSummary <- function(data, lev = NULL, model = NULL){
+#  lvls <- levels(data$obs) #take the probability of good class
+#  prob_good <- data[,lvls[2]] 
+#  the_curve <- pr.curve(scores.class0 = prob_good,
+#                        weights.class0 = as.numeric(data$obs)-1, #provide the class labels as 0/1
+#                        curve = FALSE)
+#  out <- the_curve$auc.integral
+#  names(out) <- "AUPRC"
+#  out
+#}
+
+#defining function to extract F1
+#f1Summary <- function (data, lev = NULL, model = NULL) {
+#  precision <- posPredValue(data$pred, data$obs, positive = "Yes")
+#  recall  <- sensitivity(data$pred, data$obs, postive = "Yes")
+#  f1_val <- (2 * precision * recall) / (precision + recall)
+#  names(f1_val) <- c("F1")
+#  f1_val
+#} 
+
+#defining function to extract mcc
+#mccSummary <- function (data, lev = NULL, model = NULL) 
+#{
+#  lvls <- levels(data$obs)
+#  #if (length(lvls) > 2) 
+#  #  stop(paste("Your outcome has", length(lvls), "levels. The twoClassSummary() function isn't appropriate."))
+#  #requireNamespaceQuietStop("ModelMetrics")
+#  #if (!all(levels(data[, "pred"]) == lvls)) 
+#  #  stop("levels of observed and predicted data do not match")
+#  mcc <- ModelMetrics::mcc(ifelse(data$obs == lev[2], 0, 
+#                                  1), data[, lvls[1]], cutoff = .5)
+#  out <- c(mcc)
+#  names(out) <- c("MCC")
+#  out
+#}
+
+#One summary function for roc,auprc,f1,and mcc
+allSummary <- function (data, lev = NULL, model = NULL) {
+  lvls <- levels(data$obs)
+  
+  #mcc
+  mcc <- ModelMetrics::mcc(ifelse(data$obs == lev[2], 0, 1), data[, lvls[1]], cutoff = .5)
+  
+  #roc
+  b1 <- twoClassSummary(data, lev, model)
+  
+  #auprc & f1
+  c1 <- prSummary(data, lev, model)
+  
+  out <- c(mcc, b1, c1)
+  names(out)[1] <- c("MCC")
+  out
+}
+
+```
+
+# GM12878 with distance type predictors
+
+```{r}
+sampling <- c("none", "ros", "rus", "smote")
+resolution <- c("10kb", "25kb", "50kb", "100kb")
+metric <- c("ROC", "AUC", "F", "MCC")
+
+l=1
+modelList <- list()
+
+alpha_vals <- numeric()
+lambda_vals <- numeric()
+metric_vals <- character()
+resample_vals <- character()
+resolution_vals <- character()
+
+for(i in 1:length(resolution)){
+  
+  #reading in whole genome data
+  ##setting directory specific to cell line and resolution 
+  wgd_directory <- paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/",
+                          resolution[i],
+                          "/training_testing/gm12878_",
+                          resolution[i],
+                          ".rds")
+  whole_genome_dat <- readRDS(wgd_directory)
+  
+  #reading in bin data on the whole genome that contains chromosome information
+  ##setting directory specific to cell line and resolution 
+  bd_directory <- paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/",
+                         resolution[i],
+                         "/training_testing/binslist",
+                         gsub("kb","",resolution[i]),
+                         "_center.rds")
+  binslist_dat <- readRDS(bd_directory)
+  
+  varstorm = c(names(whole_genome_dat)[grep("Ctcf-", names(whole_genome_dat))][-c(1:4)],
+               names(whole_genome_dat)[grep("Ebf1sc137065-", names(whole_genome_dat))][-c(1:4)],
+               names(whole_genome_dat)[grep("P300-", names(whole_genome_dat))][-c(1:4)],
+               names(whole_genome_dat)[grep("Pol2-", names(whole_genome_dat))][-c(1:4)],
+               names(whole_genome_dat)[grep("Rad21-", names(whole_genome_dat))][-c(1:4)])
+  
+  whole_genome_dat <- whole_genome_dat[,-which(names(whole_genome_dat) %in% varstorm)]
+  
+  #reducing the whole genome data to only specific chromosome
+  reduce_chr <- "chr1"
+  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),]
+  
+  #splitting into training and testing
+  set.seed(123)
+  inTrainingSet <- sample(length(chr_specific_dat$y),floor(length(chr_specific_dat$y)*.7))
+  train <- chr_specific_dat[inTrainingSet,]
+  test <- chr_specific_dat[-inTrainingSet,]
+  
+  #reduce predictor space
+  reduce_predictor = "_dist"
+  train <- train[,c(1,grep(reduce_predictor, names(train)))]
+  
+  for(j in 1:length(sampling)){
+    
+    # set number of iterations
+    samps = 50
+    
+    if(sampling[j]=="ros"){
+      #assign sample indeces
+      sampids <- matrix(ncol=samps, 
+                        nrow=length(train$y[which(train$y=="No")]))
+      
+      #filling in the sample ids matrix
+      set.seed(123)
+      for(s in 1:samps){
+        sampids[,s] <- sample(x = which(train$y=="Yes"),
+                              size = length(which(train$y=="No")),
+                              replace = TRUE)
+      }
+      train <- rbind.data.frame(train[which(train$y=="No"),],
+                                train[sampids[,1],])
+      #Randomly shuffle the data
+      set.seed(321)
+      train <- train[sample(nrow(train)),]
+    }else if(sampling[j]=="rus"){
+      #assign sample indeces
+      sampids <- matrix(ncol=samps, 
+                        nrow=length(train$y[which(train$y=="Yes")]))
+      
+      #filling in the sample ids matrix
+      set.seed(123)
+      for(s in 1:samps){
+        sampids[,s] <- sample(x = which(train$y=="No"),
+                              size = length(which(train$y=="Yes")),
+                              replace = FALSE)
+      }
+      train <- rbind.data.frame(train[which(train$y=="Yes"),],
+                                train[sampids[,1],])
+      
+      #Randomly shuffle the data
+      set.seed(321)
+      train <- train[sample(nrow(train)),]
+    }else if(sampling[j]=="smote"){
+      set.seed(123)
+      train <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+      
+      #Randomly shuffle the data
+      set.seed(123)
+      train <- train[sample(nrow(train)),]
+    }else{train=train}
+    
+    for(k in 1:length(metric)){
+      print(paste(i, j, k))
+      
+      #Feature Selection: ENET
+      ##set up grid of alpha and lambda values
+      lambda.grid = seq(0,10, length.out = 10)
+      alpha.grid = seq(0,1,length=10)
+      srchGrid <- expand.grid(.alpha=alpha.grid, .lambda=lambda.grid)		
+      
+      ##set tuning parameters
+      ##set seeds for each cross folds
+      set.seed(123)
+      #length is = (n_repeats*nresampling)+1
+      seeds <- vector(mode = "list", length = 11)
+      #(1 is the number of tuning parameter lambda
+      for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 100)
+      #for the last model
+      seeds[[11]]<-sample.int(1000, 1)
+      
+      ##setting contols for elastic net
+      fitControl <- trainControl(seeds = seeds,
+                                 method = "cv",
+                                 number = 10,
+                                 ## Estimate class probabilities
+                                 classProbs = TRUE,
+                                 ## Evaluate performance using 
+                                 ## the following function
+                                 summaryFunction = allSummary)
+      
+      #running elastic net model
+      eNetModel <- train(relevel(y, ref="Yes") ~ ., data=train, 
+                         method = "glmnet", 
+                         metric= metric[k], 
+                         trControl = fitControl, 
+                         family="binomial", 
+                         tuneGrid=srchGrid,
+                         standardize=FALSE)
+      
+      enetcoefs <- data.frame(Feature = gsub("`", "", rownames(coefficients(eNetModel$finalModel, s=eNetModel$bestTune$lambda))[-1]), 
+                                                Coefficient = coefficients(eNetModel$finalModel, s=eNetModel$bestTune$lambda)[-1])
+      
+      #enetcoefs <- enetcoefs[-which(enetcoefs$Coefficient==0),]
+      
+      modelList[[l]] <- enetcoefs
+      
+      l <- l+1
+      
+      resolution_vals <- rbind(resolution_vals, resolution[i])
+      resample_vals <- rbind(resample_vals, sampling[j])
+      metric_vals <- rbind(metric_vals, metric[k])
+      alpha_vals <- rbind(alpha_vals, as.numeric(eNetModel$bestTune[1])) 
+      lambda_vals <- rbind(lambda_vals, as.numeric(eNetModel$bestTune[2])) 
+    }
+  }
+}
+
+saveRDS(modelList, "/home/stilianoudakisc/TAD_data_analysis/comparing_elastic_net_results/modelList.rds")
+
+enet_df <- data.frame(Resolution = resolution_vals,
+                      Resampling = resample_vals,
+                      Metric = metric_vals,
+                      Alpha = alpha_vals,
+                      Lambda = lambda_vals)
+
+saveRDS(enet_df, "/home/stilianoudakisc/TAD_data_analysis/comparing_elastic_net_results/enet_df.rds")
+```
+
+# Plots
