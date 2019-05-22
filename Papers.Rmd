@@ -55,6 +55,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 - Twitter tread on class imbalance, https://twitter.com/goodfellow_ian/status/1127994332416364549
 
+- Wei, Qiong, and Roland L. Dunbrack. “The Role of Balanced Training and Testing Data Sets for Binary Classifiers in Bioinformatics.” PloS One 8, no. 7 (2013): e67863. https://doi.org/10.1371/journal.pone.0067863. - Class imbalance. Intro into the problem, methods for addressing class imbalance. Balanced _training_ set is crucial for the best classifier performance, balanced _test_set also helps to improve the results. AUROC is not sensitive to class imbalance, MCC is. Illustrated on predicting missense mutations.
+
 - Wallace, Byron C., Kevin Small, Carla E. Brodley, and Thomas A. Trikalinos. “Class Imbalance, Redux.” In 2011 IEEE 11th International Conference on Data Mining, 754–63. Vancouver, BC, Canada: IEEE, 2011. https://doi.org/10.1109/ICDM.2011.33. - Class imbalance is best addressed by bagging an ensemble of classifiers over balanced bootstrap training samples. Undersampling performs well, SMOTE and weighted SVM fail at high dimensions.
 
 - Haibo He, and E.A. Garcia. “Learning from Imbalanced Data.” IEEE Transactions on Knowledge and Data Engineering 21, no. 9 (September 2009): 1263–84. https://doi.org/10.1109/TKDE.2008.239. - Class imbalance comprehensive review. Approaches (random under-/oversampling, SMOTE, others). Assessment metrics for imbalanced class learning. Disadvantages of ROC curves and advantages of PR curves (J. Davis, M. Goadrich, "The Relationship between Precision-Recall and ROC Curves", Proc. Int’l Conf. Machine Learning). 
