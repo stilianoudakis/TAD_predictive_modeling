@@ -1,0 +1,476 @@
+---
+title: "comparing_enet_and random_forest"
+author: "Spiro Stilianoudakis"
+date: "May 20, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Extracting chromosome specific elastic net model performances and variable importances
+
+## GM12878
+
+```{r}
+m=1
+performanceList <- list()
+coefficientsList <- list()
+
+for(i in c("10kb", "25kb","50kb","100kb")){
+  for(j in paste0("CHR", c(1:8,10:22))){
+	  for(k in c("none","ros","rus","smote")){
+		  for(l in c("distance", "oc", "op")){
+		    print(paste(i, j, k, l))
+		    
+		    #read in elastic net model
+		    enetmodel <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/",
+			               i,
+                     "/results_by_chr/",
+									   j, 
+									   "/",
+									   k, 
+									   "/", 
+									   l, 
+									   "/enet/eNetModel.rds"))
+		    
+		    #establish training data to use to reduce test data features
+		    train <- enetmodel$trainingData
+		    
+		    #read in test data
+		    test <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/",
+                       i,
+                       "/",
+                       "training_testing/test.rds"))
+		    test <- test[,c(1,which(names(test) %in% names(train)))]
+		    
+		    #create matrix of performance metrics
+	      enetperf <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+	
+	      pred.enetModel <- as.vector(predict(enetmodel, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+	      fg <- pred.enetModel[test$y == "Yes"]
+	      bg <- pred.enetModel[test$y == "No"]
+	      pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+	      pred.enetModel2 <- predict(enetmodel,
+                         newdata=test,
+                         type="raw")
+
+
+	      confMat <- confusionMatrix(data=pred.enetModel2, test$y, positive="Yes")
+	      TN = as.numeric(confMat$table[1,1])
+	      FN = as.numeric(confMat$table[1,2])
+	      FP = as.numeric(confMat$table[2,1])
+	      TP = as.numeric(confMat$table[2,2])
+	      enetperf[1,2] <- TN
+	      enetperf[2,2] <- FN
+	      enetperf[3,2] <- FP
+	      enetperf[4,2] <- TP
+	      enetperf[5,2] <- sum(confMat$table)
+	      enetperf[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+	      enetperf[7,2] <- as.vector(confMat$byClass["Specificity"])
+	      enetperf[8,2] <- as.vector(confMat$overall["Kappa"])
+	      enetperf[9,2] <- as.vector(confMat$overall["Accuracy"])
+	      enetperf[10,2] <- TP/(TP+FP)
+	      enetperf[11,2] <- FP/(FP+TN)
+	      enetperf[12,2] <- FN/(FN+TN)
+	      enetperf[13,2] <- FN/(FN+TN)
+	      enetperf[14,2] <- TN/(TN+FN)
+	      enetperf[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+	      enetperf[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+	      enetperf[17,2] <- pROC::auc(pROC::roc(test$y, pred.enetModel))			
+	      enetperf[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+	      enetperf[19,2] <- pr$auc.integral
+	      
+	      performanceList[[m]] <- enetperf
+	      
+	      enetcoefs <- data.frame(Feature = gsub("`", "", rownames(coefficients(enetmodel$finalModel,
+	                                                                            s=enetmodel$bestTune$lambda))[-1]), 
+                                                Coefficient = coefficients(enetmodel$finalModel,
+                                                                           s=enetmodel$bestTune$lambda)[-1])
+      
+	      coefficientsList[[m]] <- enetcoefs
+	      
+        m <- m+1
+		    
+		  }
+	  }
+  }
+}
+
+saveRDS(performanceList, "/home/stilianoudakisc/TAD_data_analysis/comparing_enet_performances/performanceList_gm12878.rds")
+saveRDS(coefficientsList, "/home/stilianoudakisc/TAD_data_analysis/comparing_enet_performances/coefficientsList_gm12878.rds")
+
+```
+
+### Model Performances
+
+```{r}
+performanceList_gm12878 <- readRDS("Z:/TAD_data_analysis/comparing_enet_performances/performanceList_gm12878.rds")
+
+performanceList_gm12878 <- bind_rows(performanceList_gm12878)
+performanceList_gm12878$CHR <- rep(c(rep("CHR1", 12*19),
+                            rep("CHR2", 12*19),
+                            rep("CHR3", 12*19),
+                            rep("CHR4", 12*19),
+                            rep("CHR5", 12*19),
+                            rep("CHR6", 12*19),
+                            rep("CHR7", 12*19),
+                            rep("CHR8", 12*19),
+                            rep("CHR10", 12*19),
+                            rep("CHR11", 12*19),
+                            rep("CHR12", 12*19),
+                            rep("CHR13", 12*19),
+                            rep("CHR14", 12*19),
+                            rep("CHR15", 12*19),
+                            rep("CHR16", 12*19),
+                            rep("CHR17", 12*19),
+                            rep("CHR18", 12*19),
+                            rep("CHR19", 12*19),
+                            rep("CHR20", 12*19),
+                            rep("CHR21", 12*19),
+                            rep("CHR22", 12*19)),4)
+performanceList_gm12878$Resolution <- c(rep("10 kb", 4*3*21*19),
+                                        rep("25 kb", 4*3*21*19),
+                                        rep("50 kb", 4*3*21*19),
+                                        rep("100 kb", 4*3*21*19))
+performanceList_gm12878$Resampling <- rep(c(rep("None", 3*19),
+                                        rep("ROS", 3*19),
+                                        rep("RUS", 3*19),
+                                        rep("SMOTE", 3*19)), 84)
+performanceList_gm12878$Predictor <- rep(c(rep("Distance", 19),
+                                       rep("OC", 19), 
+                                       rep("OP", 19)), 336)
+
+performanceList_gm12878$Resolution <- factor(performanceList_gm12878$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+performanceList_gm12878$Predictor <- factor(performanceList_gm12878$Predictor, levels=c("OC", "OP", "Distance"))
+
+#MCC
+all_enetperfs_mcc <- performanceList_gm12878[which(performanceList_gm12878$Metric=="MCC"),] %>%
+  dplyr::group_by(Resolution, Resampling, Predictor) %>%
+  dplyr::summarise(MCC = mean(Performance, na.rm = TRUE),
+            MCCSD = sd(Performance, na.rm = TRUE))
+
+ggplot(all_enetperfs_mcc, aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     facet_grid(~ Predictor)+
+     theme_minimal() +
+     theme_bw()+
+     #xlab("") + ylab("") + ylim(-.05,.5) +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+#F1
+all_enetperfs_f1 <- performanceList_gm12878[which(performanceList_gm12878$Metric=="F1"),] %>%
+  dplyr::group_by(Resolution, Resampling, Predictor) %>%
+  dplyr::summarise(F1 = mean(Performance, na.rm = TRUE),
+            F1SD = sd(Performance, na.rm = TRUE))
+
+ggplot(all_enetperfs_f1, aes(x=Resolution, y=F1, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=F1-F1SD, ymax=F1+F1SD), width=1,
+                 position=position_dodge(0.5)) +
+     facet_grid(~ Predictor)+
+     theme_minimal() +
+     theme_bw()+
+     #xlab("") + ylab("") + ylim(-.05,.5) +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+#AUPRC
+all_enetperfs_auprc <- performanceList_gm12878[which(performanceList_gm12878$Metric=="AUPRC"),] %>%
+  dplyr::group_by(Resolution, Resampling, Predictor) %>%
+  dplyr::summarise(AUPRC = mean(Performance, na.rm = TRUE),
+            AUPRCSD = sd(Performance, na.rm = TRUE))
+
+ggplot(all_enetperfs_auprc, aes(x=Resolution, y=AUPRC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1,
+                 position=position_dodge(0.5)) +
+     facet_grid(~ Predictor)+
+     theme_minimal() +
+     theme_bw()+
+     #xlab("") + ylab("") + ylim(-.05,.5) +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+```
+
+
+### Variable Importances
+
+```{r}
+coefficientsList_gm12878 <- readRDS("Z:/TAD_data_analysis/comparing_enet_performances/coefficientsList_gm12878.rds")
+
+coefficientsList_gm12878 <- bind_rows(coefficientsList_gm12878)
+coefficientsList_gm12878$CHR <- rep(c(rep("CHR1", 12*107),
+                            rep("CHR2", 12*107),
+                            rep("CHR3", 12*107),
+                            rep("CHR4", 12*107),
+                            rep("CHR5", 12*107),
+                            rep("CHR6", 12*107),
+                            rep("CHR7", 12*107),
+                            rep("CHR8", 12*107),
+                            rep("CHR10", 12*107),
+                            rep("CHR11", 12*107),
+                            rep("CHR12", 12*107),
+                            rep("CHR13", 12*107),
+                            rep("CHR14", 12*107),
+                            rep("CHR15", 12*107),
+                            rep("CHR16", 12*107),
+                            rep("CHR17", 12*107),
+                            rep("CHR18", 12*107),
+                            rep("CHR19", 12*107),
+                            rep("CHR20", 12*107),
+                            rep("CHR21", 12*107),
+                            rep("CHR22", 12*107)),4)
+coefficientsList_gm12878$Resolution <- c(rep("10 kb", 4*3*21*107),
+                                        rep("25 kb", 4*3*21*107),
+                                        rep("50 kb", 4*3*21*107),
+                                        rep("100 kb", 4*3*21*107))
+coefficientsList_gm12878$Resampling <- rep(c(rep("None", 3*107),
+                                        rep("ROS", 3*107),
+                                        rep("RUS", 3*107),
+                                        rep("SMOTE", 3*107)), 84)
+coefficientsList_gm12878$Predictor <- rep(c(rep("Distance", 107),
+                                       rep("OC", 107), 
+                                       rep("OP", 107)), 336)
+
+coefficientsList_gm12878$Resolution <- factor(coefficientsList_gm12878$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+coefficientsList_gm12878$Predictor <- factor(coefficientsList_gm12878$Predictor, levels=c("OC", "OP", "Distance"))
+
+coefficientsList_gm12878_summ <- coefficientsList_gm12878 %>%
+  dplyr::group_by(Resolution, Resampling, Predictor, Feature) %>%
+  dplyr::summarise(Importance = mean(Coefficient, na.rm = TRUE),
+            ImportanceSD = sd(Coefficient, na.rm = TRUE))
+
+coefficientsList_gm12878_summ$Feature <- gsub(paste0(c("_perc", 
+                                                     "_count", 
+                                                     "_dist"),
+                                                     collapse = "|"),
+                                              "",
+                                              coefficientsList_gm12878_summ$Feature)
+
+#smote; distance types; tfbs
+annots <- list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878")
+annots <- gsub(".bed", "", annots)
+coefficientsList_gm12878_summ <- coefficientsList_gm12878_summ[which(coefficientsList_gm12878_summ$Feature %in% annots), ]
+
+coefficientsList_gm12878_summ$Feature <- gsub(paste0(c("Gm12878-",
+                                                     "-Sydh",
+                                                     "-Haib",
+                                                     "-Broad"),
+                                                     collapse = "|"),
+                                              "",
+                                              coefficientsList_gm12878_summ$Feature)
+
+varimps_gm12878 <- coefficientsList_gm12878_summ[which(coefficientsList_gm12878_summ$Resampling=="SMOTE" & coefficientsList_gm12878_summ$Predictor=="Distance"),]
+varimps_gm12878 <- varimps_gm12878[,c(1,4,5)]
+varimps_gm12878 <- melt(varimps_gm12878)
+
+varimps_gm12878_wide <- reshape(varimps_gm12878[,-3], idvar = "Feature", timevar = "Resolution", direction = "wide")
+
+names(varimps_gm12878_wide) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+varimps_gm12878_wide[,-1] <- abs(varimps_gm12878_wide[,-1])
+varimps_gm12878_wide <- varimps_gm12878_wide[order(varimps_gm12878_wide$ave10kb, decreasing = TRUE),]
+varimps_gm12878_wide <- varimps_gm12878_wide[1:20,]
+varimps_gm12878_melt <- melt(varimps_gm12878_wide)
+
+ggplot(varimps_gm12878_melt, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+  geom_tile(aes(fill = value), colour = "white") + 
+  xlab("Resolution") +
+  ylab("Transcription Factor") +
+  scale_fill_gradient2(#limits=c(0,100),
+                      low = "white",
+                      mid = "pink",
+                      #midpoint = 50,
+                      high = muted("red"),
+                      na.value = "grey50",
+                      name="Predictive\nImportance") +
+  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20))
+```
+
+
+## K562
+
+```{r}
+m=1
+performanceList <- list()
+coefficientsList <- list()
+
+for(i in c("10kb", "25kb","50kb","100kb")){
+  for(j in paste0("CHR", c(1:8,10:22))){
+	  for(k in c("none","ros","rus","smote")){
+		  for(l in c("distance", "oc", "op")){
+		    print(paste(i, j, k, l))
+		    
+		    #read in elastic net model
+		    enetmodel <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/",
+			               i,
+                     "/results_by_chr/",
+									   j, 
+									   "/",
+									   k, 
+									   "/", 
+									   l, 
+									   "/enet/eNetModel.rds"))
+		    
+		    #establish training data to use to reduce test data features
+		    train <- enetmodel$trainingData
+		    
+		    #read in test data
+		    test <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/",
+                       i,
+                       "/",
+                       "training_testing/test.rds"))
+		    test <- test[,c(1,which(names(test) %in% names(train)))]
+		    
+		    #create matrix of performance metrics
+			enetperf <- data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)
+	
+	      pred.enetModel <- as.vector(predict(enetmodel, 
+                                  newdata=test, 
+                                  type="prob")[,"Yes"])
+
+	      fg <- pred.enetModel[test$y == "Yes"]
+	      bg <- pred.enetModel[test$y == "No"]
+	      pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+	      pred.enetModel2 <- predict(enetmodel,
+                         newdata=test,
+                         type="raw")
+
+
+	      confMat <- confusionMatrix(data=pred.enetModel2, test$y, positive="Yes")
+	      TN = as.numeric(confMat$table[1,1])
+	      FN = as.numeric(confMat$table[1,2])
+	      FP = as.numeric(confMat$table[2,1])
+	      TP = as.numeric(confMat$table[2,2])
+	      enetperf[1,2] <- TN
+	      enetperf[2,2] <- FN
+	      enetperf[3,2] <- FP
+	      enetperf[4,2] <- TP
+	      enetperf[5,2] <- sum(confMat$table)
+	      enetperf[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+	      enetperf[7,2] <- as.vector(confMat$byClass["Specificity"])
+	      enetperf[8,2] <- as.vector(confMat$overall["Kappa"])
+	      enetperf[9,2] <- as.vector(confMat$overall["Accuracy"])
+	      enetperf[10,2] <- TP/(TP+FP)
+	      enetperf[11,2] <- FP/(FP+TN)
+	      enetperf[12,2] <- FN/(FN+TN)
+	      enetperf[13,2] <- FN/(FN+TN)
+	      enetperf[14,2] <- TN/(TN+FN)
+	      enetperf[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+	      enetperf[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+	      enetperf[17,2] <- pROC::auc(pROC::roc(test$y, pred.enetModel))			
+	      enetperf[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+	      enetperf[19,2] <- pr$auc.integral
+	      
+	      performanceList[[m]] <- enetperf
+	      
+	      enetcoefs <- data.frame(Feature = gsub("`", "", rownames(coefficients(enetmodel$finalModel,
+	                                                                            s=enetmodel$bestTune$lambda))[-1]), 
+                                                Coefficient = coefficients(enetmodel$finalModel,
+                                                                           s=enetmodel$bestTune$lambda)[-1])
+      
+	      coefficientsList[[m]] <- enetcoefs
+	      
+        m <- m+1
+		    
+		  }
+	  }
+  }
+}
+
+saveRDS(performanceList, "/home/stilianoudakisc/TAD_data_analysis/comparing_enet_performances/performanceList_K562.rds")
+saveRDS(coefficientsList, "/home/stilianoudakisc/TAD_data_analysis/comparing_enet_performances/coefficientsList_K562.rds")
+```
+
