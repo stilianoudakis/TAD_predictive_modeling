@@ -339,6 +339,17 @@ irtab_summ <- irtab %>%
             AveBoundsSD = sd(bounds, na.rm = TRUE),
             AveIR = mean(ir, na.rm = TRUE),
             AveIRSD = sd(ir, na.rm = TRUE))
+
+irtab_summ_med <- irtab %>%
+  group_by(cl, res) %>%
+  dplyr::summarise(MedBins = median(bins, na.rm = TRUE),
+            MedBinsIQR = IQR(bins, na.rm = TRUE),
+            MedTADs = median(tads, na.rm = TRUE),
+            MedTADsIQR = IQR(tads, na.rm = TRUE),
+            MedBounds = median(bounds, na.rm = TRUE),
+            MedBoundsIQR = IQR(bounds, na.rm = TRUE),
+            MedIR = median(ir, na.rm = TRUE),
+            MedIRIQR = IQR(ir, na.rm = TRUE))
 ```
 
 # ICC
