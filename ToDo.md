@@ -15,6 +15,7 @@
 - Focus on Results. Define everything there. In Methods, keep only the technical details.
 
 + Do we need RF?
+    - Before we ditch random forest, do we know that the magnitude of coefficients correspond to variable importance?
 
 + What do alpha and lambda values look like?
 
