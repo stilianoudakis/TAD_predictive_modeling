@@ -174,7 +174,7 @@ all_enetperfs_mcc <- performanceList_gm12878[which(performanceList_gm12878$Metri
   dplyr::summarise(MCC = mean(Performance, na.rm = TRUE),
             MCCSD = sd(Performance, na.rm = TRUE))
 
-ggplot(all_enetperfs_mcc, aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+mccplot <- ggplot(all_enetperfs_mcc, aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
      geom_line(size=2, position=position_dodge(0.5))+
      geom_point(size=5, position=position_dodge(0.5))+
      geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
@@ -203,7 +203,7 @@ all_enetperfs_f1 <- performanceList_gm12878[which(performanceList_gm12878$Metric
   dplyr::summarise(F1 = mean(Performance, na.rm = TRUE),
             F1SD = sd(Performance, na.rm = TRUE))
 
-ggplot(all_enetperfs_f1, aes(x=Resolution, y=F1, color=Resampling, group=Resampling)) +
+f1plot <- ggplot(all_enetperfs_f1, aes(x=Resolution, y=F1, color=Resampling, group=Resampling)) +
      geom_line(size=2, position=position_dodge(0.5))+
      geom_point(size=5, position=position_dodge(0.5))+
      geom_errorbar(aes(ymin=F1-F1SD, ymax=F1+F1SD), width=1,
@@ -232,7 +232,7 @@ all_enetperfs_auprc <- performanceList_gm12878[which(performanceList_gm12878$Met
   dplyr::summarise(AUPRC = mean(Performance, na.rm = TRUE),
             AUPRCSD = sd(Performance, na.rm = TRUE))
 
-ggplot(all_enetperfs_auprc, aes(x=Resolution, y=AUPRC, color=Resampling, group=Resampling)) +
+auprcplot <- ggplot(all_enetperfs_auprc, aes(x=Resolution, y=AUPRC, color=Resampling, group=Resampling)) +
      geom_line(size=2, position=position_dodge(0.5))+
      geom_point(size=5, position=position_dodge(0.5))+
      geom_errorbar(aes(ymin=AUPRC-AUPRCSD, ymax=AUPRC+AUPRCSD), width=1,
@@ -254,6 +254,15 @@ ggplot(all_enetperfs_auprc, aes(x=Resolution, y=AUPRC, color=Resampling, group=R
      legend.text=element_text(size=15),
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
+
+figure <- ggarrange(mccplot,
+                    f1plot,
+                    auprcplot,
+                    ncol=1,
+                    nrow=3,
+                    common.legend = TRUE,
+                    legend = "top")
+figure
 ```
 
 

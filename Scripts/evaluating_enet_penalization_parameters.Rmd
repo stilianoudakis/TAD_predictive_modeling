@@ -85,7 +85,7 @@ penal_params_gm12878_summ <- penal_params_gm12878 %>%
             lambdaSD = sd(Lambda, na.rm = TRUE))
 
 #alpha
-ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=alpha, color=Resampling, group=Resampling)) +
+alphaplot <- ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=alpha, color=Resampling, group=Resampling)) +
      geom_line(size=2, position=position_dodge(0.5))+
      geom_point(size=5, position=position_dodge(0.5))+
      geom_errorbar(aes(ymin=alpha-alphaSD, ymax=alpha+alphaSD), width=1,
@@ -93,7 +93,7 @@ ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=alpha, color=Resampling, g
      facet_grid(~ Predictor)+
      theme_minimal() +
      theme_bw()+
-     xlab("") + ylab("") + #ylim(-.05,.5) +
+     #xlab("") + ylab("") + #ylim(-.05,.5) +
      scale_color_discrete(name="Resampling Technique")+
      guides(shape=FALSE, linetype=FALSE)+
      theme(axis.text.x = element_text(size=15,
@@ -109,7 +109,7 @@ ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=alpha, color=Resampling, g
      plot.title = element_text(size=20))
 
 #lambda
-ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=lambda, color=Resampling, group=Resampling)) +
+lambdaplot <- ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=lambda, color=Resampling, group=Resampling)) +
      geom_line(size=2, position=position_dodge(0.5))+
      geom_point(size=5, position=position_dodge(0.5))+
      geom_errorbar(aes(ymin=lambda-lambdaSD, ymax=lambda+lambdaSD), width=1,
@@ -117,7 +117,7 @@ ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=lambda, color=Resampling, 
      facet_grid(~ Predictor)+
      theme_minimal() +
      theme_bw()+
-     xlab("") + ylab("") + #ylim(-.05,.5) +
+     #xlab("") + ylab("") + #ylim(-.05,.5) +
      scale_color_discrete(name="Resampling Technique")+
      guides(shape=FALSE, linetype=FALSE)+
      theme(axis.text.x = element_text(size=15,
@@ -131,6 +131,14 @@ ggplot(penal_params_gm12878_summ, aes(x=Resolution, y=lambda, color=Resampling, 
      legend.text=element_text(size=15),
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
+
+figure <- ggarrange(alphaplot,
+                    lambdaplot,
+                    ncol = 1,
+                    nrow = 2,
+                    common.legend = TRUE,
+                    legend = "top")
+figure
 ```
 
 

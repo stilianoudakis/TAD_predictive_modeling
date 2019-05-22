@@ -46,6 +46,7 @@ library(corrplot)
 library(cluster)
 library(RColorBrewer)
 library(coin)
+library(ggsignif)
 ```
 
 
@@ -258,31 +259,133 @@ all_dist_gm12878 <- melt(all_dist_gm12878)
 all_dist_gm12878$variable <- factor(all_dist_gm12878$variable, levels=c("SMC3", "CTCF", "RAD21", "ZNF143", "YY1sc281"))
 
 
-ggplot(all_dist_gm12878, aes(x = Resolution, y = value, fill = y)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot(#fill = fill, 
-               #colour = line,
-               outlier.shape = NA) +
+# 10 kb
+all_dist_gm12878_10kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resolution=="10 kb"),], aes(x = y, y = value, fill = y)) +
   facet_grid(~ variable) +
-  xlab("Resolution") +
-  ylab("Log2 Distances") +
-  ylim(5,25) +
-  scale_fill_discrete(name="Class of Genomic Bin",
-                      labels=c("Did not overlap\nw/ flanked TAD boundary",
-                               "Overlapped\nw/ flanked TAD boundary")) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("Transcription Factor\nBinding Site") +
+  ylab("Log2 Distance") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15,
-                                   angle = 45, 
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
                                    #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
+                                   #hjust = 1
+                                   ),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
         strip.text.x = element_text(size = 15))
+
+# 25 kb
+all_dist_gm12878_25kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resolution=="25 kb"),], aes(x = y, y = value, fill = y)) +
+  facet_grid(~ variable) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("") +
+  ylab("") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  #guides(color=FALSE) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+                                   ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+		
+		
+# 50 kb
+all_dist_gm12878_50kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resolution=="50 kb"),], aes(x = y, y = value, fill = y)) +
+  facet_grid(~ variable) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("") +
+  ylab("") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  #guides(color=FALSE) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+                                   ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+		
+
+# 100 kb
+all_dist_gm12878_100kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resolution=="100 kb"),], aes(x = y, y = value, fill = y)) +
+  facet_grid(~ variable) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("") +
+  ylab("") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  #guides(color=FALSE) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+                                   ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+
+figure <- ggarrange(all_dist_gm12878_25kb,
+                    all_dist_gm12878_50kb,
+                    all_dist_gm12878_100kb,
+                    ncol = 1,
+                    nrow = 3,
+                    common.legend = TRUE,
+                    legend = "top",
+                    labels = "AUTO",
+                    font.label = list(size=20))
+figure 
+annotate_figure(figure, 
+                bottom = text_grob("Transcription Factor\nBinding Site", color = "black", size = 20),
+                left = text_grob("Log2 Distance", color = "black", size = 20, rot=90))
 ```
 
 
@@ -495,29 +598,133 @@ all_dist_K562 <- melt(all_dist_K562)
 
 all_dist_K562$variable <- factor(all_dist_K562$variable, levels=c("SMC3", "CTCF", "RAD21", "ZNF143"))
 
-ggplot(all_dist_K562, aes(x = Resolution, y = value, fill = y)) +
-  stat_boxplot(geom = "errorbar") +
-  geom_boxplot(#fill = fill, 
-               #colour = line,
-               outlier.shape = NA) +
+
+# 10 kb
+all_dist_K562_10kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="10 kb"),], aes(x = y, y = value, fill = y)) +
   facet_grid(~ variable) +
-  xlab("Resolution") +
-  ylab("Log2 Distances") +
-  ylim(5,25) +
-  scale_fill_discrete(name="Class of Genomic Bin",
-                      labels=c("Did not overlap\nw/ flanked TAD boundary",
-                               "Overlapped\nw/ flanked TAD boundary")) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("") +
+  ylab("") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15,
-                                   angle = 45, 
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
                                    #margin = ggplot2::margin(t = 35),
-                                   hjust = 1),
+                                   #hjust = 1
+                                   ),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
         strip.text.x = element_text(size = 15))
+
+# 25 kb
+all_dist_K562_25kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="25 kb"),], aes(x = y, y = value, fill = y)) +
+  facet_grid(~ variable) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("") +
+  ylab("") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  #guides(color=FALSE) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+                                   ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+		
+		
+# 50 kb
+all_dist_K562_50kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="50 kb"),], aes(x = y, y = value, fill = y)) +
+  facet_grid(~ variable) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("") +
+  ylab("") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  #guides(color=FALSE) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+                                   ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+		
+
+# 100 kb
+all_dist_K562_100kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="100 kb"),], aes(x = y, y = value, fill = y)) +
+  facet_grid(~ variable) +
+  stat_boxplot(geom = "errorbar") +
+  geom_boxplot() +
+  stat_compare_means(comparisons = list(c("No", "Yes")), 
+                     method = "wilcox.test", 
+                     label = "p.signif") +
+  #facet_grid(~ variable) +
+  xlab("") +
+  ylab("") +
+  #ylim(5,25) +
+  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  #guides(color=FALSE) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15#,
+                                   #angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   #hjust = 1
+                                   ),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+
+figure <- ggarrange(all_dist_K562_10kb,
+                    all_dist_K562_25kb,
+                    all_dist_K562_50kb,
+                    all_dist_K562_100kb,
+                    ncol = 2,
+                    nrow = 2,
+                    common.legend = TRUE,
+                    legend = "top",
+                    labels = "AUTO",
+                    font.label = list(size=20))
+figure 
+annotate_figure(figure, 
+                bottom = text_grob("Transcription Factor\nBinding Site", color = "black", size = 20),
+                left = text_grob("Log2 Distance", color = "black", size = 20, rot=90))
 ```
