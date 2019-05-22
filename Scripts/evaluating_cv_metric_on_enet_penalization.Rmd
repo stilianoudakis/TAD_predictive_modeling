@@ -81,7 +81,7 @@ allSummary <- function (data, lev = NULL, model = NULL) {
 
 ```
 
-# GM12878 with distance type predictors
+# GM12878 with distance type predictors; only chromosome 1
 
 ```{r}
 sampling <- c("none", "ros", "rus", "smote")
