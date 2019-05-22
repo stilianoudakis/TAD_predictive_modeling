@@ -259,3 +259,56 @@ saveRDS(enet_df, "/home/stilianoudakisc/TAD_data_analysis/comparing_elastic_net_
 ```
 
 # Plots
+
+```{r}
+enet_df <- readRDS("Z:/TAD_data_analysis/evaluating_cv_metric_on_enet_penalization/enet_df.rds")
+enet_df$Resolution <- c(rep("10 kb", 16),
+                        rep("25 kb", 16),
+                        rep("50 kb", 16),
+                        rep("100 kb", 16))
+enet_df$Resolution <- factor(enet_df$Resolution, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+enet_df$Metric <- factor(enet_df$Metric, levels = c("ROC", "AUC", "F", "MCC"))
+
+#alpha
+all_enet_alpha <- ggplot(enet_df, aes(x=Resolution, y=Alpha, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Resampling) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+
+#lambda
+all_enet_lambda <- ggplot(enet_df, aes(x=Resolution, y=Lambda, fill=Metric)) +
+  geom_bar( stat="identity", position="dodge") +
+  facet_grid(~ Resampling) +
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        strip.text.x = element_text(size = 15))
+
+figure <- ggarrange(all_enet_alpha,
+                    all_enet_lambda,
+                    ncol=1,
+                    nrow=2,
+                    common.legend = TRUE,
+                    legend = "top")
+figure
+```
+

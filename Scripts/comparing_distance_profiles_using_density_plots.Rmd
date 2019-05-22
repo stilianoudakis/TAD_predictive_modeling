@@ -257,7 +257,7 @@ all_dist_gm12878 <- melt(all_dist_gm12878)
 
 all_dist_gm12878$variable <- factor(all_dist_gm12878$variable, levels=c("SMC3", "CTCF", "RAD21", "ZNF143", "YY1sc281"))
 
-#SMC3
+
 ggplot(all_dist_gm12878, aes(x = Resolution, y = value, fill = y)) +
   stat_boxplot(geom = "errorbar") +
   geom_boxplot(#fill = fill, 
