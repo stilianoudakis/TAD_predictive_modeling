@@ -14,10 +14,15 @@
 
 - Focus on Results. Define everything there. In Methods, keep only the technical details.
 
-- Do we need RF?
++ Do we need RF?
 
-* Use medians for table 1?
-* How to best specific cell line in table/figure legends?
++ What do alpha and lambda values look like?
+
+- clearly layout flow of why we are choosing mcc
+
+- clearly layout flow of why we are choosing auprc for cv tuning alpha and lambda
+
+- Use medians for table 1?
 
 + present supplementary table with all performance metrics
    - include formulas
