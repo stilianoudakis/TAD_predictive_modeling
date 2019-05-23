@@ -11,38 +11,14 @@
     - What data/methods are used?
     - Any relevant details/results?
     - What is the answer (take home message)?
-
-- Focus on Results. Define everything there. In Methods, keep only the technical details.
-
-+ Do we need RF?
-    - Before we ditch random forest, do we know that the magnitude of coefficients correspond to variable importance?
-
-+ What do alpha and lambda values look like?
-
+    
 - clearly layout flow of why we are choosing mcc
 
 - clearly layout flow of why we are choosing auprc for cv tuning alpha and lambda
 
-- Use medians for table 1?
-
-+ present supplementary table with all performance metrics
-   - include formulas
-
-+ find reference citing how test set should be treated
-
-+ make sure to understand what is going on with auprc
-
-+ describe what happens with css and hm specific models
-
-+ present figure showing difference in distance densities for important features
-
 - clarify message in legend title
 
 - Comparison with Mourad? Hong?
-
-- Read all papers in the Papers.Rmd file
-
-+ Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
 
 - Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
@@ -55,6 +31,27 @@
     - Predict which bins are TAD boundaries
     - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
 
++ Focus on Results. Define everything there. In Methods, keep only the technical details.
+
++ Do we need RF?
+    - Before we ditch random forest, do we know that the magnitude of coefficients correspond to variable importance?
+
++ What do alpha and lambda values look like?
+
++ Use medians for table 1?
+
++ present supplementary table with all performance metrics
+   - include formulas
+
++ find reference citing how test set should be treated
+
++ make sure to understand what is going on with auprc
+
++ describe what happens with css and hm specific models
+
++ present figure showing difference in distance densities for important features
+
++ Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
 
 ### Main Ideas
 
