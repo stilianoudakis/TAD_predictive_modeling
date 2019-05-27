@@ -30,6 +30,13 @@
     - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
     - Predict which bins are TAD boundaries
     - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
+    
+- how does RF perform without regularization?
+
+- switch order of yes/no in figure 8; make yes be red 
+   - put legend in the bottom; make explicit; don't use yes/no
+
+- different penalization parameters may still be important to describe
 
 + Focus on Results. Define everything there. In Methods, keep only the technical details.
 
@@ -37,8 +44,6 @@
     - Before we ditch random forest, do we know that the magnitude of coefficients correspond to variable importance?
 
 + What do alpha and lambda values look like?
-
-+ Use medians for table 1?
 
 + present supplementary table with all performance metrics
    - include formulas
