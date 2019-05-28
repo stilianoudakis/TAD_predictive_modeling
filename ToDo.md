@@ -17,6 +17,8 @@
     - Predict which bins are TAD boundaries
     - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
     
+- implement xgboost; chr 1
+
 - how does RF perform without regularization?
 
 - Write each paragraph using the structure (https://github.com/mdozmorov/manuscript_template):
