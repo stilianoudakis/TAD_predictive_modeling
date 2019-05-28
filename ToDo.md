@@ -6,6 +6,19 @@
 
 ## ToDo
 
+- Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
+    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
+    - cross section with tad lengths
+    
+- Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
+    - Use one chromosome
+    - Make finer bins (e.g., 100 bases)
+    - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
+    - Predict which bins are TAD boundaries
+    - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
+    
+- how does RF perform without regularization?
+
 - Write each paragraph using the structure (https://github.com/mdozmorov/manuscript_template):
     - What is the question?
     - What data/methods are used?
@@ -20,43 +33,10 @@
 
 - Comparison with Mourad? Hong?
 
-- Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
-    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
-    - cross section with tad lengths
-    
-- Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
-    - Use one chromosome
-    - Make finer bins (e.g., 100 bases)
-    - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
-    - Predict which bins are TAD boundaries
-    - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
-    
-- how does RF perform without regularization?
-
 - switch order of yes/no in figure 8; make yes be red 
    - put legend in the bottom; make explicit; don't use yes/no
 
 - different penalization parameters may still be important to describe
-
-+ Focus on Results. Define everything there. In Methods, keep only the technical details.
-
-+ Do we need RF?
-    - Before we ditch random forest, do we know that the magnitude of coefficients correspond to variable importance?
-
-+ What do alpha and lambda values look like?
-
-+ present supplementary table with all performance metrics
-   - include formulas
-
-+ find reference citing how test set should be treated
-
-+ make sure to understand what is going on with auprc
-
-+ describe what happens with css and hm specific models
-
-+ present figure showing difference in distance densities for important features
-
-+ Figure 6 - TFBS and all predictors perform similarly. Why? Is it because all but TFBSs got regularized out?
 
 ### Main Ideas
 
