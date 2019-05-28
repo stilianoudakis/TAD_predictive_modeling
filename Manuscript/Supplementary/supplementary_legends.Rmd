@@ -30,6 +30,11 @@ output: pdf_document
 
 **Supplementary Figure 6. Predictive importance** A heatmap illustrating the importance of the top 20 most predictive transcription factors for random forest models implemented on SMOTE resampled data with distance-type predictors for K562. Importances were sorted according to the 10 kb resolution and rescaled to values between 0 and 100. Transcription factors with higher values of predictive importance are denoted in dark red.
 
+**Figure 9. Comparing $log_{2}$ distance profiles.** Boxplots illustrating the distribution of distances around (A) 25 kb, (B) 50 kb, and (C) 100 kb regions on the GM12878 genome that either overlapped with a flanked TAD boundary (Yes) or did not (No), for the most influential TFBS including SMC3, CTCF, RAD21, ZNF143, and YY1sc281. P-values obtained from Wilcoxon Rank Sum tests are provided assessing the significance [**** = p < 0.00001]. 
+
+**Figure 10. Comparing $log_{2}$ distance profiles.** Boxplots illustrating the distribution of distances around (A) 10 kb, (B) 25 kb, (C) 50 kb, (D) 100 kb regions on the GM12878 genome that either overlapped with a flanked TAD boundary (Yes) or did not (No), for the most influential TFBS including SMC3, CTCF, RAD21, and ZNF143. P-values obtained from Wilcoxon Rank Sum tests are provided assessing the significance [**** = p < 0.00001]. 
+
+
 <!--
 **Supplementary Figure 12. Comparing $log_{2}$ distance profiles of top predictive transcription factor binding sites by bin class for 25 kb resolution, on GM12878.** Violin plots (top) and plots of differences in quantiles (bottom) between genomic bin class for 4 of the top predictive TFBS determined by the best performing model, including: SMC3 (A), ZNF143 (B), CTCF (C), and RAD21 (D). For the plots of differences in quantiles, the reference group are the genomic bins that did not overlap with a flanked TAD boundary. That is, quantile differences above 0 indicate that bins that overlapped with flanked TAD boundaries exhibited smaller quantiles.
 -->
