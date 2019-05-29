@@ -252,6 +252,7 @@ all_dist_gm12878 <- rbind.data.frame(dist_gm12878_10kb,
 
 names(all_dist_gm12878) <- c("y", "CTCF", "RAD21", "SMC3", "YY1sc281", "ZNF143", "CHR", "Resolution")
 
+all_dist_gm12878$y <- factor(all_dist_gm12878$y, levels=c("Yes","No"))
 all_dist_gm12878$Resolution <- factor(all_dist_gm12878$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
 
 all_dist_gm12878 <- melt(all_dist_gm12878)
@@ -268,23 +269,20 @@ all_dist_gm12878_10kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resoluti
                      method = "wilcox.test", 
                      label = "p.signif") +
   #facet_grid(~ variable) +
-  xlab("Transcription Factor\nBinding Site") +
+  xlab("Transcription Factor Binding Site") +
   ylab("Log2 Distance") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 
 # 25 kb
@@ -299,20 +297,17 @@ all_dist_gm12878_25kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resoluti
   xlab("") +
   ylab("") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 		
 		
@@ -328,20 +323,17 @@ all_dist_gm12878_50kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resoluti
   xlab("") +
   ylab("") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 		
 
@@ -354,23 +346,20 @@ all_dist_gm12878_100kb <- ggplot(all_dist_gm12878[which(all_dist_gm12878$Resolut
                      method = "wilcox.test", 
                      label = "p.signif") +
   #facet_grid(~ variable) +
-  xlab("") +
+  xlab("Transcription Factor Binding Site") +
   ylab("") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 
 figure <- ggarrange(all_dist_gm12878_25kb,
@@ -379,12 +368,12 @@ figure <- ggarrange(all_dist_gm12878_25kb,
                     ncol = 1,
                     nrow = 3,
                     common.legend = TRUE,
-                    legend = "top",
+                    legend = "bottom",
                     labels = "AUTO",
                     font.label = list(size=20))
 figure 
 annotate_figure(figure, 
-                bottom = text_grob("Transcription Factor\nBinding Site", color = "black", size = 20),
+                #bottom = text_grob("Transcription Factor Binding Site", color = "black", size = 20),
                 left = text_grob("Log2 Distance", color = "black", size = 20, rot=90))
 ```
 
@@ -592,6 +581,7 @@ all_dist_K562 <- rbind.data.frame(dist_K562_10kb,
 
 names(all_dist_K562) <- c("y", "CTCF", "RAD21", "SMC3", "ZNF143", "CHR", "Resolution")
 
+all_dist_K562$y <- factor(all_dist_K562$y, levels=c("Yes", "No"))
 all_dist_K562$Resolution <- factor(all_dist_K562$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
 
 all_dist_K562 <- melt(all_dist_K562)
@@ -611,20 +601,17 @@ all_dist_K562_10kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="10 k
   xlab("") +
   ylab("") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 
 # 25 kb
@@ -639,20 +626,17 @@ all_dist_K562_25kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="25 k
   xlab("") +
   ylab("") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 		
 		
@@ -665,23 +649,20 @@ all_dist_K562_50kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="50 k
                      method = "wilcox.test", 
                      label = "p.signif") +
   #facet_grid(~ variable) +
-  xlab("") +
+  xlab("Transcription Factor Binding Site") +
   ylab("") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 		
 
@@ -694,23 +675,20 @@ all_dist_K562_100kb <- ggplot(all_dist_K562[which(all_dist_K562$Resolution=="100
                      method = "wilcox.test", 
                      label = "p.signif") +
   #facet_grid(~ variable) +
-  xlab("") +
+  xlab("Transcription Factor Binding Site") +
   ylab("") +
   #ylim(5,25) +
-  scale_fill_discrete(name="Genomic bin overlapped\nw/ flanked TAD boundary") +
+  scale_fill_discrete(name="Genomic bin overlapped w/ flanked TAD boundary") +
   #guides(color=FALSE) +
   theme_minimal() +
   theme_bw() +
-  theme(axis.text.x = element_text(size=15#,
-                                   #angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   #hjust = 1
-                                   ),
+  theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
+        legend.position="bottom",
         strip.text.x = element_text(size = 15))
 
 figure <- ggarrange(all_dist_K562_10kb,
@@ -720,11 +698,11 @@ figure <- ggarrange(all_dist_K562_10kb,
                     ncol = 2,
                     nrow = 2,
                     common.legend = TRUE,
-                    legend = "top",
+                    legend = "bottom",
                     labels = "AUTO",
                     font.label = list(size=20))
 figure 
 annotate_figure(figure, 
-                bottom = text_grob("Transcription Factor\nBinding Site", color = "black", size = 20),
+                #bottom = text_grob("Transcription Factor Binding Site", color = "black", size = 20),
                 left = text_grob("Log2 Distance", color = "black", size = 20, rot=90))
 ```
