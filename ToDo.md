@@ -6,18 +6,48 @@
 
 ## ToDo
 
-- Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
-    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
-    - cross section with tad lengths
-    
-- Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
+1. Make word document with figures and legends
+
+2. how does RF perform without regularization?
+
+3. What happens when validating on balanced test data (i.e. balancing before splitting)
+
+4. Perform Xgboost; compare with RF and GBM
+
+5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
     - Use one chromosome
     - Make finer bins (e.g., 100 bases)
     - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
     - Predict which bins are TAD boundaries
     - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
+
+6. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
+    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
+    - cross section with tad lengths
+
+7. Use different splitting/CV techniques
+    - train on even/test on odd chromosomes
+    - 20 fold CV on 2-22 (not 9) and validate on chr1
+    - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
+    - For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
     
-- how does RF perform without regularization?
+8. Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
+    - Use cluster specific TFBS
+    - wait with chromstates and histone modifications
+    - use common flanked TADs between two cell lines; how many are common?
+    * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
+
+9. Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
+    - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
+    - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
+    - Call TADs in individual replicates.
+
++10. Train the best model in one cell type, apply to other cell types
+    + rerun models on clustered TFBS
+    + compare performance
+    - results not included in the manuscript yet
+ 
+### Main Ideas
 
 - Write each paragraph using the structure (https://github.com/mdozmorov/manuscript_template):
     - What is the question?
@@ -38,29 +68,7 @@
 
 - different penalization parameters may still be important to describe
 
-### Main Ideas
-
-- Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
-    - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
-    - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
-    - Call TADs in individual replicates.
-
-- For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
-
-- Use one replicate at a time for training, others for testing. Report average +/- SD model performance
-
-+ Train the best model in one cell type, apply to other cell types
-    + rerun models on clustered TFBS
-    + compare performance
-    - results not included in the manuscript yet
-    
 ### Secondary Ideas
-
-- Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
-    - Use cluster specific TFBS
-    - wait with chromstates and histone modifications
-    - use common flanked TADs between two cell lines; how many are common?
-    * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
 
 - Look into using grouped lasso to see if a particular group of annotations get regularized 
 
@@ -76,10 +84,6 @@
 - Add more classifiers: GBM, SVM, Naive Bayes, neural network, MLR, Elastic-Net 
 
 - Explore https://github.com/scikit-learn-contrib/imbalanced-learn - A Python Package to Tackle the Curse of Imbalanced Datasets in Machine Learning http://imbalanced-learn.org
-
-- Use SpectralTAD to detect hierarchical TAD boundaries. Goal - predict level 1, 2, and 3 hierarchical boundaries, identify common and hierarchy-specific predictive features. 
-    - Before predicting hierarchical boundaries separately, use combined set of TADs
-
 
 
 ### TBD 
