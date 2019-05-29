@@ -6,7 +6,7 @@
 
 ## ToDo
 
-1. Make word document with figures and legends
++1. Make word document with figures and legends
 
 2. how does RF perform without regularization?
 
