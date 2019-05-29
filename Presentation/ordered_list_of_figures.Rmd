@@ -46,11 +46,6 @@ knitr::opts_chunk$set(echo = TRUE)
 +-------+
 
 +-------+
-| ![](C:/Users/stili/Documents/TAD_predictive_modeling/Manuscript/Figures/figure4_gm12878_model_performances.png) |
-| **Figure 4. SMOTE re-sampled models built on distance-type predictors yielded optimal MCCs across resolutions for GM12878.** Performances of random forest classification models built on each of the 3 predictor types: (A) OC, (B) OP, and (C) Distance. Within each predictor type, and across resolution, training data was re-sampled using different techniques including: None (red), ROS (green), RUS (blue), and SMOTE (purple). Performances were aggregated using means across each chromosome, with error bars representing 1 standard deviation away from the mean.  |
-+-------+
-
-+-------+
 | ![](C:/Users/stili/Documents/TAD_predictive_modeling/Manuscript/Figures/figure5_proportion_of_importances_gm12878.png) |
 | **Figure 5. The proportional importance of optimally built predictive models was outweighed by transcription factor binding sites across resolutions for GM12878.** Stacked barplots illustrate the proportion of total predictive importance in models using optimal data level characteristics determined by the ensemble framework (SMOTE re-sampling; with distance-type predictors), for each resolution on GM12878. Proportions are grouped by the class of cell line specific annotations in the feature space including chromatin state segmentations (CSS), histone modifications (HM), and transcription factor binding sites (TFBS).  |
 +-------+
