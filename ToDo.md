@@ -8,9 +8,9 @@
 
 +1. Make word document with figures and legends
 
-2. how does RF perform without regularization?
++Running2. how does RF perform without regularization?
 
-3. What happens when validating on balanced test data (i.e. balancing before splitting)
++Running3. What happens when validating on balanced test data (i.e. balancing before splitting)
 
 4. Perform Xgboost; compare with RF and GBM
 
