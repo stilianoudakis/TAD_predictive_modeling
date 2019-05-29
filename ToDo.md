@@ -59,12 +59,7 @@
 
 - clearly layout flow of why we are choosing auprc for cv tuning alpha and lambda
 
-- clarify message in legend title
-
 - Comparison with Mourad? Hong?
-
-- switch order of yes/no in figure 8; make yes be red 
-   - put legend in the bottom; make explicit; don't use yes/no
 
 - different penalization parameters may still be important to describe
 
