@@ -21,6 +21,8 @@
 
 - Bednarz, Paweł, and Bartek Wilczyński. “Supervised Learning Method for Predicting Chromatin Boundary Associated Insulator Elements.” Journal of Bioinformatics and Computational Biology 12, no. 6 (December 2014): 1442006. https://doi.org/10.1142/S0219720014420062. - Prediction of TAD boundaries in Drosophila using modENCODE data (>30 ChIP-Chip and ChIP-seq tracks). Starting from k-means, then Hidden Markov Models, then use cdBEST and BMFinder previously published methods. ROC curves. Boruta package for feature prioritization. Prediction of new boundaries.
 
+- `TADBoundaryDectector` - TAD boundary prediction from sequence only using deep learning models. 12 architectures tested, with three convolutional and an LSTM layer performed best. Methods, Implementation in Keras-TensorFlow. Model evaluation using different criteria, 96% accuracy reported. Deep learning outperform feature-based models, among which Boosted trees, Random Forest, elastic net logistic regression are best performers. Data augmentation (aka feature engineering) by randomly shifting TAD boundary regions by som base pairs of length (0-100). Tested on Drozophila data. https://github.com/lincshunter/TADBoundaryDectector
+    - Henderson, John, Vi Ly, Shawn Olichwier, Pranik Chainani, Yu Liu, and Benjamin Soibam. “Accurate Prediction of Boundaries of High Resolution Topologically Associated Domains (TADs) in Fruit Flies Using Deep Learning.” Nucleic Acids Research, May 3, 2019. https://doi.org/10.1093/nar/gkz315.
 
 ## TAD epigenomics
 
