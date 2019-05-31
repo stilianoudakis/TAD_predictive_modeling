@@ -12,9 +12,9 @@
 
 +3. What happens when validating on balanced test data (i.e. balancing before splitting)
 
-+4. Perform Xgboost; compare with RF and GBM
++4. Perform Xgboost; compare with RF 
 
-5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
++5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
     - Use one chromosome
     - Make finer bins (e.g., 100 bases)
     - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
