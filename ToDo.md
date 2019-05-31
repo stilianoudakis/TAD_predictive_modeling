@@ -8,11 +8,11 @@
 
 +1. Make word document with figures and legends
 
-+Running2. how does RF perform without regularization?
++2. how does RF perform without regularization?
 
-+Running3. What happens when validating on balanced test data (i.e. balancing before splitting)
++3. What happens when validating on balanced test data (i.e. balancing before splitting)
 
-4. Perform Xgboost; compare with RF and GBM
++4. Perform Xgboost; compare with RF and GBM
 
 5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
     - Use one chromosome
