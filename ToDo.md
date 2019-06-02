@@ -15,15 +15,17 @@
 +4. Perform Xgboost; compare with RF 
 
 +5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
-    - Use one chromosome
-    - Make finer bins (e.g., 100 bases)
-    - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
-    - Predict which bins are TAD boundaries
-    - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
+    + Use one chromosome
+    + Make finer bins (e.g., 100 bases)
+    + Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
+    + Predict which bins are TAD boundaries
+    + Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
+    - shrink flank to match new bin width of test data
 
 6. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
     - cross section with tad lengths
+    - count peaks of top annotations between detected tads and tads that werent detected
 
 7. Use different splitting/CV techniques
     - train on even/test on odd chromosomes
