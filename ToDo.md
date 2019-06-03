@@ -12,37 +12,42 @@
 
 +3. What happens when validating on balanced test data (i.e. balancing before splitting)
 
-+4. Perform Xgboost; compare with RF 
++4. Perform Xgboost; compare with RF
+    - tune xgboost model and compare with RF
 
 +5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
-    - Use one chromosome
-    - Make finer bins (e.g., 100 bases)
-    - Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
-    - Predict which bins are TAD boundaries
-    - Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
+    + Use one chromosome
+    + Make finer bins (e.g., 100 bases)
+    + Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
+    + Predict which bins are TAD boundaries
+    + Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
+    - shrink flank to match new bin width of test data
+    
+6. Check how tomdom compares with arrowhead
 
-6. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
+7. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
     - cross section with tad lengths
+    - count peaks of top annotations between detected tads and tads that werent detected
 
-7. Use different splitting/CV techniques
+8. Use different splitting/CV techniques
     - train on even/test on odd chromosomes
     - 20 fold CV on 2-22 (not 9) and validate on chr1
     - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
     - For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
     
-8. Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
+9. Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
     - wait with chromstates and histone modifications
     - use common flanked TADs between two cell lines; how many are common?
     * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
 
-9. Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
+10. Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
     - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
     - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
     - Call TADs in individual replicates.
 
-+10. Train the best model in one cell type, apply to other cell types
++11. Train the best model in one cell type, apply to other cell types
     + rerun models on clustered TFBS
     + compare performance
     - results not included in the manuscript yet
