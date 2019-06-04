@@ -6,11 +6,7 @@
 
 ## ToDo
 
-+1. Make word document with figures and legends
-
-+2. how does RF perform without regularization?
-
-+3. What happens when validating on balanced test data (i.e. balancing before splitting)
++1. Tune mtry
 
 +4. Perform Xgboost; compare with RF
     - tune xgboost model and compare with RF
@@ -22,9 +18,8 @@
     + Predict which bins are TAD boundaries
     + Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
     - shrink flank to match new bin width of test data
+    - look that the probability vector
     
-6. Check how tomdom compares with arrowhead
-
 7. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
     - cross section with tad lengths
