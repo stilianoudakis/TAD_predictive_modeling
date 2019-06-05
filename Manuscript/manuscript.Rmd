@@ -145,14 +145,15 @@ We analyzed [??? Boring. What problem you are solving?] publically available Hi-
 
 To investigate class imbalance, defined as the ratio of TAD vs. non-TAD boundaries, we estimated the number of TAD boundaries ($Y=1$ in the response vector) and the rest of genomic bins ($Y=0$) at four resolutions of Hi-C data. Expectedly, the average number of TAD boundaries and the rest of genomic bins increased with the increased resolution of Hi-C data (Table 1) irrespectively of cell line (Supplementary Tables 3). <!--This correlation [?? What correlation ??] with resolution was found to be significant, as evidenced by large intraclass correlation coefficients (ICC) (Table 2; Supplementary Tables 4). However, the class imbalance problem, caused by the sparsity of TAD boundaries throughout the genome, was found to be much more consistant across resolutions in both cell lines. This imbalance was evidenced by low imbalance ratios, defined as the ratio of the number of genomic bins that overlapped with flanked TAD boundaries, to the much larger number of genomic bins that did not. This relationship was not significantly correlated with resoltuion for either cell line, indicating that there existed a severe disparity between classes at all resolutions of Hi-C data.-->
 
-**Table 1. TAD boundaries are the minority of the genome, creating high class imbalance ratio irrespectively of resolution.** 
+**Table 1. Sparce TAD boundaries throughout the linear genome create high imbalance ratios irrespective of resolution.** 
 
-| Resolution (Bin Width) | Median Number of Genomic Bins (IQR) | Median Number of TADs (IQR) | Median Number of TAD Boundaries (IQR) | Median Imbalance Ratio (IQR) |
-|------------------------|-------------------------------------|-----------------------------|---------------------------------------|------------------------------|
-| 10 kb                  | 13055 (8961)                        | 380 (203)                   | 1338 (832)                            | 0.11 (0.02)                  |
-| 25 kb                  | 5226 (3586)                         | 220 (155)                   | 737 (521)                             | 0.17 (0.02)                  |
-| 50 kb                  | 2616 (1794)                         | 110 (86)                    | 367 (294)                             | 0.17 (0.02)                  |
-| 100 kb                 | 1310 (897)                          | 53 (37)                     | 169 (136)                             | 0.15 (0.02)                  |
+| Resolution (Bin Width) | Average Number of Genomic Bins (SD) | Average Number of TAD Boundaries (SD) | Average Imbalance Ratio (SD) |
+|------------------------|-------------------------------------|---------------------------------------|------------------------------|
+| 10 kb                  | 12214.1 (6068.5)                    | 1254.6 (598.8)                        | 0.12 (0.02)                  |  
+| 25 kb                  | 4892.7 (2431.2)                     | 714.0 (358.4)                         | 0.17 (0.01)                  |
+| 50 kb	                 | 2450.9 (1217.6)                     | 364.4 (184.5)                         | 0.17 (0.01)                  |
+| 100 kb                 | 1227.5 (609.8)                      | 165.3 (90.9)                          | 0.15 (0.02)                  |
+
 
 <!--**Table 2. Inter-Resolution ICCs.** For GM12878, two-way intraclass correlation coefficients between resolutions for the following quantities: Number of genomic bins, number of TADs called, number of unique TAD boundaries, and imbalance ratio. The ICC was computed across 21 of the autosomal chromosomes. P-values indicate the level of significance of the correlation between data resolution and each quantity.[??? What is ICC? !!!editted]
 
