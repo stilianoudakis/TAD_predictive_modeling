@@ -74,7 +74,7 @@ In this study, we developed a novel ensemble framework aimed at systematically c
 
 ## DOMAIN DATA
 
-Biological replicate Hi-C data for the GM12878 and K562 cell lines were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1). The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for both cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line.
+Biological replicate Hi-C data for the GM12878 and K562 cell lines were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1). The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all cell lines and resolutions, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line.
 
 ## GENOMIC ANNOTATION DATA
 
@@ -82,11 +82,11 @@ Genomic annotation data in the form of cell type specific chromatin states, hist
 
 ## MODEL CONSTRUCTION
 
-To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution of the corresponding contact matrix. As an example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. For the boundary data, in order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. That is, for 10 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was then labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
+To establish the data for modeling, the genome was binned into equally sized intervals defined by the data resolution of the corresponding contact matrix. As an example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. In order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. That is, for 10 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was then labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
 
 ### FEATURE ENGINEERING 
 
-Using the sets of cell line specific genomic annotations, we created three types of predictors that were used to describe the spatial relationship with genomic bins, $\textbf{X} = \{X_1, X_2, ..., X_p\}$, where $p$ was the complete set of functional annotations. They are described in detail below:
+Using the sets of cell line specific genomic annotations, we created three types of predictors that were used to describe the relationship between functional annotations and genomic bins<!--, $\textbf{X} = \{X_1, X_2, ..., X_p\}$, where $p$ was the complete set of functional annotations-->. They are described in detail below:
 
 1. **Overlap Counts (OC)**: For each genomic bin, the total number of instances where a bin overlapped with regions assigned to genomic annotations (features) was calculated. 
    
@@ -96,7 +96,7 @@ Using the sets of cell line specific genomic annotations, we created three types
 
 ### TRAINING AND TESTING
 
-The cell line- and resolution-specific data, composed of the response vector and predictor-type specific data matrix (**X**), was then split into a 7:3 ratio of training to testing sets. For the task of performance evaluation and prediction, the test set remained constant to account for an unbiased comparison between data level characteristics.
+The data set used for modeling was composed of the response vector **Y**, and the predictor-type specific data matrix, **X** = {X_1, X_2, ..., X_p}, where $p$ was the complete set of functional annotations. Each composed data set was specific to cell line and resolution. We then split the data into a 7:3 ratio of training to testing sets. For the task of performance evaluation and prediction, the test set remained constant to account for an unbiased comparison between data level characteristics.
 
 ### DATA RE-SAMPLING
 
