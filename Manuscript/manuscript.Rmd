@@ -86,7 +86,7 @@ To establish the data for modeling, the genome was binned into equally sized int
 
 ### FEATURE ENGINEERING 
 
-Using the sets of cell line specific genomic annotations, we created three types of predictors that were used to describe the relationship between functional annotations and genomic bins<!--, $\textbf{X} = \{X_1, X_2, ..., X_p\}$, where $p$ was the complete set of functional annotations-->. They are described in detail below:
+Using the sets of cell line specific genomic annotations, we created three types of predictors that were used to describe the relationship between functional annotations and genomic bins. They are described in detail below:
 
 1. **Overlap Counts (OC)**: For each genomic bin, the total number of instances where a bin overlapped with regions assigned to genomic annotations (features) was calculated. 
    
@@ -96,11 +96,15 @@ Using the sets of cell line specific genomic annotations, we created three types
 
 ### TRAINING AND TESTING
 
-The data set used for modeling was composed of the response vector **Y**, and the predictor-type specific data matrix, **X** = {X_1, X_2, ..., X_p}, where $p$ was the complete set of functional annotations. Each composed data set was specific to cell line and resolution. We then split the data into a 7:3 ratio of training to testing sets. For the task of performance evaluation and prediction, the test set remained constant to account for an unbiased comparison between data level characteristics.
+The data set used for modeling was composed of the response vector **Y**, and the predictor-type specific data matrix, **X** = {$X_1$, $X_2$, ..., $X_p$}, where $p$ was the complete set of functional annotations. Each composed data set was specific to cell line and resolution. We then split the data into a 7:3 ratio of training to testing sets. For the task of performance evaluation and prediction, the test set remained constant to account for an unbiased comparison between data level characteristics.
 
 ### DATA RE-SAMPLING
 
-Class imbalance was characterized by each dataset's imalance ratio, defined as the ratio of minority to majority classes given by the genomic bins. Minority classes were the set of genomic bins that overlapped with flanked TAD boundaries, while majority classes were the set of genomic bins that did not overlap with a flanked TAD boundary. In order to assess the influence of imbalanced classes, we then evaluated four re-sampling techniques (in addition to no re-sampling). They are described in detail below.
+Class imbalance was characterized by each dataset's imalance ratio (IR), defined as the ratio of minority to majority sets given by the class of genomic bins:
+
+$$IR = \dfrac{C_{minority}}{C_{majority}}$$
+
+where $C_{minority}$ denotes the set of genomic bins that overlapped with flanked TAD boundaries and $C_{majority}$ denotes the set of genomic bins that did not overlap with a flanked TAD boundary. In order to assess the influence of imbalanced classes, we then evaluated four re-sampling techniques (in addition to no re-sampling). They are described in detail below.
 
 1. **No Sampling**: All of the data points from the majority and minority classes of the training set were used.
 
@@ -108,7 +112,7 @@ Class imbalance was characterized by each dataset's imalance ratio, defined as t
 
 3. **Random Over-Sampling (ROS)**: All of the data points from the majority class of the training set were used. Sampling with replacement was used to obtain the same number of data points from the minority class. 
 
-4. **SMOTE** (Synthetic Minority Over-Sampling Technique): This method incorporates both random under- and over-sampling [@chawla2002smote]. Under-sampling is performed without replacement from the majority class. On the other hand, over-sampling is performed by creating new synthetic observations using the minority class. The minority class is over-sampled by taking each minority class sample and introducing synthetic examples along the feature vectors joining any/all of the k=5 (default) minority class nearest neighbors. The SMOTE algorithm can have many variations is the percentage of over- and under-sampling. In this study we restricted the algorithm to 100% over-sampling and 200% under-sampling. That is, 1 new synthetic observation was to be created for each existing minority class data point, while 2 data points were simultaneously randomly selected from the majority class. This combination results in perfectly balanced classes. The *DMwR* R package was used to perform SMOTE (version 0.4.1). 
+4. **SMOTE** (Synthetic Minority Over-Sampling Technique): This method incorporates both random under- and over-sampling [@chawla2002smote]. Under-sampling is performed without replacement from the majority class. On the other hand, over-sampling is performed by creating new synthetic observations using the minority class. The minority class is over-sampled by taking each minority class sample and introducing synthetic examples along the feature vectors joining any/all of the k=5 (default) minority class nearest neighbors. The SMOTE algorithm can have many variations in the weightinh of over- and under-sampling. In this study we restricted the algorithm to 100% over-sampling and 200% under-sampling. That is, 1 new synthetic observation was to be created for each existing minority class data point, while 2 data points were simultaneously randomly selected from the majority class. This combination results in perfectly balanced classes. The *DMwR* R package was used to perform SMOTE (version 0.4.1). 
 
 <!--
 ### FEATURE REDUCTION
@@ -120,7 +124,7 @@ In order to suitably reduce the feature space while also maintaining the inclusi
 
 ### FINAL MODEL ASSESSMENT AND PERFORMANCE
 
-random forest classification models were built to compare model performances between re-sampling techniques and predictor types. To reduce bias due to random dataset generation, 10-fold cross validation was used to tune the number of annotations, *p*, to consider at each node. The number of trees that were aggregated for each random forest model was set to the default, n=500. All random forest algorithms were implemented in R using the *caret* package version 6.0 [@kuhn2012caret]. Once the model was implemented, it was validated on the test set. The performance of each ensemble system in the framework was compared using the composite metric, Matthews Correlation Coefficient (MCC), which is defined as follows:
+Random forest classification models were built to compare model performances between combinations of predictor types and re-sampling techniques. To reduce bias due to random dataset generation, 10-fold cross validation was used to tune the number of annotations, *p*, to consider at each node. The number of trees that were aggregated for each random forest model was set to the default, n=500. All random forest algorithms were implemented in R using the *caret* package version 6.0 [@kuhn2012caret]. Once the model was implemented, it was validated on the test set. The performance of each model was compared using the composite metric, Matthews Correlation Coefficient (MCC), which is defined as follows:
 
 <!--
 $$F1 - Score = \frac{2TP}{2TP + FP + FN}$$
