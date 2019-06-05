@@ -6,8 +6,6 @@
 
 ## ToDo
 
-+1. Tune mtry
-
 +4. Perform Xgboost; compare with RF
     - tune xgboost model and compare with RF
 
@@ -55,14 +53,8 @@
     - Any relevant details/results?
     - What is the answer (take home message)?
     
-- clearly layout flow of why we are choosing mcc
-
-- clearly layout flow of why we are choosing auprc for cv tuning alpha and lambda
-
 - Comparison with Mourad? Hong?
-
-- different penalization parameters may still be important to describe
-
+    
 ### Secondary Ideas
 
 - Look into using grouped lasso to see if a particular group of annotations get regularized 
