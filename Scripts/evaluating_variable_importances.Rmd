@@ -77,7 +77,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -100,7 +108,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -123,7 +139,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -146,7 +170,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -184,7 +216,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -207,7 +247,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -230,7 +278,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -253,7 +309,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
 									   chrs[i], 
 									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
-	  varimps$Feature <- gsub("_dist", "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -275,7 +339,7 @@ all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
 names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_gm12878 <- all_varimps_gm12878[order(all_varimps_gm12878$ave10kb, decreasing = TRUE),]
+all_varimps_gm12878 <- all_varimps_gm12878[order(rowMeans(all_varimps_gm12878[,-1]), decreasing = TRUE),]
 all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
 all_varimps_gm12878 <- melt(all_varimps_gm12878)
 
@@ -308,7 +372,7 @@ all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
 names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_K562 <- all_varimps_K562[order(all_varimps_K562$ave10kb, decreasing = TRUE),]
+all_varimps_K562 <- all_varimps_K562[order(rowMeans(all_varimps_K562[,-1]), decreasing = TRUE),]
 all_varimps_K562 <- all_varimps_K562[1:20,]
 all_varimps_K562 <- melt(all_varimps_K562)
 
@@ -357,7 +421,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -382,7 +454,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -407,7 +487,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -432,7 +520,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -466,7 +562,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -491,7 +595,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)		
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -516,7 +628,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -541,7 +661,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -565,7 +693,7 @@ all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
 names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_gm12878 <- all_varimps_gm12878[order(all_varimps_gm12878$ave10kb, decreasing = TRUE),]
+all_varimps_gm12878 <- all_varimps_gm12878[order(rowMeans(all_varimps_gm12878[,-1]), decreasing = TRUE),]
 #all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
 all_varimps_gm12878 <- melt(all_varimps_gm12878)
 
@@ -598,7 +726,7 @@ all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
 names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_K562 <- all_varimps_K562[order(all_varimps_K562$ave10kb, decreasing = TRUE),]
+all_varimps_K562 <- all_varimps_K562[order(rowMeans(all_varimps_K562[,-1]), decreasing = TRUE),]
 #all_varimps_K562 <- all_varimps_K562[1:20,]
 all_varimps_K562 <- melt(all_varimps_K562)
 
@@ -662,7 +790,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)		
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -687,7 +823,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -712,7 +856,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -737,7 +889,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -771,7 +931,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -796,7 +964,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -821,7 +997,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -846,7 +1030,15 @@ for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
                               chrs[i],
 									            "/smote/distance/enet/rfimpvars_histones.rds"))
-	  varimps$Feature <- gsub(paste(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -870,7 +1062,7 @@ all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
 names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_gm12878 <- all_varimps_gm12878[order(all_varimps_gm12878$ave10kb, decreasing = TRUE),]
+all_varimps_gm12878 <- all_varimps_gm12878[order(rowMeans(all_varimps_gm12878[,-1]), decreasing = TRUE),]
 #all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
 all_varimps_gm12878 <- melt(all_varimps_gm12878)
 
@@ -903,7 +1095,7 @@ all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
 names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_K562 <- all_varimps_K562[order(all_varimps_K562$ave10kb, decreasing = TRUE),]
+all_varimps_K562 <- all_varimps_K562[order(rowMeans(all_varimps_K562[,-1]), decreasing = TRUE),]
 #all_varimps_K562 <- all_varimps_K562[1:20,]
 all_varimps_K562 <- melt(all_varimps_K562)
 

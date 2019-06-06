@@ -66,13 +66,13 @@ annots <- c("Gm12878-Smc3ab9263-Sydh_dist",
 
 ```{r}
 
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/gm12878_10kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/binslist10.rds")
+
 dist_list_gm12878_10kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/gm12878_10kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/binslist10.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
@@ -110,14 +110,13 @@ dist_gm12878_10kb <- do.call("rbind", dist_list_gm12878_10kb)
 ### 25kb
 
 ```{r}
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/gm12878_25kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/binslist25.rds")
 
 dist_list_gm12878_25kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/gm12878_25kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/binslist25.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
@@ -155,14 +154,13 @@ dist_gm12878_25kb <- do.call("rbind", dist_list_gm12878_25kb)
 ### 50kb
 
 ```{r}
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/gm12878_50kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/binslist50.rds")
 
 dist_list_gm12878_50kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/gm12878_50kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/binslist50.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
@@ -200,14 +198,13 @@ dist_gm12878_50kb <- do.call("rbind", dist_list_gm12878_50kb)
 ### 100kb
 
 ```{r}
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/gm12878_100kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/binslist100.rds")
 
 dist_list_gm12878_100kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/gm12878_100kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/binslist100.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
@@ -393,14 +390,13 @@ annots <- c("K562-Smc3ab9263-Sydh_dist",
 ### 10kb
 
 ```{r}
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/K562_10kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/binslist10.rds")
 
 dist_list_K562_10kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/K562_10kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/binslist10.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
@@ -438,14 +434,13 @@ dist_K562_10kb <- do.call("rbind", dist_list_K562_10kb)
 ### 25kb
 
 ```{r}
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/K562_25kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/binslist25.rds")
 
 dist_list_K562_25kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/K562_25kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/binslist25.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
@@ -483,14 +478,13 @@ dist_K562_25kb <- do.call("rbind", dist_list_K562_25kb)
 ### 50kb
 
 ```{r}
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/K562_50kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/binslist50.rds")
 
 dist_list_K562_50kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/K562_50kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/binslist50.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
@@ -528,14 +522,13 @@ dist_K562_50kb <- do.call("rbind", dist_list_K562_50kb)
 ### 100kb
 
 ```{r}
+whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/K562_100kb.rds")
+binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/binslist100.rds")
 
 dist_list_K562_100kb <- list()
 
 chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
-	  whole_genome_dat <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/K562_100kb.rds")
-	  
-	  binslist_dat <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/binslist100.rds")
 	  
 	  reduce_chr <- tolower(chrs[i])
 	  chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),
