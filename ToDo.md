@@ -15,8 +15,8 @@
     + Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
     + Predict which bins are TAD boundaries
     + Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
-    - shrink flank to match new bin width of test data
-    - look that the probability vector
+    + shrink flank to match new bin width of test data
+    + look that the probability vector
     
 7. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
