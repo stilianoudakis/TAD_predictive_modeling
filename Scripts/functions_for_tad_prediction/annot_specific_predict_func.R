@@ -107,6 +107,7 @@ annot_specific_predict_func <- function(CL, resolution, sampling="smote", predic
 		vars <- paste0(vars,"_dist")
 		#reduce training features
 		train <- train[,c(1,which(names(train) %in% vars))]
+		test <- test[,c(1,which(names(test) %in% vars))]
 		}else if(annotation=="chromstates"){
 			vars <- list.files("/home/stilianoudakisc/TAD_data_analysis/annotations/BroadHMM")
 				if(CL=="GM12878"){
@@ -115,12 +116,14 @@ annot_specific_predict_func <- function(CL, resolution, sampling="smote", predic
 					vars <- paste0(vars,"_dist")
 					#reduce training features
 					train <- train[,c(1,which(names(train) %in% vars))]
+					test <- test[,c(1,which(names(test) %in% vars))]
 					}else{
 						vars <- vars[grep("K562", vars)]
 						vars <- gsub(".bed", "", vars)
 						vars <- paste0(vars,"_dist")
 						#reduce training features
 						train <- train[,c(1,which(names(train) %in% vars))]
+						test <- test[,c(1,which(names(test) %in% vars))]
 						}
 			}else{
 				vars <- list.files("/home/stilianoudakisc/TAD_data_analysis/annotations/HistoneModifications")
@@ -130,12 +133,14 @@ annot_specific_predict_func <- function(CL, resolution, sampling="smote", predic
 					vars <- paste0(vars,"_dist")
 					#reduce training features
 					train <- train[,c(1,which(names(train) %in% vars))]
+					test <- test[,c(1,which(names(test) %in% vars))]
 					}else{
 						vars <- vars[grep("K562", vars)]
 						vars <- gsub(".bed", "", vars)
 						vars <- paste0(vars,"_dist")
 						#reduce training features
 						train <- train[,c(1,which(names(train) %in% vars))]
+						test <- test[,c(1,which(names(test) %in% vars))]
 						}
 				}
 	

@@ -1,5 +1,5 @@
 
-tad_predict_func_noenet_xgboost <- function(CL, resolution, sampling, predictor, chromosome){
+tad_predict_func_xgboost <- function(CL, resolution, sampling, predictor, chromosome){
   
   ##gbm
   ###model results
