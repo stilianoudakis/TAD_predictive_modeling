@@ -111,7 +111,7 @@ In order to suitably reduce the feature space while also maintaining the inclusi
 
 ### FINAL MODEL ASSESSMENT AND PERFORMANCE
 
-Random forest classification models were built to compare model performances between combinations of predictor types and re-sampling techniques. To reduce bias due to random dataset generation, 10-fold cross validation was used to tune the number of annotations, *p*, to consider at each node. The number of trees that were aggregated for each random forest model was set to the default, n=500. All random forest algorithms were implemented in R using the *caret* package version 6.0 [@kuhn2012caret]. Once the model was implemented, it was validated on the test set. The performance of each model was compared using the composite metric, Matthews Correlation Coefficient (MCC), which is defined as follows:
+Random forest classification models were built to compare model performances between combinations of predictor types and re-sampling techniques. To reduce bias due to random dataset generation, 10-fold cross validation was used to tune the number of annotations, *p*, to consider at each node. The number of trees that were aggregated for each random forest model was set to the default, n=500. All random forest algorithms were implemented in R using the *caret* package version 6.0 [@kuhn2012caret]. Once the model was implemented, it was validated on the test set. The performance of each model was compared using the composite metric, Matthews Correlation Coefficient (MCC). The MCC is, in essence, the correlation coefficient between the observed and predicted binary classifications [@brodersen2010balanced]. A value of 1 represents a perfect prediction, while a value of -1 represents total disagreement between prediction and observation. A value of 0 indicates no better than random prediction. The MCC is defined as
 
 <!--
 $$F1 - Score = \frac{2TP}{2TP + FP + FN}$$
@@ -128,7 +128,7 @@ $$Balanced \quad Accuracy = \dfrac{1}{2}\left( \dfrac{TP}{TP+FN} + \dfrac{TN}{TN
 $$Informedness = \dfrac{TP}{TP+FN} + \dfrac{TN}{TN+FP} - 1$$
 -->
 
-Here, TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary (false negatives). Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. Additional performance metrics were reported in the supplementary materials.
+where TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary (false negatives). Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. Additional performance metrics were reported in the supplementary materials.
 
 # RESULTS
 
