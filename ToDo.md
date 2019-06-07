@@ -7,7 +7,7 @@
 ## ToDo
 
 +4. Perform Xgboost; compare with RF
-    - tune xgboost model and compare with RF
+    + tune xgboost model and compare with RF
 
 +5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
     + Use one chromosome
