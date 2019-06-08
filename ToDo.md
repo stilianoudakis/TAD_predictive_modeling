@@ -6,6 +6,10 @@
 
 ## ToDo
 
+- change definition of imbalance ratio to match with reference
+
+- write paragraphs of all previous methods; refer them to supplementary
+
 +4. Perform Xgboost; compare with RF
     + tune xgboost model and compare with RF
 
@@ -17,6 +21,7 @@
     + Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
     + shrink flank to match new bin width of test data
     + look that the probability vector
+    - look at loess
     
 7. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
     - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
@@ -40,7 +45,7 @@
     - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
     - Call TADs in individual replicates.
 
-+11. Train the best model in one cell type, apply to other cell types
+11. Train the best model in one cell type, apply to other cell types
     + rerun models on clustered TFBS
     + compare performance
     - results not included in the manuscript yet
