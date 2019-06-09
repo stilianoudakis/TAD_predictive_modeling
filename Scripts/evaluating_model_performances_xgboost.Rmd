@@ -1,7 +1,8 @@
 ---
-title: "evaluating_model_performances_xgboost"
+title: "Evaluating Model Performances"
+subtitle: "XGBoost; no enet"
 author: "Spiro Stilianoudakis"
-date: "May 30, 2019"
+date: "March 8, 2019"
 output: html_document
 ---
 
@@ -52,50 +53,49 @@ library(RColorBrewer)
 
 ##10kb
 
-###MCC
-
-####RF; No elastic-net
-
 ```{r}
-mccdata_gm12878_10kb_rf <- numeric()
+mccdata_gm12878_10kb <- numeric()
 
 for(i in paste0("CHR", c(1:8,10:22))){
 	for(j in c("none","ros","rus","smote")){
 		for(k in c("distance", "oc", "op")){
-			perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
 									   i, 
 									   "/",
 									   j, 
 									   "/", 
 									   k, 
-									   "/enet/rfperf_noenet.rds"))
-									   
-			mccdata_gm12878_10kb_rf <- rbind(mccdata_gm12878_10kb_rf,
-										  perfdata[15,2])
-		}
-	}
-}
-
-
-```
-
-####XGB; no elastic-net
-
-```{r}
-mccdata_gm12878_10kb_xgb <- numeric()
-
-for(i in paste0("CHR", c(1:8,10:22))){
-	for(j in c("none","ros","rus","smote")){
-		for(k in c("distance", "oc", "op")){
-			perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
 									   i, 
 									   "/",
 									   j, 
 									   "/", 
 									   k, 
 									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
 									   
-			mccdata_gm12878_10kb_xgb <- rbind(mccdata_gm12878_10kb_xgb,
+			mccdata_gm12878_10kb <- rbind(mccdata_gm12878_10kb,
 										  perfdata[15,2])
 		}
 	}
@@ -104,20 +104,401 @@ for(i in paste0("CHR", c(1:8,10:22))){
 
 ```
 
-###Plots
+##25kb
 
 ```{r}
-all_rfperfs <- rbind.data.frame(mccdata_gm12878_10kb_rf,
-                                mccdata_gm12878_10kb_xgb)
+mccdata_gm12878_25kb <- numeric()
 
-all_rfperfs$Model <- c(rep("RF", length(mccdata_gm12878_10kb_rf)),
-                                rep("XGB", length(mccdata_gm12878_10kb_xgb)))
-all_rfperfs$Predictor <- rep(c("Distance", "OC", "OP"), 168)
-all_rfperfs$Resampling <- rep(c(rep("None", 3),
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_25kb <- rbind(mccdata_gm12878_25kb,
+										  perfdata[15,2])
+		}
+	}
+}
+
+```
+
+##50kb
+
+```{r}
+mccdata_gm12878_50kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_50kb <- rbind(mccdata_gm12878_50kb,
+										  perfdata[15,2])
+		}
+	}
+}
+
+
+```
+
+##100kb
+
+```{r}
+mccdata_gm12878_100kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_100kb <- rbind(mccdata_gm12878_100kb,
+										  perfdata[15,2])
+		}
+	}
+}
+
+
+```
+
+# K562
+
+##10kb
+
+```{r}
+mccdata_K562_10kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+		  files <- list.files(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+		  
+		  mccdata_K562_10kb <- rbind(mccdata_K562_10kb,
+										  perfdata[15,2])
+			
+		}
+	}
+}
+
+
+```
+
+##25kb
+
+```{r}
+mccdata_K562_25kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_K562_25kb <- rbind(mccdata_K562_25kb,
+										  perfdata[15,2])
+		}
+	}
+}
+
+```
+
+##50kb
+
+```{r}
+mccdata_K562_50kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_K562_50kb <- rbind(mccdata_K562_50kb,
+										  perfdata[15,2])
+		}
+	}
+}
+
+
+```
+
+##100kb
+
+```{r}
+mccdata_K562_100kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("gbmperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/gbmperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_K562_100kb <- rbind(mccdata_K562_100kb,
+										  perfdata[15,2])
+		}
+	}
+}
+
+
+```
+
+
+## Plots
+
+```{r}
+all_xgbperfs <- rbind.data.frame(mccdata_gm12878_10kb,
+                                mccdata_gm12878_25kb,
+                                mccdata_gm12878_50kb,
+                                mccdata_gm12878_100kb,
+                                mccdata_K562_10kb,
+                                mccdata_K562_25kb,
+                                mccdata_K562_50kb,
+                                mccdata_K562_100kb)
+all_xgbperfs$CL <- c(rep("GM12878", length(mccdata_gm12878_10kb)*4), rep("K562", length(mccdata_K562_10kb)*4))
+all_xgbperfs$Resolution <- rep(c(rep("10 kb", 252),
+                            rep("25 kb", 252),
+                            rep("50 kb", 252),
+                            rep("100 kb", 252)))
+all_xgbperfs$Resampling <- rep(c(rep("None", 3),
                             rep("ROS", 3),
                             rep("RUS", 3),
-                            rep("SMOTE", 3)),42)
-all_rfperfs$Chromosome <- rep(c(rep("CHR1", 12),
+                            rep("SMOTE", 3)),168)
+all_xgbperfs$Predictor <- rep(c("Distance", "OC", "OP"), 672)
+all_xgbperfs$Chromosome <- c(rep("CHR1", 12),
                             rep("CHR2", 12),
                             rep("CHR3", 12),
                             rep("CHR4", 12),
@@ -137,29 +518,31 @@ all_rfperfs$Chromosome <- rep(c(rep("CHR1", 12),
                             rep("CHR19", 12),
                             rep("CHR20", 12),
                             rep("CHR21", 12),
-                            rep("CHR22", 12)), 2)
+                            rep("CHR22", 12))
 
-all_rfperfs$Resampling <- factor(all_rfperfs$Resampling, levels = c("None", "ROS", "RUS", "SMOTE"))
-all_rfperfs$Predictor <- factor(all_rfperfs$Predictor, levels = c("OC", "OP", "Distance"))
-all_rfperfs$Chromosome <- factor(all_rfperfs$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
+all_xgbperfs$CL <- factor(all_xgbperfs$CL, levels = c("GM12878", "K562"))
+all_xgbperfs$Resolution <- factor(all_xgbperfs$Resolution, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_xgbperfs$Resampling <- factor(all_xgbperfs$Resampling, levels = c("None", "ROS", "RUS", "SMOTE"))
+all_xgbperfs$Predictor <- factor(all_xgbperfs$Predictor, levels = c("OC", "OP", "Distance"))
+all_xgbperfs$Chromosome <- factor(all_xgbperfs$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
 
-all_rfperfs_mcc <- all_rfperfs %>%
-  dplyr::group_by(Model, Resampling, Predictor) %>%
+all_xgbperfs_mcc <- all_xgbperfs %>%
+  dplyr::group_by(CL, Resolution, Resampling, Predictor) %>%
   dplyr::summarise(MCC = mean(V1, na.rm = TRUE),
             MCCSD = sd(V1, na.rm = TRUE))
 
-ggplot(all_rfperfs_mcc, aes(x=Predictor, y=MCC, fill=Model)) +
-     #geom_line(size=2, position=position_dodge(0.5))+
-     #geom_point(size=5, position=position_dodge(0.5))+
-     #geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
-     #             position=position_dodge(0.5)) +
-     geom_bar(position=position_dodge(), stat="identity", colour='black') +
-     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,position=position_dodge(.9)) +
-     facet_grid(~ Resampling)+
+#GM12878
+c <- ggplot(all_xgbperfs_mcc[which(all_xgbperfs_mcc$CL=="GM12878" & all_xgbperfs_mcc$Predictor=="OC"),], aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     #facet_grid(~ Metric)+
      theme_minimal() +
      theme_bw()+
-     #xlab("") + ylab("") + ylim(-.05,.5) +
-     scale_color_discrete(name="Predictor Type")+
+     xlab("") + ylab("") + ylim(-.1,.5) +
+     ggtitle("Overlap Counts") +
+     scale_color_discrete(name="Resampling Technique")+
      guides(shape=FALSE, linetype=FALSE)+
      theme(axis.text.x = element_text(size=15,
                                       angle = 45, 
@@ -173,116 +556,17 @@ ggplot(all_rfperfs_mcc, aes(x=Predictor, y=MCC, fill=Model)) +
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
 
-```
-
-###F1
-
-####RF; No elastic-net
-
-```{r}
-F1data_gm12878_10kb_rf <- numeric()
-
-for(i in paste0("CHR", c(1:8,10:22))){
-	for(j in c("none","ros","rus","smote")){
-		for(k in c("distance", "oc", "op")){
-			perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
-									   i, 
-									   "/",
-									   j, 
-									   "/", 
-									   k, 
-									   "/enet/rfperf_noenet.rds"))
-									   
-			F1data_gm12878_10kb_rf <- rbind(F1data_gm12878_10kb_rf,
-										  perfdata[16,2])
-		}
-	}
-}
-
-
-```
-
-####XGB; no elastic-net
-
-```{r}
-F1data_gm12878_10kb_xgb <- numeric()
-
-for(i in paste0("CHR", c(1:8,10:22))){
-	for(j in c("none","ros","rus","smote")){
-		for(k in c("distance", "oc", "op")){
-			perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
-									   i, 
-									   "/",
-									   j, 
-									   "/", 
-									   k, 
-									   "/enet/gbmperf_noenet.rds"))
-									   
-			F1data_gm12878_10kb_xgb <- rbind(F1data_gm12878_10kb_xgb,
-										  perfdata[16,2])
-		}
-	}
-}
-
-
-```
-
-###Plots
-
-```{r}
-all_rfperfs <- rbind.data.frame(F1data_gm12878_10kb_rf,
-                                F1data_gm12878_10kb_xgb)
-
-all_rfperfs$Model <- c(rep("RF", length(F1data_gm12878_10kb_rf)),
-                                rep("XGB", length(F1data_gm12878_10kb_xgb)))
-all_rfperfs$Predictor <- rep(c("Distance", "OC", "OP"), 168)
-all_rfperfs$Resampling <- rep(c(rep("None", 3),
-                            rep("ROS", 3),
-                            rep("RUS", 3),
-                            rep("SMOTE", 3)),42)
-all_rfperfs$Chromosome <- rep(c(rep("CHR1", 12),
-                            rep("CHR2", 12),
-                            rep("CHR3", 12),
-                            rep("CHR4", 12),
-                            rep("CHR5", 12),
-                            rep("CHR6", 12),
-                            rep("CHR7", 12),
-                            rep("CHR8", 12),
-                            rep("CHR10", 12),
-                            rep("CHR11", 12),
-                            rep("CHR12", 12),
-                            rep("CHR13", 12),
-                            rep("CHR14", 12),
-                            rep("CHR15", 12),
-                            rep("CHR16", 12),
-                            rep("CHR17", 12),
-                            rep("CHR18", 12),
-                            rep("CHR19", 12),
-                            rep("CHR20", 12),
-                            rep("CHR21", 12),
-                            rep("CHR22", 12)), 2)
-
-all_rfperfs$Resampling <- factor(all_rfperfs$Resampling, levels = c("None", "ROS", "RUS", "SMOTE"))
-all_rfperfs$Predictor <- factor(all_rfperfs$Predictor, levels = c("OC", "OP", "Distance"))
-all_rfperfs$Chromosome <- factor(all_rfperfs$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
-
-all_rfperfs_F1 <- all_rfperfs %>%
-  dplyr::group_by(Model, Resampling, Predictor) %>%
-  dplyr::summarise(F1 = mean(V1, na.rm = TRUE),
-            F1SD = sd(V1, na.rm = TRUE))
-
-ggplot(all_rfperfs_F1, aes(x=Predictor, y=F1, fill=Model)) +
-     #geom_line(size=2, position=position_dodge(0.5))+
-     #geom_point(size=5, position=position_dodge(0.5))+
-     #geom_errorbar(aes(ymin=F1-F1SD, ymax=F1+F1SD), width=1,
-     #             position=position_dodge(0.5)) +
-     geom_bar(position=position_dodge(), stat="identity", colour='black') +
-     geom_errorbar(aes(ymin=F1-F1SD, ymax=F1+F1SD), width=.5,position=position_dodge(.9)) +
-     facet_grid(~ Resampling)+
+p <- ggplot(all_xgbperfs_mcc[which(all_xgbperfs_mcc$CL=="GM12878" & all_xgbperfs_mcc$Predictor=="OP"),], aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     #facet_grid(~ Metric)+
      theme_minimal() +
      theme_bw()+
-     #xlab("") + ylab("") + ylim(-.05,.5) +
-     scale_color_discrete(name="Predictor Type")+
+     xlab("") + ylab("") + ylim(-.1,.5) +
+     ggtitle("Overlap Percents") +
+     scale_color_discrete(name="Resampling Technique")+
      guides(shape=FALSE, linetype=FALSE)+
      theme(axis.text.x = element_text(size=15,
                                       angle = 45, 
@@ -295,5 +579,127 @@ ggplot(all_rfperfs_F1, aes(x=Predictor, y=F1, fill=Model)) +
      legend.text=element_text(size=15),
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
+
+d <- ggplot(all_xgbperfs_mcc[which(all_xgbperfs_mcc$CL=="GM12878" & all_xgbperfs_mcc$Predictor=="Distance"),], aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     #facet_grid(~ Metric)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("") + ylab("") + ylim(-.1,.5) +
+     ggtitle("Distance") +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+figure <- ggarrange(c,p,d,
+                ncol = 3, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "top",
+                labels = "AUTO",
+                font.label = list(size=20))
+figure
+annotate_figure(figure,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("MCC", color = "black", rot = 90, size=20)
+)
+
+
+#K562
+c2 <- ggplot(all_xgbperfs_mcc[which(all_xgbperfs_mcc$CL=="K562" & all_xgbperfs_mcc$Predictor=="OC"),], aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     #facet_grid(~ Metric)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("") + ylab("") + ylim(-.1,.5) +
+     ggtitle("Overlap Counts") +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+p2 <- ggplot(all_xgbperfs_mcc[which(all_xgbperfs_mcc$CL=="K562" & all_xgbperfs_mcc$Predictor=="OP"),], aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     #facet_grid(~ Metric)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("") + ylab("") + ylim(-.1,.5) +
+     ggtitle("Overlap Percents") +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+d2 <- ggplot(all_xgbperfs_mcc[which(all_xgbperfs_mcc$CL=="K562" & all_xgbperfs_mcc$Predictor=="Distance"),], aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     #facet_grid(~ Metric)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("") + ylab("") + ylim(-.1,.5) +
+     ggtitle("Distance") +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+figure2 <- ggarrange(c2,p2,d2,
+                ncol = 3, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "top",
+                labels = "AUTO",
+                font.label = list(size=20))
+figure2
+annotate_figure(figure2,
+    bottom = text_grob("Resolution", color = "black", size = 20),
+    left = text_grob("MCC", color = "black", rot = 90, size=20)
+)
 
 ```
