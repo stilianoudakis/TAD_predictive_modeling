@@ -52,9 +52,150 @@ library(RColorBrewer)
 
 ## SMOTE; distance-type predictors
 
-### GM12878
+```{r}
+misclassified_func <- function(CL, resolution, sampling="smote", predictor="distance", chromosome){
+  #reading in whole genome data
+	##setting directory specific to cell line and resolution 
+	if(CL=="GM12878"){dataset = "gm12878"}else{dataset = "K562"}
+	wgd_directory <- paste0("Z:/TAD_data_analysis/",
+	                        CL,
+							"/",
+							resolution,
+							"/training_testing/",
+							dataset,
+							"_",
+							resolution,
+							".rds")
+	whole_genome_dat <- readRDS(wgd_directory)
+	
+	#reading in bin data on the whole genome that contains chromosome information
+	##setting directory specific to cell line and resolution 
+	bd_directory <- paste0("Z:/TAD_data_analysis/",
+	                        CL,
+							"/",
+							resolution,
+							"/training_testing/binslist",
+							gsub("kb","",resolution),
+							"_center.rds")
+	binslist_dat <- readRDS(bd_directory)
+	
+	#removing duplicate annotations
+	if(CL=="GM12878"){
+		varstorm = c(names(whole_genome_dat)[grep("Ctcf-", names(whole_genome_dat))][-c(1:4)],
+					 names(whole_genome_dat)[grep("Ebf1sc137065-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("P300-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Pol2-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Rad21-", names(whole_genome_dat))][-c(1:4)])} else {
+		varstorm = c(names(whole_genome_dat)[grep("Atf3-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Cmyc-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Ctcf-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("E2f6-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Max-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("P300-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Pol2-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Rad21-", names(whole_genome_dat))][-c(1:4)],
+                     names(whole_genome_dat)[grep("Yy1-", names(whole_genome_dat))][-c(1:4)])
+					 }
+					 
+	whole_genome_dat <- whole_genome_dat[,-which(names(whole_genome_dat) %in% varstorm)]
+	
+	#reducing the whole genome data to only specific chromosome
+	reduce_chr <- tolower(chromosome)
+	chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),]
+	
+	#splitting into training and testing
+	set.seed(123)
+    inTrainingSet <- sample(length(chr_specific_dat$y),floor(length(chr_specific_dat$y)*.7))
+    train <- chr_specific_dat[inTrainingSet,]
+    test <- chr_specific_dat[-inTrainingSet,]
+	
+	#reduce predictor space
+	if(predictor=="distance"){reduce_predictor = "_dist"}else if(predictor=="oc"){reduce_predictor = "_count"}else{reduce_predictor = "_perc"}
+	
+	train <- train[,c(1,grep(reduce_predictor, names(train)))]
+	test <- test[,c(1,grep(reduce_predictor, names(test)))]
+	
+	#reading in model and making predictions
+	model_directory <- paste0("Z:/TAD_data_analysis/",
+	                        CL,
+							"/",
+							resolution,
+							"/results_by_chr/",
+							chromosome,
+							"/",
+							"smote/distance/enet/rfModel_noenet.rds")
+  rfModel <- readRDS(model_directory)
+  
+  predictions <- predict(rfModel, newdata=test)
+  preddata <- cbind.data.frame(Prediction = predictions, True=test$y)
+  
+  #subset the false negatives (bins that were predicted as not overlapping with flanked TAD boundary but really were)
+  FNdata <- test[which(preddata$Prediction=="No" & preddata$True=="Yes"),]
+  FNdatamelt <- melt(FNdata[,-1])
+  FNdatamelt$Prediction <- "False Negatives"
 
-####10kb
+  #subset the true positives (bins that were predicted as overlapping with flanked TAD boundary and truely were)
+  TPdata <- test[which(preddata$Prediction=="Yes" & preddata$True=="Yes"),]
+  TPdatamelt <- melt(TPdata[,-1])
+  TPdatamelt$Prediction <- "True Positives"
+
+  prediction_data <- list(FNdatamelt,TPdatamelt)
+  return(prediction_data)
+}
+```
+
+
+## Plots
+
+```{r}
+allpredictiondata <- rbind.data.frame(prediction_data[[1]],prediction_data[[2]])
+allpredictiondata$Prediction <- factor(allpredictiondata$Prediction, levels=c("False Negatives","True Positives"))
+
+#looking at specific annotations
+##Ctcf
+ggplot(allpredictiondata[grep("Ctcf-",allpredictiondata$variable),], aes(x=value, color=Prediction)) +
+  geom_density() +
+  scale_color_discrete(name="Prediction Class") +
+  ylab("Density") +
+  xlab("Log2 Distance") +
+  #ylab("") +
+  #xlab("") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+##Rad21
+ggplot(allpredictiondata[grep("Rad21-",allpredictiondata$variable),], aes(x=value, color=Prediction)) +
+  geom_density() +
+  scale_color_discrete(name="Prediction Class") +
+  ylab("Density") +
+  xlab("Log2 Distance") +
+  #ylab("") +
+  #xlab("") +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15 #,
+                                      #angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      #hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+```
+
 
 ```{r}
 #reading in test data and reducing
