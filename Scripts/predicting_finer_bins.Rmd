@@ -1,0 +1,373 @@
+---
+title: "Predicting Finer Bins"
+author: "Spiro Stilianoudakis"
+date: "June 10, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+
+```
+
+# Predict finer bins
+
+```{r}
+finer_resolution_predict_func <- function(CL, resolution, sampling, predictor, chromosome){
+	#reading in whole genome data
+	##setting directory specific to cell line and resolution 
+	if(CL=="GM12878"){dataset = "gm12878"}else{dataset = "K562"}
+	wgd_directory <- paste0("Z:/TAD_data_analysis/",
+	                        CL,
+							"/",
+							resolution,
+							"/training_testing/",
+							dataset,
+							"_",
+							resolution,
+							".rds")
+	whole_genome_dat <- readRDS(wgd_directory)
+	
+	#reading in bin data on the whole genome that contains chromosome information
+	##setting directory specific to cell line and resolution 
+	bd_directory <- paste0("Z:/TAD_data_analysis/",
+	                        CL,
+							"/",
+							resolution,
+							"/training_testing/binslist",
+							gsub("kb","",resolution),
+							"_center.rds")
+	binslist_dat <- readRDS(bd_directory)
+	
+	#annotations to keep
+	#############################################
+	#!!!make this cell line specific; don't include yy1 for k562
+	#############################################
+	
+	if(CL=="GM12878" & predictor=="distance"){
+	  annots = c("Gm12878-Ctcf-Broad_dist",
+				   "Gm12878-Znf143166181ap-Sydh_dist",
+				   "Gm12878-Rad21-Haib_dist",
+				   "Gm12878-Smc3ab9263-Sydh_dist",
+				   "Gm12878-Yy1sc281-Haib_dist")
+	}else if(CL=="GM12878" & predictor=="count"){
+	  annots = c("Gm12878-Ctcf-Broad_count",
+				   "Gm12878-Znf143166181ap-Sydh_count",
+				   "Gm12878-Rad21-Haib_count",
+				   "Gm12878-Smc3ab9263-Sydh_count",
+				   "Gm12878-Yy1sc281-Haib_count")
+	}else if(CL=="K562" & predictor=="distance"){
+	  annots = c("K562-Ctcf-Broad_dist",
+				   "K562-Znf143-Sydh_dist",
+				   "K562-Rad21-Haib_dist",
+				   "K562-Smc3ab9263-Sydh_dist")
+	}else{
+	   annots = c("K562-Ctcf-Broad_count",
+				   "K562-Znf143-Sydh_count",
+				   "K562-Rad21-Haib_count",
+				   "K562-Smc3ab9263-Sydh_count") 
+	  }
+				   
+	
+					 
+	whole_genome_dat <- whole_genome_dat[,c(1,which(names(whole_genome_dat) %in% annots))]
+	
+	#reducing the whole genome data to only specific chromosome
+	reduce_chr <- tolower(chromosome)
+	chr_specific_dat <- whole_genome_dat[which(as.character(seqnames(binslist_dat))==reduce_chr),]
+	
+	train <- chr_specific_dat
+	
+	# set number of iterations
+	samps = 50
+	
+	if(sampling=="ros"){
+	    #assign sample indeces
+		sampids <- matrix(ncol=samps, 
+                  nrow=length(train$y[which(train$y=="No")]))
+
+		#filling in the sample ids matrix
+		set.seed(123)
+		for(j in 1:samps){
+			sampids[,j] <- sample(x = which(train$y=="Yes"),
+                        size = length(which(train$y=="No")),
+                        replace = TRUE)
+		}
+		train <- rbind.data.frame(train[which(train$y=="No"),],
+                          train[sampids[,1],])
+		#Randomly shuffle the data
+		set.seed(321)
+		train <- train[sample(nrow(train)),]
+        }else if(sampling=="rus"){
+		    #assign sample indeces
+			sampids <- matrix(ncol=samps, 
+                  nrow=length(train$y[which(train$y=="Yes")]))
+            
+			#filling in the sample ids matrix
+			set.seed(123)
+			for(j in 1:samps){
+				sampids[,j] <- sample(x = which(train$y=="No"),
+                        size = length(which(train$y=="Yes")),
+                        replace = FALSE)
+			}
+			train <- rbind.data.frame(train[which(train$y=="Yes"),],
+                          train[sampids[,1],])
+
+			#Randomly shuffle the data
+			set.seed(321)
+			train <- train[sample(nrow(train)),]
+			}else if(sampling=="smote"){
+				set.seed(123)
+				train <- SMOTE(y ~ ., 
+                     data=train, 
+                     perc.over = 100, 
+                     perc.under = 200)
+				
+				#Randomly shuffle the data
+				set.seed(123)
+				train <- train[sample(nrow(train)),]
+				}else{train=train}
+				
+	##set tuning parameters
+	##set seeds for each cross folds
+	set.seed(123)
+	#length is = (n_repeats*nresampling)+1
+	seeds <- vector(mode = "list", length = 11)
+	#(1 is the number of tuning parameter lambda
+	for(i in 1:10) seeds[[i]]<- sample.int(n=1000, 100)
+	#for the last model
+	seeds[[11]]<-sample.int(1000, 1)
+
+	##defining one summary function for roc,auprc,f1,and mcc
+	allSummary <- function (data, lev = NULL, model = NULL) {
+		lvls <- levels(data$obs)
+    
+		#mcc
+		mcc <- ModelMetrics::mcc(ifelse(data$obs == lev[2], 0, 1), data[, lvls[1]], cutoff = .5)
+    
+		#roc
+		b1 <- twoClassSummary(data, lev, model)
+    
+		#auprc & f1
+		c1 <- prSummary(data, lev, model)
+    
+		out <- c(mcc, b1, c1)
+		names(out)[1] <- c("MCC")
+		out
+	}
+	
+	##setting contols for elastic net
+	fitControl <- trainControl(#seeds = seeds,
+                           method = "cv",
+                           number = 5,
+                           ## Estimate class probabilities
+                           classProbs = TRUE,
+                           ## Evaluate performance using 
+                           ## the following function
+                           summaryFunction = allSummary)
+						   
+	#set number of predictors to consider at each node
+	tunegrid <- expand.grid(mtry=ceiling(sqrt(dim(train)[2] - 1)))
+	
+	#performing random forest
+	rfModel <- train(y~., data=train, 
+                 method="rf", 
+                 metric="AUC", 
+                 #tuneGrid=tunegrid, 
+				 tuneLength=4,
+                 trControl=fitControl, 
+                 ntree=500) #as.numeric(rownames(results)[1]))
+
+	return(rfModel)
+	
+}
+
+```
+
+# Make finer bins
+
+```{r}
+#CL="GM12878"; resolution="10kb"; sampling="smote"; predictor="distance"; chromosome="CHR22"
+
+make_finer_test <- function(CL, resolution, sampling, predictor, chromosome){
+	#reading in bin data on the whole genome that contains chromosome information
+	##setting directory specific to cell line and resolution 
+	bd_directory <- paste0("Z:/TAD_data_analysis/",
+	                        CL,
+							"/",
+							resolution,
+							"/training_testing/binslist",
+							gsub("kb","",resolution),
+							"_center.rds")
+	binslist_dat <- readRDS(bd_directory)
+	
+	#extracting the first and last chromosome specific genomic coordinate
+	reduce_chr <- tolower(chromosome)
+	chr_binslist_dat <- binslist_dat[which(as.character(seqnames(binslist_dat))==reduce_chr)]
+	min_point <- start(chr_binslist_dat)[1]+1
+	max_point <- end(chr_binslist_dat)[length(chr_binslist_dat)]+1
+	
+	#creating finer bins for new test data
+	##100 bases 
+	test_bins <- GRanges(seqnames=reduce_chr, 
+						 ranges=IRanges(start=seq(from=min_point, to=max_point, by=100), 
+						 width=100))
+						 
+	#reading chromosome and resolution specific boundary data
+	bounds_directory <- paste0("Z:/TAD_data_analysis/",
+	                        CL,
+							"/",
+							resolution,
+							"/training_testing/bounds.rds")
+	bounds <- readRDS(bounds_directory)
+	bounds_f <- flank(bounds, width=100, both=TRUE)
+	bounds_f <- bounds_f[which(as.character(seqnames(bounds_f))==tolower(chromosome))]
+	
+	#Creating Response Vector Y (1 if tad boundary is in bin; 0 if not)
+	y <- countOverlaps(test_bins, bounds_f)
+	y <- ifelse(y>=1,1,0)
+	
+	test_data <- data.frame(y = y)
+	
+	#creating a granges object from the center of every range in the new binned test data
+	#this will be used to calculate distances from genomic feature to center of genomic bin
+	test_bins_center <- resize(test_bins, width = 1, fix = "center")
+	
+	#annotating test data 
+	##Creating Feature Space
+	###calculating distance
+	distance_func <- function(binned_data_center_gr, annot_data_center_gr){
+		#distance from center of genomic bin to nearest genomic region of interest
+		dist <- mcols(distanceToNearest(binned_data_center_gr, annot_data_center_gr))$distance
+		return(dist)
+	}
+	
+	####calculating count overlaps
+	count_func <- function(binned_data_gr, annot_data_gr){
+		#Finding the total number of overlaps between genomic bins and the specific genomic annotation
+		count_total <- countOverlaps(binned_data_gr, annot_data_gr)
+	
+		return(count_total)
+	}
+
+	
+	setwd("Z:/TAD_data_analysis/annotations/all_annotations/gm12878/")
+	temp = list.files()
+	
+	#isolate specific annotations
+	#############################################
+	#!!!make this cell line specific; don't include yy1 for k562
+	#############################################
+	annots <- c("Gm12878-Ctcf-Broad.bed",
+				"Gm12878-Znf143166181ap-Sydh.bed",
+				"Gm12878-Rad21-Haib.bed",
+				"Gm12878-Smc3ab9263-Sydh.bed",
+				"Gm12878-Yy1sc281-Haib.bed")
+	temp <- temp[which(temp %in% annots)]
+
+	for(i in 1:length(temp)){
+		#print(temp[i])
+		dat <- read.table(temp[i],header = FALSE, sep="\t")
+		dat_gr <- GRanges(seqnames=dat$V1,
+						IRanges(start=dat$V2, 
+								end=dat$V3))
+		dat_gr_center <- resize(dat_gr, width = 1, fix = "center")
+	
+		####calculating distance
+		d <- distance_func(test_bins_center, dat_gr_center)
+		test_data <- cbind.data.frame(test_data,d)
+		names(test_data)[length(names(test_data))] <- paste(sub(".bed", "", temp[i]), "_dist", sep="")
+		
+		####calculating count overlaps
+		#co <- count_func(test_bins_center, dat_gr)
+		#test_data <- cbind.data.frame(test_data,co)
+		#names(test_data)[length(names(test_data))] <- paste(sub(".bed", "", temp[i]), "_count", sep="")
+	
+	}
+	
+	##Taking log2 transform of distance variables
+	cols <- grep("dist",colnames(test_data))
+	test_data[,cols] <- apply(test_data[,cols],2,function(x){log(x + 1, base=2)})
+
+	##Changing levels of response (y) to yes no
+	test_data$y <- factor(test_data$y)
+	levels(test_data$y) <- c("No", "Yes")
+	
+	
+	return(list(test_data,test_bins,test_bins_center))
+
+}
+
+test_list <- make_finer_test(CL="GM12878", resolution="10kb", sampling="smote", predictor="distance", chromosome="CHR22")
+
+test_bins <- test_list[[2]]
+test_bins_center <- test_list[[3]]
+test_data <- test_list[[1]]
+
+```
+
+# Plots
+
+```{r}
+pred.rfModel2 <- predict(rfModel,newdata=test_data[,-1],type="prob")[,"Yes"]
+	
+	test_data$PredProb <- pred.rfModel2
+	
+
+mcols(test_bins_center)$prediction <- pred.rfModel2
+
+
+test_data[which(test_data$y=="Yes"),][1:100,c(1,7)]
+
+
+x <- cbind.data.frame(bin=seq(51224999+1, 51234999, 100),
+                      PredProb=test_data$PredProb)
+
+ggplot(x, aes(x=bin, y=PredProb)) + 
+    geom_point() +
+    geom_smooth(method="loess",size=1)+
+    theme_minimal() +
+    theme_bw()
+
+
+```
+
+
