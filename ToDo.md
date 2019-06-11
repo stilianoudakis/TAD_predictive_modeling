@@ -6,7 +6,9 @@
 
 ## ToDo
 
-- change definition of imbalance ratio to match with reference
+- venn diagrams of overlaps in tad boundaries between cell lines
+
++ change definition of imbalance ratio to match with reference
 
 - write paragraphs of all previous methods; refer them to supplementary
 
@@ -21,13 +23,9 @@
     + Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
     + shrink flank to match new bin width of test data
     + look that the probability vector
-    - look at loess
+    + look at loess
+    - expand interval to see if probabilities converge
     
-7. Even the best model cannot predict all TADs accurately. Why some TADs are failing to be predicted?
-    - look at profiles of annotations for tads that cant be predicted; wilcoxon tests
-    - cross section with tad lengths
-    - count peaks of top annotations between detected tads and tads that werent detected
-
 8. Use different splitting/CV techniques
     - train on even/test on odd chromosomes
     - 20 fold CV on 2-22 (not 9) and validate on chr1
