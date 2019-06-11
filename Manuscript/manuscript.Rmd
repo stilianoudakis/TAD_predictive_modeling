@@ -129,11 +129,12 @@ where TP refers to the number of bins correctly identified as containing a TAD b
 # RESULTS
 
 ## DEVELOPING A RESOLUTION-SPECIFIC APPROACH FOR DATA CONSTRUCTION
-<!--## CELL LINE AND DATA [??? What data?] RESOLUTION SPECIFIC MODEL [??? What model?] CONSTRUCTION [??? Why?] !!!created new header-->
 
-We developed a resolution-specific approach toward constructing data necessary for TAD boundary prediction. We illustrate the proposed method of construction using the following example (Figure 1). Given in-situ Hi-C data sequenced at 100 kb resolution, we binned the linear genome into 100 kb intervals. Using the Arrowhead TAD calling algorithm [@durand2016juicer], unique TAD boundaries were identified and flanked on either side by the corresponding bin width, $b$, for a total flanking width of $2b$ (i.e. if $b$=100 kb, the total flanked width of each TAD would be 200 kb). We defined the response vector **Y** as a variable that indicated whether a genomic bin overlapped with a flanked TAD boundary ($Y=1$) or not ($Y=0$). In total, we applied our method of data construction for four resolutions including 10 kb, 25 kb, 50 kb, and 100 kb.
+We analyzed publically published replicate HiC data sets from two cell lines (Supplementary Table 1): GM12878 and K562. Topologically associating domains (TADs) were subsequently called using the ARROWHEAD pipeline [@durand2016juicer] at four resolutions: 10 kb, 25 kb, 50 kb, and 100 kb. To account for the varying levels of data resolution, we developed a resolution-specific approach toward constructing TAD vs non TAD boundary regions on the linear genome (Figure 1). 
 
-![**An illustration of the proposed approach for resolution-specific data construction used for TAD boundary prediction.** <!--A subsection of the contact matrix for chromosome 14 on GM12878 [@durand2016juicer] at 100kb resolution shows the appearance of TAD boundaries. To account for the uncertainty in TAD boundary location, each boundary point was flanked on both sides by resolution-specific genomic regions (bins). The response vector $Y$ was constructed by defining $Y=1$ if a bin flanks a TAD boundary, and $Y=0$ otherwise.-->](Figures/figure1_model_construction_V3.png)
+![**An illustration of the proposed approach for resolution-specific data construction used for TAD boundary prediction.** Depicted is a subsection of the contact matrix of GM12878 (chromosome 14; 100kb) as visualized by JUICERBOX [@durand2016juicer]. Resolution-specific TADs were called and unique boundaries were identified. Boundaries were flanked on either side according to the resolution (i.e. 100 kb resolution corresponded to a 100 kb flank for a total boundary region of 200 kb). The linear genome was subsequently binned into resolution-specific intervals. The response vector **Y** was defined as a variable that indicated whether a genomic bin overlapped with a flanked TAD boundary ($Y = 1$) or not ($Y = 0$). ](Figures/figure1_model_construction_V3.png)
+
+## TAD boundary regions exhibit cell-line specificity
 
 ## IMBALANCE RATIOS REMAINED SEVERE IRRESPECTIVELY OF Hi-C DATA RESOLUTION 
 
