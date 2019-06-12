@@ -311,7 +311,7 @@ for(i in c("GM12878","K562")){
       
       bounds.per.chr <- rbind(bounds.per.chr, table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[2])
       
-      ir.per.chr <- rbind(ir.per.chr, table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[2]/table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[1])
+      ir.per.chr <- rbind(ir.per.chr, table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[1]/table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[2])
       
       tads.per.chr <- rbind(tads.per.chr, dim(tad_dat[which(tad_dat$V1==k),])[1])
       
