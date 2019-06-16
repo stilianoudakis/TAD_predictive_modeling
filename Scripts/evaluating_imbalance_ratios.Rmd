@@ -350,6 +350,10 @@ irtab_summ_med <- irtab %>%
             MedBoundsIQR = IQR(bounds, na.rm = TRUE),
             MedIR = median(ir, na.rm = TRUE),
             MedIRIQR = IQR(ir, na.rm = TRUE))
+
+bounds_df <-irtab %>%
+  group_by(cl, res) %>%
+  dplyr::summarise(TotBounds = sum(bounds, na.rm = TRUE))
 ```
 
 # ICC
@@ -414,3 +418,168 @@ icc(bounds[,-1], model="twoway")
 imbratio <- reshape(irtab[which(irtab$cl=="K562"),c(2,3,7)], idvar = "chr", timevar = "res", direction = "wide")
 icc(imbratio[,-1], model="twoway")
 ```
+
+##Bounds Plots
+
+```{r}
+a <- ggplot(bounds_df[which(bounds_df$res=="10kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+  geom_bar(stat="identity", position="dodge")+
+  theme_minimal() +
+  theme_bw()+
+  xlab("") + ylab("") + ylim(0,27000) +
+  scale_fill_discrete(name="Cell Line") +
+  ggtitle("10 kb") +
+  guides(fill=FALSE) +
+  theme(axis.text.x = element_text(size=10),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+
+b <- ggplot(bounds_df[which(bounds_df$res=="25kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+  geom_bar(stat="identity", position="dodge")+
+  theme_minimal() +
+  theme_bw()+
+  xlab("") + ylab("") + ylim(0,27000) +
+  scale_fill_discrete(name="Cell Line") +
+  ggtitle("25 kb") +
+  guides(fill=FALSE) +
+  theme(axis.text.x = element_text(size=10),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+
+c <- ggplot(bounds_df[which(bounds_df$res=="50kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+  geom_bar(stat="identity", position="dodge")+
+  theme_minimal() +
+  theme_bw()+
+  xlab("") + ylab("") + ylim(0,27000) +
+  scale_fill_discrete(name="Cell Line") +
+  ggtitle("50 kb") +
+  guides(fill=FALSE) +
+  theme(axis.text.x = element_text(size=10),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+
+d <- ggplot(bounds_df[which(bounds_df$res=="100kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+  geom_bar(stat="identity", position="dodge")+
+  theme_minimal() +
+  theme_bw()+
+  xlab("") + ylab("") + ylim(0,27000) +
+  scale_fill_discrete(name="Cell Line") +
+  ggtitle("100 kb") +
+  guides(fill=FALSE) +
+  theme(axis.text.x = element_text(size=10),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+  
+
+figure <- ggarrange(a,b,c,d,
+                    ncol=4,
+                    nrow=1)
+figure
+annotate_figure(figure,
+    #bottom = text_grob("Cell Line", color = "black", size = 20),
+    left = text_grob("Number of TAD Boundary Regions", color = "black", rot = 90, size=20)
+)
+
+```
+
+## IR Plots
+
+```{r}
+a <- ggplot(irtab[which(irtab$res=="10kb"),], aes(x=cl, y = ir, fill=cl, color=cl))  + 
+ stat_boxplot(geom ='errorbar', width = 0.2) + 
+ geom_boxplot() +
+ theme_minimal() +
+ theme_bw()+
+ xlab("") + ylab("") + #ylim(5,21) +
+ ggtitle("10 kb") +
+ guides(fill=FALSE) +
+ guides(color=FALSE) +
+ theme(axis.text.x = element_text(size=15),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+b <- ggplot(irtab[which(irtab$res=="25kb"),], aes(x=cl, y = ir, fill=cl, color=cl))  + 
+ stat_boxplot(geom ='errorbar', width = 0.2) + 
+ geom_boxplot() +
+ theme_minimal() +
+ theme_bw()+
+ xlab("") + ylab("") + #ylim(5,21) +
+ ggtitle("25 kb") +
+ guides(fill=FALSE) +
+ guides(color=FALSE) +
+ theme(axis.text.x = element_text(size=15),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+c <- ggplot(irtab[which(irtab$res=="50kb"),], aes(x=cl, y = ir, fill=cl, color=cl))  + 
+ stat_boxplot(geom ='errorbar', width = 0.2) + 
+ geom_boxplot() +
+ theme_minimal() +
+ theme_bw()+
+ xlab("") + ylab("") + #ylim(5,21) +
+ ggtitle("50 kb") +
+ guides(fill=FALSE) +
+ guides(color=FALSE) +
+ theme(axis.text.x = element_text(size=15),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+d <- ggplot(irtab[which(irtab$res=="100kb"),], aes(x=cl, y = ir, fill=cl, color=cl))  + 
+ stat_boxplot(geom ='errorbar', width = 0.2) + 
+ geom_boxplot() +
+ theme_minimal() +
+ theme_bw()+
+ xlab("") + ylab("") + #ylim(5,21) +
+ ggtitle("100 kb") +
+ guides(fill=FALSE) +
+ guides(color=FALSE) +
+ theme(axis.text.x = element_text(size=15),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+figure <- ggarrange(a,b,c,d,
+                    ncol=4,
+                    nrow=1)
+figure
+annotate_figure(figure,
+    #bottom = text_grob("Cell Line", color = "black", size = 20),
+    left = text_grob("Imbalance Ratio", color = "black", rot = 90, size=20)
+)
+
+```
+

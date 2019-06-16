@@ -6,7 +6,10 @@
 
 ## ToDo
 
-- venn diagrams of overlaps in tad boundaries between cell lines
+- look into propotion of imbalance
+- remove figure 1 A
+
++ venn diagrams of overlaps in tad boundaries between cell lines
 
 + change definition of imbalance ratio to match with reference
 
