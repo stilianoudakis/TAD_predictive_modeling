@@ -6,17 +6,7 @@
 
 ## ToDo
 
-- look into propotion of imbalance
-- remove figure 1 A
-
-+ venn diagrams of overlaps in tad boundaries between cell lines
-
-+ change definition of imbalance ratio to match with reference
-
 - write paragraphs of all previous methods; refer them to supplementary
-
-+4. Perform Xgboost; compare with RF
-    + tune xgboost model and compare with RF
 
 +5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
     + Use one chromosome
