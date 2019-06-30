@@ -477,7 +477,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 ```
 
 
-## Plots
+# Line Plots V1
 
 ```{r}
 all_rfperfs <- rbind.data.frame(mccdata_gm12878_10kb,
@@ -703,4 +703,46 @@ annotate_figure(figure2,
 )
 
 ```
+
+# Line Plots V2
+
+```{r}
+x <- ggplot(all_rfperfs_mcc, aes(x=Resolution, y=MCC, color=Resampling, group=Resampling)) +
+     geom_line(size=2, position=position_dodge(0.5))+
+     geom_point(size=5, position=position_dodge(0.5))+
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+                 position=position_dodge(0.5)) +
+     facet_grid(CL ~ Predictor)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("Resolution") + ylab("MCC") + ylim(-.1,.5) +
+     scale_color_discrete(name="Resampling Technique")+
+     guides(shape=FALSE, linetype=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     strip.text.x = element_text(size = 15),
+     strip.text.y = element_text(size = 15),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20),
+     legend.position="bottom")
+
+#figure <- ggarrange(x,
+#                ncol = 1, nrow = 1, 
+#                common.legend = TRUE, 
+#                legend = "bottom")
+#figure
+#annotate_figure(figure,
+#    bottom = text_grob("Resolution", color = "black", size = 20),
+#    left = text_grob("MCC", color = "black", rot = 90, size=20)
+#)
+
+```
+
 
