@@ -333,20 +333,21 @@ rownames(varimp_K562_100kb) <- NULL
 
 ```{r}
 #GM12878
-all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+all_varimps_gm12878_tfbs <- cbind.data.frame(varimp_gm12878_10kb$Feature,
                                         varimp_gm12878_10kb$aveimp10kb,
                                         varimp_gm12878_25kb$aveimp25kb,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
-names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_gm12878 <- all_varimps_gm12878[order(rowMeans(all_varimps_gm12878[,-1]), decreasing = TRUE),]
-all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
-all_varimps_gm12878 <- melt(all_varimps_gm12878)
+names(all_varimps_gm12878_tfbs) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_gm12878_tfbs <- all_varimps_gm12878_tfbs[order(rowMeans(all_varimps_gm12878_tfbs[,-1]), decreasing = TRUE),]
+all_varimps_gm12878_tfbs <- all_varimps_gm12878_tfbs[1:20,]
+all_varimps_gm12878_tfbs <- melt(all_varimps_gm12878_tfbs)
 
-ggplot(all_varimps_gm12878, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+a <- ggplot(all_varimps_gm12878_tfbs, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
   geom_tile(aes(fill = value), colour = "white") + 
-  xlab("Resolution") +
+  xlab("") +
   ylab("Transcription Factor") +
+  ggtitle("GM12878") +
   scale_fill_gradient2(limits=c(0,100),
                       low = "white",
                       mid = "pink",
@@ -359,32 +360,34 @@ ggplot(all_varimps_gm12878, aes(variable, ordered(Feature, levels=rev(unique(Fea
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
                                    hjust = 1),
-        axis.text.y = element_text(size = 10),
+        axis.text.y = element_text(size = 12),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size = 20))
 
 #K562
-all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
+all_varimps_K562_tfbs <- cbind.data.frame(varimp_K562_10kb$Feature,
                                         varimp_K562_10kb$aveimp10kb,
                                         varimp_K562_25kb$aveimp25kb,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
-names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_K562 <- all_varimps_K562[order(rowMeans(all_varimps_K562[,-1]), decreasing = TRUE),]
-all_varimps_K562 <- all_varimps_K562[1:20,]
-all_varimps_K562 <- melt(all_varimps_K562)
+names(all_varimps_K562_tfbs) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_K562_tfbs <- all_varimps_K562_tfbs[order(rowMeans(all_varimps_K562_tfbs[,-1]), decreasing = TRUE),]
+all_varimps_K562_tfbs <- all_varimps_K562_tfbs[1:20,]
+all_varimps_K562_tfbs <- melt(all_varimps_K562_tfbs)
 
-ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+b <- ggplot(all_varimps_K562_tfbs, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
   geom_tile(aes(fill = value), colour = "white") + 
-  xlab("Resolution") +
-  ylab("Transcription Factor") +
+  xlab("") +
+  ylab("") +
+  ggtitle("K562") +
   scale_fill_gradient2(limits=c(0,100),
                       low = "white",
-                      mid = "pink",
+                      mid = "lightblue",
                       midpoint = 50,
-                      high = muted("red"),
+                      high = muted("blue"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
   scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
@@ -392,11 +395,19 @@ ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Featur
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
                                    hjust = 1),
-        axis.text.y = element_text(size = 10),
+        axis.text.y = element_text(size = 12),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size = 20))
+
+figure <- ggarrange(a,b,
+                ncol = 2, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "bottom")
+figure
+
 ```
 
 # Chromstates with distance type predictors with SMOTE resampling
@@ -687,20 +698,21 @@ rownames(varimp_K562_100kb) <- NULL
 
 ```{r}
 #GM12878
-all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+all_varimps_gm12878_chromstates <- cbind.data.frame(varimp_gm12878_10kb$Feature,
                                         varimp_gm12878_10kb$aveimp10kb,
                                         varimp_gm12878_25kb$aveimp25kb,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
-names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_gm12878 <- all_varimps_gm12878[order(rowMeans(all_varimps_gm12878[,-1]), decreasing = TRUE),]
-#all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
-all_varimps_gm12878 <- melt(all_varimps_gm12878)
+names(all_varimps_gm12878_chromstates) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_gm12878_chromstates <- all_varimps_gm12878_chromstates[order(rowMeans(all_varimps_gm12878_chromstates[,-1]), decreasing = TRUE),]
+#all_varimps_gm12878_chromstates <- all_varimps_gm12878_chromstates[1:20,]
+all_varimps_gm12878_chromstates <- melt(all_varimps_gm12878_chromstates)
 
-chromstates_gm12878_plot <- ggplot(all_varimps_gm12878, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+a <- ggplot(all_varimps_gm12878_chromstates, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
   geom_tile(aes(fill = value), colour = "white") + 
   xlab("") +
-  ylab("") +
+  ylab("Chromatin State") +
+  ggtitle("GM12878") +
   scale_fill_gradient2(limits=c(0,100),
                       low = "white",
                       mid = "pink",
@@ -717,28 +729,30 @@ chromstates_gm12878_plot <- ggplot(all_varimps_gm12878, aes(variable, ordered(Fe
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size = 20))
 
 #K562
-all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
+all_varimps_K562_chromstates <- cbind.data.frame(varimp_K562_10kb$Feature,
                                         varimp_K562_10kb$aveimp10kb,
                                         varimp_K562_25kb$aveimp25kb,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
-names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_K562 <- all_varimps_K562[order(rowMeans(all_varimps_K562[,-1]), decreasing = TRUE),]
-#all_varimps_K562 <- all_varimps_K562[1:20,]
-all_varimps_K562 <- melt(all_varimps_K562)
+names(all_varimps_K562_chromstates) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_K562_chromstates <- all_varimps_K562_chromstates[order(rowMeans(all_varimps_K562_chromstates[,-1]), decreasing = TRUE),]
+#all_varimps_K562_chromstates <- all_varimps_K562_chromstates[1:20,]
+all_varimps_K562_chromstates <- melt(all_varimps_K562_chromstates)
 
-chromstates_K562_plot <- ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+b <- ggplot(all_varimps_K562_chromstates, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
   geom_tile(aes(fill = value), colour = "white") + 
   xlab("") +
   ylab("") +
+  ggtitle("K562") +
   scale_fill_gradient2(limits=c(0,100),
                       low = "white",
-                      mid = "pink",
+                      mid = "lightblue",
                       midpoint = 50,
-                      high = muted("red"),
+                      high = muted("blue"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
   scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
@@ -750,21 +764,14 @@ chromstates_K562_plot <- ggplot(all_varimps_K562, aes(variable, ordered(Feature,
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size = 20))
 
-figure <- ggarrange(chromstates_gm12878_plot,
-                    chromstates_K562_plot,
+figure <- ggarrange(a,b,
                 ncol = 2, nrow = 1, 
                 common.legend = TRUE, 
-                legend = "right",
-                labels = "AUTO",
-                font.label = list(size=20))
+                legend = "bottom")
 figure
-annotate_figure(figure,
-    bottom = text_grob("Resolution", color = "black", size = 20),
-    left = text_grob("Chromatin States", color = "black", rot = 90, size=20)
-)
-
 ```
 
 
@@ -1056,20 +1063,21 @@ rownames(varimp_K562_100kb) <- NULL
 
 ```{r}
 #GM12878
-all_varimps_gm12878 <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+all_varimps_gm12878_histones <- cbind.data.frame(varimp_gm12878_10kb$Feature,
                                         varimp_gm12878_10kb$aveimp10kb,
                                         varimp_gm12878_25kb$aveimp25kb,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
-names(all_varimps_gm12878) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_gm12878 <- all_varimps_gm12878[order(rowMeans(all_varimps_gm12878[,-1]), decreasing = TRUE),]
-#all_varimps_gm12878 <- all_varimps_gm12878[1:20,]
-all_varimps_gm12878 <- melt(all_varimps_gm12878)
+names(all_varimps_gm12878_histones) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_gm12878_histones <- all_varimps_gm12878_histones[order(rowMeans(all_varimps_gm12878_histones[,-1]), decreasing = TRUE),]
+#all_varimps_gm12878_histones <- all_varimps_gm12878_histones[1:20,]
+all_varimps_gm12878_histones <- melt(all_varimps_gm12878_histones)
 
-histones_gm12878_plot <- ggplot(all_varimps_gm12878, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+a2 <- ggplot(all_varimps_gm12878_histones, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
   geom_tile(aes(fill = value), colour = "white") + 
   xlab("") +
-  ylab("") +
+  ylab("Histone Modification") +
+  ggtitle("GM12878") +
   scale_fill_gradient2(limits=c(0,100),
                       low = "white",
                       mid = "pink",
@@ -1086,28 +1094,30 @@ histones_gm12878_plot <- ggplot(all_varimps_gm12878, aes(variable, ordered(Featu
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size = 20))
 
 #K562
-all_varimps_K562 <- cbind.data.frame(varimp_K562_10kb$Feature,
+all_varimps_K562_histones <- cbind.data.frame(varimp_K562_10kb$Feature,
                                         varimp_K562_10kb$aveimp10kb,
                                         varimp_K562_25kb$aveimp25kb,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
-names(all_varimps_K562) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
-all_varimps_K562 <- all_varimps_K562[order(rowMeans(all_varimps_K562[,-1]), decreasing = TRUE),]
-#all_varimps_K562 <- all_varimps_K562[1:20,]
-all_varimps_K562 <- melt(all_varimps_K562)
+names(all_varimps_K562_histones) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+all_varimps_K562_histones <- all_varimps_K562_histones[order(rowMeans(all_varimps_K562_histones[,-1]), decreasing = TRUE),]
+#all_varimps_K562_histones <- all_varimps_K562_histones[1:20,]
+all_varimps_K562_histones <- melt(all_varimps_K562_histones)
 
-histones_K562_plot <- ggplot(all_varimps_K562, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
+b2 <- ggplot(all_varimps_K562_histones, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
   geom_tile(aes(fill = value), colour = "white") + 
   xlab("") +
   ylab("") +
+  ggtitle("K562") +
   scale_fill_gradient2(limits=c(0,100),
                       low = "white",
-                      mid = "pink",
+                      mid = "lightblue",
                       midpoint = 50,
-                      high = muted("red"),
+                      high = muted("blue"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
   scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
@@ -1119,19 +1129,20 @@ histones_K562_plot <- ggplot(all_varimps_K562, aes(variable, ordered(Feature, le
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size = 20))
 
-figure <- ggarrange(histones_gm12878_plot,
-                    histones_K562_plot,
+figure <- ggarrange(a,b,
                 ncol = 2, nrow = 1, 
                 common.legend = TRUE, 
-                legend = "right",
-                labels = "AUTO",
-                font.label = list(size=20))
+                legend = "bottom")
 figure
-annotate_figure(figure,
-    bottom = text_grob("Resolution", color = "black", size = 20),
-    left = text_grob("Histone Modifications", color = "black", rot = 90, size=20)
-)
 
+figure <- ggarrange(a,b,a2,b2,
+                ncol = 2, nrow = 2, 
+                common.legend = TRUE, 
+                legend = "bottom",
+                labels = c("A","","B",""),
+                font.label = list(size=25))
+figure
 ```

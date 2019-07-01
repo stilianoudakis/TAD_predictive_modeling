@@ -215,11 +215,12 @@ all_propimp_gm12878_summ <- data.frame(Prop.VI = c(
 
 all_propimp_gm12878_summ$Resolution <- factor(all_propimp_gm12878_summ$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
 
-ggplot(all_propimp_gm12878_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
+a <- ggplot(all_propimp_gm12878_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
   geom_bar( stat="identity", position="fill") +
-  xlab("Resolution") +
+  xlab("") +
   ylab("Proportion of Importance") +
-  scale_fill_discrete(name="Annotation\nGroup")+
+  scale_fill_discrete(name="Annotation Group")+
+  ggtitle("GM12878") +
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
@@ -228,7 +229,8 @@ ggplot(all_propimp_gm12878_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) 
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
   
 ```
 
@@ -400,11 +402,12 @@ all_propimp_K562_summ <- data.frame(Prop.VI = c(
 
 all_propimp_K562_summ$Resolution <- factor(all_propimp_K562_summ$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
 
-ggplot(all_propimp_K562_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
+b <- ggplot(all_propimp_K562_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
   geom_bar( stat="identity", position="fill") +
-  xlab("Resolution") +
-  ylab("Proportion of Importance") +
-  scale_fill_discrete(name="Annotation\nGroup")+
+  xlab("") +
+  ylab("") +
+  scale_fill_discrete(name="Annotation Group")+
+  ggtitle("K562") +
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
@@ -413,6 +416,42 @@ ggplot(all_propimp_K562_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) +
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
         legend.text=element_text(size=15),
-        legend.title=element_text(size=20))
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
   
 ```
+
+# Plots v2
+
+```{r}
+figure <- ggarrange(a,b,
+                ncol = 2, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "bottom")
+figure
+
+all_propimp <- rbind(all_propimp_gm12878_summ, all_propimp_K562_summ)
+all_propimp$CL <- c(rep("GM12878", 12),
+                    rep("K562", 12))
+
+ggplot(all_propimp, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
+  geom_bar( stat="identity", position="fill") +
+  facet_grid(~ CL) +
+  xlab("Resolution") +
+  ylab("Proportion of Importance") +
+  scale_fill_discrete(name="Annotation Group")+
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        strip.text.x = element_text(size = 15),
+        panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        legend.position = "bottom")
+  
+```
+

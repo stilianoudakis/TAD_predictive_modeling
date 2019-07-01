@@ -324,15 +324,15 @@ all_rfperfs_mcc <- all_rfperfs %>%
             MCCSD = sd(V1, na.rm = TRUE))
 
 #GM12878
-ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="GM12878"),], aes(x=Resolution, y=MCC, group=Annotation, fill=Annotation)) +
+a <- ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="GM12878"),], aes(x=Resolution, y=MCC, group=Annotation, fill=Annotation)) +
   geom_bar(stat="identity", position = position_dodge()) +
   geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
                  position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
   theme_bw()+
-  #xlab("") + ylab("") + ylim(-.05,.5) +
-  scale_fill_discrete(name="Annotation\nGroup")+
-  guides(shape=FALSE, linetype=FALSE)+
+  xlab("") + ylab("MCC") + 
+  scale_fill_discrete(name="Annotation Group")+
+  ggtitle("GM12878") +
   theme(axis.text.x = element_text(size=15,
                                   angle = 45, 
                                   #margin = ggplot2::margin(t = 35),
@@ -346,15 +346,15 @@ ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="GM12878"),], aes(x=Resolution,
   plot.title = element_text(size=20))
 
 #K562
-ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="K562"),], aes(x=Resolution, y=MCC, group=Annotation, fill=Annotation)) +
+b <- ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="K562"),], aes(x=Resolution, y=MCC, group=Annotation, fill=Annotation)) +
   geom_bar(stat="identity", position = position_dodge()) +
   geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
                  position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
   theme_bw()+
-  #xlab("") + ylab("") + ylim(-.05,.5) +
+  xlab("") + ylab("") +
   scale_fill_discrete(name="Annotation\nGroup")+
-  guides(shape=FALSE, linetype=FALSE)+
+  ggtitle("K562") +
   theme(axis.text.x = element_text(size=15,
                                   angle = 45, 
                                   #margin = ggplot2::margin(t = 35),
@@ -366,5 +366,40 @@ ggplot(all_rfperfs_mcc[which(all_rfperfs_mcc$CL=="K562"),], aes(x=Resolution, y=
   legend.text=element_text(size=15),
   legend.title=element_text(size=20),
   plot.title = element_text(size=20))
+
+figure <- ggarrange(a,b,
+                ncol = 2, nrow = 1, 
+                common.legend = TRUE, 
+                legend = "bottom")
+figure
+```
+
+# Plots v2
+
+```{r}
+ggplot(all_rfperfs_mcc, aes(x=Resolution, y=MCC, group=Annotation, fill=Annotation)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
+  facet_grid(~ CL) +
+  theme_minimal() +
+  theme_bw()+
+  #xlab("") + ylab("") + ylim(-.05,.5) +
+  scale_fill_discrete(name="Annotation Group")+
+  guides(shape=FALSE, linetype=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                  angle = 45, 
+                                  #margin = ggplot2::margin(t = 35),
+                                  hjust = 1
+  ),
+  axis.text.y = element_text(size = 15),
+  axis.title.x = element_text(size = 20),
+  axis.title.y = element_text(size = 20),
+  strip.text.x = element_text(size = 15),
+  panel.spacing = unit(2, "lines"),
+  legend.text=element_text(size=15),
+  legend.title=element_text(size=20),
+  plot.title = element_text(size=20),
+  legend.position = "bottom")
 ```
 
