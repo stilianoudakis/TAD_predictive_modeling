@@ -4,9 +4,27 @@
 + Completed to do items (awaiting discussion)
 * Outstanding questions
 
+## Deliverables
+
+- Class imbalance
+- OC, OP, Distance
+- Metric
+- Resolution
+- Collinearity
+- TBD - Feature selection
+- Prediction
+
+
 ## ToDo
 
 - write paragraphs of all previous methods; refer them to supplementary
+
+- As you observe performance improves with the increasing resolution of the data, you need results at higher resolution, 5kb, 1kb, the latest was 750kb
+    - There are tools to improve resolution, https://github.com/mdozmorov/HiC_tools#resolution-improvement
+
+- Relevant supplementary figures should be referred consequentially.
+
+- Comparison with Mourad? Hong?
 
 +5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
     + Use one chromosome
@@ -25,6 +43,8 @@
     - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
     - For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
     
+### For later
+
 9. Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
     - Use cluster specific TFBS
     - wait with chromstates and histone modifications
@@ -40,7 +60,7 @@
     + rerun models on clustered TFBS
     + compare performance
     - results not included in the manuscript yet
- 
+
 ### Main Ideas
 
 - Write each paragraph using the structure (https://github.com/mdozmorov/manuscript_template):
@@ -49,9 +69,12 @@
     - Any relevant details/results?
     - What is the answer (take home message)?
     
-- Comparison with Mourad? Hong?
     
 ### Secondary Ideas
+
+- Prediction of hierarchical TADs
+
+- Prediction using signal, like gene expression/methylation level
 
 - Look into using grouped lasso to see if a particular group of annotations get regularized 
 
