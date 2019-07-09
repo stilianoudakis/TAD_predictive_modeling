@@ -1,0 +1,789 @@
+---
+title: "Cell Type Specific Validation"
+author: "Spiro Stilianoudakis"
+date: "July 8, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+
+```
+
+# Building optimal models on one cell line and validating on another
+
+## GM12878 on K562
+
+### 10kb
+
+```{r}
+mccdata_gm12878_on_k562_10kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_GM12878_on_K562.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_GM12878_on_K562.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_k562_10kb <- rbind(mccdata_gm12878_on_k562_10kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 25kb
+
+```{r}
+mccdata_gm12878_on_k562_25kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_GM12878_on_K562.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_GM12878_on_K562.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_k562_25kb <- rbind(mccdata_gm12878_on_k562_25kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 50kb
+
+```{r}
+mccdata_gm12878_on_k562_50kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_GM12878_on_K562.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_GM12878_on_K562.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_k562_50kb <- rbind(mccdata_gm12878_on_k562_50kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 100kb
+
+```{r}
+mccdata_gm12878_on_k562_100kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_GM12878_on_K562.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_GM12878_on_K562.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_k562_100kb <- rbind(mccdata_gm12878_on_k562_100kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+## K562 on GM12878
+
+### 10kb
+
+```{r}
+mccdata_k562_on_gm12878_10kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_K562_on_GM12878.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_K562_on_GM12878.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_gm12878_10kb <- rbind(mccdata_k562_on_gm12878_10kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 25kb
+
+```{r}
+mccdata_k562_on_gm12878_25kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_K562_on_GM12878.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_K562_on_GM12878.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_gm12878_25kb <- rbind(mccdata_k562_on_gm12878_25kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 50kb
+
+```{r}
+mccdata_k562_on_gm12878_50kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_K562_on_GM12878.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_K562_on_GM12878.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_gm12878_50kb <- rbind(mccdata_k562_on_gm12878_50kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 100kb
+
+```{r}
+mccdata_k562_on_gm12878_100kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs_K562_on_GM12878.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs_K562_on_GM12878.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_gm12878_100kb <- rbind(mccdata_k562_on_gm12878_100kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+## GM12878 on GM12878
+
+### 10kb
+
+```{r}
+mccdata_gm12878_on_gm12878_10kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_gm12878_10kb <- rbind(mccdata_gm12878_on_gm12878_10kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 25kb
+
+```{r}
+mccdata_gm12878_on_gm12878_25kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_gm12878_25kb <- rbind(mccdata_gm12878_on_gm12878_25kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 50kb
+
+```{r}
+mccdata_gm12878_on_gm12878_50kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_gm12878_50kb <- rbind(mccdata_gm12878_on_gm12878_50kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 100kb
+
+```{r}
+mccdata_gm12878_on_gm12878_100kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_on_gm12878_100kb <- rbind(mccdata_gm12878_on_gm12878_100kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+## K562 on K562
+
+### 10kb
+
+```{r}
+mccdata_k562_on_k562_10kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_k562_10kb <- rbind(mccdata_k562_on_k562_10kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 25kb
+
+```{r}
+mccdata_k562_on_k562_25kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_k562_25kb <- rbind(mccdata_k562_on_k562_25kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 50kb
+
+```{r}
+mccdata_k562_on_k562_50kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_k562_50kb <- rbind(mccdata_k562_on_k562_50kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+### 100kb
+
+```{r}
+mccdata_k562_on_k562_100kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+			files <- list.files(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/"))
+		  if("rfperf_tfbs.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_tfbs.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_k562_on_k562_100kb <- rbind(mccdata_k562_on_k562_100kb,
+			                                      perfdata[15,2])
+}
+
+```
+
+## Plots
+
+```{r}
+all_rfperfs_cl_specific_valid <- rbind.data.frame(mccdata_gm12878_on_k562_10kb,
+                                                  mccdata_gm12878_on_k562_25kb,
+                                                  mccdata_gm12878_on_k562_50kb,
+                                                  mccdata_gm12878_on_k562_100kb,
+                                                  mccdata_k562_on_gm12878_10kb,
+                                                  mccdata_k562_on_gm12878_25kb,
+                                                  mccdata_k562_on_gm12878_50kb,
+                                                  mccdata_k562_on_gm12878_100kb,
+                                                  mccdata_gm12878_on_gm12878_10kb,
+                                                  mccdata_gm12878_on_gm12878_25kb,
+                                                  mccdata_gm12878_on_gm12878_50kb,
+                                                  mccdata_gm12878_on_gm12878_100kb,
+                                                  mccdata_k562_on_k562_10kb,
+                                                  mccdata_k562_on_k562_25kb,
+                                                  mccdata_k562_on_k562_50kb,
+                                                  mccdata_k562_on_k562_100kb)
+
+all_rfperfs_cl_specific_valid$Chromosome <- rep(c("CHR1",
+                                                  "CHR2",
+                                                  "CHR3",
+                                                  "CHR4",
+                                                  "CHR5",
+                                                  "CHR6",
+                                                  "CHR7",
+                                                  "CHR8",
+                                                  "CHR10",
+                                                  "CHR11",
+                                                  "CHR12",
+                                                  "CHR13",
+                                                  "CHR14",
+                                                  "CHR15",
+                                                  "CHR16",
+                                                  "CHR17",
+                                                  "CHR18",
+                                                  "CHR19",
+                                                  "CHR20",
+                                                  "CHR21",
+                                                  "CHR22"),16)
+all_rfperfs_cl_specific_valid$Resolution <- rep(c(rep("10 kb", 21),
+                                              rep("25 kb", 21),
+                                              rep("50 kb", 21),
+                                              rep("100 kb", 21)), 4)
+all_rfperfs_cl_specific_valid$Validation <- c(rep("GM12878 on K562", 21*4),
+                                              rep("K562 on GM12878", 21*4),
+                                              rep("GM12878 on GM12878", 21*4),
+                                              rep("K562 on K562", 21*4))
+
+all_rfperfs_cl_specific_valid$Validation <- factor(all_rfperfs_cl_specific_valid$Validation, levels = c("GM12878 on GM12878", "K562 on K562", "GM12878 on K562", "K562 on GM12878"))
+all_rfperfs_cl_specific_valid$Resolution <- factor(all_rfperfs_cl_specific_valid$Resolution, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_rfperfs_cl_specific_valid$Chromosome <- factor(all_rfperfs_cl_specific_valid$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
+
+all_rfperfs_cl_specific_valid_mcc <- all_rfperfs_cl_specific_valid %>%
+  dplyr::group_by(Validation, Resolution) %>%
+  dplyr::summarise(MCC = mean(V1, na.rm = TRUE),
+            MCCSD = sd(V1, na.rm = TRUE))
+
+
+ggplot(all_rfperfs_cl_specific_valid_mcc, aes(x=Resolution, y=MCC, group=Validation, fill=Validation)) +
+  geom_bar(stat="identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
+  theme_minimal() +
+  theme_bw()+
+  #scale_fill_discrete(name="Cell Line\nSpecific\nValidation")+
+  scale_fill_manual(name="Cell Line\nSpecific\nValidation", 
+                    values = c("GM12878 on GM12878" = "red", 
+                               "K562 on K562" = "blue", 
+                               "GM12878 on K562" = "pink",
+                               "K562 on GM12878" = "purple")) +
+  guides(shape=FALSE, linetype=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                  angle = 45, 
+                                  #margin = ggplot2::margin(t = 35),
+                                  hjust = 1
+  ),
+  axis.text.y = element_text(size = 15),
+  axis.title.x = element_text(size = 20),
+  axis.title.y = element_text(size = 20),
+  strip.text.x = element_text(size = 15),
+  panel.spacing = unit(2, "lines"),
+  legend.text=element_text(size=15),
+  legend.title=element_text(size=20),
+  plot.title = element_text(size=20),
+  legend.position = "bottom")
+```
+
