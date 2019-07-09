@@ -64,6 +64,41 @@ venn_cnt2venn <- function(venn_cnt){
 
 ```
 
+### 5kb
+
+```{r}
+#bounds_f_gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/bounds_f.rds")
+#bounds_f_K562_5kb <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/bounds_f.rds")
+
+#res <- makeVennDiagram(Peaks=list(bounds_f_gm12878_5kb, bounds_f_K562_5kb),
+#                       NameOfPeaks=c("GM12878", "K562"))
+
+#venn_5kb <- venn_cnt2venn(res$vennCounts)
+#plot(venn_5kb)
+
+binslist_gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/binslist5.rds")
+binslist_gm12878_5kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/binslist5_center.rds")
+mcols(binslist_gm12878_5kb)$y <- mcols(binslist_gm12878_5kb_center)$y
+binslist_gm12878_5kb <- binslist_gm12878_5kb[mcols(binslist_gm12878_5kb)$y==1]
+
+binslist_K562_5kb <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/binslist5.rds")
+binslist_K562_5kb_center <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/binslist5_center.rds")
+mcols(binslist_K562_5kb)$y <- mcols(binslist_K562_5kb_center)$y
+binslist_K562_5kb <- binslist_K562_5kb[mcols(binslist_K562_5kb)$y==1]
+
+res <- makeVennDiagram(Peaks=list(binslist_gm12878_5kb, binslist_K562_5kb),
+                       NameOfPeaks=c("GM12878", "K562"))
+
+venn_5kb <- venn_cnt2venn(res$vennCounts)
+venn_5kb <- compute.Venn(venn_5kb)
+gp <- VennThemes(venn_5kb)
+gp[["Face"]][["11"]]$fill <-  "purple"
+gp[["Face"]][["01"]]$fill <-  "lightblue"
+gp[["Face"]][["10"]]$fill <-  "red"
+#plot(venn_5kb)
+
+```
+
 ### 10kb
 
 ```{r}
@@ -209,6 +244,8 @@ gp[["Face"]][["10"]]$fill <-  "red"
 ```{r}
 #par(mfrow=c(1,4))
 
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_5kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("5 kb", gp=gpar(fontsize=20)))
+grid.newpage()
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_10kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("10 kb", gp=gpar(fontsize=20)))
 grid.newpage()
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_25kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("25 kb", gp=gpar(fontsize=20)))

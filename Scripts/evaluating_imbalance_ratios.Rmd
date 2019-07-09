@@ -289,7 +289,7 @@ pi.per.chr <- numeric()
 
 chrs <- paste0("chr", c(1:8,10:22))
 for(i in c("GM12878","K562")){
-  for(j in c("10kb", "25kb","50kb","100kb")){
+  for(j in c("5kb", "10kb", "25kb","50kb","100kb")){
     for(k in 1:length(chrs)){
       binslist_dat_center <- readRDS(paste0("Z:/TAD_data_analysis/",
                                             i,
@@ -331,7 +331,7 @@ irtab <- cbind.data.frame(cl.per.chr,
                           ir.per.chr,
                           pi.per.chr)
 colnames(irtab) <- c("cl","res","chr","bins","tads","bounds","ir","pi")
-irtab$res <- factor(irtab$res, levels=c("10kb","25kb","50kb","100kb"))
+irtab$res <- factor(irtab$res, levels=c("5kb","10kb","25kb","50kb","100kb"))
 
 irtab_summ <- irtab %>%
   group_by(cl, res) %>%
@@ -430,18 +430,43 @@ icc(imbratio[,-1], model="twoway")
 ##Bounds Plots
 
 ```{r}
-a <- ggplot(bounds_df[which(bounds_df$res=="10kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+a <- ggplot(bounds_df[which(bounds_df$res=="5kb"),], aes(x=cl, y=TotBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,27000) +
+  xlab("") + ylab("") + ylim(0,30000) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,27000),
-                     breaks=c(0,10000,20000),
-                     labels=c("0"="0", "10000"="10", "20000"="20")) +
+  scale_y_continuous(limits = c(0,30000),
+                     breaks=c(0,10000,20000,30000),
+                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
+  ggtitle("5 kb") +
+  guides(fill=FALSE) +
+  theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+b <- ggplot(bounds_df[which(bounds_df$res=="10kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+  geom_bar(stat="identity", position="dodge")+
+  theme_minimal() +
+  theme_bw()+
+  xlab("") + ylab("") + ylim(0,30000) +
+  scale_fill_discrete(name="Cell Line") +
+  scale_y_continuous(limits = c(0,30000),
+                     breaks=c(0,10000,20000,30000),
+                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
   ggtitle("10 kb") +
   guides(fill=FALSE) +
-  theme(axis.text.x = element_text(size=15),
+  theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -450,18 +475,21 @@ a <- ggplot(bounds_df[which(bounds_df$res=="10kb"),], aes(x=cl, y=TotBounds, fil
      plot.title = element_text(size=20))
 
 
-b <- ggplot(bounds_df[which(bounds_df$res=="25kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+c <- ggplot(bounds_df[which(bounds_df$res=="25kb"),], aes(x=cl, y=TotBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,27000) +
+  xlab("") + ylab("") + ylim(0,30000) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,27000),
-                     breaks=c(0,10000,20000),
-                     labels=c("0"="0", "10000"="10", "20000"="20")) +
+  scale_y_continuous(limits = c(0,30000),
+                     breaks=c(0,10000,20000,30000),
+                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
   ggtitle("25 kb") +
   guides(fill=FALSE) +
-  theme(axis.text.x = element_text(size=15),
+  theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -470,18 +498,21 @@ b <- ggplot(bounds_df[which(bounds_df$res=="25kb"),], aes(x=cl, y=TotBounds, fil
      plot.title = element_text(size=20))
 
 
-c <- ggplot(bounds_df[which(bounds_df$res=="50kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+d <- ggplot(bounds_df[which(bounds_df$res=="50kb"),], aes(x=cl, y=TotBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,27000) +
+  xlab("") + ylab("") + ylim(0,30000) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,27000),
-                     breaks=c(0,10000,20000),
-                     labels=c("0"="0", "10000"="10", "20000"="20")) +
+  scale_y_continuous(limits = c(0,30000),
+                     breaks=c(0,10000,20000,30000),
+                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
   ggtitle("50 kb") +
   guides(fill=FALSE) +
-  theme(axis.text.x = element_text(size=15),
+  theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -490,18 +521,21 @@ c <- ggplot(bounds_df[which(bounds_df$res=="50kb"),], aes(x=cl, y=TotBounds, fil
      plot.title = element_text(size=20))
 
 
-d <- ggplot(bounds_df[which(bounds_df$res=="100kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+e <- ggplot(bounds_df[which(bounds_df$res=="100kb"),], aes(x=cl, y=TotBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,27000) +
+  xlab("") + ylab("") + ylim(0,30000) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,27000),
-                     breaks=c(0,10000,20000),
-                     labels=c("0"="0", "10000"="10", "20000"="20")) +
+  scale_y_continuous(limits = c(0,30000),
+                     breaks=c(0,10000,20000,30000),
+                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
   ggtitle("100 kb") +
   guides(fill=FALSE) +
-  theme(axis.text.x = element_text(size=15),
+  theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -510,8 +544,8 @@ d <- ggplot(bounds_df[which(bounds_df$res=="100kb"),], aes(x=cl, y=TotBounds, fi
      plot.title = element_text(size=20))
   
 
-figure <- ggarrange(a,b,c,d,
-                    ncol=4,
+figure <- ggarrange(a,b,c,d,e,
+                    ncol=5,
                     nrow=1)
 figure
 annotate_figure(figure,
@@ -606,7 +640,27 @@ annotate_figure(figure,
 ## PI Plots
 
 ```{r}
-a <- ggplot(irtab[which(irtab$res=="10kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
+a <- ggplot(irtab[which(irtab$res=="5kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
+ stat_boxplot(geom ='errorbar', width = 0.2) + 
+ geom_boxplot() +
+ theme_minimal() +
+ theme_bw()+
+ xlab("") + ylab("") + ylim(0,.2) +
+ ggtitle("5 kb") +
+ guides(fill=FALSE) +
+ guides(color=FALSE) +
+ theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20))
+
+b <- ggplot(irtab[which(irtab$res=="10kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
  stat_boxplot(geom ='errorbar', width = 0.2) + 
  geom_boxplot() +
  theme_minimal() +
@@ -615,7 +669,10 @@ a <- ggplot(irtab[which(irtab$res=="10kb"),], aes(x=cl, y = pi, fill=cl, color=c
  ggtitle("10 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
- theme(axis.text.x = element_text(size=15),
+ theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -623,7 +680,7 @@ a <- ggplot(irtab[which(irtab$res=="10kb"),], aes(x=cl, y = pi, fill=cl, color=c
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
 
-b <- ggplot(irtab[which(irtab$res=="25kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
+c <- ggplot(irtab[which(irtab$res=="25kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
  stat_boxplot(geom ='errorbar', width = 0.2) + 
  geom_boxplot() +
  theme_minimal() +
@@ -632,7 +689,10 @@ b <- ggplot(irtab[which(irtab$res=="25kb"),], aes(x=cl, y = pi, fill=cl, color=c
  ggtitle("25 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
- theme(axis.text.x = element_text(size=15),
+ theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -640,7 +700,7 @@ b <- ggplot(irtab[which(irtab$res=="25kb"),], aes(x=cl, y = pi, fill=cl, color=c
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
 
-c <- ggplot(irtab[which(irtab$res=="50kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
+d <- ggplot(irtab[which(irtab$res=="50kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
  stat_boxplot(geom ='errorbar', width = 0.2) + 
  geom_boxplot() +
  theme_minimal() +
@@ -649,7 +709,10 @@ c <- ggplot(irtab[which(irtab$res=="50kb"),], aes(x=cl, y = pi, fill=cl, color=c
  ggtitle("50 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
- theme(axis.text.x = element_text(size=15),
+ theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -657,7 +720,7 @@ c <- ggplot(irtab[which(irtab$res=="50kb"),], aes(x=cl, y = pi, fill=cl, color=c
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
 
-d <- ggplot(irtab[which(irtab$res=="100kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
+e <- ggplot(irtab[which(irtab$res=="100kb"),], aes(x=cl, y = pi, fill=cl, color=cl))  + 
  stat_boxplot(geom ='errorbar', width = 0.2) + 
  geom_boxplot() +
  theme_minimal() +
@@ -666,7 +729,10 @@ d <- ggplot(irtab[which(irtab$res=="100kb"),], aes(x=cl, y = pi, fill=cl, color=
  ggtitle("100 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
- theme(axis.text.x = element_text(size=15),
+ theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1),
      axis.text.y = element_text(size = 15),
      axis.title.x = element_text(size = 20),
      axis.title.y = element_text(size = 20),
@@ -674,8 +740,8 @@ d <- ggplot(irtab[which(irtab$res=="100kb"),], aes(x=cl, y = pi, fill=cl, color=
      legend.title=element_text(size=20),
      plot.title = element_text(size=20))
 
-figure <- ggarrange(a,b,c,d,
-                    ncol=4,
+figure <- ggarrange(a,b,c,d,e,
+                    ncol=5,
                     nrow=1)
 figure
 annotate_figure(figure,
