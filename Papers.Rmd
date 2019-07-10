@@ -2,6 +2,8 @@
 
 ## TAD predictions
 
+- Mourad, Raphaël, and Olivier Cuvier. “TAD-Free Analysis of Architectural Proteins and Insulators.” Nucleic Acids Research 46, no. 5 (March 16, 2018): e27–e27. https://doi.org/10.1093/nar/gkx1246. - GLM to investigate the association of TFBSs with TAD boundaries. Eliminates the blurriness effect of TAD boundaries. GLM includes distance between boundaries, interaction frequency, biases (fragment length, GC content, mappability). https://cran.r-project.org/web/packages/HiCblock/index.html
+
 - Mourad, Raphaël, Lang Li, and Olivier Cuvier. “Uncovering Direct and Indirect Molecular Determinants of Chromatin Loops Using a Computational Integrative Approach.” Edited by Alexandre V Morozov. PLOS Computational Biology 13, no. 5 (May 23, 2017): e1005538. https://doi.org/10.1371/journal.pcbi.1005538. - Generalized Linear Model with Interactions (GLMI) to assess TFBSs association with TAD boundaries. 10 versions, each answers different biological question. Log-distance. Biases (fragment length, GC, mappability) are explicitly included. Comparison with enrichment test, correlation, random forest. Outperforms by AUROC. Collinearity and its impact, model with all interactions can account for that. Poisson lasso to regularize. CTCF, RAD21, SMC3, ZNF143, Polycomb proteins, EGR1, ELF1, FOXM1, MAZ, MXI1, NRF1, YY1. Repulsion testing, CTCF and EZH2 are repulsive. Drosophila and human data. https://cran.r-project.org/web/packages/HiCglmi/index.html
 
 - Xiong, Kyle, and Jian Ma. “Revealing Hi-C Subcompartments by Imputing High-Resolution Inter-Chromosomal Chromatin Interactions.” BioRxiv, January 1, 2018, 505503. https://doi.org/10.1101/505503. - SNIPER - 3D subcompartment (A1, A2, B1, B2, B3) identification from low-coverage Hi-C datasets. A neural network based on a denoising autoencoder (9 layers) and multi-layer perceptron. Sigmoidal activation of inputs, ReLU, softmax on outputs. Dropout, binary cross-entropy. exp(-1/C) transformation of Hi-C matrices. Applied to Gm12878 and 8 additional cell types to compare subcompartment changes. Compared with Rao2014 annotations, outperforms Gaussian HMM and MEGABASE. https://github.com/ma-compbio/SNIPER
@@ -113,6 +115,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 
 ## Misc
+
+- TAD boundaries are blurry - Van Bortle K., Nichols M.H., Li L., Ong C.-T., Takenaka N., Qin Z.S., Corces V.G. Insulator function and topological domain border strength scale with architectural protein occupancy.
 
 - Mourad, Raphaël. “Studying 3D Genome Evolution Using Genomic Sequence.” Preprint. Bioinformatics, May 23, 2019. https://doi.org/10.1101/646851. - Distance idea - Ratio R of the median distances between convergent CTCF motifs. CTCF sites from ChIP-seq, predicted if not available. R depends on A/B compartments and subcompartments, replication timing, isochores. R can be used to study genome evolution.https://github.com/morphos30/PhyloCTCFLooping
 
