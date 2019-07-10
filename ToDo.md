@@ -42,7 +42,10 @@
     - 20 fold CV on 2-22 (not 9) and validate on chr1
     - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
     - For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
-    
+
+- Directionality of CTCF
+
+
 ### For later
 
 9. Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
@@ -72,9 +75,11 @@
     
 ### Secondary Ideas
 
+- https://sites.google.com/site/raphaelmouradeng/programs
+
 - Prediction of hierarchical TADs
 
-- Prediction using signal, like gene expression/methylation level
+- Prediction using signal, like gene expression/methylation level. Wang,Y. et al. (2016) Predicting DNA methylation state of CpG dinucleo- tide using genome topological features and deep networks.
 
 - Look into using grouped lasso to see if a particular group of annotations get regularized 
 
