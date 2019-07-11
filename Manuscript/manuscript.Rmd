@@ -63,7 +63,9 @@ Biological replicate Hi-C data for the GM12878 and K562 cell lines were download
 
 Genomic annotation data in the form of cell type specific chromatin states, histone marks, and transcription factor binding sites (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 2). Functional annotations were represented by chromosome-specific regions on the linear genome obtained by ChIP-seq peak calling algorithms.
 
-## CLASSIFICATION
+## DEVELOPING FRAMEWORK TO DETERMINE OPTIMAL DATA LEVEL CHARACTERISTICS FOR TAD BOUNDARY PREDICTION
+
+### CLASSIFICATION
 
 To establish the data for classification, the genome was binned into equally sized intervals defined by the data resolution of the corresponding contact matrix. As an example, for domain data obtained from a 10 kb resolution contact matrix, the genome was binned into 10 kb intervals. In order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. That is, for 10 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 10 kilobases for a total width around each boundary point of 20 kb. A genomic bin was then labeled as having a TAD boundary within it (Y=1) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary (Y=0).
 
@@ -125,6 +127,10 @@ $$Informedness = \dfrac{TP}{TP+FN} + \dfrac{TN}{TN+FP} - 1$$
 -->
 
 where TP refers to the number of bins correctly identified as containing a TAD boundary (true positives), FP refers to the number of bins incorrectly identified as containing a TAD boundary (false positives), TN refers to the number of bins correctly identified as not containing a TAD boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a TAD boundary (false negatives). Each of these quantities are obtained from the confusion matrix created by validating the model on the testing set. Additional performance metrics were [??? are?] reported in the supplementary materials. [??? Where is it?]
+
+## USING OPTIMALLY BUILD CLASSIFIER TO PREDICT BOUNDARIES AT FINER RESOLUTION
+
+
 
 # RESULTS
 
