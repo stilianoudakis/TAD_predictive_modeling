@@ -54,7 +54,7 @@ library(RColorBrewer)
 ##GM12878
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878")
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/TFBS")
 annots <- gsub(paste(c("Gm12878-", 
                              "-Haib.bed", 
                              "-Sydh.bed",
@@ -62,7 +62,6 @@ annots <- gsub(paste(c("Gm12878-",
                              "-Uw.bed",
                              "-Broad.bed",
                              "-Uchicago.bed"), collapse = "|"), "", annots)
-annots <- annots[!duplicated(annots)]
 ```
 
 
@@ -193,7 +192,7 @@ rownames(varimp_gm12878_100kb) <- NULL
 ##K562
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/K562")
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/k562/TFBS")
 annots <- gsub(paste(c("K562-", 
                              "-Haib.bed", 
                              "-Sydh.bed",
@@ -201,7 +200,6 @@ annots <- gsub(paste(c("K562-",
                              "-Uw.bed",
                              "-Broad.bed",
                              "-Uchicago.bed"), collapse = "|"), "", annots)
-annots <- annots[!duplicated(annots)]
 ```
 
 
@@ -415,8 +413,7 @@ figure
 ##GM12878
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
-annots <- annots[grep("Gm12878", annots)]
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/BroadHMM")
 annots <- gsub(paste(c("Gm12878-",".bed"), collapse = "|"), "", annots)
 
 ```
@@ -556,8 +553,7 @@ rownames(varimp_gm12878_100kb) <- NULL
 ##K562
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
-annots <- annots[grep("K562", annots)]
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/k562/BroadHMM")
 annots <- gsub(paste(c("K562-",".bed"), collapse = "|"), "", annots)
 
 ```
@@ -780,8 +776,7 @@ figure
 ##GM12878
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
-annots <- annots[grep("Gm12878", annots)]
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/HistoneModifications")
 annots <- gsub(paste(c("Gm12878-",".bed"), collapse = "|"), "", annots)
 
 ```
@@ -921,8 +916,7 @@ rownames(varimp_gm12878_100kb) <- NULL
 ##K562
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
-annots <- annots[grep("K562", annots)]
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/k562/HistoneModifications")
 annots <- gsub(paste(c("K562-",".bed"), collapse = "|"), "", annots)
 
 ```
