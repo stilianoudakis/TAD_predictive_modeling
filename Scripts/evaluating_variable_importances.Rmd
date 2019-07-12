@@ -401,7 +401,7 @@ all_varimps_gm12878_tfbs <- cbind.data.frame(varimp_gm12878_5kb$Feature,
                                         varimp_gm12878_100kb$aveimp100kb)
 names(all_varimps_gm12878_tfbs) <- c("Feature", "ave10kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_gm12878_tfbs <- all_varimps_gm12878_tfbs[order(rowMeans(all_varimps_gm12878_tfbs[,-1]), decreasing = TRUE),]
-all_varimps_gm12878_tfbs <- all_varimps_gm12878_tfbs[1:20,]
+#all_varimps_gm12878_tfbs <- all_varimps_gm12878_tfbs[1:20,]
 all_varimps_gm12878_tfbs <- melt(all_varimps_gm12878_tfbs)
 
 a <- ggplot(all_varimps_gm12878_tfbs, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 
@@ -437,7 +437,7 @@ all_varimps_K562_tfbs <- cbind.data.frame(varimp_K562_5kb$Feature,
                                         varimp_K562_100kb$aveimp100kb)
 names(all_varimps_K562_tfbs) <- c("Feature", "ave5kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_K562_tfbs <- all_varimps_K562_tfbs[order(rowMeans(all_varimps_K562_tfbs[,-1]), decreasing = TRUE),]
-all_varimps_K562_tfbs <- all_varimps_K562_tfbs[1:20,]
+#all_varimps_K562_tfbs <- all_varimps_K562_tfbs[1:20,]
 all_varimps_K562_tfbs <- melt(all_varimps_K562_tfbs)
 
 b <- ggplot(all_varimps_K562_tfbs, aes(variable, ordered(Feature, levels=rev(unique(Feature))))) + 

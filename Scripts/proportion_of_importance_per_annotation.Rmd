@@ -573,8 +573,8 @@ figure <- ggarrange(a,b,
 figure
 
 all_propimp <- rbind(all_propimp_gm12878_summ, all_propimp_K562_summ)
-all_propimp$CL <- c(rep("GM12878", 12),
-                    rep("K562", 12))
+all_propimp$CL <- c(rep("GM12878", 15),
+                    rep("K562", 15))
 
 ggplot(all_propimp, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
   geom_bar( stat="identity", position="fill") +
