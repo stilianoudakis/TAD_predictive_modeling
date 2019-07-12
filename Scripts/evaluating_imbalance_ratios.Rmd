@@ -316,7 +316,7 @@ for(i in c("GM12878","K562")){
       
       tads.per.chr <- rbind(tads.per.chr, dim(tad_dat[which(tad_dat$V1==k),])[1])
       
-      pi.per.chr <- rbind(pi.per.chr, table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[2]/sum(table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)))
+      pi.per.chr <- rbind(pi.per.chr, 2*(table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y)[2]/sum(table(mcols(binslist_dat_center[seqnames(binslist_dat_center)==chrs[k]])$y))))
       
     }
   }
@@ -645,7 +645,7 @@ a <- ggplot(irtab[which(irtab$res=="5kb"),], aes(x=cl, y = pi, fill=cl, color=cl
  geom_boxplot() +
  theme_minimal() +
  theme_bw()+
- xlab("") + ylab("") + ylim(0,.2) +
+ xlab("") + ylab("") + ylim(0,1) +
  ggtitle("5 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
@@ -665,7 +665,7 @@ b <- ggplot(irtab[which(irtab$res=="10kb"),], aes(x=cl, y = pi, fill=cl, color=c
  geom_boxplot() +
  theme_minimal() +
  theme_bw()+
- xlab("") + ylab("") + ylim(0,.2) +
+ xlab("") + ylab("") + ylim(0,1) +
  ggtitle("10 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
@@ -685,7 +685,7 @@ c <- ggplot(irtab[which(irtab$res=="25kb"),], aes(x=cl, y = pi, fill=cl, color=c
  geom_boxplot() +
  theme_minimal() +
  theme_bw()+
- xlab("") + ylab("") + ylim(0,.2) +
+ xlab("") + ylab("") + ylim(0,1) +
  ggtitle("25 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
@@ -705,7 +705,7 @@ d <- ggplot(irtab[which(irtab$res=="50kb"),], aes(x=cl, y = pi, fill=cl, color=c
  geom_boxplot() +
  theme_minimal() +
  theme_bw()+
- xlab("") + ylab("") + ylim(0,.2) +
+ xlab("") + ylab("") + ylim(0,1) +
  ggtitle("50 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +
@@ -725,7 +725,7 @@ e <- ggplot(irtab[which(irtab$res=="100kb"),], aes(x=cl, y = pi, fill=cl, color=
  geom_boxplot() +
  theme_minimal() +
  theme_bw()+
- xlab("") + ylab("") + ylim(0,.2) +
+ xlab("") + ylab("") + ylim(0,1) +
  ggtitle("100 kb") +
  guides(fill=FALSE) +
  guides(color=FALSE) +

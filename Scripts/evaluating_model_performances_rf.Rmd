@@ -51,6 +51,59 @@ library(RColorBrewer)
 
 # GM12878
 
+##5kb
+
+```{r}
+mccdata_gm12878_5kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+			files <- list.files(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("rfperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/rfperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+									   
+			mccdata_gm12878_5kb <- rbind(mccdata_gm12878_5kb,
+										  perfdata[15,2])
+		}
+	}
+}
+
+
+```
+
 ##10kb
 
 ```{r}
@@ -263,6 +316,60 @@ for(i in paste0("CHR", c(1:8,10:22))){
 ```
 
 # K562
+
+##5kb
+
+```{r}
+mccdata_K562_5kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("none","ros","rus","smote")){
+		for(k in c("distance", "oc", "op")){
+		  files <- list.files(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet"))
+		  if("rfperf_noenet.rds" %in% files){
+		    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+									   i, 
+									   "/",
+									   j, 
+									   "/", 
+									   k, 
+									   "/enet/rfperf_noenet.rds"))
+		  }else{perfdata=data.frame(Metric = c("TN",
+                                "FN",
+                                "FP",
+                                "TP",
+                                "Total",
+                                "Sensitivity",
+                                "Specificity",
+                                "Kappa",
+                                "Accuracy",
+                                "Precision",
+                                "FPR",
+                                "FNR",
+                                "FOR",
+                                "NPV",
+                                "MCC",
+                                "F1",
+                                "AUC",
+                                "Youden",
+                                "AUPRC"), 
+                     Performance=NA)}
+		  
+		  mccdata_K562_5kb <- rbind(mccdata_K562_5kb,
+										  perfdata[15,2])
+			
+		}
+	}
+}
+
+
+```
 
 ##10kb
 
@@ -480,24 +587,27 @@ for(i in paste0("CHR", c(1:8,10:22))){
 # Line Plots V1
 
 ```{r}
-all_rfperfs <- rbind.data.frame(mccdata_gm12878_10kb,
+all_rfperfs <- rbind.data.frame(mccdata_gm12878_5kb,
+                                mccdata_gm12878_10kb,
                                 mccdata_gm12878_25kb,
                                 mccdata_gm12878_50kb,
                                 mccdata_gm12878_100kb,
+                                mccdata_K562_5kb,
                                 mccdata_K562_10kb,
                                 mccdata_K562_25kb,
                                 mccdata_K562_50kb,
                                 mccdata_K562_100kb)
-all_rfperfs$CL <- c(rep("GM12878", length(mccdata_gm12878_10kb)*4), rep("K562", length(mccdata_K562_10kb)*4))
-all_rfperfs$Resolution <- rep(c(rep("10 kb", 252),
-                            rep("25 kb", 252),
-                            rep("50 kb", 252),
-                            rep("100 kb", 252)))
+all_rfperfs$CL <- c(rep("GM12878", length(mccdata_gm12878_10kb)*5), rep("K562", length(mccdata_K562_10kb)*5))
+all_rfperfs$Resolution <- rep(c(rep("5 kb", length(mccdata_gm12878_5kb)),
+                            rep("10 kb", length(mccdata_gm12878_10kb)),
+                            rep("25 kb", length(mccdata_gm12878_25kb)),
+                            rep("50 kb", length(mccdata_gm12878_50kb)),
+                            rep("100 kb", length(mccdata_gm12878_100kb))), 2)
 all_rfperfs$Resampling <- rep(c(rep("None", 3),
                             rep("ROS", 3),
                             rep("RUS", 3),
-                            rep("SMOTE", 3)),168)
-all_rfperfs$Predictor <- rep(c("Distance", "OC", "OP"), 672)
+                            rep("SMOTE", 3)),210)
+all_rfperfs$Predictor <- rep(c("Distance", "OC", "OP"), 840)
 all_rfperfs$Chromosome <- c(rep("CHR1", 12),
                             rep("CHR2", 12),
                             rep("CHR3", 12),
@@ -521,7 +631,7 @@ all_rfperfs$Chromosome <- c(rep("CHR1", 12),
                             rep("CHR22", 12))
 
 all_rfperfs$CL <- factor(all_rfperfs$CL, levels = c("GM12878", "K562"))
-all_rfperfs$Resolution <- factor(all_rfperfs$Resolution, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_rfperfs$Resolution <- factor(all_rfperfs$Resolution, levels = c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))
 all_rfperfs$Resampling <- factor(all_rfperfs$Resampling, levels = c("None", "ROS", "RUS", "SMOTE"))
 all_rfperfs$Predictor <- factor(all_rfperfs$Predictor, levels = c("OC", "OP", "Distance"))
 all_rfperfs$Chromosome <- factor(all_rfperfs$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
@@ -728,6 +838,7 @@ x <- ggplot(all_rfperfs_mcc, aes(x=Resolution, y=MCC, color=Resampling, group=Re
      axis.title.y = element_text(size = 20),
      strip.text.x = element_text(size = 15),
      strip.text.y = element_text(size = 15),
+     panel.spacing = unit(2, "lines"),
      legend.text=element_text(size=15),
      legend.title=element_text(size=20),
      plot.title = element_text(size=20),
