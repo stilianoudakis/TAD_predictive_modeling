@@ -64,6 +64,37 @@ annots <- gsub(paste(c("Gm12878-",
                              "-Uchicago.bed"), collapse = "|"), "", annots)
 ```
 
+###5kb
+
+```{r}
+varimp_gm12878_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+									   chrs[i], 
+									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_5kb <- data.frame(Feature = rownames(varimp_gm12878_5kb),
+                                  aveimp5kb = rowMeans(varimp_gm12878_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_gm12878_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_5kb) <- NULL
+```
+
 
 ###10kb
 
@@ -202,6 +233,37 @@ annots <- gsub(paste(c("K562-",
                              "-Uchicago.bed"), collapse = "|"), "", annots)
 ```
 
+###5kb
+
+```{r}
+varimp_K562_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+									   chrs[i], 
+									   "/smote/distance/enet/rfimpvars_tfbs.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_5kb <- data.frame(Feature = rownames(varimp_K562_5kb),
+                                  aveimp5kb = rowMeans(varimp_K562_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_K562_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_5kb) <- NULL
+```
+
 
 ###10kb
 
@@ -331,12 +393,13 @@ rownames(varimp_K562_100kb) <- NULL
 
 ```{r}
 #GM12878
-all_varimps_gm12878_tfbs <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+all_varimps_gm12878_tfbs <- cbind.data.frame(varimp_gm12878_5kb$Feature,
+                                        varimp_gm12878_5kb$aveimp5kb,
                                         varimp_gm12878_10kb$aveimp10kb,
                                         varimp_gm12878_25kb$aveimp25kb,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
-names(all_varimps_gm12878_tfbs) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+names(all_varimps_gm12878_tfbs) <- c("Feature", "ave10kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_gm12878_tfbs <- all_varimps_gm12878_tfbs[order(rowMeans(all_varimps_gm12878_tfbs[,-1]), decreasing = TRUE),]
 all_varimps_gm12878_tfbs <- all_varimps_gm12878_tfbs[1:20,]
 all_varimps_gm12878_tfbs <- melt(all_varimps_gm12878_tfbs)
@@ -353,7 +416,7 @@ a <- ggplot(all_varimps_gm12878_tfbs, aes(variable, ordered(Feature, levels=rev(
                       high = muted("red"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
-  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  scale_x_discrete(labels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))+
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
@@ -366,12 +429,13 @@ a <- ggplot(all_varimps_gm12878_tfbs, aes(variable, ordered(Feature, levels=rev(
         plot.title = element_text(size = 20))
 
 #K562
-all_varimps_K562_tfbs <- cbind.data.frame(varimp_K562_10kb$Feature,
+all_varimps_K562_tfbs <- cbind.data.frame(varimp_K562_5kb$Feature,
+                                        varimp_K562_5kb$aveimp5kb,
                                         varimp_K562_10kb$aveimp10kb,
                                         varimp_K562_25kb$aveimp25kb,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
-names(all_varimps_K562_tfbs) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+names(all_varimps_K562_tfbs) <- c("Feature", "ave5kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_K562_tfbs <- all_varimps_K562_tfbs[order(rowMeans(all_varimps_K562_tfbs[,-1]), decreasing = TRUE),]
 all_varimps_K562_tfbs <- all_varimps_K562_tfbs[1:20,]
 all_varimps_K562_tfbs <- melt(all_varimps_K562_tfbs)
@@ -388,7 +452,7 @@ b <- ggplot(all_varimps_K562_tfbs, aes(variable, ordered(Feature, levels=rev(uni
                       high = muted("blue"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
-  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  scale_x_discrete(labels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))+
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
@@ -415,6 +479,39 @@ figure
 ```{r}
 annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/BroadHMM")
 annots <- gsub(paste(c("Gm12878-",".bed"), collapse = "|"), "", annots)
+
+```
+
+###5kb
+
+```{r}
+varimp_gm12878_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_5kb <- data.frame(Feature = rownames(varimp_gm12878_5kb),
+                                  aveimp5kb = rowMeans(varimp_gm12878_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_gm12878_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_5kb) <- NULL
+
 
 ```
 
@@ -558,6 +655,39 @@ annots <- gsub(paste(c("K562-",".bed"), collapse = "|"), "", annots)
 
 ```
 
+###5kb
+
+```{r}
+varimp_K562_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_chromstates.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_5kb <- data.frame(Feature = rownames(varimp_K562_5kb),
+                                  aveimp5kb = rowMeans(varimp_K562_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_K562_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_5kb) <- NULL
+
+
+```
+
 ###10kb
 
 ```{r}
@@ -694,12 +824,13 @@ rownames(varimp_K562_100kb) <- NULL
 
 ```{r}
 #GM12878
-all_varimps_gm12878_chromstates <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+all_varimps_gm12878_chromstates <- cbind.data.frame(varimp_gm12878_5kb$Feature,
+                                        varimp_gm12878_5kb$aveimp5kb,            
                                         varimp_gm12878_10kb$aveimp10kb,
                                         varimp_gm12878_25kb$aveimp25kb,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
-names(all_varimps_gm12878_chromstates) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+names(all_varimps_gm12878_chromstates) <- c("Feature", "ave5kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_gm12878_chromstates <- all_varimps_gm12878_chromstates[order(rowMeans(all_varimps_gm12878_chromstates[,-1]), decreasing = TRUE),]
 #all_varimps_gm12878_chromstates <- all_varimps_gm12878_chromstates[1:20,]
 all_varimps_gm12878_chromstates <- melt(all_varimps_gm12878_chromstates)
@@ -716,7 +847,7 @@ a <- ggplot(all_varimps_gm12878_chromstates, aes(variable, ordered(Feature, leve
                       high = muted("red"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
-  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  scale_x_discrete(labels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))+
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
@@ -729,12 +860,13 @@ a <- ggplot(all_varimps_gm12878_chromstates, aes(variable, ordered(Feature, leve
         plot.title = element_text(size = 20))
 
 #K562
-all_varimps_K562_chromstates <- cbind.data.frame(varimp_K562_10kb$Feature,
+all_varimps_K562_chromstates <- cbind.data.frame(varimp_K562_5kb$Feature,
+                                        varimp_K562_5kb$aveimp5kb,         
                                         varimp_K562_10kb$aveimp10kb,
                                         varimp_K562_25kb$aveimp25kb,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
-names(all_varimps_K562_chromstates) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+names(all_varimps_K562_chromstates) <- c("Feature", "ave5kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_K562_chromstates <- all_varimps_K562_chromstates[order(rowMeans(all_varimps_K562_chromstates[,-1]), decreasing = TRUE),]
 #all_varimps_K562_chromstates <- all_varimps_K562_chromstates[1:20,]
 all_varimps_K562_chromstates <- melt(all_varimps_K562_chromstates)
@@ -751,7 +883,7 @@ b <- ggplot(all_varimps_K562_chromstates, aes(variable, ordered(Feature, levels=
                       high = muted("blue"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
-  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  scale_x_discrete(labels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))+
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
@@ -778,6 +910,39 @@ figure
 ```{r}
 annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/HistoneModifications")
 annots <- gsub(paste(c("Gm12878-",".bed"), collapse = "|"), "", annots)
+
+```
+
+###5kb
+
+```{r}
+varimp_gm12878_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "Gm12878-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)		
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_5kb <- data.frame(Feature = rownames(varimp_gm12878_5kb),
+                                  aveimp5kb = rowMeans(varimp_gm12878_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_gm12878_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_5kb) <- NULL
+
 
 ```
 
@@ -921,6 +1086,39 @@ annots <- gsub(paste(c("K562-",".bed"), collapse = "|"), "", annots)
 
 ```
 
+###5kb
+
+```{r}
+varimp_K562_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+                              chrs[i],
+									            "/smote/distance/enet/rfimpvars_histones.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                                   "K562-",
+	                                   "_dist",
+	                                   "-Haib", 
+                                     "-Sydh",
+                                     "-Uta",
+                                     "-Uw",
+                                     "-Broad",
+                                     "-Uchicago"), collapse = "|"), "", varimps$Feature)
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_5kb <- data.frame(Feature = rownames(varimp_K562_5kb),
+                                  aveimp5kb = rowMeans(varimp_K562_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_K562_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_5kb) <- NULL
+
+
+```
+
 ###10kb
 
 ```{r}
@@ -1057,12 +1255,13 @@ rownames(varimp_K562_100kb) <- NULL
 
 ```{r}
 #GM12878
-all_varimps_gm12878_histones <- cbind.data.frame(varimp_gm12878_10kb$Feature,
+all_varimps_gm12878_histones <- cbind.data.frame(varimp_gm12878_5kb$Feature,
+                                        varimp_gm12878_5kb$aveimp5kb,
                                         varimp_gm12878_10kb$aveimp10kb,
                                         varimp_gm12878_25kb$aveimp25kb,
                                         varimp_gm12878_50kb$aveimp50kb,
                                         varimp_gm12878_100kb$aveimp100kb)
-names(all_varimps_gm12878_histones) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+names(all_varimps_gm12878_histones) <- c("Feature", "ave5kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_gm12878_histones <- all_varimps_gm12878_histones[order(rowMeans(all_varimps_gm12878_histones[,-1]), decreasing = TRUE),]
 #all_varimps_gm12878_histones <- all_varimps_gm12878_histones[1:20,]
 all_varimps_gm12878_histones <- melt(all_varimps_gm12878_histones)
@@ -1079,7 +1278,7 @@ a2 <- ggplot(all_varimps_gm12878_histones, aes(variable, ordered(Feature, levels
                       high = muted("red"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
-  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  scale_x_discrete(labels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))+
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,
@@ -1092,12 +1291,13 @@ a2 <- ggplot(all_varimps_gm12878_histones, aes(variable, ordered(Feature, levels
         plot.title = element_text(size = 20))
 
 #K562
-all_varimps_K562_histones <- cbind.data.frame(varimp_K562_10kb$Feature,
+all_varimps_K562_histones <- cbind.data.frame(varimp_K562_5kb$Feature,
+                                        varimp_K562_5kb$aveimp5kb,
                                         varimp_K562_10kb$aveimp10kb,
                                         varimp_K562_25kb$aveimp25kb,
                                         varimp_K562_50kb$aveimp50kb,
                                         varimp_K562_100kb$aveimp100kb)
-names(all_varimps_K562_histones) <- c("Feature", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
+names(all_varimps_K562_histones) <- c("Feature", "ave5kb", "ave10kb", "ave25kb", "ave50kb", "ave100kb")
 all_varimps_K562_histones <- all_varimps_K562_histones[order(rowMeans(all_varimps_K562_histones[,-1]), decreasing = TRUE),]
 #all_varimps_K562_histones <- all_varimps_K562_histones[1:20,]
 all_varimps_K562_histones <- melt(all_varimps_K562_histones)
@@ -1114,7 +1314,7 @@ b2 <- ggplot(all_varimps_K562_histones, aes(variable, ordered(Feature, levels=re
                       high = muted("blue"),
                       na.value = "grey50",
                       name="Predictive\nImportance") +
-  scale_x_discrete(labels=c("10 kb", "25 kb", "50 kb", "100 kb"))+
+  scale_x_discrete(labels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))+
   theme_bw() +
   theme(axis.text.x = element_text(size=15,
                                    angle = 45,

@@ -51,7 +51,7 @@ library(RColorBrewer)
 #GM12878
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/all_annotations/gm12878")
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878", pattern = "*.bed")
 annots <- gsub(paste(c("Gm12878-",".bed", 
                              "-Haib", 
                              "-Sydh",
@@ -61,18 +61,49 @@ annots <- gsub(paste(c("Gm12878-",".bed",
                              "-Uchicago"), collapse = "|"), "", annots)
 annots <- annots[!duplicated(annots)]
 
-chromstates <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
+chromstates <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/BroadHMM")
 chromstates <- chromstates[grep("Gm12878", chromstates)]
 chromstates <- gsub(paste0(c("Gm12878-", ".bed"), collapse = "|"),"",chromstates)
 
-histones <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
+histones <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/HistoneModifications")
 histones <- histones[grep("Gm12878", histones)]
 histones <- gsub(paste0(c("Gm12878-", ".bed"), collapse = "|"),"",histones)
 
-tfbs <- list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/gm12878")
+tfbs <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/TFBS")
 tfbs <- gsub(paste0(c("Gm12878-", ".bed", "-Haib", "-Sydh", "-Broad", "-Uw", "-Uta", "-Chicago"), collapse = "|"),"", tfbs)
 tfbs <- tfbs[!duplicated(tfbs)]
 
+```
+
+##5kb
+
+```{r}
+varimp_gm12878_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_gm12878_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+									   chrs[i], 
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "Gm12878-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_gm12878_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_gm12878_5kb <- data.frame(Feature = rownames(varimp_gm12878_5kb),
+                                  aveimp5kb = rowMeans(varimp_gm12878_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_gm12878_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_gm12878_5kb) <- NULL
 ```
 
 ##10kb
@@ -85,8 +116,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "Gm12878-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -108,8 +147,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "Gm12878-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -131,8 +178,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "Gm12878-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -154,8 +209,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "Gm12878-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_gm12878_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -170,24 +233,31 @@ rownames(varimp_gm12878_100kb) <- NULL
 ##Plots
 
 ```{r}
-all_propimp_gm12878 <- data.frame(Importance=c(varimp_gm12878_10kb$aveimp10kb,
+all_propimp_gm12878 <- data.frame(Importance=c(varimp_gm12878_5kb$aveimp5kb,
+                                                   varimp_gm12878_10kb$aveimp10kb,
                                                    varimp_gm12878_25kb$aveimp25kb,
                                                    varimp_gm12878_50kb$aveimp50kb,
                                                    varimp_gm12878_100kb$aveimp100kb),
                                   Feature=c(as.character(varimp_gm12878_10kb$Feature),
                                             as.character(varimp_gm12878_10kb$Feature),
                                             as.character(varimp_gm12878_10kb$Feature),
+                                            as.character(varimp_gm12878_10kb$Feature),
                                             as.character(varimp_gm12878_10kb$Feature)),
-                                  Resolution=c(rep("10 kb", 107),
-                                               rep("25 kb", 107),
-                                               rep("50 kb", 107),
-                                               rep("100 kb", 107))
+                                  Resolution=c(rep("5 kb", 78),
+                                               rep("10 kb", 78),
+                                               rep("25 kb", 78),
+                                               rep("50 kb", 78),
+                                               rep("100 kb", 78))
                                   )
 
 all_propimp_gm12878$Annotation <- ifelse(all_propimp_gm12878$Feature %in% chromstates, "CSS",
                                          ifelse(all_propimp_gm12878$Feature %in% histones, "HM", "TFBS"))
 
-all_propimp_gm12878_summ <- data.frame(Prop.VI = c(
+all_propimp_gm12878_summ <- data.frame(Prop.VI = c(#5kb
+                                                   sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="5 kb" & all_propimp_gm12878$Annotation=="CSS")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="5 kb")]),
+                                                   sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="5 kb" & all_propimp_gm12878$Annotation=="HM")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="5 kb")]),
+                                                   sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="5 kb" & all_propimp_gm12878$Annotation=="TFBS")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="5 kb")]),
+                                                   
                                                    #10kb
                                                    sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="10 kb" & all_propimp_gm12878$Annotation=="CSS")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="10 kb")]),
                                                    sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="10 kb" & all_propimp_gm12878$Annotation=="HM")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="10 kb")]),
@@ -207,13 +277,14 @@ all_propimp_gm12878_summ <- data.frame(Prop.VI = c(
                                                    sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="100 kb" & all_propimp_gm12878$Annotation=="CSS")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="100 kb")]),
                                                    sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="100 kb" & all_propimp_gm12878$Annotation=="HM")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="100 kb")]),
                                                    sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="100 kb" & all_propimp_gm12878$Annotation=="TFBS")])/sum(all_propimp_gm12878$Importance[which(all_propimp_gm12878$Resolution=="100 kb")])),
-                                       Resolution = c(rep("10 kb", 3),
+                                       Resolution = c(rep("5 kb", 3),
+                                                      rep("10 kb", 3),
                                                       rep("25 kb", 3),
                                                       rep("50 kb", 3),
                                                       rep("100 kb", 3)),
-                                       Annotation = rep(c("CSS","HM","TFBS"), 4))
+                                       Annotation = rep(c("CSS","HM","TFBS"), 5))
 
-all_propimp_gm12878_summ$Resolution <- factor(all_propimp_gm12878_summ$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_propimp_gm12878_summ$Resolution <- factor(all_propimp_gm12878_summ$Resolution, levels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))
 
 a <- ggplot(all_propimp_gm12878_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
   geom_bar( stat="identity", position="fill") +
@@ -238,7 +309,7 @@ a <- ggplot(all_propimp_gm12878_summ, aes(fill=Annotation, y=Prop.VI, x=Resoluti
 #K562
 
 ```{r}
-annots <- list.files("Z:/TAD_data_analysis/annotations/all_annotations/k562")
+annots <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/k562", pattern = "*.bed")
 annots <- gsub(paste(c("K562-",".bed", 
                              "-Haib", 
                              "-Sydh",
@@ -248,18 +319,49 @@ annots <- gsub(paste(c("K562-",".bed",
                              "-Uchicago"), collapse = "|"), "", annots)
 annots <- annots[!duplicated(annots)]
 
-chromstates <- list.files("Z:/TAD_data_analysis/annotations/BroadHMM")
+chromstates <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/k562/BroadHMM")
 chromstates <- chromstates[grep("K562", chromstates)]
 chromstates <- gsub(paste0(c("K562-", ".bed"), collapse = "|"),"",chromstates)
 
-histones <- list.files("Z:/TAD_data_analysis/annotations/HistoneModifications")
+histones <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/k562/HistoneModifications")
 histones <- histones[grep("K562", histones)]
 histones <- gsub(paste0(c("K562-", ".bed"), collapse = "|"),"",histones)
 
-tfbs <- list.files("Z:/TAD_data_analysis/annotations/tfbs/cell_type_specific/K562")
+tfbs <- list.files("Z:/TAD_data_analysis/annotations/all_common_annotations/k562/TFBS")
 tfbs <- gsub(paste0(c("K562-", ".bed", "-Haib", "-Sydh", "-Broad", "-Uw", "-Uta", "-Chicago"), collapse = "|"),"", tfbs)
 tfbs <- tfbs[!duplicated(tfbs)]
 
+```
+
+##5kb
+
+```{r}
+varimp_K562_5kb <- matrix(nrow=length(annots), ncol=21)
+rownames(varimp_K562_5kb) <- annots
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+									   chrs[i], 
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "K562-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)	
+	  varimps <- varimps[order(varimps$Feature),]
+		
+		varimp_K562_5kb[match(varimps$Feature,annots),i] <- varimps$Importance
+}
+
+varimp_K562_5kb <- data.frame(Feature = rownames(varimp_K562_5kb),
+                                  aveimp5kb = rowMeans(varimp_K562_5kb, na.rm = TRUE),
+                                  sdimp5kb = apply(varimp_K562_5kb,1, sd, na.rm = TRUE))
+rownames(varimp_K562_5kb) <- NULL
 ```
 
 ##10kb
@@ -272,8 +374,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "K562-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_10kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -295,8 +405,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "K562-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_25kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -318,8 +436,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "K562-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)	
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_50kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -341,8 +467,16 @@ chrs <- paste0("CHR", c(1:8,10:22))
 for(i in 1:length(chrs)){
 	  varimps <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
 									   chrs[i], 
-									   "/smote/distance/enet/rfimpvars.rds"))
-	  varimps$Feature <- gsub(paste0(c("`","_dist"), collapse = "|"), "", varimps$Feature)	
+									   "/smote/distance/enet/rfimpvars_noenet.rds"))
+	  varimps$Feature <- gsub(paste0(c("`",
+	                           "_dist",
+	                           "K562-",".bed", 
+                             "-Haib", 
+                             "-Sydh",
+                             "-Uta",
+                             "-Uw",
+                             "-Broad",
+                             "-Uchicago"), collapse = "|"), "", varimps$Feature)
 	  varimps <- varimps[order(varimps$Feature),]
 		
 		varimp_K562_100kb[match(varimps$Feature,annots),i] <- varimps$Importance
@@ -357,24 +491,31 @@ rownames(varimp_K562_100kb) <- NULL
 ##Plots
 
 ```{r}
-all_propimp_K562 <- data.frame(Importance=c(varimp_K562_10kb$aveimp10kb,
+all_propimp_K562 <- data.frame(Importance=c(varimp_K562_5kb$aveimp5kb,
+                                                  varimp_K562_10kb$aveimp10kb,
                                                    varimp_K562_25kb$aveimp25kb,
                                                    varimp_K562_50kb$aveimp50kb,
                                                    varimp_K562_100kb$aveimp100kb),
                                   Feature=c(as.character(varimp_K562_10kb$Feature),
                                             as.character(varimp_K562_10kb$Feature),
                                             as.character(varimp_K562_10kb$Feature),
+                                            as.character(varimp_K562_10kb$Feature),
                                             as.character(varimp_K562_10kb$Feature)),
-                                  Resolution=c(rep("10 kb", 141),
-                                               rep("25 kb", 141),
-                                               rep("50 kb", 141),
-                                               rep("100 kb", 141))
+                                  Resolution=c(rep("5 kb", 78),
+                                               rep("10 kb", 78),
+                                               rep("25 kb", 78),
+                                               rep("50 kb", 78),
+                                               rep("100 kb", 78))
                                   )
 
 all_propimp_K562$Annotation <- ifelse(all_propimp_K562$Feature %in% chromstates, "CSS",
                                          ifelse(all_propimp_K562$Feature %in% histones, "HM", "TFBS"))
 
-all_propimp_K562_summ <- data.frame(Prop.VI = c(
+all_propimp_K562_summ <- data.frame(Prop.VI = c(#5kb
+                                                   sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="5 kb" & all_propimp_K562$Annotation=="CSS")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="5 kb")]),
+                                                   sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="5 kb" & all_propimp_K562$Annotation=="HM")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="5 kb")]),
+                                                   sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="5 kb" & all_propimp_K562$Annotation=="TFBS")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="5 kb")]),
+                                                   
                                                    #10kb
                                                    sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="10 kb" & all_propimp_K562$Annotation=="CSS")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="10 kb")]),
                                                    sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="10 kb" & all_propimp_K562$Annotation=="HM")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="10 kb")]),
@@ -394,13 +535,14 @@ all_propimp_K562_summ <- data.frame(Prop.VI = c(
                                                    sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="100 kb" & all_propimp_K562$Annotation=="CSS")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="100 kb")]),
                                                    sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="100 kb" & all_propimp_K562$Annotation=="HM")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="100 kb")]),
                                                    sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="100 kb" & all_propimp_K562$Annotation=="TFBS")])/sum(all_propimp_K562$Importance[which(all_propimp_K562$Resolution=="100 kb")])),
-                                       Resolution = c(rep("10 kb", 3),
+                                       Resolution = c(rep("5 kb", 3),
+                                                      rep("10 kb", 3),
                                                       rep("25 kb", 3),
                                                       rep("50 kb", 3),
                                                       rep("100 kb", 3)),
-                                       Annotation = rep(c("CSS","HM","TFBS"), 4))
+                                       Annotation = rep(c("CSS","HM","TFBS"), 5))
 
-all_propimp_K562_summ$Resolution <- factor(all_propimp_K562_summ$Resolution, levels=c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_propimp_K562_summ$Resolution <- factor(all_propimp_K562_summ$Resolution, levels=c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))
 
 b <- ggplot(all_propimp_K562_summ, aes(fill=Annotation, y=Prop.VI, x=Resolution)) + 
   geom_bar( stat="identity", position="fill") +

@@ -51,6 +51,34 @@ library(RColorBrewer)
 
 # GM12878; smote; distance types
 
+## 5kb
+
+```{r}
+mccdata_gm12878_5kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_noenet.rds"))
+	  }
+									   
+			mccdata_gm12878_5kb <- rbind(mccdata_gm12878_5kb,
+										  perfdata[15,2])
+		
+	}
+}
+
+
+```
+
 ## 10kb
 
 ```{r}
@@ -67,7 +95,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_gm12878_10kb <- rbind(mccdata_gm12878_10kb,
@@ -95,7 +123,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_gm12878_25kb <- rbind(mccdata_gm12878_25kb,
@@ -123,7 +151,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_gm12878_50kb <- rbind(mccdata_gm12878_50kb,
@@ -150,7 +178,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_gm12878_100kb <- rbind(mccdata_gm12878_100kb,
@@ -162,6 +190,34 @@ for(i in paste0("CHR", c(1:8,10:22))){
 ```
 
 # K562; smote; distance types
+
+## 5kb
+
+```{r}
+mccdata_K562_5kb <- numeric()
+
+for(i in paste0("CHR", c(1:8,10:22))){
+	for(j in c("chromstates", "histones", "tfbs", "all")){
+	  if(j %in% c("chromstates", "histones", "tfbs")){
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_",
+									   j, 
+									   ".rds"))
+	  }else{
+	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+									   i, 
+									   "/smote/distance/enet/rfperf_noenet.rds"))
+	  }
+									   
+			mccdata_K562_5kb <- rbind(mccdata_K562_5kb,
+										  perfdata[15,2])
+		
+	}
+}
+
+
+```
 
 ## 10kb
 
@@ -179,7 +235,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_K562_10kb <- rbind(mccdata_K562_10kb,
@@ -207,7 +263,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_K562_25kb <- rbind(mccdata_K562_25kb,
@@ -235,7 +291,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_K562_50kb <- rbind(mccdata_K562_50kb,
@@ -262,7 +318,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 	  }else{
 	    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
 									   i, 
-									   "/smote/distance/enet/rfperf.rds"))
+									   "/smote/distance/enet/rfperf_noenet.rds"))
 	  }
 									   
 			mccdata_K562_100kb <- rbind(mccdata_K562_100kb,
@@ -277,20 +333,23 @@ for(i in paste0("CHR", c(1:8,10:22))){
 # Plots
 
 ```{r}
-all_rfperfs <- rbind.data.frame(mccdata_gm12878_10kb,
+all_rfperfs <- rbind.data.frame(mccdata_gm12878_5kb,
+                                mccdata_gm12878_10kb,
                                 mccdata_gm12878_25kb,
                                 mccdata_gm12878_50kb,
                                 mccdata_gm12878_100kb,
+                                mccdata_K562_5kb,
                                 mccdata_K562_10kb,
                                 mccdata_K562_25kb,
                                 mccdata_K562_50kb,
                                 mccdata_K562_100kb)
-all_rfperfs$CL <- c(rep("GM12878", length(mccdata_gm12878_10kb)*4), rep("K562", length(mccdata_K562_10kb)*4))
-all_rfperfs$Resolution <- rep(c(rep("10 kb", 84),
-                            rep("25 kb", 84),
-                            rep("50 kb", 84),
-                            rep("100 kb", 84)))
-all_rfperfs$Annotation <- rep(c("CSS","HM","TFBS","Combined"),168)
+all_rfperfs$CL <- c(rep("GM12878", length(mccdata_gm12878_5kb)*5), rep("K562", length(mccdata_K562_5kb)*5))
+all_rfperfs$Resolution <- c(rep("5 kb", length(mccdata_gm12878_5kb)),
+                            rep("10 kb", length(mccdata_gm12878_10kb)),
+                            rep("25 kb", length(mccdata_gm12878_25kb)),
+                            rep("50 kb", length(mccdata_gm12878_50kb)),
+                            rep("100 kb", length(mccdata_gm12878_100kb)))
+all_rfperfs$Annotation <- rep(c("CSS","HM","TFBS","Combined"),210)
 all_rfperfs$Chromosome <- rep(c(rep("CHR1", 4),
                             rep("CHR2", 4),
                             rep("CHR3", 4),
@@ -311,10 +370,10 @@ all_rfperfs$Chromosome <- rep(c(rep("CHR1", 4),
                             rep("CHR19", 4),
                             rep("CHR20", 4),
                             rep("CHR21", 4),
-                            rep("CHR22", 4)),8)
+                            rep("CHR22", 4)),10)
 
 all_rfperfs$CL <- factor(all_rfperfs$CL, levels = c("GM12878", "K562"))
-all_rfperfs$Resolution <- factor(all_rfperfs$Resolution, levels = c("10 kb", "25 kb", "50 kb", "100 kb"))
+all_rfperfs$Resolution <- factor(all_rfperfs$Resolution, levels = c("5 kb", "10 kb", "25 kb", "50 kb", "100 kb"))
 all_rfperfs$Annotation <- factor(all_rfperfs$Annotation, levels = c("HM", "CSS", "TFBS", "Combined"))
 all_rfperfs$Chromosome <- factor(all_rfperfs$Chromosome, levels = paste0("CHR", c(1:8,10:22)))
 
