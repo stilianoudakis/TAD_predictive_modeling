@@ -97,11 +97,13 @@ The data set used for modeling was composed of the response vector **Y**, and th
 
 ### DATA RE-SAMPLING
 
-Class imbalance was characterized by each dataset's *proportion of imbalance* (PI), [??? Why? It is bounded [0, 0.5], never seen it is used.] defined as the ratio of minority class observations to the sum of minority and majority class observations:
+Class imbalance was characterized by each dataset's *proportion of imbalance* (PI) defined as the ratio of minority class observations to the sum of minority and majority class observations:
 
-$$PI = \dfrac{C_{min}}{C_{min} + C_{maj}}$$
+$$PI = 2\dfrac{C_{min}}{C_{min} + C_{maj}}$$
 
-where $C_{min}$ denotes the complementary set of genomic bins that did overlap with a flanked TAD boundary and $C_{maj}$ denotes the set of genomic bins that did not overlap with a flanked TAD boundary. In order to assess the influence of imbalanced classes, we then evaluated four re-sampling techniques (in addition to no re-sampling). They are described in detail below.
+where $C_{min}$ denotes the set of genomic bins that overlap with a flanked TAD boundary and $C_{maj}$ denotes the complementary set of genomic bins that did not overlap with a flanked TAD boundary. Here, PI is bounded by 0 and 1, with heavily imbalanced classes approaching 0.
+
+In order to assess the influence of imbalanced classes, we then evaluated four re-sampling techniques (in addition to no re-sampling). They are described in detail below.
 
 1. **No Sampling**: All of the data points from the majority and minority classes of the training set were used.
 
