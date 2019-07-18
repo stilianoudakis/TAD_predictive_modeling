@@ -17,14 +17,17 @@
 
 ## ToDo
 
+_ provide summaries of predicted tad regions
+
++ Consider filtering out TAD boundaries that form TADs greater than 2mb bp in length prior to modelling and compare
+   -quantify
+
 - write paragraphs of all previous methods; refer them to supplementary
+   - Comparison with Mourad? Hong?
 
 - As you observe performance improves with the increasing resolution of the data, you need results at higher resolution, 5kb, 1kb, the latest was 750kb
-    - There are tools to improve resolution, https://github.com/mdozmorov/HiC_tools#resolution-improvement
 
 - Relevant supplementary figures should be referred consequentially.
-
-- Comparison with Mourad? Hong?
 
 +5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
     + Use one chromosome
@@ -43,26 +46,13 @@
     - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
     - For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
 
-- Directionality of CTCF
-
 
 ### For later
-
-9. Combine TAD boundaries from all cell lines (Intersection, or union) and predict them using features common to all cell lines to estimate performance and identify universal set of features
-    - Use cluster specific TFBS
-    - wait with chromstates and histone modifications
-    - use common flanked TADs between two cell lines; how many are common?
-    * Question: how to handle non uniform overlaps? what size bins to use for non TADs?
 
 10. Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
     - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
     - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
     - Call TADs in individual replicates.
-
-11. Train the best model in one cell type, apply to other cell types
-    + rerun models on clustered TFBS
-    + compare performance
-    - results not included in the manuscript yet
 
 ### Main Ideas
 
@@ -81,16 +71,7 @@
 
 - Prediction using signal, like gene expression/methylation level. Wang,Y. et al. (2016) Predicting DNA methylation state of CpG dinucleo- tide using genome topological features and deep networks.
 
-- Look into using grouped lasso to see if a particular group of annotations get regularized 
-
-- Consider filtering out TAD boundaries that form TADs greater than 2mb bp in length prior to modelling and compare
-
-- Use stacking/ensemble model building techniques and compare performances with RF, GBM, etc
-    - "Comparison of Bagging, Boosting and Stacking Ensembles Applied to Real Estate Appraisal" shows that stacking outperforms other aggregation techniques like additive regression and bagging
-
 - Prediction of differential TADs. Idea from Crow, Megan, Nathaniel Lim, Sara Ballouz, Paul Pavlidis, and Jesse Gillis. “Predictability of Human Differential Gene Expression.” Proceedings of the National Academy of Sciences 116, no. 13 (March 26, 2019): 6491–6500. https://doi.org/10.1073/pnas.1802973116.
-
-- Check if we can adapt F-racing strategy: Dal Pozzolo, Andrea, Olivier Caelen, Serge Waterschoot, and Gianluca Bontempi. “Racing for Unbalanced Methods Selection.” In International Conference on Intelligent Data Engineering and Automated Learning, 24–31. Springer, 2013. - F-racing strategy to select best performing method to deal with class imbalance. Overview of class imbalance techniques, including SMOTE, Ensemble methods. The F-Racing approach tests in parallel a set of alternatives and uses Friedman test to determine if an alternative is significantly worse than others.Random Forest and SMOTEnsemble generally perform best. race R package to perform F-racing algorithm https://cran.r-project.org/web/packages/race/index.html
 
 - Add more classifiers: GBM, SVM, Naive Bayes, neural network, MLR, Elastic-Net 
 
