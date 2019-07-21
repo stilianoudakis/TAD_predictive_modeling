@@ -1,11 +1,15 @@
-extract_boundaries_func <- function(domains.mat, preprocess, chromosome){
+#function to extract unique chromosome specific TAD boundaries
+extract_boundaries_func <- function(domains.mat, preprocess, chromosome, resolution){
+  domains.mat <- domains.mat[,1:3]
+  domains.mat[,1] <- paste0("chr",domains.mat[,1])
+  colnames(domains.mat) <- c("Chromosome", "Start", "End")
   if(preprocess==TRUE){
     ##restricting domain data to TADs > 2*resolution and < 2,000,000
-    domains <- domains[which((domains$End - domains$Start)>(2*resolution) & (domains$End - domains$Start)<2000000),]
+    domains.mat <- domains.mat[which((domains.mat$End - domains.mat$Start)>(2*resolution) & (domains.mat$End - domains.mat$Start)<2000000),]
     }
   
   ##concatenating boundary coordinates into one long vector
-  coords <- domains
+  coords <- domains.mat
   colnames(coords)[2:3] <- c("coordinate", "coordinate")
   coords <- rbind.data.frame(coords[,c(1,2)],coords[,c(1,3)])
   coords$Chromosome <- as.character(coords$Chromosome)

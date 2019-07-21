@@ -1,5 +1,5 @@
 #function to predict cl, resolution, and chromosome specific tad boundaries using optimal parameters
-predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sampling, metric, seed, crossvalidation, number){
+predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10){
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
@@ -17,12 +17,6 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sa
   train <- full_data[inTrainingSet,]
   test <- full_data[-inTrainingSet,]
   
-  #reduce predictor space
-  if(predictor=="distance"){reduce_predictor = "_dist"}else if(predictor=="oc"){reduce_predictor = "_count"}else{reduce_predictor = "_perc"}
-  
-  train <- train[,c(1,grep(reduce_predictor, names(train)))]
-  test <- test[,c(1,grep(reduce_predictor, names(test)))]
-  
   # set number of iterations
   samps = 50
   
@@ -32,7 +26,7 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sa
                       nrow=length(train$y[which(train$y=="No")]))
     
     #filling in the sample ids matrix
-    set.seed(123)
+    set.seed(seed)
     for(j in 1:samps){
       sampids[,j] <- sample(x = which(train$y=="Yes"),
                             size = length(which(train$y=="No")),
@@ -41,7 +35,7 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sa
     train <- rbind.data.frame(train[which(train$y=="No"),],
                               train[sampids[,1],])
     #Randomly shuffle the data
-    set.seed(321)
+    set.seed(seed)
     train <- train[sample(nrow(train)),]
   }else if(sampling=="rus"){
     #assign sample indeces
@@ -49,7 +43,7 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sa
                       nrow=length(train$y[which(train$y=="Yes")]))
     
     #filling in the sample ids matrix
-    set.seed(123)
+    set.seed(seed)
     for(j in 1:samps){
       sampids[,j] <- sample(x = which(train$y=="No"),
                             size = length(which(train$y=="Yes")),
@@ -59,17 +53,17 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sa
                               train[sampids[,1],])
     
     #Randomly shuffle the data
-    set.seed(321)
+    set.seed(seed)
     train <- train[sample(nrow(train)),]
   }else if(sampling=="smote"){
-    set.seed(123)
+    set.seed(seed)
     train <- SMOTE(y ~ ., 
                    data=train, 
                    perc.over = 100, 
                    perc.under = 200)
     
     #Randomly shuffle the data
-    set.seed(123)
+    set.seed(seed)
     train <- train[sample(nrow(train)),]
   }else{train=train}
   
@@ -91,10 +85,10 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sa
     out
   }
   
-  ##setting contols for elastic net
+  ##setting contols for model
   fitControl <- trainControl(#seeds = seeds,
-    method = crossvalidation,
-    number = number,
+    method = if(crossvalidation==TRUE){print("cv")}else{print("none")},
+    number = if(crossvalidation==TRUE){number}else{print(NULL)},
     ## Estimate class probabilities
     classProbs = TRUE,
     ## Evaluate performance using 
@@ -103,7 +97,7 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, model, sa
   
   #performing model
   tadModel <- train(y~., data=train, 
-                   method=model, 
+                   method="rf", 
                    metric=metric, 
                    tuneLength=10,
                    trControl=fitControl)

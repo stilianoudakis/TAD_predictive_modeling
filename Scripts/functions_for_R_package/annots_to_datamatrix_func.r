@@ -1,11 +1,12 @@
 #function to create data matrix for training predictive model
 annots_to_datamatrix_func <- function(resolution, predictortype="distance", annotationListGR, chromosome){
   #determining dimensions of chromosome specific data matrix
-  hg19_chrominfo <- fetchExtendedChromInfoFromUCSC("hg19")
-  hg19_chrominfo_specific <- hg19_chrominfo$UCSC_seqlength[which(hg19_chrominfo$UCSC_seqlevel==tolower(chromosome))]
-  
-  start=0
-  end = hg19_chrominfo_specific - (hg19_chrominfo_specific %% resolution)
+  genome <- getBSgenome("hg19")
+  seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
+  ##start = first chromosome specific coordinate
+  ##end = last chromosome specific coordinate that is a factor of resolution
+  start = 0
+  end = seqlength - (seqlength %% resolution)
   data_mat <- matrix(nrow=length(seq.int(start, 
                                   end,
                                   by=resolution)), 
