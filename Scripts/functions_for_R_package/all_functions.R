@@ -263,8 +263,14 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
     out
   }
   
+  set.seed(seed)
+  seeds <- vector(mode = "list", length = (number+1))
+  for(i in 1:number) seeds[[i]]<- sample.int(n=1000, 10)
+  #for the last model
+  seeds[[11]]<-sample.int(1000, 1)
+  
   ##setting contols for model
-  fitControl <- trainControl(#seeds = seeds,
+  fitControl <- trainControl(seeds = seeds,
     method = if(crossvalidation==TRUE){print("cv")}else{print("none")},
     number = if(crossvalidation==TRUE){number}else{print(NULL)},
     ## Estimate class probabilities
