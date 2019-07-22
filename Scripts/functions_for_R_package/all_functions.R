@@ -1,8 +1,15 @@
+#Functions for R package
+
+#libraries
 library(GenomicRanges)
 library(ggplot2)
 library(caret)
 library(GenomeInfoDbData)
 library(GenomeInfoDb)
+library(GenometriCorr)
+library(BSgenome)
+
+###################################################################################
 
 #function to create grangeslist object from functional genomic annotation .bed files
 annots_to_granges_func <- function(filepath){
@@ -21,7 +28,7 @@ annots_to_granges_func <- function(filepath){
   return(annots_gr_list)
 }
 
-###############################################################################3333
+##################################################################################
 
 #Functions for calculating different types of predictors/overlaps
 ####calculating binary overlaps
@@ -399,8 +406,13 @@ predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, ann
   if(region==TRUE){
     finer_res_list <- list(trueBound_gr_region,predBound_gr_region)
   }else{finer_res_list <- list(trueBound_gr,predBound_gr)}
+  names(finer_res_list) <- c("Called", "Predicted")
   
   return(finer_res_list)
   
 }
+
+###################################################################################################
+
+#function to perform correlation tests
 

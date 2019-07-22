@@ -107,6 +107,7 @@ predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, ann
   if(region==TRUE){
     finer_res_list <- list(trueBound_gr_region,predBound_gr_region)
   }else{finer_res_list <- list(trueBound_gr,predBound_gr)}
+  names(finer_res_list) <- c("Called", "Predicted")
   
   return(finer_res_list)
   
