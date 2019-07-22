@@ -61,4 +61,21 @@ In contrast, 1D genome annotation tracks assembled by the ENCODE and Roadmap con
 ## Our work on solving problems
 
 ### Consider distance
+
+## Predicting at bp resolution
+
+### Empirical way to determine boundary regions
+
+### Predicted TAD boundary regions vs Called TAD boundary regions
+
+#### Number of predicted regions compared to called regions
+#### Overlap between the two
+#### Summary statistics
+##### Distribution of distances 
+###### densities
+###### ECDF
+##### Jaccard indeces
+##### Enrichment
+
+
 -->
