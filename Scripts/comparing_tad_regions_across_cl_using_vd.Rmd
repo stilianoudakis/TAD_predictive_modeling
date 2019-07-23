@@ -76,17 +76,20 @@ venn_cnt2venn <- function(venn_cnt){
 #venn_5kb <- venn_cnt2venn(res$vennCounts)
 #plot(venn_5kb)
 
-binslist_gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/binslist5.rds")
-binslist_gm12878_5kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/binslist5_center.rds")
-mcols(binslist_gm12878_5kb)$y <- mcols(binslist_gm12878_5kb_center)$y
-binslist_gm12878_5kb <- binslist_gm12878_5kb[mcols(binslist_gm12878_5kb)$y==1]
+#binslist_gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/binslist5.rds")
+#binslist_gm12878_5kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/binslist5_center.rds")
+#mcols(binslist_gm12878_5kb)$y <- mcols(binslist_gm12878_5kb_center)$y
+#binslist_gm12878_5kb <- binslist_gm12878_5kb[mcols(binslist_gm12878_5kb)$y==1]
 
-binslist_K562_5kb <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/binslist5.rds")
-binslist_K562_5kb_center <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/binslist5_center.rds")
-mcols(binslist_K562_5kb)$y <- mcols(binslist_K562_5kb_center)$y
-binslist_K562_5kb <- binslist_K562_5kb[mcols(binslist_K562_5kb)$y==1]
+#binslist_K562_5kb <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/binslist5.rds")
+#binslist_K562_5kb_center <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/binslist5_center.rds")
+#mcols(binslist_K562_5kb)$y <- mcols(binslist_K562_5kb_center)$y
+#binslist_K562_5kb <- binslist_K562_5kb[mcols(binslist_K562_5kb)$y==1]
 
-res <- makeVennDiagram(Peaks=list(binslist_gm12878_5kb, binslist_K562_5kb),
+bounds_gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/bounds_f.rds")
+bounds_k562_5kb <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/bounds_f.rds")
+
+res <- makeVennDiagram(Peaks=list(bounds_gm12878_5kb, bounds_k562_5kb),
                        NameOfPeaks=c("GM12878", "K562"))
 
 venn_5kb <- venn_cnt2venn(res$vennCounts)
@@ -95,6 +98,12 @@ gp <- VennThemes(venn_5kb)
 gp[["Face"]][["11"]]$fill <-  "purple"
 gp[["Face"]][["01"]]$fill <-  "lightblue"
 gp[["Face"]][["10"]]$fill <-  "red"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- 2
+gp[["SetText"]][["Set2"]]$cex <- 2
+
 #plot(venn_5kb)
 
 ```
@@ -111,18 +120,22 @@ gp[["Face"]][["10"]]$fill <-  "red"
 #venn_10kb <- venn_cnt2venn(res$vennCounts)
 #plot(venn_10kb)
 
-binslist_gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/binslist10.rds")
-binslist_gm12878_10kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/binslist10_center.rds")
-mcols(binslist_gm12878_10kb)$y <- mcols(binslist_gm12878_10kb_center)$y
-binslist_gm12878_10kb <- binslist_gm12878_10kb[mcols(binslist_gm12878_10kb)$y==1]
+#binslist_gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/binslist10.rds")
+#binslist_gm12878_10kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/binslist10_center.rds")
+#mcols(binslist_gm12878_10kb)$y <- mcols(binslist_gm12878_10kb_center)$y
+#binslist_gm12878_10kb <- binslist_gm12878_10kb[mcols(binslist_gm12878_10kb)$y==1]
 
-binslist_K562_10kb <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/binslist10.rds")
-binslist_K562_10kb_center <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/binslist10_center.rds")
-mcols(binslist_K562_10kb)$y <- mcols(binslist_K562_10kb_center)$y
-binslist_K562_10kb <- binslist_K562_10kb[mcols(binslist_K562_10kb)$y==1]
+#binslist_K562_10kb <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/binslist10.rds")
+#binslist_K562_10kb_center <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/binslist10_center.rds")
+#mcols(binslist_K562_10kb)$y <- mcols(binslist_K562_10kb_center)$y
+#binslist_K562_10kb <- binslist_K562_10kb[mcols(binslist_K562_10kb)$y==1]
 
-res <- makeVennDiagram(Peaks=list(binslist_gm12878_10kb, binslist_K562_10kb),
+bounds_gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/bounds_f.rds")
+bounds_k562_10kb <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/bounds_f.rds")
+
+res <- makeVennDiagram(Peaks=list(bounds_gm12878_10kb, bounds_k562_10kb),
                        NameOfPeaks=c("GM12878", "K562"))
+
 
 venn_10kb <- venn_cnt2venn(res$vennCounts)
 venn_10kb <- compute.Venn(venn_10kb)
@@ -130,6 +143,11 @@ gp <- VennThemes(venn_10kb)
 gp[["Face"]][["11"]]$fill <-  "purple"
 gp[["Face"]][["01"]]$fill <-  "lightblue"
 gp[["Face"]][["10"]]$fill <-  "red"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- 2
+gp[["SetText"]][["Set2"]]$cex <- 2
 #plot(venn_10kb)
 
 ```
@@ -146,18 +164,22 @@ gp[["Face"]][["10"]]$fill <-  "red"
 #venn_25kb <- venn_cnt2venn(res$vennCounts)
 #plot(venn_25kb)
 
-binslist_gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/binslist25.rds")
-binslist_gm12878_25kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/binslist25_center.rds")
-mcols(binslist_gm12878_25kb)$y <- mcols(binslist_gm12878_25kb_center)$y
-binslist_gm12878_25kb <- binslist_gm12878_25kb[mcols(binslist_gm12878_25kb)$y==1]
+#binslist_gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/binslist25.rds")
+#binslist_gm12878_25kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/binslist25_center.rds")
+#mcols(binslist_gm12878_25kb)$y <- mcols(binslist_gm12878_25kb_center)$y
+#binslist_gm12878_25kb <- binslist_gm12878_25kb[mcols(binslist_gm12878_25kb)$y==1]
 
-binslist_K562_25kb <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/binslist25.rds")
-binslist_K562_25kb_center <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/binslist25_center.rds")
-mcols(binslist_K562_25kb)$y <- mcols(binslist_K562_25kb_center)$y
-binslist_K562_25kb <- binslist_K562_25kb[mcols(binslist_K562_25kb)$y==1]
+#binslist_K562_25kb <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/binslist25.rds")
+#binslist_K562_25kb_center <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/binslist25_center.rds")
+#mcols(binslist_K562_25kb)$y <- mcols(binslist_K562_25kb_center)$y
+#binslist_K562_25kb <- binslist_K562_25kb[mcols(binslist_K562_25kb)$y==1]
 
-res <- makeVennDiagram(Peaks=list(binslist_gm12878_25kb, binslist_K562_25kb),
+bounds_gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/bounds_f.rds")
+bounds_k562_25kb <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/bounds_f.rds")
+
+res <- makeVennDiagram(Peaks=list(bounds_gm12878_25kb, bounds_k562_25kb),
                        NameOfPeaks=c("GM12878", "K562"))
+
 
 venn_25kb <- venn_cnt2venn(res$vennCounts)
 venn_25kb <- compute.Venn(venn_25kb)
@@ -165,6 +187,11 @@ gp <- VennThemes(venn_25kb)
 gp[["Face"]][["11"]]$fill <-  "purple"
 gp[["Face"]][["01"]]$fill <-  "lightblue"
 gp[["Face"]][["10"]]$fill <-  "red"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- 2
+gp[["SetText"]][["Set2"]]$cex <- 2
 #plot(venn_25kb)
 
 ```
@@ -181,18 +208,22 @@ gp[["Face"]][["10"]]$fill <-  "red"
 #venn_50kb <- venn_cnt2venn(res$vennCounts)
 #plot(venn_50kb)
 
-binslist_gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/binslist50.rds")
-binslist_gm12878_50kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/binslist50_center.rds")
-mcols(binslist_gm12878_50kb)$y <- mcols(binslist_gm12878_50kb_center)$y
-binslist_gm12878_50kb <- binslist_gm12878_50kb[mcols(binslist_gm12878_50kb)$y==1]
+#binslist_gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/binslist50.rds")
+#binslist_gm12878_50kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/binslist50_center.rds")
+#mcols(binslist_gm12878_50kb)$y <- mcols(binslist_gm12878_50kb_center)$y
+#binslist_gm12878_50kb <- binslist_gm12878_50kb[mcols(binslist_gm12878_50kb)$y==1]
 
-binslist_K562_50kb <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/binslist50.rds")
-binslist_K562_50kb_center <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/binslist50_center.rds")
-mcols(binslist_K562_50kb)$y <- mcols(binslist_K562_50kb_center)$y
-binslist_K562_50kb <- binslist_K562_50kb[mcols(binslist_K562_50kb)$y==1]
+#binslist_K562_50kb <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/binslist50.rds")
+#binslist_K562_50kb_center <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/binslist50_center.rds")
+#mcols(binslist_K562_50kb)$y <- mcols(binslist_K562_50kb_center)$y
+#binslist_K562_50kb <- binslist_K562_50kb[mcols(binslist_K562_50kb)$y==1]
 
-res <- makeVennDiagram(Peaks=list(binslist_gm12878_50kb, binslist_K562_50kb),
+bounds_gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/bounds_f.rds")
+bounds_k562_50kb <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/bounds_f.rds")
+
+res <- makeVennDiagram(Peaks=list(bounds_gm12878_50kb, bounds_k562_50kb),
                        NameOfPeaks=c("GM12878", "K562"))
+
 
 venn_50kb <- venn_cnt2venn(res$vennCounts)
 venn_50kb <- compute.Venn(venn_50kb)
@@ -200,6 +231,11 @@ gp <- VennThemes(venn_50kb)
 gp[["Face"]][["11"]]$fill <-  "purple"
 gp[["Face"]][["01"]]$fill <-  "lightblue"
 gp[["Face"]][["10"]]$fill <-  "red"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- 2
+gp[["SetText"]][["Set2"]]$cex <- 2
 #plot(venn_50kb)
 
 ```
@@ -216,18 +252,22 @@ gp[["Face"]][["10"]]$fill <-  "red"
 #venn_100kb <- venn_cnt2venn(res$vennCounts)
 #plot(venn_100kb)
 
-binslist_gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/binslist100.rds")
-binslist_gm12878_100kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/binslist100_center.rds")
-mcols(binslist_gm12878_100kb)$y <- mcols(binslist_gm12878_100kb_center)$y
-binslist_gm12878_100kb <- binslist_gm12878_100kb[mcols(binslist_gm12878_100kb)$y==1]
+#binslist_gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/binslist100.rds")
+#binslist_gm12878_100kb_center <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/binslist100_center.rds")
+#mcols(binslist_gm12878_100kb)$y <- mcols(binslist_gm12878_100kb_center)$y
+#binslist_gm12878_100kb <- binslist_gm12878_100kb[mcols(binslist_gm12878_100kb)$y==1]
 
-binslist_K562_100kb <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/binslist100.rds")
-binslist_K562_100kb_center <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/binslist100_center.rds")
-mcols(binslist_K562_100kb)$y <- mcols(binslist_K562_100kb_center)$y
-binslist_K562_100kb <- binslist_K562_100kb[mcols(binslist_K562_100kb)$y==1]
+#binslist_K562_100kb <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/binslist100.rds")
+#binslist_K562_100kb_center <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/binslist100_center.rds")
+#mcols(binslist_K562_100kb)$y <- mcols(binslist_K562_100kb_center)$y
+#binslist_K562_100kb <- binslist_K562_100kb[mcols(binslist_K562_100kb)$y==1]
 
-res <- makeVennDiagram(Peaks=list(binslist_gm12878_100kb, binslist_K562_100kb),
+bounds_gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/bounds_f.rds")
+bounds_k562_100kb <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/bounds_f.rds")
+
+res <- makeVennDiagram(Peaks=list(bounds_gm12878_100kb, bounds_k562_100kb),
                        NameOfPeaks=c("GM12878", "K562"))
+
 
 venn_100kb <- venn_cnt2venn(res$vennCounts)
 venn_100kb <- compute.Venn(venn_100kb)
@@ -235,6 +275,11 @@ gp <- VennThemes(venn_100kb)
 gp[["Face"]][["11"]]$fill <-  "purple"
 gp[["Face"]][["01"]]$fill <-  "lightblue"
 gp[["Face"]][["10"]]$fill <-  "red"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- 2
+gp[["SetText"]][["Set2"]]$cex <- 2
 #plot(venn_100kb)
 
 ```
@@ -244,15 +289,15 @@ gp[["Face"]][["10"]]$fill <-  "red"
 ```{r}
 #par(mfrow=c(1,4))
 
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_5kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("5 kb", gp=gpar(fontsize=20)))
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_5kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("5 kb", gp=gpar(fontsize=50)))
 grid.newpage()
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_10kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("10 kb", gp=gpar(fontsize=20)))
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_10kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("10 kb", gp=gpar(fontsize=50)))
 grid.newpage()
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_25kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("25 kb", gp=gpar(fontsize=20)))
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_25kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("25 kb", gp=gpar(fontsize=50)))
 grid.newpage()
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_50kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("50 kb", gp=gpar(fontsize=20)))
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_50kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("50 kb", gp=gpar(fontsize=50)))
 grid.newpage()
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_100kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("100 kb", gp=gpar(fontsize=20)))
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_100kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("100 kb", gp=gpar(fontsize=50)))
 grid.newpage()
 
 #par(mfrow=c(1,1))

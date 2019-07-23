@@ -40,6 +40,7 @@ library(tidyverse)
 library(reshape)
 library(ROSE)
 library(lattice)
+library(irr)
 
 ```
 
@@ -427,130 +428,140 @@ imbratio <- reshape(irtab[which(irtab$cl=="K562"),c(2,3,7)], idvar = "chr", time
 icc(imbratio[,-1], model="twoway")
 ```
 
-##Bounds Plots
+##Boundary regions Plots
 
 ```{r}
-a <- ggplot(bounds_df[which(bounds_df$res=="5kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+a <- ggplot(irtab_summ[which(irtab_summ$res=="5kb"),], aes(x=cl, y=AveBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
+  geom_errorbar(aes(ymin=AveBounds-AveBoundsSD, ymax=AveBounds+AveBoundsSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,30000) +
+  xlab("") + ylab("") + ylim(0,2100) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,30000),
-                     breaks=c(0,10000,20000,30000),
-                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
+  scale_y_continuous(limits = c(0,2100),
+                     breaks=c(0,500,1000,1500,2000),
+                     labels=c("0"="0", "500"="5", "1000"="10", "1500"="15", "2000"="20")) +
   ggtitle("5 kb") +
   guides(fill=FALSE) +
   theme(axis.text.x = element_text(size=15,
-                                      angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      hjust = 1),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
 
-b <- ggplot(bounds_df[which(bounds_df$res=="10kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+b <- ggplot(irtab_summ[which(irtab_summ$res=="10kb"),], aes(x=cl, y=AveBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
+  geom_errorbar(aes(ymin=AveBounds-AveBoundsSD, ymax=AveBounds+AveBoundsSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,30000) +
+  xlab("") + ylab("") + ylim(0,2100) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,30000),
-                     breaks=c(0,10000,20000,30000),
-                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
+  scale_y_continuous(limits = c(0,2100),
+                     breaks=c(0,500,1000,1500,2000),
+                     labels=c("0"="0", "500"="5", "1000"="10", "1500"="15", "2000"="20")) +
   ggtitle("10 kb") +
   guides(fill=FALSE) +
   theme(axis.text.x = element_text(size=15,
-                                      angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      hjust = 1),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
 
 
-c <- ggplot(bounds_df[which(bounds_df$res=="25kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+c <- ggplot(irtab_summ[which(irtab_summ$res=="25kb"),], aes(x=cl, y=AveBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
+  geom_errorbar(aes(ymin=AveBounds-AveBoundsSD, ymax=AveBounds+AveBoundsSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,30000) +
+  xlab("") + ylab("") + ylim(0,2100) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,30000),
-                     breaks=c(0,10000,20000,30000),
-                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
+  scale_y_continuous(limits = c(0,2100),
+                     breaks=c(0,500,1000,1500,2000),
+                     labels=c("0"="0", "500"="5", "1000"="10", "1500"="15", "2000"="20")) +
   ggtitle("25 kb") +
   guides(fill=FALSE) +
   theme(axis.text.x = element_text(size=15,
-                                      angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      hjust = 1),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
 
 
-d <- ggplot(bounds_df[which(bounds_df$res=="50kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+d <- ggplot(irtab_summ[which(irtab_summ$res=="50kb"),], aes(x=cl, y=AveBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
+  geom_errorbar(aes(ymin=AveBounds-AveBoundsSD, ymax=AveBounds+AveBoundsSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,30000) +
+  xlab("") + ylab("") + ylim(0,2100) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,30000),
-                     breaks=c(0,10000,20000,30000),
-                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
+  scale_y_continuous(limits = c(0,2100),
+                     breaks=c(0,500,1000,1500,2000),
+                     labels=c("0"="0", "500"="5", "1000"="10", "1500"="15", "2000"="20")) +
   ggtitle("50 kb") +
   guides(fill=FALSE) +
   theme(axis.text.x = element_text(size=15,
-                                      angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      hjust = 1),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
 
 
-e <- ggplot(bounds_df[which(bounds_df$res=="100kb"),], aes(x=cl, y=TotBounds, fill=cl))+
+e <- ggplot(irtab_summ[which(irtab_summ$res=="100kb"),], aes(x=cl, y=AveBounds, fill=cl))+
   geom_bar(stat="identity", position="dodge")+
+  geom_errorbar(aes(ymin=AveBounds-AveBoundsSD, ymax=AveBounds+AveBoundsSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
   theme_minimal() +
   theme_bw()+
-  xlab("") + ylab("") + ylim(0,30000) +
+  xlab("") + ylab("") + ylim(0,2100) +
   scale_fill_discrete(name="Cell Line") +
-  scale_y_continuous(limits = c(0,30000),
-                     breaks=c(0,10000,20000,30000),
-                     labels=c("0"="0", "10000"="10", "20000"="20", "30000"="30")) +
+  scale_y_continuous(limits = c(0,2100),
+                     breaks=c(0,500,1000,1500,2000),
+                     labels=c("0"="0", "500"="5", "1000"="10", "1500"="15", "2000"="20")) +
   ggtitle("100 kb") +
   guides(fill=FALSE) +
   theme(axis.text.x = element_text(size=15,
-                                      angle = 45, 
-                                      #margin = ggplot2::margin(t = 35),
-                                      hjust = 1),
-     axis.text.y = element_text(size = 15),
-     axis.title.x = element_text(size = 20),
-     axis.title.y = element_text(size = 20),
-     legend.text=element_text(size=15),
-     legend.title=element_text(size=20),
-     plot.title = element_text(size=20))
-  
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
+
 
 figure <- ggarrange(a,b,c,d,e,
                     ncol=5,
                     nrow=1)
 figure
 annotate_figure(figure,
-    #bottom = text_grob("Cell Line", color = "black", size = 20),
-    left = text_grob("Number of TAD Boundary\nRegions (thousands)", color = "black", rot = 90, size=20)
+                #bottom = text_grob("Cell Line", color = "black", size = 20),
+                left = text_grob("Average number of TBR across chromosomes\n(thousands)", color = "black", rot = 90, size=20)
 )
 
 ```
