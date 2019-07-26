@@ -1,5 +1,5 @@
 #function to predict TAD boundaries at bp resolution
-predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, annotationListGR, tadModel, predwindow=10, region=TRUE){
+predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, annotationListGR, tadModel, predwindow, region=TRUE){
   #creating chromosome specific test data at bp resolution
   
   #chromosome-specific test data is at basepair resolution
@@ -51,7 +51,7 @@ predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, ann
   #indentifying where the model gives 100% probability of TAD boundary location
   ##taking the center of areas where multiple adjacent basepairs correspond to 100% probability
   predprob_df_1 <- predprob_df[which(predprob_df$PredProb==1),]
-  lagpad <- function(x, k) {
+  lagpad <- function(x, k){
     if (k>0) {
       return (c(rep(NA, k), x)[1 : length(x)] );
     }
@@ -62,23 +62,113 @@ predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, ann
   predprob_df_1$lagbaseNum <- lagpad(predprob_df_1$baseNum, 1)
   predprob_df_1$predprob1length <- predprob_df_1$baseNum - predprob_df_1$lagbaseNum  
   
-  predprob_df_1$retain <-  NA
-  predprob_df_1$retain[1] <- 1
-  x <- 1
-  #consider where groups of probabilities==1 are not adjacent
-  ##set the window as the average number of basepairs for nonadjacent probabilities==1
-  ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
-  for(i in 2:(dim(predprob_df_1)[1])){
-    if(predprob_df_1$predprob1length[i]<=predwindow){predprob_df_1$retain[i] = x}else{x = x+1; predprob_df_1$retain[i] = x}
-  }
-  
-  #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
-  prob1intervals <- unique(predprob_df_1$retain)
-  mid <- numeric()
-  for(i in prob1intervals){
-    dat <- predprob_df_1[which(predprob_df_1$retain==prob1intervals[i]),]
-    n=dim(dat)[1]
-    mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
+  if(predwindow=="median"){
+    
+    predprob_df_1$retain <-  NA
+    predprob_df_1$retain[1] <- 1
+    x <- 1
+    #consider where groups of probabilities==1 are not adjacent
+    ##set the window as 1 base pair 
+    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
+    for(i in 2:(dim(predprob_df_1)[1])){
+      if(predprob_df_1$predprob1length[i]<=1){predprob_df_1$retain[i] = x}else{x = x+1; predprob_df_1$retain[i] = x}
+    }
+    
+    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
+    prob1intervals <- unique(predprob_df_1$retain)
+    mid <- numeric()
+    for(i in prob1intervals){
+      dat <- predprob_df_1[which(predprob_df_1$retain==prob1intervals[i]),]
+      n=dim(dat)[1]
+      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
+    }
+    
+    predprob_df_1$retain2 <-  NA
+    predprob_df_1$retain2[1] <- 1
+    x <- 1
+    #consider where groups of probabilities==1 are not adjacent
+    ##set the window as 1 base pair 
+    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
+    pred.window = median(diff(mid))
+    for(i in 2:(dim(predprob_df_1)[1])){
+      if(predprob_df_1$predprob1length[i]<=pred.window){predprob_df_1$retain2[i] = x}else{x = x+1; predprob_df_1$retain2[i] = x}
+    }
+    
+    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
+    prob1intervals <- unique(predprob_df_1$retain2)
+    mid <- numeric()
+    for(i in prob1intervals){
+      dat <- predprob_df_1[which(predprob_df_1$retain2==prob1intervals[i]),]
+      n=dim(dat)[1]
+      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
+    }
+    
+    predprob_df_1$retain = predprob_df_1$retain2
+    
+  }else if(predwindow=="mean"){
+    
+    predprob_df_1$retain <-  NA
+    predprob_df_1$retain[1] <- 1
+    x <- 1
+    #consider where groups of probabilities==1 are not adjacent
+    ##set the window as 1 base pair 
+    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
+    for(i in 2:(dim(predprob_df_1)[1])){
+      if(predprob_df_1$predprob1length[i]<=1){predprob_df_1$retain[i] = x}else{x = x+1; predprob_df_1$retain[i] = x}
+    }
+    
+    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
+    prob1intervals <- unique(predprob_df_1$retain)
+    mid <- numeric()
+    for(i in prob1intervals){
+      dat <- predprob_df_1[which(predprob_df_1$retain==prob1intervals[i]),]
+      n=dim(dat)[1]
+      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
+    }
+    
+    predprob_df_1$retain2 <-  NA
+    predprob_df_1$retain2[1] <- 1
+    x <- 1
+    #consider where groups of probabilities==1 are not adjacent
+    ##set the window as 1 base pair 
+    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
+    pred.window = mean(diff(mid))
+    for(i in 2:(dim(predprob_df_1)[1])){
+      if(predprob_df_1$predprob1length[i]<=pred.window){predprob_df_1$retain2[i] = x}else{x = x+1; predprob_df_1$retain2[i] = x}
+    }
+    
+    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
+    prob1intervals <- unique(predprob_df_1$retain2)
+    mid <- numeric()
+    for(i in prob1intervals){
+      dat <- predprob_df_1[which(predprob_df_1$retain2==prob1intervals[i]),]
+      n=dim(dat)[1]
+      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
+    }
+    
+    predprob_df_1$retain = predprob_df_1$retain2
+    
+  }else{
+    
+    predprob_df_1$retain <-  NA
+    predprob_df_1$retain[1] <- 1
+    x <- 1
+    #consider where groups of probabilities==1 are not adjacent
+    ##set the window as 1 base pair 
+    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
+    for(i in 2:(dim(predprob_df_1)[1])){
+      if(predprob_df_1$predprob1length[i]<=predwindow){predprob_df_1$retain[i] = x}else{x = x+1; predprob_df_1$retain[i] = x}
+    }
+    
+    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
+    prob1intervals <- unique(predprob_df_1$retain)
+    mid <- numeric()
+    for(i in prob1intervals){
+      dat <- predprob_df_1[which(predprob_df_1$retain==prob1intervals[i]),]
+      n=dim(dat)[1]
+      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
+    }
+    
   }
   
   predprob_df$predBound <- ifelse(predprob_df$baseNum %in% mid, "Yes", "No")
@@ -105,9 +195,9 @@ predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, ann
   predBound_gr_region <- do.call("c", predBound_gr_region)
   
   if(region==TRUE){
-    finer_res_list <- list(predprob_df,trueBound_gr_region,predBound_gr_region)
-  }else{finer_res_list <- list(predprob_df,trueBound_gr,predBound_gr)}
-  names(finer_res_list) <- c("Called", "Predicted")
+    finer_res_list <- list(predprob_df_1, predprob_df, trueBound_gr_region,predBound_gr_region)
+  }else{finer_res_list <- list(predprob_df_1, predprob_df, trueBound_gr,predBound_gr)}
+  #names(finer_res_list)[3:4] <- c("Called", "Predicted")
   
   return(finer_res_list)
   

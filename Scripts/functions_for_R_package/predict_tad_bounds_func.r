@@ -1,5 +1,5 @@
 #function to predict cl, resolution, and chromosome specific tad boundaries using optimal parameters
-predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10){
+predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
@@ -101,11 +101,46 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
                              ## the following function
                              summaryFunction = allSummary)
   
-  #performing model
-  tadModel <- train(y~., data=train, 
-                    method="rf", 
-                    metric=metric, 
-                    tuneLength=10,
-                    trControl=fitControl)
+  if(featureSelection==TRUE){
+    ##setting contols for model
+    fitControl <- trainControl(seeds = seeds,
+                               method = if(crossvalidation==TRUE){print("cv")}else{print("none")},
+                               number = if(crossvalidation==TRUE){number}else{print(NULL)},
+                               ## Estimate class probabilities
+                               classProbs = TRUE,
+                               ## Evaluate performance using 
+                               ## the following function
+                               summaryFunction = allSummary)
+    
+    #performing model
+    tadModel <- train(y~., data=train, 
+                      method="rf", 
+                      metric=metric, 
+                      tuneLength=10,
+                      trControl=fitControl)
+  }else{
+    rfectrl <- rfFuncs
+    rfectrl$summary <- allSummary
+    control <- rfeControl(functions=rfectrl, 
+                          method=if(crossvalidation==TRUE){print("cv")}else{print("none")}, 
+                          number=if(crossvalidation==TRUE){number}else{print(NULL)},  
+                          verbose=TRUE)
+    control$returnResamp <- "final"
+    
+    n=dim(train)-1
+    z <- numeric()
+    x=0
+    i=1
+    while(x < n){
+      x = 2^(i);i=i+1;z <- c(z,x)
+    }
+    z[length(z)] <- n
+    tadModel <- rfe(train[,-1], 
+                    train[,1],
+                    metric = metric,
+                    sizes=z,
+                    rfeControl=control)
+  }
+  
   return(tadModel)
 }
