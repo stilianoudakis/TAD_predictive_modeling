@@ -30,6 +30,8 @@
 
 - Trieu, Tuan, and Ekta Khurana. “A Deep Learning Approach to Predict the Impact of Non-Coding Sequence Variants on 3D Chromatin Structure.” BioRxiv, January 1, 2019, 516849. https://doi.org/10.1101/516849. - DeepMILO - learn TAD boundaries and predict the effect of genomic variants on them. Convolutional and recurrent neural networks (CNN, RNN), distinguishes CTCF and cohesin vs. CTCF only. Trained on experimental CTCF peaks overlapping RAD21 peaks (Gm12878). CTCF orientation is important, Figure 2a, detected by FIMO tool. https://github.com/tuantrieu/DeepMILO
 
+- Rozenwald, Michal, Ekaterina Khrameeva, Grigory Sapunov, and Mikhail Gelfand. “Prediction of 3D Chromatin Structure Using Recurrent Neural Networks.” In 2018 IEEE International Conference on Bioinformatics and Biomedicine (BIBM), 2488–2488. IEEE, 2018. - Prediction of TAD boundaries using penalized regressions and RNNs. RNN with LSTM units captures the sequential ordering of the genome, distance. Drosophila data, Armatus for TAD calling. PyTorch and Keras implementation.
+
 
 ## TAD epigenomics
 
