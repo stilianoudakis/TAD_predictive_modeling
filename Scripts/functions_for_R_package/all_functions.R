@@ -333,17 +333,20 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
 ############################################################################################
 
 #function to predict TAD boundaries at bp resolution
-predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, annotationListGR, tadModel, predwindow, region=TRUE){
+predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, seqList, annotationListGR, tadModel, predwindow, region=TRUE){
   #creating chromosome specific test data at bp resolution
   
   #chromosome-specific test data is at basepair resolution
-  genome <- getBSgenome("hg19")
-  seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
+  #genome <- getBSgenome("hg19")
+  #seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
   ##start = first chromosome specific coordinate
   ##end = last chromosome specific coordinate that is a factor of resolution
-  start = 0
-  end = seqlength - (seqlength %% resolution)
-  test_data <- data.frame(baseNum = seq.int(from=start, to=end, by=1))
+  #start = 0
+  #end = seqlength - (seqlength %% resolution)
+  #test_data <- data.frame(baseNum = seq.int(from=start, to=end, by=1))
+  
+  
+  test_data <- data.frame(baseNum = seqList[[as.numeric(gsub("CHR", "", chromosome))]])
   
   #annotate where the observed TAD boundary is according to TAD caller
   test_data$y <- ifelse(test_data$baseNum %in% start(bounds.GR), 1, 0)
@@ -539,5 +542,4 @@ predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, ann
 
 ###################################################################################################
 
-#function to perform correlation tests
 
