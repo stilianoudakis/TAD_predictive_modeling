@@ -1,23 +1,31 @@
 #function to create data matrix for training predictive model
-annots_to_datamatrix_func <- function(resolution, predictortype="distance", annotationListGR, chromosome){
+annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distance", annotationListGR, chromosome){
   #determining dimensions of chromosome specific data matrix
-  genome <- getBSgenome("hg19")
-  seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
+  
+  #genome <- getBSgenome("hg19")
+  #seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
   ##start = first chromosome specific coordinate
   ##end = last chromosome specific coordinate that is a factor of resolution
-  start = 0
-  end = seqlength - (seqlength %% resolution)
-  data_mat <- matrix(nrow=length(seq.int(start, 
-                                  end,
-                                  by=resolution)), 
+  #start = 0
+  #end = seqlength - (seqlength %% resolution)
+  #data_mat <- matrix(nrow=length(seq.int(start, 
+  #                                end,
+  #                                by=resolution)), 
+  #                   ncol=length(annotationListGR))
+  
+  seqData <- seqList[[as.numeric(gsub("CHR", "", chromosome))]]
+  start=seqData[1]
+  end=seqData[length(seqData)] - (seqData[length(seqData)] %% resolution)
+  rows = seqData[seqData %in% seq(start, end, 10000)]
+  
+  data_mat <- matrix(nrow=length(rows),
                      ncol=length(annotationListGR))
-  rownames(data_mat) <- seq.int(start, 
-                                end,
-                                by=resolution)
+  rownames(data_mat) <- rows
   
   dat_mat_gr <- GRanges(seqnames = tolower(chromosome),
                         IRanges(start = as.numeric(rownames(data_mat)),
-                                end = as.numeric(rownames(data_mat))))
+                                #end = as.numeric(rownames(data_mat)),
+                                width=resolution))
   
   if(predictortype=="distance"){
     for(i in 1:length(annotationListGR)){
