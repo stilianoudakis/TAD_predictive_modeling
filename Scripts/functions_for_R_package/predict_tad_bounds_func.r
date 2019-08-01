@@ -1,5 +1,5 @@
 #function to predict cl, resolution, and chromosome specific tad boundaries using optimal parameters
-predict_tad_bounds_func <- function(resolution=10000, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
+predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
