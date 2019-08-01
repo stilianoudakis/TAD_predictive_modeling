@@ -1,9 +1,10 @@
 #function to predict cl, resolution, and chromosome specific tad boundaries using optimal parameters
-predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
+predict_tad_bounds_func <- function(resolution=10000, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
-                                     end = as.numeric(rownames(datamatrix)))), bounds.GR)
+                                     #end = as.numeric(rownames(datamatrix)),
+                                     width = resolution)), bounds.GR)
   y <- ifelse(y>=1,1,0)
   
   full_data <- cbind.data.frame(y, datamatrix)
@@ -91,21 +92,11 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
   #for the last model
   seeds[[11]]<-sample.int(1000, 1)
   
-  ##setting contols for model
-  fitControl <- trainControl(seeds = seeds,
-                             method = if(crossvalidation==TRUE){print("cv")}else{print("none")},
-                             number = if(crossvalidation==TRUE){number}else{print(NULL)},
-                             ## Estimate class probabilities
-                             classProbs = TRUE,
-                             ## Evaluate performance using 
-                             ## the following function
-                             summaryFunction = allSummary)
-  
-  if(featureSelection==TRUE){
+  if(featureSelection==FALSE){
     ##setting contols for model
     fitControl <- trainControl(seeds = seeds,
-                               method = if(crossvalidation==TRUE){print("cv")}else{print("none")},
-                               number = if(crossvalidation==TRUE){number}else{print(NULL)},
+                               method = if(crossvalidation==TRUE){"cv"}else{"none"},
+                               number = if(crossvalidation==TRUE){number}else{NULL},
                                ## Estimate class probabilities
                                classProbs = TRUE,
                                ## Evaluate performance using 
@@ -122,12 +113,12 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
     rfectrl <- rfFuncs
     rfectrl$summary <- allSummary
     control <- rfeControl(functions=rfectrl, 
-                          method=if(crossvalidation==TRUE){print("cv")}else{print("none")}, 
-                          number=if(crossvalidation==TRUE){number}else{print(NULL)},  
+                          method=if(crossvalidation==TRUE){"cv"}else{"none"}, 
+                          number=if(crossvalidation==TRUE){number}else{NULL},  
                           verbose=TRUE)
     control$returnResamp <- "final"
     
-    n=dim(train)-1
+    n=dim(train)[2]-1
     z <- numeric()
     x=0
     i=1
@@ -135,6 +126,8 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
       x = 2^(i);i=i+1;z <- c(z,x)
     }
     z[length(z)] <- n
+    
+    set.seed(seed)
     tadModel <- rfe(train[,-1], 
                     train[,1],
                     metric = metric,
