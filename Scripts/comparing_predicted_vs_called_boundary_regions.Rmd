@@ -92,7 +92,7 @@ gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
 gp[["SetText"]][["Set1"]]$cex <- 2
 gp[["SetText"]][["Set2"]]$cex <- 2
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_5kb, 
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_gm12878_22, 
                                                  gp = gp, 
                                                  show=list(Universe=FALSE))), 
                         top=textGrob("Boundary Region", 
