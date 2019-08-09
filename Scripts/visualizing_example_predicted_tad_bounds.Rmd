@@ -95,7 +95,7 @@ ggplot(predprob_df_temp, aes(x=baseNum, y=PredProb)) +
 	              #linetype="dashed", 
 	              size=.5)+
      geom_vline(xintercept=predprob_df_temp$baseNum[which(predprob_df_temp$predBound=="Yes")], 
-	              color="yellow", 
+	              color="blue", 
 	              #linetype="dashed", 
 	              size=.5)+
      xlab("Base Pair") +
@@ -173,9 +173,9 @@ ggplot(predprob_df_temp, aes(x=baseNum, y=PredProb)) +
 	              #linetype="dashed", 
 	              size=.5)+
      geom_vline(xintercept=predprob_df_temp$baseNum[which(predprob_df_temp$predBound2=="Yes")], 
-	              color="yellow", 
+	              color="blue", 
 	              #linetype="dashed", 
-	              size=.5)+
+	              size=1)+
      xlab("Base Pair") +
      ylab("Predicted Probability") +
      theme_minimal() +
