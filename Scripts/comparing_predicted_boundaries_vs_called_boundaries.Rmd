@@ -82,8 +82,51 @@ for(i in 1:length(chrs)){
   
 }
 
-all_true_bounds <- do.call("c", true_bound_list)
-all_pred_bounds <- do.call("c", pred_bound_list)
+called_and_pred_17 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR17/smote/distance/enet/called_and_pred_bound_regions.rds"))
+true_bound_17 <- called_and_pred_17[[3]]
+pred_bound_17 <- called_and_pred_17[[4]]
+rm(called_and_pred_17)
+
+called_and_pred_18 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR18/smote/distance/enet/called_and_pred_bound_regions.rds"))
+true_bound_18 <- called_and_pred_18[[3]]
+pred_bound_18 <- called_and_pred_18[[4]]
+rm(called_and_pred_18)
+
+called_and_pred_19 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR19/smote/distance/enet/called_and_pred_bound_regions.rds"))
+true_bound_19 <- called_and_pred_19[[3]]
+pred_bound_19 <- called_and_pred_19[[4]]
+rm(called_and_pred_19)
+
+called_and_pred_20 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR20/smote/distance/enet/called_and_pred_bound_regions.rds"))
+true_bound_20 <- called_and_pred_20[[3]]
+pred_bound_20 <- called_and_pred_20[[4]]
+rm(called_and_pred_20)
+
+called_and_pred_21 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR21/smote/distance/enet/called_and_pred_bound_regions.rds"))
+true_bound_21 <- called_and_pred_21[[3]]
+pred_bound_21 <- called_and_pred_21[[4]]
+rm(called_and_pred_21)
+
+called_and_pred_22 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR22/smote/distance/enet/called_and_pred_bound_regions.rds"))
+true_bound_22 <- called_and_pred_22[[3]]
+pred_bound_22 <- called_and_pred_22[[4]]
+rm(called_and_pred_22)
+
+all_true_bounds <- GRangesList(true_bound_17,
+                               true_bound_18,
+                               true_bound_19,
+                               true_bound_20,
+                               true_bound_21,
+                               true_bound_22)
+all_pred_bounds <- GRangesList(pred_bound_17,
+                               pred_bound_18,
+                               pred_bound_19,
+                               pred_bound_20,
+                               pred_bound_21,
+                               pred_bound_22)
+
+all_true_bounds <- do.call("c", all_true_bounds)
+all_pred_bounds <- do.call("c", all_pred_bounds)
 
 venn_cnt2venn <- function(venn_cnt){
   n <- which(colnames(venn_cnt)=="Counts") - 1
@@ -148,7 +191,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
 ```
@@ -171,7 +215,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "right")))
 ```
@@ -196,7 +241,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
 ```
@@ -219,7 +265,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "right")))
 ```
@@ -244,7 +291,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
 ```
@@ -267,7 +315,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "right")))
 ```
@@ -292,7 +341,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
 ```
@@ -315,7 +365,8 @@ EnrichedHeatmap(mat,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red"), 
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = muted("red"), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "right")))
 ```
@@ -402,6 +453,8 @@ p_to_znf143 <- GenometriCorrelation(all_pred_bounds,
 ### Called
 
 ```{r}
+all_true_bounds <- resize(all_true_bounds, width=1,fix = "center")
+
 chromslength <- numeric()
 for(i in 1:length(chrs)){
   chromslength[i] <- max(end(all_true_bounds[which(as.character(seqnames(all_true_bounds))==tolower(chrs[i]))]),
@@ -546,5 +599,75 @@ ggplot(pred_v_called_10_df, aes(x=BoundReg, y = log2AbsoluteDist, fill=BoundReg)
         plot.title = element_text(size=20),
         legend.position = "bottom")
 
+```
+
+### Plots v2
+
+```{r}
+pred_v_called_10_df <- data.frame(LogDist = c(#Predicted
+    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[4]]))$distance+1),
+    
+    #Called
+    log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[4]]))$distance+1)
+),
+Annotation = c(#Predicted
+    rep("CTCF",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3a",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    
+    #Called
+    rep("CTCF",length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3a",length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1)))),
+BoundReg = c(#Predicted
+    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
+    
+    #Called
+    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1))),
+    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds, annots.GR.f[[1]]))$distance+1)))))
+
+pred_v_called_10_df$BoundReg <- factor(pred_v_called_10_df$BoundReg, levels=c("Predicted", "Called"))
+
+ggplot(pred_v_called_10_df, aes(x=BoundReg, y = LogDist, fill=BoundReg))  + 
+    facet_grid(~ Annotation) +    
+    stat_boxplot(geom ='errorbar', width = 0.2) + 
+    geom_boxplot(outlier.shape = NA) +
+    geom_signif(test = "wilcox.test", 
+                comparisons = list( c("Predicted", "Called")),
+                vjust = 0,
+                textsize = 4,
+                size = .5,
+                step_increase = .08) +
+    theme_minimal()+
+    theme_bw()+
+    ylab("Log2 Distance to Annotation")+
+    xlab("") +
+    scale_fill_discrete(name="Boundary Region")+
+    #guides(color=FALSE, linetype=FALSE)+
+    theme(axis.text.x = element_text(size=15,
+                                     angle = 45,
+                                     hjust = 1),
+          axis.text.y = element_text(size = 15),
+          axis.title.x = element_text(size = 20),
+          axis.title.y = element_text(size = 20),
+          strip.text.x = element_text(size = 15),
+          #panel.spacing = unit(2, "lines"),
+          legend.text=element_text(size=15),
+          legend.title=element_text(size=20),
+          plot.title = element_text(size=20),
+          legend.position = "bottom")
 ```
 

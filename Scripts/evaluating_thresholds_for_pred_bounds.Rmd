@@ -1,5 +1,5 @@
 ---
-title: "Comparing Predicted Boundaries vs Called Boundaries"
+title: "Evaluating Thresholds for Predicted TAD Boundary Regions"
 author: "Spiro Stilianoudakis"
 date: "July 30, 2019"
 output: html_document
