@@ -90,18 +90,18 @@ predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, seq
   z <- sapply(2:(length(mid)-1), function(i) { 
     mean(silhouette(cutree(hc1, i), dist=x)[,"sil_width"]) })
   k=which.max(z)+1
-  p <- pam(x, diss=TRUE, k=k, cluster.only=TRUE, trace.lev = 0)
-  clustdf <- data.frame(mid=mid, clust=cutree(hc1, k=which.max(z)))
+  c <- clara(mid, 
+             k=k, 
+             samples=100,
+             metric = "euclidean",
+             stand = FALSE, 
+             trace = 2, 
+             medoids.x = TRUE)
+  clustdf <- data.frame(mid=mid, 
+                        clust=c$clustering, 
+                        medoid=ifelse(mid %in% c$medoids, "Yes", "No"))
   
-  prob1intervals <- unique(clustdf$clust)
-  mid2 <- numeric()
-  for(i in prob1intervals){
-    dat <- clustdf[which(clustdf$clust==prob1intervals[i]),]
-    n=dim(dat)[1]
-    mid2[i] <- ceiling((dat$mid[1]+dat$mid[n])/2)
-  }
-  
-  predprob_df$predBound <- ifelse(predprob_df$baseNum %in% mid2, "Yes", "No")
+  predprob_df$predBound <- ifelse(predprob_df$baseNum %in% c$medoids, "Yes", "No")
   
   #creating a list with two granges objects
   ##trueBound_gr: chromosome-specific observed TAD boundaries 
