@@ -120,6 +120,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Misc
 
+- Check your (Mixed) Model for Multicollinearity with ‘performance’, https://www.r-bloggers.com/check-your-mixed-model-for-multicollinearity-with-performance/
+
 - TAD boundaries are blurry - Van Bortle K., Nichols M.H., Li L., Ong C.-T., Takenaka N., Qin Z.S., Corces V.G. Insulator function and topological domain border strength scale with architectural protein occupancy.
 
 - Mourad, Raphaël. “Studying 3D Genome Evolution Using Genomic Sequence.” Preprint. Bioinformatics, May 23, 2019. https://doi.org/10.1101/646851. - Distance idea - Ratio R of the median distances between convergent CTCF motifs. CTCF sites from ChIP-seq, predicted if not available. R depends on A/B compartments and subcompartments, replication timing, isochores. R can be used to study genome evolution.https://github.com/morphos30/PhyloCTCFLooping
