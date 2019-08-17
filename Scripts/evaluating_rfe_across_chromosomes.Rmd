@@ -102,6 +102,8 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=AveMCC, color=CL)) +
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
         #strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
         legend.text=element_text(size=15),
@@ -154,6 +156,7 @@ rfeperchr_summ <- rfeperchr %>%
             AveImpSD = sd(Importance, na.rm = TRUE)) %>%
   dplyr::arrange(CL, desc(AveImp))
 
+#gm12878
 rfegm12878 <- rfeperchr[which(rfeperchr$CL=="GM12878"),]
 rfegm12878 <- reshape(rfegm12878[,c(1,2,4)], idvar = "Feature", timevar = "Chromosome", direction = "wide")
 names(rfegm12878)[-1] <- paste0("CHR", c(1:8,10:22)) 
@@ -165,7 +168,7 @@ rfegm12878.mat <- apply(rfegm12878.mat,2,rev)
 #using heatmap.2
 distance.col = dist(rfegm12878.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
-my_palette <- colorRampPalette(c("white", "pink", "red"))(rcol(rfegm12878.mat))
+my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfegm12878.mat))
 heatmap.2(t(rfegm12878.mat),
           #labRow=rownames(rfegm12878.mat),
           #labCol=colnames(rfegm12878.mat),

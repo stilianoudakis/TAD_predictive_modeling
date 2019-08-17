@@ -23,7 +23,7 @@ extract_boundaries_func <- function(domains.mat, preprocess, chromosome, resolut
   bounds <- GRanges(seqnames=coords$Chromosome, ranges=IRanges(start=coords$coordinate, width=1))
   
   #chromsome specific boundary data
-  bounds_chr_specific <- bounds[which(seqnames(bounds)==tolower(chromosome))]
+  bounds_chr_specific <- bounds[which(as.character(seqnames(bounds))==tolower(chromosome))]
   
   return(bounds_chr_specific)
 }

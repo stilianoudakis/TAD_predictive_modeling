@@ -17,15 +17,8 @@
 
 ## ToDo
 
-_ provide summaries of predicted tad regions
-
-+ Consider filtering out TAD boundaries that form TADs greater than 2mb bp in length prior to modelling and compare
-   -quantify
-
 - write paragraphs of all previous methods; refer them to supplementary
    - Comparison with Mourad? Hong?
-
-- As you observe performance improves with the increasing resolution of the data, you need results at higher resolution, 5kb, 1kb, the latest was 750kb
 
 - Relevant supplementary figures should be referred consequentially.
 
@@ -40,12 +33,6 @@ _ provide summaries of predicted tad regions
     + look at loess
     - expand interval to see if probabilities converge
     
-8. Use different splitting/CV techniques
-    - train on even/test on odd chromosomes
-    - 20 fold CV on 2-22 (not 9) and validate on chr1
-    - Use one replicate at a time for training, others for testing. Report average +/- SD model performance
-    - For consensus TADs, use even chromosomes for training, odd for testing. This is Chromosome cross-validation.
-
 
 ### For later
 

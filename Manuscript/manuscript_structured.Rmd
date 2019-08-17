@@ -66,16 +66,15 @@ In contrast, 1D genome annotation tracks assembled by the ENCODE and Roadmap con
 
 ### Empirical way to determine boundary regions
 
-### Predicted TAD boundary regions vs Called TAD boundary regions
+####################################################################################
 
-#### Number of predicted regions compared to called regions
-#### Overlap between the two
-#### Summary statistics
-##### Distribution of distances 
-###### densities
-###### ECDF
-##### Jaccard indeces
-##### Enrichment
+# Results
+
+## Determining optimal data level characteristics for TAD boundary prediction
+## Identifying top predictive annotations of TAD boundaries
+## Predicting TAD boundaries at bp resolution
+### Comparing distance profiles of called TAD boundaries vs predicted TAD boundaries
+
 
 
 -->

@@ -1,0 +1,247 @@
+---
+title: "Visualizing Example of Clustered Predicted TAD Boundary Regions"
+author: "Spiro Stilianoudakis"
+date: "August 9, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(scales)
+library(GGally)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(GenometriCorr)
+library(ggpubr)
+library(ggsignif)
+library(Vennerable)
+library(VennDiagram)
+library(ChIPpeakAnno)
+library(EnrichedHeatmap)
+library(factoextra)
+```
+
+# Steps
+##1.	Build chromosome specific test data
+###a.	Bin chromosome specific data at bp resolution (i.e. 1 row -> 1 bp)
+###b.	Annotate data matrix with distances to top TFBS
+##2.	Validate best performing model on test data
+##3.	Extract probability vector
+##4.	Determine threshold for identifying predicted TAD boundary
+###a.	Consider the base pairs where the probability vector is given to be 1 
+###b.	Consider the midpoints of all groups of base pairs with probability 1
+###c.	Obtain distance matrix of all pairwise distances between midpoints
+###d.	Perform PAM clustering on the distance matrix
+###i.	Obtain optimal number of clusters using silhouette method
+###e.	Assign predicted TAD boundary as the new midpoint (bp) of clustered distances
+
+# GM12878
+
+## CHR 22
+
+###17390000-18640000
+
+```{r}
+called_and_pred_bound_regions <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR22/smote/distance/enet/called_and_pred_bound_regions.rds")
+
+predprob_df_1 <- called_and_pred_bound_regions[[1]]
+predprob_df <- called_and_pred_bound_regions[[2]]
+trueBound_gr_region <- called_and_pred_bound_regions[[3]]
+predBound_gr <- called_and_pred_bound_regions[[4]]
+
+predprob_df$baseNum[which(predprob_df$trueBound=="Yes")][1:10]
+#17390000 17540000 17550000 17650000 17820000 18010000 18030000 18210000 18280000 18640000
+
+predprob_df_temp <- predprob_df[which(predprob_df$baseNum>=17390000 & predprob_df$baseNum<=18640000),]
+table(predprob_df_temp$predBound)
+
+dat1 <- predprob_df_temp[which(predprob_df_temp$PredProb==1),]
+
+ggplot() + 
+  geom_line(data=predprob_df_temp, aes(x=baseNum, y=PredProb), 
+              color='black',
+              size=.5)+
+  geom_vline(data=dat1, aes(xintercept=baseNum, 
+             color=as.factor(PredProb)),
+             size=.75,
+             show.legend = TRUE)+
+  xlab("Base Pair") +
+  ylab("Predicted Probability") +
+  scale_color_manual(name = '', 
+         values =c("red"),
+         labels = c('Predicted Region'))+
+  theme_minimal() +
+  theme_bw() +
+  theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        #strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+  
+
+x <- dist(predprob_df_temp$baseNum[which(predprob_df_temp$predBound=="Yes")], method = "euclidean")
+
+xlabels <- c("1", "2", "3", "9", "10", "4", "5", "8", "6", "7")
+fviz_dist(x, gradient = list(low = "white", mid = "pink", high = muted("red")))+
+  xlab("Predicted Boundary Regions")+
+  ylab("Predicted Boundary Regions")+
+  #scale_fill_continuous("Distance")+
+  scale_fill_gradient2("Distance\nBetween\nMidpoints",
+                       low = "white", 
+                       mid = "pink",
+                       midpoint = 450000,
+                       high = muted("red"))+
+  scale_x_discrete(labels=xlabels)+
+  scale_y_discrete(labels=xlabels)+
+  theme_minimal()+
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        #panel.grid.major = element_blank(),
+        #panel.grid.minor = element_blank(),
+        #strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20))
+
+hc1 <- hclust(x, method = "complete", size=2)
+plot(hc1)
+
+z <- sapply(2:(dim(as.matrix(x))[1]-1), function(i) { 
+    mean(silhouette(cutree(hc1, i), dist=x)[,"sil_width"]) })
+plot(2:(dim(as.matrix(x))[1]-1), z)
+
+k = which.max(z)+1
+c <- clara(predprob_df_temp$baseNum[which(predprob_df_temp$predBound=="Yes")], k=k, metric = "euclidean",
+           stand = FALSE, 
+           trace = 2, medoids.x = TRUE)
+clustdf <- data.frame(mid=predprob_df_temp$baseNum[which(predprob_df_temp$predBound=="Yes")], clust=c$clustering, medoid=ifelse(predprob_df_temp$baseNum[which(predprob_df_temp$predBound=="Yes")] %in% c$medoids, "Yes", "No"))
+
+dend <- as.dendrogram(hc1)
+dend %>% set("labels_col", c("red","green","red","red","green","red","green","red","red","green")) %>% set("labels_cex", 2) %>% plot(main = "Clustered Distances")
+rect.hclust(hc1, k = k)
+
+
+#prob1intervals <- unique(clustdf$clust)
+#  mid2 <- numeric()
+#  for(i in prob1intervals){
+#    dat <- clustdf[which(clustdf$clust==prob1intervals[i]),]
+#    n=dim(dat)[1]
+#    mid2[i] <- ceiling((dat$mid[1]+dat$mid[n])/2)
+#  }
+  
+  predprob_df_temp$predBound2 <- ifelse(predprob_df_temp$baseNum %in% c$medoids, "Yes", "No")
+  
+  dat2 <- predprob_df_temp[which(predprob_df_temp$predBound2=="Yes"),]
+  
+ggplot(predprob_df_temp, aes(x=baseNum, y=PredProb)) +
+     geom_line(size=.5)+
+     #geom_smooth(method = "loess", size = 5, color="blue")
+	   geom_vline(data=dat1, aes(xintercept=baseNum, 
+             color=as.factor(PredProb)),
+             size=.75,
+             show.legend = TRUE)+
+     geom_vline(data=dat2, aes(xintercept=baseNum, 
+             color=predBound2),
+             size=.75,
+             show.legend = TRUE)+
+     scale_color_manual(name = '', 
+         values =c("red", "green"),
+         labels = c('Predicted Region',
+                    'Predicted Boundary'))+
+     xlab("Base Pair") +
+     ylab("Predicted Probability") +
+     theme_minimal() +
+     theme_bw() +
+     theme(axis.text.x = element_text(size=15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        #strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+
+#dat3 <- predprob_df_temp[which(predprob_df_temp$predBound2=="Yes"),]
+#dat3$predBound2 <- "T"
+
+#ggplot() + 
+#  geom_line(data=predprob_df_temp, aes(x=baseNum, y=PredProb), 
+#              color='black',
+#              size=.5)+
+#  geom_vline(data=dat1, aes(xintercept=baseNum, 
+#             color=as.factor(PredProb)),
+#             size=.75,
+#             show.legend = TRUE)+
+#  geom_vline(data=dat2, aes(xintercept=baseNum, 
+#             color=predBound),
+#             size=.75,
+#             show.legend = TRUE)+
+#  geom_vline(data=dat3, aes(xintercept=baseNum, 
+#             color=predBound2),
+#             size=.75,
+#             show.legend = TRUE)+
+#  xlab("Base Pair") +
+#  ylab("Predicted Probability") +
+#  scale_color_manual(name = '', 
+#         values =c("red", "blue", "green"),
+#         labels = c('Predicted Region',
+#                    'New Predicted Boundary',
+#                    'Midpoint'))+
+#  theme_minimal() +
+#  theme_bw() +
+#  theme(axis.text.x = element_text(size=15),
+#        axis.text.y = element_text(size = 15),
+#        axis.title.x = element_text(size = 20),
+#        axis.title.y = element_text(size = 20),
+#        #strip.text.x = element_text(size = 15),
+#        #panel.spacing = unit(2, "lines"),
+#        legend.text=element_text(size=15),
+#        legend.title=element_text(size=20),
+#        plot.title = element_text(size=20),
+#        legend.position = "bottom")
+  
+  
+```
+

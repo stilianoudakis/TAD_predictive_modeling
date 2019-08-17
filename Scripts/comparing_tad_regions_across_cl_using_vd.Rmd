@@ -51,6 +51,12 @@ library(ChIPpeakAnno)
 
 # Comparing TAD regions across cell lines
 
+## Function to extract boundaries
+
+```{r}
+source("C:/Users/stili/Documents/TAD_predictive_modeling/Scripts/functions_for_R_package/extract_boundaries_func.r")
+```
+
 ## Venn diagrams
 
 ```{r}
@@ -86,8 +92,26 @@ venn_cnt2venn <- function(venn_cnt){
 #mcols(binslist_K562_5kb)$y <- mcols(binslist_K562_5kb_center)$y
 #binslist_K562_5kb <- binslist_K562_5kb[mcols(binslist_K562_5kb)$y==1]
 
-bounds_gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/bounds_f.rds")
-bounds_k562_5kb <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/bounds_f.rds")
+#bounds_gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/training_testing/bounds_f.rds")
+#bounds_k562_5kb <- readRDS("Z:/TAD_data_analysis/K562/5kb/training_testing/bounds_f.rds")
+
+domains <- read.table("Z:/TAD_data_analysis/GM12878/5kb/GM12878_domain_data_5000.b.txt", header=F)
+bounds_gm12878_5kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=5000)
+  bounds_gm12878_5kb[[i]] <- bounds
+}
+bounds_gm12878_5kb <- do.call("c", bounds_gm12878_5kb)
+
+domains <- read.table("Z:/TAD_data_analysis/K562/5kb/K562_domain_data_5000.b.txt", header=F)
+bounds_k562_5kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=5000)
+  bounds_k562_5kb[[i]] <- bounds
+}
+bounds_k562_5kb <- do.call("c", bounds_k562_5kb)
 
 res <- makeVennDiagram(Peaks=list(bounds_gm12878_5kb, bounds_k562_5kb),
                        NameOfPeaks=c("GM12878", "K562"))
@@ -130,8 +154,26 @@ gp[["SetText"]][["Set2"]]$cex <- 2
 #mcols(binslist_K562_10kb)$y <- mcols(binslist_K562_10kb_center)$y
 #binslist_K562_10kb <- binslist_K562_10kb[mcols(binslist_K562_10kb)$y==1]
 
-bounds_gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/bounds_f.rds")
-bounds_k562_10kb <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/bounds_f.rds")
+#bounds_gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/training_testing/bounds_f.rds")
+#bounds_k562_10kb <- readRDS("Z:/TAD_data_analysis/K562/10kb/training_testing/bounds_f.rds")
+
+domains <- read.table("Z:/TAD_data_analysis/GM12878/10kb/GM12878_domain_data_10000.b.txt", header=F)
+bounds_gm12878_10kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=10000)
+  bounds_gm12878_10kb[[i]] <- bounds
+}
+bounds_gm12878_10kb <- do.call("c", bounds_gm12878_10kb)
+
+domains <- read.table("Z:/TAD_data_analysis/K562/10kb/K562_domain_data_10000.b.txt", header=F)
+bounds_k562_10kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=10000)
+  bounds_k562_10kb[[i]] <- bounds
+}
+bounds_k562_10kb <- do.call("c", bounds_k562_10kb)
 
 res <- makeVennDiagram(Peaks=list(bounds_gm12878_10kb, bounds_k562_10kb),
                        NameOfPeaks=c("GM12878", "K562"))
@@ -174,8 +216,26 @@ gp[["SetText"]][["Set2"]]$cex <- 2
 #mcols(binslist_K562_25kb)$y <- mcols(binslist_K562_25kb_center)$y
 #binslist_K562_25kb <- binslist_K562_25kb[mcols(binslist_K562_25kb)$y==1]
 
-bounds_gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/bounds_f.rds")
-bounds_k562_25kb <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/bounds_f.rds")
+#bounds_gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/training_testing/bounds_f.rds")
+#bounds_k562_25kb <- readRDS("Z:/TAD_data_analysis/K562/25kb/training_testing/bounds_f.rds")
+
+domains <- read.table("Z:/TAD_data_analysis/GM12878/25kb/GM12878_domain_data_25000.b.txt", header=F)
+bounds_gm12878_25kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=25000)
+  bounds_gm12878_25kb[[i]] <- bounds
+}
+bounds_gm12878_25kb <- do.call("c", bounds_gm12878_25kb)
+
+domains <- read.table("Z:/TAD_data_analysis/K562/25kb/K562_domain_data_25000.b.txt", header=F)
+bounds_k562_25kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=25000)
+  bounds_k562_25kb[[i]] <- bounds
+}
+bounds_k562_25kb <- do.call("c", bounds_k562_25kb)
 
 res <- makeVennDiagram(Peaks=list(bounds_gm12878_25kb, bounds_k562_25kb),
                        NameOfPeaks=c("GM12878", "K562"))
@@ -218,8 +278,26 @@ gp[["SetText"]][["Set2"]]$cex <- 2
 #mcols(binslist_K562_50kb)$y <- mcols(binslist_K562_50kb_center)$y
 #binslist_K562_50kb <- binslist_K562_50kb[mcols(binslist_K562_50kb)$y==1]
 
-bounds_gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/bounds_f.rds")
-bounds_k562_50kb <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/bounds_f.rds")
+#bounds_gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/training_testing/bounds_f.rds")
+#bounds_k562_50kb <- readRDS("Z:/TAD_data_analysis/K562/50kb/training_testing/bounds_f.rds")
+
+domains <- read.table("Z:/TAD_data_analysis/GM12878/50kb/GM12878_domain_data_50000.b.txt", header=F)
+bounds_gm12878_50kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=50000)
+  bounds_gm12878_50kb[[i]] <- bounds
+}
+bounds_gm12878_50kb <- do.call("c", bounds_gm12878_50kb)
+
+domains <- read.table("Z:/TAD_data_analysis/K562/50kb/K562_domain_data_50000.b.txt", header=F)
+bounds_k562_50kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=50000)
+  bounds_k562_50kb[[i]] <- bounds
+}
+bounds_k562_50kb <- do.call("c", bounds_k562_50kb)
 
 res <- makeVennDiagram(Peaks=list(bounds_gm12878_50kb, bounds_k562_50kb),
                        NameOfPeaks=c("GM12878", "K562"))
@@ -262,8 +340,26 @@ gp[["SetText"]][["Set2"]]$cex <- 2
 #mcols(binslist_K562_100kb)$y <- mcols(binslist_K562_100kb_center)$y
 #binslist_K562_100kb <- binslist_K562_100kb[mcols(binslist_K562_100kb)$y==1]
 
-bounds_gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/bounds_f.rds")
-bounds_k562_100kb <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/bounds_f.rds")
+#bounds_gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/training_testing/bounds_f.rds")
+#bounds_k562_100kb <- readRDS("Z:/TAD_data_analysis/K562/100kb/training_testing/bounds_f.rds")
+
+domains <- read.table("Z:/TAD_data_analysis/GM12878/100kb/GM12878_domain_data_100000.b.txt", header=F)
+bounds_gm12878_100kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=100000)
+  bounds_gm12878_100kb[[i]] <- bounds
+}
+bounds_gm12878_100kb <- do.call("c", bounds_gm12878_100kb)
+
+domains <- read.table("Z:/TAD_data_analysis/K562/100kb/K562_domain_data_100000.b.txt", header=F)
+bounds_k562_100kb <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  bounds <- extract_boundaries_func(domains.mat=domains, preprocess=TRUE, chromosome=chrs[i], resolution=100000)
+  bounds_k562_100kb[[i]] <- bounds
+}
+bounds_k562_100kb <- do.call("c", bounds_k562_100kb)
 
 res <- makeVennDiagram(Peaks=list(bounds_gm12878_100kb, bounds_k562_100kb),
                        NameOfPeaks=c("GM12878", "K562"))
@@ -298,7 +394,7 @@ grid.newpage()
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_50kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("50 kb", gp=gpar(fontsize=50)))
 grid.newpage()
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn_100kb, gp = gp, show=list(Universe=FALSE))), top=textGrob("100 kb", gp=gpar(fontsize=50)))
-grid.newpage()
+
 
 #par(mfrow=c(1,1))
 ```

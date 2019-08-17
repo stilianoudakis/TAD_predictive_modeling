@@ -17,16 +17,17 @@ annots_to_granges_func <- function(filepath){
   #if(grepl(paste0(names, collapse = "|"), list.files(filepath)))
   for(i in 1:length(list.files(filepath))){
     dat <- read.table(paste0(filepath,"/",list.files(filepath)[i]),
-                      header = FALSE, 
-                      sep="\t")
+                      header = FALSE)
     
     annots_gr_list[[i]] <- GRanges(seqnames=dat$V1,
                                    IRanges(start=dat$V2, 
                                            end=dat$V3))
+    mcols(annots_gr_list[[i]])$coverage <- dat[,4]
   }
   names(annots_gr_list) <- gsub(".bed", "", list.files(filepath))
   return(annots_gr_list)
 }
+
 
 ##################################################################################
 
@@ -95,25 +96,33 @@ distance_func <- function(binned_data_center_gr, annot_data_center_gr){
 ########################################################################################
 
 #function to create data matrix for training predictive model
-annots_to_datamatrix_func <- function(resolution, predictortype="distance", annotationListGR, chromosome){
+annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distance", annotationListGR, chromosome){
   #determining dimensions of chromosome specific data matrix
-  genome <- getBSgenome("hg19")
-  seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
+  
+  #genome <- getBSgenome("hg19")
+  #seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
   ##start = first chromosome specific coordinate
   ##end = last chromosome specific coordinate that is a factor of resolution
-  start = 0
-  end = seqlength - (seqlength %% resolution)
-  data_mat <- matrix(nrow=length(seq.int(start, 
-                                  end,
-                                  by=resolution)), 
+  #start = 0
+  #end = seqlength - (seqlength %% resolution)
+  #data_mat <- matrix(nrow=length(seq.int(start, 
+  #                                end,
+  #                                by=resolution)), 
+  #                   ncol=length(annotationListGR))
+  
+  seqData <- seqList[[as.numeric(gsub("CHR", "", chromosome))]]
+  start=seqData[1]
+  end=seqData[length(seqData)] - (seqData[length(seqData)] %% resolution)
+  rows = seqData[seqData %in% seq(start, end, 10000)]
+  
+  data_mat <- matrix(nrow=length(rows),
                      ncol=length(annotationListGR))
-  rownames(data_mat) <- seq.int(start, 
-                                end,
-                                by=resolution)
+  rownames(data_mat) <- rows
   
   dat_mat_gr <- GRanges(seqnames = tolower(chromosome),
                         IRanges(start = as.numeric(rownames(data_mat)),
-                                end = as.numeric(rownames(data_mat))))
+                                #end = as.numeric(rownames(data_mat)),
+                                width=resolution))
   
   if(predictortype=="distance"){
     for(i in 1:length(annotationListGR)){
@@ -148,6 +157,7 @@ annots_to_datamatrix_func <- function(resolution, predictortype="distance", anno
   return(data_mat)
 }
 
+
 ################################################################################################################
 
 #function to extract unique chromosome specific TAD boundaries
@@ -175,7 +185,7 @@ extract_boundaries_func <- function(domains.mat, preprocess, chromosome, resolut
   bounds <- GRanges(seqnames=coords$Chromosome, ranges=IRanges(start=coords$coordinate, width=1))
   
   #chromsome specific boundary data
-  bounds_chr_specific <- bounds[which(seqnames(bounds)==tolower(chromosome))]
+  bounds_chr_specific <- bounds[which(as.character(seqnames(bounds))==tolower(chromosome))]
   
   return(bounds_chr_specific)
 }
@@ -184,11 +194,12 @@ extract_boundaries_func <- function(domains.mat, preprocess, chromosome, resolut
 ##################################################################################################
 
 #function to predict cl, resolution, and chromosome specific tad boundaries using optimal parameters
-predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
+predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
-                                     end = as.numeric(rownames(datamatrix)))), bounds.GR)
+                                     #end = as.numeric(rownames(datamatrix)),
+                                     width = resolution)), bounds.GR)
   y <- ifelse(y>=1,1,0)
   
   full_data <- cbind.data.frame(y, datamatrix)
@@ -276,21 +287,11 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
   #for the last model
   seeds[[11]]<-sample.int(1000, 1)
   
-  ##setting contols for model
-  fitControl <- trainControl(seeds = seeds,
-                             method = if(crossvalidation==TRUE){print("cv")}else{print("none")},
-                             number = if(crossvalidation==TRUE){number}else{print(NULL)},
-                             ## Estimate class probabilities
-                             classProbs = TRUE,
-                             ## Evaluate performance using 
-                             ## the following function
-                             summaryFunction = allSummary)
-  
-  if(featureSelection==TRUE){
+  if(featureSelection==FALSE){
     ##setting contols for model
     fitControl <- trainControl(seeds = seeds,
-                               method = if(crossvalidation==TRUE){print("cv")}else{print("none")},
-                               number = if(crossvalidation==TRUE){number}else{print(NULL)},
+                               method = if(crossvalidation==TRUE){"cv"}else{"none"},
+                               number = if(crossvalidation==TRUE){number}else{NULL},
                                ## Estimate class probabilities
                                classProbs = TRUE,
                                ## Evaluate performance using 
@@ -307,12 +308,12 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
     rfectrl <- rfFuncs
     rfectrl$summary <- allSummary
     control <- rfeControl(functions=rfectrl, 
-                          method=if(crossvalidation==TRUE){print("cv")}else{print("none")}, 
-                          number=if(crossvalidation==TRUE){number}else{print(NULL)},  
+                          method=if(crossvalidation==TRUE){"cv"}else{"none"}, 
+                          number=if(crossvalidation==TRUE){number}else{NULL},  
                           verbose=TRUE)
     control$returnResamp <- "final"
     
-    n=dim(train)-1
+    n=dim(train)[2]-1
     z <- numeric()
     x=0
     i=1
@@ -320,6 +321,8 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
       x = 2^(i);i=i+1;z <- c(z,x)
     }
     z[length(z)] <- n
+    
+    set.seed(seed)
     tadModel <- rfe(train[,-1], 
                     train[,1],
                     metric = metric,
@@ -333,211 +336,67 @@ predict_tad_bounds_func <- function(bounds.GR, datamatrix, chromosome, sampling=
 ############################################################################################
 
 #function to predict TAD boundaries at bp resolution
-predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, annotationListGR, tadModel, predwindow, region=TRUE){
-  #creating chromosome specific test data at bp resolution
+predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, seqData, annotationListGR, tadModel){
   
-  #chromosome-specific test data is at basepair resolution
-  genome <- getBSgenome("hg19")
-  seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
-  ##start = first chromosome specific coordinate
-  ##end = last chromosome specific coordinate that is a factor of resolution
-  start = 0
-  end = seqlength - (seqlength %% resolution)
-  test_data <- data.frame(baseNum = seq.int(from=start, to=end, by=1))
+  test_data <- matrix(nrow=length(seqData),
+                      ncol=length(annotationListGR))
   
-  #annotate where the observed TAD boundary is according to TAD caller
-  test_data$y <- ifelse(test_data$baseNum %in% start(bounds.GR), 1, 0)
-  
-  #create separate granges object to use to calculate distance to center of annotation
-  test_bins_center <- GRanges(seqnames=tolower(chromosome),
-                              IRanges(start=test_data$baseNum,
-                                      end=test_data$baseNum))
-  
+  d <- lapply(annotationListGR, function(x){distance_func(GRanges(seqnames=tolower(chromosome),
+                                                                  IRanges(start=seqData,
+                                                                          end=seqData)), 
+                                                          x)})
   for(i in 1:length(annotationListGR)){
-    #print(temp[i])
-    dat_gr <- annotationListGR[[i]]
-    
-    dat_gr_center <- resize(dat_gr, width = 1, fix = "center")
-    
-    ####calculating distance
-    d <- distance_func(test_bins_center, dat_gr_center)
-    test_data <- cbind.data.frame(test_data,d)
+    test_data[,i] <- d[[i]]
   }
   
-  colnames(test_data)[-c(1,2)] <- colnames(tadModel$trainingData)[-1]
+  colnames(test_data) <- names(annotationListGR)
+  test_data <- apply(test_data,2,function(x){log(x + 1, base=2)})
   
-  #take log of features
-  test_data[,-c(1,2)] <- apply(test_data[,-c(1,2)],2,function(x){log(x + 1, base=2)})
+  pred.tadModel <- predict(tadModel,newdata=test_data,type="prob")[,"Yes"]
   
-  #factor the observed TAD boundary indicator
-  test_data$y <- factor(test_data$y)
-  levels(test_data$y) <- c("No", "Yes")
-  
-  #predict location of TAD boundary at basepair resolution using optimal model
-  ##only include the data matrix part of the test data
-  pred.tadModel <- predict(tadModel,newdata=test_data[,-c(1,2)],type="prob")[,"Yes"]
-  
-  #create data frame with basepair coordinates, predicted value of TAD boundary, observed TAD boundary
-  predprob_df <- data.frame(baseNum = test_data$baseNum,
-                            PredProb = pred.tadModel,
-                            trueBound = test_data$y)
-  
-  #indentifying where the model gives 100% probability of TAD boundary location
-  ##taking the center of areas where multiple adjacent basepairs correspond to 100% probability
-  predprob_df_1 <- predprob_df[which(predprob_df$PredProb==1),]
-  lagpad <- function(x, k){
-    if (k>0) {
-      return (c(rep(NA, k), x)[1 : length(x)] );
-    }
-    else {
-      return (c(x[(-k+1) : length(x)], rep(NA, -k)));
-    }
+  prob1basenumdiff <- diff(seqData[which(pred.tadModel==1)])
+  retain <- numeric()
+  x <- 1
+  for(i in 1:length(prob1basenumdiff)){
+    if(prob1basenumdiff[i]<=1){retain[i] = x}else{x = x+1; retain[i] = x}
   }
-  predprob_df_1$lagbaseNum <- lagpad(predprob_df_1$baseNum, 1)
-  predprob_df_1$predprob1length <- predprob_df_1$baseNum - predprob_df_1$lagbaseNum  
+  retain = c(1,retain)
   
-  if(predwindow=="median"){
-    
-    predprob_df_1$retain <-  NA
-    predprob_df_1$retain[1] <- 1
-    x <- 1
-    #consider where groups of probabilities==1 are not adjacent
-    ##set the window as 1 base pair 
-    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
-    for(i in 2:(dim(predprob_df_1)[1])){
-      if(predprob_df_1$predprob1length[i]<=1){predprob_df_1$retain[i] = x}else{x = x+1; predprob_df_1$retain[i] = x}
-    }
-    
-    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
-    prob1intervals <- unique(predprob_df_1$retain)
-    mid <- numeric()
-    for(i in prob1intervals){
-      dat <- predprob_df_1[which(predprob_df_1$retain==prob1intervals[i]),]
-      n=dim(dat)[1]
-      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
-    }
-    
-    predprob_df_1$retain2 <-  NA
-    predprob_df_1$retain2[1] <- 1
-    x <- 1
-    #consider where groups of probabilities==1 are not adjacent
-    ##set the window as 1 base pair 
-    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
-    pred.window = median(diff(mid))
-    for(i in 2:(dim(predprob_df_1)[1])){
-      if(predprob_df_1$predprob1length[i]<=pred.window){predprob_df_1$retain2[i] = x}else{x = x+1; predprob_df_1$retain2[i] = x}
-    }
-    
-    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
-    prob1intervals <- unique(predprob_df_1$retain2)
-    mid <- numeric()
-    for(i in prob1intervals){
-      dat <- predprob_df_1[which(predprob_df_1$retain2==prob1intervals[i]),]
-      n=dim(dat)[1]
-      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
-    }
-    
-    predprob_df_1$retain = predprob_df_1$retain2
-    
-  }else if(predwindow=="mean"){
-    
-    predprob_df_1$retain <-  NA
-    predprob_df_1$retain[1] <- 1
-    x <- 1
-    #consider where groups of probabilities==1 are not adjacent
-    ##set the window as 1 base pair 
-    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
-    for(i in 2:(dim(predprob_df_1)[1])){
-      if(predprob_df_1$predprob1length[i]<=1){predprob_df_1$retain[i] = x}else{x = x+1; predprob_df_1$retain[i] = x}
-    }
-    
-    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
-    prob1intervals <- unique(predprob_df_1$retain)
-    mid <- numeric()
-    for(i in prob1intervals){
-      dat <- predprob_df_1[which(predprob_df_1$retain==prob1intervals[i]),]
-      n=dim(dat)[1]
-      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
-    }
-    
-    predprob_df_1$retain2 <-  NA
-    predprob_df_1$retain2[1] <- 1
-    x <- 1
-    #consider where groups of probabilities==1 are not adjacent
-    ##set the window as 1 base pair 
-    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
-    pred.window = mean(diff(mid))
-    for(i in 2:(dim(predprob_df_1)[1])){
-      if(predprob_df_1$predprob1length[i]<=pred.window){predprob_df_1$retain2[i] = x}else{x = x+1; predprob_df_1$retain2[i] = x}
-    }
-    
-    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
-    prob1intervals <- unique(predprob_df_1$retain2)
-    mid <- numeric()
-    for(i in prob1intervals){
-      dat <- predprob_df_1[which(predprob_df_1$retain2==prob1intervals[i]),]
-      n=dim(dat)[1]
-      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
-    }
-    
-    predprob_df_1$retain = predprob_df_1$retain2
-    
-  }else{
-    
-    predprob_df_1$retain <-  NA
-    predprob_df_1$retain[1] <- 1
-    x <- 1
-    #consider where groups of probabilities==1 are not adjacent
-    ##set the window as 1 base pair 
-    ###all basepairs within that window are considered a predicted TAD boundary region (PTBR)
-    for(i in 2:(dim(predprob_df_1)[1])){
-      if(predprob_df_1$predprob1length[i]<=predwindow){predprob_df_1$retain[i] = x}else{x = x+1; predprob_df_1$retain[i] = x}
-    }
-    
-    #consider the middle of a PTR as a predicted TAD boundary point (PTBP)
-    prob1intervals <- unique(predprob_df_1$retain)
-    mid <- numeric()
-    for(i in prob1intervals){
-      dat <- predprob_df_1[which(predprob_df_1$retain==prob1intervals[i]),]
-      n=dim(dat)[1]
-      mid[i] <- ceiling((dat$baseNum[1]+dat$baseNum[n])/2)
-    }
-    
+  mid <- numeric()
+  for(i in unique(retain)){
+    #print(i)
+    bpdat <- seqData[which(pred.tadModel==1)][which(retain==i)]
+    n=length(bpdat)
+    mid[i] <- ceiling((bpdat[1]+bpdat[n])/2)
   }
   
-  predprob_df$predBound <- ifelse(predprob_df$baseNum %in% mid, "Yes", "No")
+  x <- dist(mid, method = "euclidean")
+  hc1 <- hclust(x, method = "complete")
+  z <- sapply(2:(length(mid)-1), function(i) { 
+    mean(silhouette(cutree(hc1, i), dist=x)[,"sil_width"]) })
+  k=which.max(z)+1
+  c <- clara(mid, 
+             k=k, 
+             samples=100,
+             metric = "euclidean",
+             stand = FALSE, 
+             trace = 2, 
+             medoids.x = TRUE)
   
-  #creating a list with two granges objects
-  ##trueBound_gr: chromosome-specific observed TAD boundaries 
-  ##predBound_gr: chromosome-specific predicted TAD boundaries 
-  trueBound_gr <- GRanges(seqnames=tolower(chromosome),
-                          IRanges(start=predprob_df$baseNum[which(predprob_df$trueBound=="Yes")],
-                                  end=predprob_df$baseNum[which(predprob_df$trueBound=="Yes")]))
   predBound_gr <- GRanges(seqnames=tolower(chromosome),
-                          IRanges(start=predprob_df$baseNum[which(predprob_df$predBound=="Yes")],
-                                  end=predprob_df$baseNum[which(predprob_df$predBound=="Yes")]))
+                          IRanges(start=seqData[which(seqData %in% c$medoids)],
+                                  end=seqData[which(seqData %in% c$medoids)]))
+  trueBound_gr <- GRanges(seqnames=tolower(chromosome),
+                          IRanges(start=seqData[which(seqData %in% start(bounds.GR))],
+                                  end=seqData[which(seqData %in% start(bounds.GR))]))
   
-  #creating a list with two granges objects
-  ##trueBound_gr_region: chromosome-specific observed TAD boundaries flanked by resolution
-  ##predBound_gr_region: chromosome-specific predicted TAD boundary regions given by predwindow
-  trueBound_gr_region <- flank(trueBound_gr, width=10000, both=TRUE)
-  predBound_gr_region <- GRangesList()
-  for(i in 1:(length(table(predprob_df_1$retain)))){
-    predBound_gr_region[[i]] <- GRanges(seqnames=tolower(chromosome), IRanges(start=predprob_df_1$baseNum[which(predprob_df_1$retain==i)][1],
-                                                                              end=predprob_df_1$baseNum[which(predprob_df_1$retain==i)][length(predprob_df_1$baseNum[which(predprob_df_1$retain==i)])]))
-  }
-  predBound_gr_region <- do.call("c", predBound_gr_region)
+  trueBound_gr_region <- flank(trueBound_gr, width=resolution, both=TRUE)
   
-  if(region==TRUE){
-    finer_res_list <- list(predprob_df_1, predprob_df, trueBound_gr_region,predBound_gr_region)
-  }else{finer_res_list <- list(predprob_df_1, predprob_df, trueBound_gr,predBound_gr)}
-  #names(finer_res_list)[3:4] <- c("Called", "Predicted")
-  
+  finer_res_list <- list(trueBound_gr_region, predBound_gr)
   return(finer_res_list)
-  
 }
+
 
 ###################################################################################################
 
-#function to perform correlation tests
 
