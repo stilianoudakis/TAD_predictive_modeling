@@ -3,8 +3,8 @@
 annots_to_granges_func <- function(filepath){
   annots_gr_list <- GRangesList() 
   #if(grepl(paste0(names, collapse = "|"), list.files(filepath)))
-  for(i in 1:length(list.files(filepath))){
-    dat <- read.table(paste0(filepath,"/",list.files(filepath)[i]),
+  for(i in 1:length(list.files(filepath, pattern = "*.bed"))){
+    dat <- read.table(paste0(filepath,"/",list.files(filepath, pattern = "*.bed")[i]),
                       header = FALSE)
     
     annots_gr_list[[i]] <- GRanges(seqnames=dat$V1,
@@ -12,6 +12,6 @@ annots_to_granges_func <- function(filepath){
                                            end=dat$V3))
     mcols(annots_gr_list[[i]])$coverage <- dat[,4]
   }
-  names(annots_gr_list) <- gsub(".bed", "", list.files(filepath))
+  names(annots_gr_list) <- gsub(".bed", "", list.files(filepath, pattern = "*.bed"))
   return(annots_gr_list)
 }
