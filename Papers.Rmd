@@ -2,6 +2,8 @@
 
 ## TAD predictions
 
+- Salameh, Tarik J, Xiaotao Wang, Fan Song, Bo Zhang, Sage M. Wright, Chachrit Khunsriraksakul, and Feng Yue. “A Supervised Learning Framework for Chromatin Loop Detection in Genome-Wide Contact Maps.” Preprint. Bioinformatics, August 20, 2019. https://doi.org/10.1101/739698. - Peakachu - loop prediction from Hi-C data using random forest. ChIA-PET and HiChIP provide positive training examples. H3K27ac HiChIP better predicts short-range interactions, CTCF ChIA-PET is better for longer interactions. Each pixel is characterized by 11x11 window, 10Kb resolution data, Gm12878 and K562 cell line. Excels for short-range interactions. Model trained using data from Hi-C performs well in other technologies, Micro-C, DNA SPRITE. Code athttps://github.com/tariks/peakachu, Predicted loops for 56 cell/tissue types are available athttp://promoter.bx.psu.edu/hi-c/publications.html
+
 - Mourad, Raphaël, and Olivier Cuvier. “TAD-Free Analysis of Architectural Proteins and Insulators.” Nucleic Acids Research 46, no. 5 (March 16, 2018): e27–e27. https://doi.org/10.1093/nar/gkx1246. - GLM to investigate the association of TFBSs with TAD boundaries. Eliminates the blurriness effect of TAD boundaries. GLM includes distance between boundaries, interaction frequency, biases (fragment length, GC content, mappability). https://cran.r-project.org/web/packages/HiCblock/index.html
 
 - Mourad, Raphaël, Lang Li, and Olivier Cuvier. “Uncovering Direct and Indirect Molecular Determinants of Chromatin Loops Using a Computational Integrative Approach.” Edited by Alexandre V Morozov. PLOS Computational Biology 13, no. 5 (May 23, 2017): e1005538. https://doi.org/10.1371/journal.pcbi.1005538. - Generalized Linear Model with Interactions (GLMI) to assess TFBSs association with TAD boundaries. 10 versions, each answers different biological question. Log-distance. Biases (fragment length, GC, mappability) are explicitly included. Comparison with enrichment test, correlation, random forest. Outperforms by AUROC. Collinearity and its impact, model with all interactions can account for that. Poisson lasso to regularize. CTCF, RAD21, SMC3, ZNF143, Polycomb proteins, EGR1, ELF1, FOXM1, MAZ, MXI1, NRF1, YY1. Repulsion testing, CTCF and EZH2 are repulsive. Drosophila and human data. https://cran.r-project.org/web/packages/HiCglmi/index.html
@@ -30,6 +32,8 @@
 
 - Trieu, Tuan, and Ekta Khurana. “A Deep Learning Approach to Predict the Impact of Non-Coding Sequence Variants on 3D Chromatin Structure.” BioRxiv, January 1, 2019, 516849. https://doi.org/10.1101/516849. - DeepMILO - learn TAD boundaries and predict the effect of genomic variants on them. Convolutional and recurrent neural networks (CNN, RNN), distinguishes CTCF and cohesin vs. CTCF only. Trained on experimental CTCF peaks overlapping RAD21 peaks (Gm12878). CTCF orientation is important, Figure 2a, detected by FIMO tool. https://github.com/tuantrieu/DeepMILO
 
+- Rozenwald, Michal, Ekaterina Khrameeva, Grigory Sapunov, and Mikhail Gelfand. “Prediction of 3D Chromatin Structure Using Recurrent Neural Networks.” In 2018 IEEE International Conference on Bioinformatics and Biomedicine (BIBM), 2488–2488. IEEE, 2018. - Prediction of TAD boundaries using penalized regressions and RNNs. RNN with LSTM units captures the sequential ordering of the genome, distance. Drosophila data, Armatus for TAD calling. PyTorch and Keras implementation.
+
 
 ## TAD epigenomics
 
@@ -41,6 +45,8 @@
 ## Epigenomic predictions
 
 Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collection
+
+- Al Bkhetan, Ziad, and Dariusz Plewczynski. “Three-Dimensional Epigenome Statistical Model: Genome-Wide Chromatin Looping Prediction.” Scientific Reports 8, no. 1 (December 2018). https://doi.org/10.1038/s41598-018-23276-8. - 3DEpiLoop - prediction of 3D interactions from 1D epigenomic profiles using Random Forest trained on CTCF peaks (histone modifications are the most important predictors, and TFBSs). https://bitbucket.org/4dnucleome/3depiloop
 
 - Jaroszewicz, Artur, and Jason Ernst. “An Integrative Approach for Fine-Mapping Chromatin Interactions.” Preprint. Bioinformatics, April 11, 2019. https://doi.org/10.1101/605576. - X-SCNN - prediction of significant Hi-C interactions at highly improved resolution using TFBSs, histone marks, DNAse data (WIG format). A Siamese Convolutional Neural Network (SCNN) - two subnetworks with shared parameters predicting true interactions. HiCCUPS calls as true interactions, the same number of no interactions (balanced dataset). Keras with TensorFlow backend.https://github.com/ernstlab/X-SCNN. Describe this paper and the references from introduction about the use of epigenomic data for prediction.
 
@@ -115,6 +121,8 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 
 ## Misc
+
+- Check your (Mixed) Model for Multicollinearity with ‘performance’, https://www.r-bloggers.com/check-your-mixed-model-for-multicollinearity-with-performance/
 
 - TAD boundaries are blurry - Van Bortle K., Nichols M.H., Li L., Ong C.-T., Takenaka N., Qin Z.S., Corces V.G. Insulator function and topological domain border strength scale with architectural protein occupancy.
 
