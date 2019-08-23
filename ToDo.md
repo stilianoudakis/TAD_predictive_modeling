@@ -17,6 +17,16 @@
 
 ## ToDo
 
+- look at instructions for journals
+
+- make figures in final form
+
+- for predicted regions: provide summaries of widths
+
+- look at distances between called and predicted regions
+
+- look into developing a way to enumerate the strength of each predicted region
+
 - write paragraphs of all previous methods; refer them to supplementary
    - Comparison with Mourad? Hong?
 
