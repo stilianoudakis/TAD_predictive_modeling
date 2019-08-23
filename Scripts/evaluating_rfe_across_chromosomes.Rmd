@@ -115,7 +115,6 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=AveMCC, color=CL)) +
 ### Importance heatmap
 
 ```{r}
-
 rfeperchr <- data.frame()
 
 set.size = 8
@@ -156,7 +155,13 @@ rfeperchr_summ <- rfeperchr %>%
             AveImpSD = sd(Importance, na.rm = TRUE)) %>%
   dplyr::arrange(CL, desc(AveImp))
 
-#gm12878
+```
+
+
+#### GM12878
+
+```{r}
+
 rfegm12878 <- rfeperchr[which(rfeperchr$CL=="GM12878"),]
 rfegm12878 <- reshape(rfegm12878[,c(1,2,4)], idvar = "Feature", timevar = "Chromosome", direction = "wide")
 names(rfegm12878)[-1] <- paste0("CHR", c(1:8,10:22)) 
@@ -187,13 +192,58 @@ heatmap.2(t(rfegm12878.mat),
           dendrogram="column",     # only draw a row dendrogram,
           Rowv = FALSE,
           Colv = reorder(as.dendrogram(cluster.col), 37:1),
-          cexRow=1.5,
-          cexCol=1.5,
+          cexRow=.5,
+          cexCol=1,
           #labRow = FALSE,
           #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
           #lhei=c(.5,6,0),
           rowsep=0:nrow(t(rfegm12878.mat)),
           colsep=0:ncol(t(rfegm12878.mat)),
+          sepwidth=c(0.001,0.001),
+          sepcolor="black"
+) 
+```
+
+#### K562
+
+```{r}
+rfek562 <- rfeperchr[which(rfeperchr$CL=="K562"),]
+rfek562 <- reshape(rfek562[,c(1,2,4)], idvar = "Feature", timevar = "Chromosome", direction = "wide")
+names(rfek562)[-1] <- paste0("CHR", c(1:8,10:22)) 
+rfek562.mat <- as.matrix(rfek562[,-1])
+rownames(rfek562.mat) <- rfek562$Feature
+rfek562.mat[is.na(rfek562.mat)] <- 0
+#rfek562.mat <- apply(rfek562.mat,2,rev)
+
+#using heatmap.2
+distance.col = dist(rfek562.mat, method = "euclidean")
+cluster.col = hclust(distance.col, method = "average")
+my_palette <- colorRampPalette(c("white", "lightblue", "blue"))(ncol(rfek562.mat))
+heatmap.2(t(rfek562.mat),
+          #labRow=rownames(rfek562.mat),
+          #labCol=colnames(rfek562.mat),
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins=c(12,8),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #keysize = 1.5,
+          #key.title = "Elastic-Net Coefficient",
+          dendrogram="column",     # only draw a row dendrogram,
+          Rowv = FALSE,
+          Colv = reorder(as.dendrogram(cluster.col), 37:1),
+          cexRow=.5,
+          cexCol=1,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          rowsep=0:nrow(t(rfek562.mat)),
+          colsep=0:ncol(t(rfek562.mat)),
           sepwidth=c(0.001,0.001),
           sepcolor="black"
 ) 
