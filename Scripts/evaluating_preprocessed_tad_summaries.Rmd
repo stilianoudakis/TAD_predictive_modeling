@@ -65,6 +65,7 @@ for(i in 1:length(res)){
                                ".b.txt"), header=F)
   domains <- domains[,1:3]
   names(domains) <- c("Chromosome","Start","End")
+  domains <- domains[-which(domains$Chromosome==9),]
   
   num_domains <- rbind(num_domains, nrow(domains))
   num_domains_lt_2mb <- rbind(num_domains_lt_2mb,length(which((domains$End - domains$Start)>=2000000)))
@@ -115,6 +116,7 @@ for(i in 1:length(res)){
                                ".b.txt"), header=F)
   domains <- domains[,1:3]
   names(domains) <- c("Chromosome","Start","End")
+  if("9" %in% names(table(domains$Chromosome))){domains <- domains[-which(domains$Chromosome==9),]}
   
   num_domains <- rbind(num_domains, nrow(domains))
   num_domains_lt_2mb <- rbind(num_domains_lt_2mb,length(which((domains$End - domains$Start)>=2000000)))
