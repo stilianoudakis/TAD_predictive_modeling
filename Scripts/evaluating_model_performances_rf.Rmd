@@ -856,4 +856,136 @@ x <- ggplot(all_rfperfs_mcc, aes(x=Resolution, y=MCC, color=Resampling, group=Re
 
 ```
 
+# Boxplots
+
+## GM12878
+
+```{r}
+ggplot(all_rfperfs[all_rfperfs$CL=="GM12878",], aes(x=Resolution, y=V1, color=Predictor, fill=Predictor)) +
+     #geom_line(size=2, position=position_dodge(0.5))+
+     #geom_point(size=5, position=position_dodge(0.5))+
+     #geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+     #             position=position_dodge(0.5)) +
+     #stat_boxplot(geom ='errorbar', width = 0.2) + 
+     geom_boxplot() +
+     facet_grid( ~ Resampling)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("Resolution") + ylab("MCC") + ylim(-.1,.5) +
+     scale_fill_discrete(name="Predictor Type")+
+     guides(color=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     strip.text.x = element_text(size = 15),
+     strip.text.y = element_text(size = 15),
+     panel.spacing = unit(2, "lines"),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20),
+     legend.position="bottom")
+
+```
+
+## K562
+
+```{r}
+ggplot(all_rfperfs[all_rfperfs$CL=="K562",], aes(x=Resolution, y=V1, color=Predictor, fill=Predictor)) +
+     #geom_line(size=2, position=position_dodge(0.5))+
+     #geom_point(size=5, position=position_dodge(0.5))+
+     #geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=1,
+     #             position=position_dodge(0.5)) +
+     #stat_boxplot(geom ='errorbar', width = 0.2) + 
+     geom_boxplot() +
+     facet_grid( ~ Resampling)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("Resolution") + ylab("MCC") + ylim(-.1,.5) +
+     scale_fill_discrete(name="Predictor Type")+
+     guides(color=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     strip.text.x = element_text(size = 15),
+     strip.text.y = element_text(size = 15),
+     panel.spacing = unit(2, "lines"),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20),
+     legend.position="bottom")
+
+```
+
+# Barplots
+
+## GM12878
+
+```{r}
+ggplot(all_rfperfs_mcc[all_rfperfs_mcc$CL=="GM12878",], aes(x=Resolution, y=MCC, color=Predictor, fill=Predictor, group=Predictor)) +
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
+     geom_bar(stat="identity", position = position_dodge()) +
+     facet_grid(. ~ Resampling)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("Resolution") + ylab("MCC") + ylim(-.1,.5) +
+     scale_fill_discrete(name="Predictor Type")+
+     guides(color=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     strip.text.x = element_text(size = 15),
+     strip.text.y = element_text(size = 15),
+     panel.spacing = unit(2, "lines"),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20),
+     legend.position="bottom")
+
+```
+
+## K562
+
+```{r}
+ggplot(all_rfperfs_mcc[all_rfperfs_mcc$CL=="K562",], aes(x=Resolution, y=MCC, color=Predictor, fill=Predictor, group=Predictor)) +
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
+                 position=position_dodge(.9), alpha=0.75) +
+     geom_bar(stat="identity", position = position_dodge()) +
+     facet_grid(. ~ Resampling)+
+     theme_minimal() +
+     theme_bw()+
+     xlab("Resolution") + ylab("MCC") + #ylim(-.1,.5) +
+     scale_fill_discrete(name="Predictor Type")+
+     guides(color=FALSE)+
+     theme(axis.text.x = element_text(size=15,
+                                      angle = 45, 
+                                      #margin = ggplot2::margin(t = 35),
+                                      hjust = 1
+     ),
+     axis.text.y = element_text(size = 15),
+     axis.title.x = element_text(size = 20),
+     axis.title.y = element_text(size = 20),
+     strip.text.x = element_text(size = 15),
+     strip.text.y = element_text(size = 15),
+     panel.spacing = unit(2, "lines"),
+     legend.text=element_text(size=15),
+     legend.title=element_text(size=20),
+     plot.title = element_text(size=20),
+     legend.position="bottom")
+```
 
