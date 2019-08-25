@@ -150,43 +150,15 @@ where TP refers to the number of bins correctly identified as containing a TAD b
 
 ## DEVELOPING A RESOLUTION-SPECIFIC APPROACH FOR DATA CONSTRUCTION
 
-We analyzed publically available replicate Hi-C data sets from two cell lines including GM12878 and K562 (Supplementary Table 1). Topologically associating domains (TADs) were subsequently called using the ARROWHEAD pipeline [@durand2016juicer] at 4 resolutions: 5 kb 10 kb, 25 kb, 50 kb, and 100 kb. We implemented a preprocessing step by removing TADs with lengths that exceeded 2 mb [???ref] (Supplementary Figure 1). To account for the varying levels of data resolution, we developed a resolution-specific approach toward constructing TAD versus non-TAD boundary regions on the linear genome (See Methods), labeled as a response vector **Y** (Figure 1). <!--First, we binned the linear genome according to the data resolution. We then flanked the boundaries on either side by the same number of basepairs as the previously constructed genomic bins.--> TAD boundary regions were defined as regions on the linear genome where a genomic bin overlapped with a flanked TAD boundary ($Y = 1$), while non-TAD boundary regions were defined as the regions that did not overlap with a flanked TAD boundary ($Y = 0$).  
+We analyzed publically available replicate Hi-C data sets from the GM12878 and K562 cell lines (Supplementary Table 1). Topologically associating domains (TADs) were subsequently called using the ARROWHEAD pipeline [@durand2016juicer] at 5 data resolutions: 5 kb 10 kb, 25 kb, 50 kb, and 100 kb. After removing TADs that exceeded 2 megabases in length, we obtained a total of 16133, 14824, 8081, 3560, and 919 unique TAD boundaries for the GM12878 cell line, and 9314, 10881, 6923, 3197, and 831 unique TAD boundaries for the K562 cell line across each of the 5 resolutions respectively (Supplementary Figure 1). To account for the variability in boundary location due to varying resolution, we developed a resolution-specific approach toward constructing TAD versus non-TAD boundary regions on the linear genome (See Methods), labeled as a response vector **Y** (Figure 1). TAD boundary regions were defined as regions on the linear genome where a genomic bin overlapped with a flanked TAD boundary ($Y = 1$), while non-TAD boundary regions were defined as the regions that did not overlap with a flanked TAD boundary ($Y = 0$). A significant number of TAD boundary regions were found to be specific to one of the two cell lines (Supplementary Figure 2). Given the plasticity in boundary location, we opted to build cell line specific models for predicting TAD boundary regions. The results presented are for the GM12878 cell line, with K562 results presented as supplementary.
 
-![**An illustration of the proposed approach for resolution-specific data construction used for TAD boundary prediction.** Resolution-specific TADs were called and unique boundaries were identified, denoted by the blue dots. The yellow regions denote the flanked boundary regions according to the Hi-C data resolution (i.e. 100 kb resolution corresponded to a 100 kb flank for a total boundary region of 200 kb). The linear genome was subsequently binned into resolution-specific intervals. The response vector **Y** was defined as a variable that indicated whether a genomic bin overlapped with a flanked TAD boundary ($Y = 1$) or not ($Y = 0$).](Figures/figure1_model_construction_V7.png)
-
-## TAD BOUNDARY REGIONS EXHIBIT CELL-LINE SPECIFICITY
-
-<!--## TOTAL NUMBER OF TAD BOUNDARY REGIONS DECREASE AS Hi-C DATA RESOLUTION DECREASES-->
-Expectedly, the total number of TAD boundary regions increased with the increased resolution of Hi-C data irrespectively of cell line (Figure 2A). At higher resolutions, GM12878 was found to contain more TADs, and thus more TAD boundary regions compared to K562. This can largely be attributed to the increased sequencing depth of the GM12878 library. However, this difference was found to dissipate as resolution decreased, resulting in much more similar numbers of TAD boundary regions between the two cell lines at the 50 kb and 100 kb resolutions respectively. 
-
-We sought to compare the cell-line specificity of TAD boundary regions. Between the two cell lines, a significant number of TAD boundary regions were found to be specific to one of the two cell lines (Figure 2B). It was found that X%, 45%, 38%, 37%, and 36% of TAD boundary regions were specific to the GM12878 cell line, while X%, 27%, 27%, 29%, and 33% of TAD boundary regions were specific to the K562 cell line across each of the 5 kb, 10 kb, 25 kb, 50 kb, and 100 kb resolutions respectively. Given the plasticity in boundary location, we opted to build cell line specific models for predicting TAD boundary regions.
+![**An illustration of the proposed approach for resolution-specific data construction used for TAD boundary prediction.** Unique boundaries are denoted by the blue dots. The yellow regions denote the flanked boundary regions according to the Hi-C data resolution (i.e. 100 kb resolution corresponded to a 100 kb flank for a total boundary region of 200 kb). The linear genome was subsequently binned into resolution-specific intervals. The response vector **Y** was defined as a variable that indicated whether a genomic bin overlapped with a flanked TAD boundary ($Y = 1$) or not ($Y = 0$).](Figures/figure1_model_construction_V7.png)
 
 ## PROPORTIONAL IMBALANCE REMAINED SEVERE IRRESPECTIVELY OF Hi-C DATA RESOLUTION 
 
 We then investigated the proportional class imbalance (PI) featured at each resolution and among each cell line. The PI was defined as twice the ratio of TAD boundary regions ($Y=1$) versus the sum of both TAD and non-TAD boundary regions. The proportional imbalance was found to be invariant to resolution, remaining consistently low for both cell lines, with very little variability between chromosomes (Figure 3C). Such low proportions of imbalance gave precedence for the implementation of re-sampling prior to classification. 
 
 ![**Cell-line specific boundary summaries.** (A) Barplots illustrating that the total number of TAD boundary regions decreases as Hi-C data resolution decreases. (B) Venn diagrams showing that TAD boundary regions exhibit cell-line specificity across resolution. (C) Boxplots indicating that the proportion of class imbalance remained severe irrespective of resolution.](Figures/bounds_and_pis_v2.png)
-
-<!--
-**Table 1. Sparse TAD boundaries throughout the linear genome create high imbalance ratios irrespective of resolution.** 
-
-| Resolution (Bin Width) | Average Number of Genomic Bins (SD) | Average Number of TAD Boundaries (SD) | Average Imbalance Ratio (SD) |
-|------------------------|-------------------------------------|---------------------------------------|------------------------------|
-| 10 kb                  | 12214.1 (6068.5)                    | 1254.6 (598.8)                        | 8.7 (1.2)                    |  
-| 25 kb                  | 4892.7 (2431.2)                     | 714.0 (358.4)                         | 5.9 (0.5)                    |
-| 50 kb	                 | 2450.9 (1217.6)                     | 364.4 (184.5)                         | 5.8 (0.5)                    |
-| 100 kb                 | 1227.5 (609.8)                      | 165.3 (90.9)                          | 6.8 (1.1)                    |
--->
-
-<!--**Table 2. Inter-Resolution ICCs.** For GM12878, two-way intraclass correlation coefficients between resolutions for the following quantities: Number of genomic bins, number of TADs called, number of unique TAD boundaries, and imbalance ratio. The ICC was computed across 21 of the autosomal chromosomes. P-values indicate the level of significance of the correlation between data resolution and each quantity.[??? What is ICC? !!!editted]
-
-| Quantity                 | Inter-Resolution | 95% CI          | P-Value  |
-|--------------------------|------------------|-----------------|----------|
-| Number of Genomic Bins   | 0.464            | [0.244, 0.690]  | < 0.0001 |
-| Number of TADs Called    | 0.627            | [0.426, 0.802]  | < 0.0001 |
-| Number of TAD Boundaries | 0.611            | [0.407, 0.791]  | < 0.0001 |
-| Imbalanced Ratio         | 0.114            | [-0.058, 0.372] | 0.109    |
--->
 
 ## DEVELOPING THREE TYPES OF PREDICTORS DESCRIBING THE ASSOCIATIONS BETWEEN TAD BOUNDARY REGIONS AND EPIGENOMIC FEATURES 
 
