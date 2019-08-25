@@ -17,6 +17,8 @@
 
 ## ToDo
 
+- reference kellens bioarxiv paper
+
 - look at instructions for journals
 
 - make figures in final form
@@ -31,18 +33,6 @@
    - Comparison with Mourad? Hong?
 
 - Relevant supplementary figures should be referred consequentially.
-
-+5. Given the goal to predict TAD boundaries at finer resolution, train a model on the detected TADs.
-    + Use one chromosome
-    + Make finer bins (e.g., 100 bases)
-    + Annotate them with predictors that are used in the original model (e.g., CTCF distance, SMC3 overlap percent)
-    + Predict which bins are TAD boundaries
-    + Evaluate prediction performance by flanking those finer bins and testing them for overlap with the original TAD boundaries
-    + shrink flank to match new bin width of test data
-    + look that the probability vector
-    + look at loess
-    - expand interval to see if probabilities converge
-    
 
 ### For later
 
