@@ -23,15 +23,17 @@
 
 - add distance boxplots as last sup figs
 
-- play around with jaccard heatmaps; consider making diagonal na's
++ make heatmap larger in fig4/sup fig 8
 
-- change to chromhmm sup fig 7
++ fix lines on heatmaps fig4/sup fig 8
 
-- combine sup fig 4 and 5
++ play around with jaccard heatmaps; consider making diagonal na's
 
-- cut sup fig 3 to .2; put A and B
++ change to chromhmm sup fig 7; put A and B; reorder chromhmm and hm
 
-- provide arrows for supp fig 1
++ combine sup fig 4 and 5; fix xaxis
+
++ cut sup fig 3 to .2; put A and B
 
 - use arial font
 
