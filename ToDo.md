@@ -17,11 +17,13 @@
 
 ## ToDo
 
+- reconfigure sup fig 1
+
 - fix ???
 
-- put legends at bottom of manuscript
-
 - add distance boxplots as last sup figs
+
++ put legends at bottom of manuscript
 
 + make heatmap larger in fig4/sup fig 8
 
