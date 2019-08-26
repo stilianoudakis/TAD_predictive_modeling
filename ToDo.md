@@ -17,6 +17,24 @@
 
 ## ToDo
 
+- fix ???
+
+- put legends at bottom of manuscript
+
+- add distance boxplots as last sup figs
+
+- play around with jaccard heatmaps; consider making diagonal na's
+
+- change to chromhmm sup fig 7
+
+- combine sup fig 4 and 5
+
+- cut sup fig 3 to .2; put A and B
+
+- provide arrows for supp fig 1
+
+- use arial font
+
 - reference kellens bioarxiv paper
 
 - look at instructions for journals
