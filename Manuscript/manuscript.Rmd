@@ -67,33 +67,21 @@ In this study, we have developed a computational framework aimed at determining 
 
 # METHODS
 
-## DOMAIN DATA
+## TAD boundary data
 
-Biological replicate Hi-C data were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1) for the GM12878 and K562 cell lines. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all resolutions and cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line.
+Biological replicate Hi-C data were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1) for the GM12878 and K562 cell lines. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all resolutions and cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line. [??? TBD, did you process the data yourself? Or, just downloaded coordinates. If the latter, why the whole mishmash of data processing description?]
 
 ## GENOMIC ANNOTATION DATA
 
-Genomic annotation data in the form of cell type specific chromatin states (ChromHMM), histone modifications (HM), and transcription factor binding sites (TFBS) were obtained from the UCSC Genome Browser Database (GRCh37/hg19 human genome assembly) [@Tyner:2017aa] (Supplementary Table 2). Each functional annotation was represented by chromosome-specific coordinates on the linear genome obtained by ChIP-seq peak calling algorithms.
+Genomic annotation data in the form of cell type specific chromatin states (ChromHMM), histone modifications (HM), and transcription factor binding sites (TFBS) were obtained from the UCSC Genome Browser Database (GRCh37/hg19 human genome assembly) [@Tyner:2017aa] (Supplementary Table 2). [??? The former two may be combined, TBD]
 
-## DEVELOPING FRAMEWORK TO DETERMINE OPTIMAL DATA LEVEL CHARACTERISTICS FOR TAD BOUNDARY PREDICTION
+## Machine learning FRAMEWORK FOR TAD BOUNDARY PREDICTION
 
-### CLASSIFICATION
+To make the data amenable for model training, the genome was binned into equally sized intervals defined by the data resolution of the corresponding contact matrix. As an example, for domain data obtained from a 100 kb resolution contact matrix, the genome was binned into 100 kb intervals. To accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. A genomic bin was defined as a TAD boundary region ($Y = 1$) if it overlapped with at least one flanked TAD boundary, and a non-TAD boundary region ($Y = 0$) otherwise. Random forest models were used to train on Arrowhead-predicted TAD boundary regions. Training was performed separately for each cell line, data resolution, and chromosome.
 
-To establish the data for classification, the genome was binned into equally sized intervals defined by the data resolution of the corresponding contact matrix. As an example, for domain data obtained from a 100 kb resolution contact matrix, the genome was binned into 100 kb intervals. In order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. That is, for 100 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 100 kb for a total width around each boundary point of 200,000 base pairs. A genomic bin was defined as a TAD boundary region ($Y = 1$) if it overlapped with at least one flanked TAD boundary. Otherwise, the bin was considered a non-TAD boundary region ($Y = 0$). Random forest classifiers were used to discriminate between TAD and non-TAD boundary regions on chromosome-specific sections of the linear genome.
+Cell line-specific genomic annotations were used to built the predictors for of our random forest models. We created three types of predictors (Figure 1): **Overlap Count (OC)** - the total number of overlaps between a bin and genomic annotation regions;  **Overlap Percent (OP)** - the percent of overlap between the bin and the total width of genomic annotation regions overlapping it; **Log2 Distance** - the $log_{2}$ of the distance in bases (refered to hereafter as *Distance*), from the center of the bin to the center of the nearest genomic annotation region. 
 
-### FEATURE ENGINEERING 
-
-Cell line specific genomic annotations were used to built the feature space of our random forest models. Here, we created three types of predictors that were used to describe the relationship between functional annotations and genomic bins. They are described in detail below:
-
-1. **Overlap Count (OC)**: For each genomic bin, the total number of instances where a bin overlapped with regions assigned to genomic annotations (features). 
-   
-2. **Overlap Percent (OP)**: For each genomic bin, the percent of overlap between the bin and the region assigned to a genomic annotation, defined as the *feature width*. If multiple overlaps existed, the *feature width* was defined as the sum of the total number of bases that overlapped with a particular bin. 
-
-3. **Log2 Distance**: For each genomic bin, the $log_{2}$ of the distance in bases (refered to hereafter as *Distance*), from the center of the bin to the center of the nearest region defined by a specific genomic annotation. 
-
-### TRAINING AND TESTING
-
-The data set used for modeling was composed of two components: the response vector **Y**, an indicator variable separating between TAD and non-TAD boundary regions, and the predictor-type specific data matrix, **X** = {$X_1$, $X_2$, ..., $X_p$}, where $p$ was the complete set of functional annotations. Each composed data set was specific to cell line, resolution, and chromosome. We then split the data into a 7:3 ratio of training to testing sets. <!--For the task of performance evaluation and prediction, the test set remained untouched to account for an unbiased comparison between data level characteristics.-->
+The complete dataset used for modeling was composed of two components: the response vector **Y**, an indicator variable separating between TAD and non-TAD boundary regions, and the predictor-type specific data matrix, **X** = {$X_1$, $X_2$, ..., $X_p$}, where $p$ was the complete set of predictors. The data was split into a 7:3 ratio of training and testing sets.
 
 ### DATA RE-SAMPLING
 
