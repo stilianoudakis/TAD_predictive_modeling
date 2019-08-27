@@ -17,11 +17,21 @@
 
 ## ToDo
 
+- ??? Quantify sparsity, need to substantiate this statement
+
+- ??? Where is this figure? It seemed important !!!how best to include? as an example for specific section of genome?
+
+- ??? Need further drill down, as we discussed
+
+- ??? Make all in this order!; !!!reasoning of order is to match heatmap; discuss in meeting
+
 - reconfigure sup fig 1
 
-- fix ???
-
 - add distance boxplots as last sup figs
+
++ editted methods
+
++ fix ??? in results
 
 + put legends at bottom of manuscript
 
