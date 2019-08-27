@@ -69,41 +69,41 @@ In this study, we have developed a computational framework aimed at determining 
 
 ## DOMAIN DATA
 
-Biological replicate Hi-C data for the GM12878 and K562 cell lines were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1). The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all cell lines and resolutions, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line.
+Biological replicate Hi-C data were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1) for the GM12878 and K562 cell lines. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from data at 10 kb, 25 kb, 50 kb, and 100 kb resolution using the Arrowhead algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all resolutions and cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line.
 
 ## GENOMIC ANNOTATION DATA
 
-Genomic annotation data in the form of cell type specific chromatin states, histone marks, and transcription factor binding sites (GRCh37/hg19 human genome assembly) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 2). Functional annotations were represented by chromosome-specific regions on the linear genome obtained by ChIP-seq peak calling algorithms.
+Genomic annotation data in the form of cell type specific chromatin states (ChromHMM), histone modifications (HM), and transcription factor binding sites (TFBS) were obtained from the UCSC Genome Browser Database (GRCh37/hg19 human genome assembly) [@Tyner:2017aa] (Supplementary Table 2). Each functional annotation was represented by chromosome-specific coordinates on the linear genome obtained by ChIP-seq peak calling algorithms.
 
 ## DEVELOPING FRAMEWORK TO DETERMINE OPTIMAL DATA LEVEL CHARACTERISTICS FOR TAD BOUNDARY PREDICTION
 
 ### CLASSIFICATION
 
-To establish the data for classification, the genome was binned into equally sized intervals defined by the data resolution of the corresponding contact matrix. As an example, for domain data obtained from a 100 kb resolution contact matrix, the genome was binned into 100 kb intervals. In order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. That is, for 100 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 100 kilobases for a total width around each boundary point of 200 kb. A genomic bin was then labeled as having a TAD boundary within it ($Y = 1$) if it overlapped with a particular flanked boundary. Otherwise, the bin was labeled as not containing a boundary ($Y = 0$).
+To establish the data for classification, the genome was binned into equally sized intervals defined by the data resolution of the corresponding contact matrix. As an example, for domain data obtained from a 100 kb resolution contact matrix, the genome was binned into 100 kb intervals. In order to accommodate for the uncertainty in exact boundary location, the boundary points were flanked on both sides by the size of the resolution of the corresponding contact matrix. That is, for 100 kb resolution data, each uniquely identified TAD boundary was flanked on either side by 100 kb for a total width around each boundary point of 200,000 base pairs. A genomic bin was defined as a TAD boundary region ($Y = 1$) if it overlapped with at least one flanked TAD boundary. Otherwise, the bin was considered a non-TAD boundary region ($Y = 0$). Random forest classifiers were used to discriminate between TAD and non-TAD boundary regions on chromosome-specific sections of the linear genome.
 
 ### FEATURE ENGINEERING 
 
-Using the sets of cell line specific genomic annotations, we created three types of predictors that were used to describe the relationship between functional annotations and genomic bins. They are described in detail below:
+Cell line specific genomic annotations were used to built the feature space of our random forest models. Here, we created three types of predictors that were used to describe the relationship between functional annotations and genomic bins. They are described in detail below:
 
-1. **Overlap Counts (OC)**: For each genomic bin, the total number of instances where a bin overlapped with regions assigned to genomic annotations (features) was calculated. 
+1. **Overlap Counts (OC)**: For each genomic bin, the total number of instances where a bin overlapped with regions assigned to genomic annotations (features). 
    
-2. **Overlap Percent (OP)**: For each genomic bin, the percent of overlap between the width of the region assigned to a genomic annotation and the total width of the bin was calculated. We defined the feature width as the number of bases that overlapped with a particular genomic bin. If multiple overlaps existed, the feature width was defined as the sum of the total number of bases that overlapped with a particular bin. [??? Unclear.]
+2. **Overlap Percent (OP)**: For each genomic bin, the percent of overlap between the bin and the region assigned to a genomic annotation, defined as the *feature width*. If multiple overlaps existed, the *feature width* was defined as the sum of the total number of bases that overlapped with a particular bin. 
 
-3. **Log2 Distance**: For each genomic bin, the $log_{2}$ of the distance in bases (refered to hereafter as $\textit{distance}$) [??? Learn Markdown!], from the center of the bin to the center of the nearest region defined by a specific genomic annotation was calculated. 
+3. **Log2 Distance**: For each genomic bin, the $log_{2}$ of the distance in bases (refered to hereafter as *Distance*), from the center of the bin to the center of the nearest region defined by a specific genomic annotation. 
 
 ### TRAINING AND TESTING
 
-The data set used for modeling was composed of the response vector **Y**, and the predictor-type specific data matrix, **X** = {$X_1$, $X_2$, ..., $X_p$}, where $p$ was the complete set of functional annotations. Each composed data set was specific to cell line and resolution. We then split the data into a 7:3 ratio of training to testing sets. For the task of performance evaluation and prediction, the test set remained constant to account for an unbiased comparison between data level characteristics.
+The data set used for modeling was composed of two components: the response vector **Y**, an indicator variable separating between TAD and non-TAD boundary regions, and the predictor-type specific data matrix, **X** = {$X_1$, $X_2$, ..., $X_p$}, where $p$ was the complete set of functional annotations. Each composed data set was specific to cell line, resolution, and chromosome. We then split the data into a 7:3 ratio of training to testing sets. <!--For the task of performance evaluation and prediction, the test set remained untouched to account for an unbiased comparison between data level characteristics.-->
 
 ### DATA RE-SAMPLING
 
 Class imbalance was characterized by each dataset's *proportion of imbalance* (PI) defined as the ratio of minority class observations to the sum of minority and majority class observations:
 
-$$PI = 2\dfrac{C_{min}}{C_{min} + C_{maj}}$$
+$$PI = \dfrac{C_{min}}{C_{min} + C_{maj}}$$
 
-where $C_{min}$ denotes the set of genomic bins that overlap with a flanked TAD boundary and $C_{maj}$ denotes the complementary set of genomic bins that did not overlap with a flanked TAD boundary. Here, PI is bounded by 0 and 1, with heavily imbalanced classes approaching 0.
+where $C_{min}$ denotes the set of TAD boundary regions and $C_{maj}$ denotes the complementary set non-TAD boundary regions. Here, PI is bounded by 0 and 0.50. Heavily imbalanced classes tend to approach 0, while balanced classes approach 0.50.
 
-In order to assess the influence of imbalanced classes, we then evaluated four re-sampling techniques (in addition to no re-sampling). They are described in detail below.
+In order to assess the influence of imbalanced classes, we evaluated four re-sampling techniques (including to no re-sampling). They are described in detail below.
 
 1. **No Sampling**: All of the data points from the majority and minority classes of the training set were used.
 
@@ -113,13 +113,11 @@ In order to assess the influence of imbalanced classes, we then evaluated four r
 
 4. **SMOTE** (Synthetic Minority Over-Sampling Technique): This method incorporates both random under- and over-sampling [@chawla2002smote]. Under-sampling is performed without replacement from the majority class. Over-sampling is performed by creating new synthetic observations using the minority class. The minority class is over-sampled by taking each minority class sample and introducing synthetic examples along the feature vectors joining any/all of the k=5 (default) minority class nearest neighbors. The SMOTE algorithm can have many variations in the weightinh of over- and under-sampling. In this study we restricted the algorithm to 100% over-sampling and 200% under-sampling. That is, 1 new synthetic observation was to be created for each existing minority class data point, while 2 data points were simultaneously randomly selected from the majority class. This combination results in perfectly balanced classes. The *DMwR* R package was used to perform SMOTE (version 0.4.1). 
 
-<!--
 ### FEATURE REDUCTION
 
-Architectural proteins tend to exhibit an extensive pattern of colocalization (correlation) [@van2014insulator]. To measure the pairwise correlation of each cell line specific annotation, we used the Jaccard Index. The Jaccard Index measures the ratio of the number of intersecting base pairs between two sets to the number of base pairs in the union, subtracted by the intersection [@favorov2012exploring]. The quantity ranges from 0.0 to 1.0, where 0.0 represents no overlap (no correlation) and 1.0 represent complete overlap (complete correlation). [?? Jaccard is a distance measure, I would avoid using the term correlation here ??]
+Architectural proteins tend to exhibit an extensive pattern of colocalization (correlation) [@van2014insulator]. To measure the pairwise correlation of each cell line specific annotation, we used the Jaccard Index. The Jaccard Index measures the ratio of the number of intersecting base pairs between two sets to the number of base pairs in the union, subtracted by the intersection [@favorov2012exploring]. The quantity ranges from 0.0 to 1.0, where 0.0 represents no overlap (no correlation) and 1.0 represent complete overlap (complete correlation). 
 
-In order to suitably reduce the feature space while also maintaining the inclusion of possibly colocalized annotations, we implemented an elastic-net regularization technique prior to modelling. The technique using a combination of the *l_{1}* and *l_{2}* penalties. For each elastic-net regularization, 10-fold cross-validation was used to tune the parameters that controlled the penalty terms. All elastic-net algorithms were implemented in R using the *caret* package version 6.0 [@kuhn2012caret]. 
--->
+In order to suitably reduce the feature space while also maintaining the inclusion of possibly colocalized annotations, we implemented recursive feature elimination to estimate the optimal number of necessary features to include in the model. The best performing subset was identified, ranging from 2 to the maximum number of features by powers of 2. Given that our approach is chromosome specific, we aggregated the predictive importance of the union of the optimal set of features across chromosome using the mean decrease in node impurity. We then performed hierarchical clustering to obtained the most common and top ranked annotations responsible for TAD boundary prediction.
 
 ### FINAL MODEL ASSESSMENT AND PERFORMANCE
 
