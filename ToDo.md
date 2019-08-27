@@ -25,6 +25,8 @@
 
 - ??? Make all in this order!; !!!reasoning of order is to match heatmap; discuss in meeting
 
+- discuss distance plot; what categories to use
+
 - reconfigure sup fig 1
 
 - add distance boxplots as last sup figs
