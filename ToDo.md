@@ -17,6 +17,8 @@
 
 ## ToDo
 
+- Make headers "Sentence case"
+
 - ??? Quantify sparsity, need to substantiate this statement
 
 - ??? Where is this figure? It seemed important !!!how best to include? as an example for specific section of genome?
