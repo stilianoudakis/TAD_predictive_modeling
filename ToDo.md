@@ -29,11 +29,11 @@
    + look at sparse matrix
    - running 
 
-- ??? Where is this figure? It seemed important !!!how best to include? as an example for specific section of genome?
-   - rescale y axis: 0,.5,1
-   - put legend of predicted regions under plot; only include predict bound line in plot
-   - make lines thicker
-   - use green for predicted
++ ??? Where is this figure? It seemed important !!!how best to include? as an example for specific section of genome?
+   + rescale y axis: 0,.5,1
+   + put legend of predicted regions under plot; only include predict bound line in plot
+   + make lines thicker
+   + use green for predicted
 
 + discuss distance plot; what categories to use
    + pick dist to pred for overlaps
