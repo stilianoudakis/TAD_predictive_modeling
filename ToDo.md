@@ -25,6 +25,8 @@
 
 - numbering structure of re-sampling section in methods
 
+- talk about sparse matrices
+
 + reorder tfbs plots
 
 + fixed enriched heatmap ordering and formatting
