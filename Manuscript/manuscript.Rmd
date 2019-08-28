@@ -81,27 +81,23 @@ To make the data amenable for model training, the genome was binned into equally
 
 Cell line-specific genomic annotations were used to built the predictors for of our random forest models. We created three types of predictors (Figure 1): **Overlap Count (OC)** - the total number of overlaps between a bin and genomic annotation regions;  **Overlap Percent (OP)** - the percent of overlap between the bin and the total width of genomic annotation regions overlapping it; **Log2 Distance** - the $log_{2}$ of the distance in bases (refered to hereafter as *Distance*), from the center of the bin to the center of the nearest genomic annotation region. 
 
-The complete dataset used for modeling was composed of two components: the response vector **Y**, an indicator variable separating between TAD and non-TAD boundary regions, and the predictor-type specific data matrix, **X** = {$X_1$, $X_2$, ..., $X_p$}, where $p$ was the complete set of predictors. The data was split into a 7:3 ratio of training and testing sets.
+The complete dataset used for modeling was composed of two components: the response vector **Y**, an indicator variable separating between TAD and non-TAD boundary regions, and the predictor-type specific data matrix, **X** = {$X_1$, $X_2$, ..., $X_p$}, where $p$ was the set of predictors. One, or all types of predictors were used as described. The data was split into a 7:3 ratio of training and testing sets.
 
-### DATA RE-SAMPLING
+### Addressing class imbalance
 
-Class imbalance was (CI) defined as the ratio of minority class observations to the sum of minority and majority class observations:
+Class imbalance (CI) was defined as the proportion of minority class out of the total number of observations:
 
 $$CI = \dfrac{C_{min}}{C_{min} + C_{maj}}$$
 
-where $C_{min}$ denotes the set of TAD boundary regions and $C_{maj}$ denotes the complementary set non-TAD boundary regions. Here, CI is bounded by 0 and 0.50. Heavily imbalanced classes tend to approach 0, while balanced classes approach 0.50.
+where $C_{min}$ denotes the set of TAD boundary regions and $C_{maj}$ denotes the set non-TAD boundary regions. CI of heavily imbalanced classes approaches 0, while CI for balanced classes approaches 0.50. To assess the effect of CI on predictive performance, we first used the data with **o Sampling**, that is, the majority and minority classes were used as is. We evaluated three re-sampling techniques: **Random Under-Sampling (RUS)** - ll of the data points from the minority class of the training set were used. Sampling without replacement was used to obtain the same number of data points from the majority class. 
 
-In order to assess the influence of imbalanced classes, we evaluated four re-sampling techniques (including to no re-sampling). They are described in detail below.
-
-1. **No Sampling**: All of the data points from the majority and minority classes of the training set were used.
-
-2. **Random Under-Sampling (RUS)**: All of the data points from the minority class of the training set were used. Sampling without replacement was used to obtain the same number of data points from the majority class. 
-
-3. **Random Over-Sampling (ROS)**: All of the data points from the majority class of the training set were used. Sampling with replacement was used to obtain the same number of data points from the minority class. 
+3. **Random Over-Sampling (ROS)**: All of the data points from the majority class of the training set were used. Sampling with replacement was used to obtain the same number of data points from the minority class. [??? I leave this unfinished because the definitions seem plain wrong]
 
 4. **SMOTE** (Synthetic Minority Over-Sampling Technique): This method incorporates both random under- and over-sampling [@chawla2002smote]. Under-sampling is performed without replacement from the majority class. Over-sampling is performed by creating new synthetic observations using the minority class. The minority class is over-sampled by taking each minority class sample and introducing synthetic examples along the feature vectors joining any/all of the k=5 (default) minority class nearest neighbors. The SMOTE algorithm can have many variations in the weightinh of over- and under-sampling. In this study we restricted the algorithm to 100% over-sampling and 200% under-sampling. That is, 1 new synthetic observation was to be created for each existing minority class data point, while 2 data points were simultaneously randomly selected from the majority class. This combination results in perfectly balanced classes. The *DMwR* R package was used to perform SMOTE (version 0.4.1). 
 
-### FINAL MODEL ASSESSMENT AND PERFORMANCE
+[??? Stopped here]
+
+### Assessmend of model performance
 
 Random forest classification models were built to compare model performances between combinations of data resolutions, predictor types, and re-sampling techniques. To reduce bias due to random dataset generation, 10-fold cross validation was used to tune the number of annotations, *p*, to consider at each node. The number of trees that were aggregated for each random forest model was set to the default, n=500. All random forest algorithms were implemented in R using the *caret* package version 6.0 [@kuhn2012caret]. The performance of each model was compared using Matthews Correlation Coefficient (MCC), defined as <!--The MCC is, in essence, the correlation coefficient between the observed and predicted binary classifications [@brodersen2010balanced]. A value of 1 represents a perfect prediction, while a value of -1 represents total disagreement between prediction and observation. A value of 0 indicates no better than random prediction. The MCC is defined as-->
 
