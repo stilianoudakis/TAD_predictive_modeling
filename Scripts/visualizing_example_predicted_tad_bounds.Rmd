@@ -323,7 +323,7 @@ ggplot() +
              size=.75,
              show.legend = TRUE)+
   xlab("Base Pair") +
-  ylab("Predicted Probability") +
+  ylab("Probability") +
   scale_color_manual(name = '', 
                      values =c("blue", "red"),
                      labels = c("Called Boundary", 'Predicted Region'))+
@@ -435,7 +435,7 @@ ggplot() +
              size=.75,
              show.legend = TRUE)+
   xlab("Base Pair") +
-  ylab("Predicted Probability") +
+  ylab("Probability") +
   scale_color_manual(name = '', 
                      values =c("blue", "green", "red"),
                      labels = c("Called Boundary",
