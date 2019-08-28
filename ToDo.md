@@ -17,44 +17,28 @@
 
 ## ToDo
 
-- ??? TBD, did you process the data yourself? Or, just downloaded coordinates. If the latter, why the whole mishmash of data processing description?
-
 - ??? The former two may be combined, TBD
+   - combine under the same header; one supp table
 
-- ??? I leave this unfinished because the definitions seem plain wrong
+- quantify sparsity
 
-- numbering structure of re-sampling section in methods
+- remove wilcoxon tests from sup fig 11
 
-- talk about sparse matrices
+- remove sup fig 8
 
-- which figs to consider combining?
+- combine both supp tables; use two sheets; refer to same table in manuscript
 
-+ reorder tfbs plots
+- remove sup fig 1
+   - combine sup fig 1 and sup fig 3 into table in manuscript (table 1)
 
-+ fixed enriched heatmap ordering and formatting
+- remove sup fig 2
 
-+ Make headers "Sentence case"
+- shrink bottom of fig 5 A
 
-+ change gradient of jaccard to white:red
+- write paragraphs of all previous methods; refer them to supplementary
+   - Comparison with Mourad? Hong?
 
-+ ??? Quantify sparsity, need to substantiate this statement
-   + look at sparse matrix
-   - running 
-
-+ ??? Where is this figure? It seemed important !!!how best to include? as an example for specific section of genome?
-   + rescale y axis: 0,.5,1
-   + put legend of predicted regions under plot; only include predict bound line in plot
-   + make lines thicker
-   + use green for predicted
-
-+ discuss distance plot; what categories to use
-   + pick dist to pred for overlaps
-
-+ add distance boxplots as last sup figs
-
-- reconfigure sup fig 1
-
-- look at instructions for journals
+### For later
 
 - for predicted regions: provide summaries of widths
 
@@ -62,12 +46,6 @@
 
 - look into developing a way to enumerate the strength of each predicted region
 
-- write paragraphs of all previous methods; refer them to supplementary
-   - Comparison with Mourad? Hong?
-
-- Relevant supplementary figures should be referred consequentially.
-
-### For later
 
 10. Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
     - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
