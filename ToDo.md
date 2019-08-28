@@ -17,6 +17,14 @@
 
 ## ToDo
 
+- ??? TBD, did you process the data yourself? Or, just downloaded coordinates. If the latter, why the whole mishmash of data processing description?
+
+- ??? The former two may be combined, TBD
+
+- ??? I leave this unfinished because the definitions seem plain wrong
+
+- numbering structure of re-sampling section in methods
+
 + reorder tfbs plots
 
 + fixed enriched heatmap ordering and formatting
