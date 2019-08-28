@@ -1,0 +1,118 @@
+---
+title: "Jaccard Index Heatmaps for TFBS"
+author: "Spiro Stilianoudakis"
+date: "August 27, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading Libraries
+
+```{r}
+library(GenomicRanges)
+library(caret)
+library(data.table)
+library(gbm)
+library(randomForest)
+library(glmnet)
+library(pROC)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(DMwR)
+library(gridExtra)
+library(pROC)
+library(ROCR)
+#library(leaps)
+library(cluster)
+library(scales)
+library(GGally)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(GenometriCorr)
+library(ggpubr)
+library(ggsignif)
+library(Vennerable)
+library(VennDiagram)
+library(ChIPpeakAnno)
+library(EnrichedHeatmap)
+```
+
+# GM12878
+
+```{r}
+jaccard.mat.gm12878_tfbs <-  readRDS("Z:/TAD_data_analysis/jaccard/jaccard.mat.gm12878_tfbs.rds")
+
+diag(jaccard.mat.gm12878_tfbs) <- NA
+
+distance.col = as.dist(jaccard.mat.gm12878_tfbs)
+cluster.col = hclust(distance.col, method = "average")
+my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(jaccard.mat.gm12878_tfbs))
+heatmap.2(t(jaccard.mat.gm12878_tfbs),
+          #labRow=rownames(rfegm12878.mat),
+          #labCol=colnames(rfegm12878.mat),
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins=c(12,8),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #keysize = 1.5,
+          #key.title = "Elastic-Net Coefficient",
+          dendrogram="none",     # only draw a row dendrogram,
+          #Rowv = FALSE,
+          #Colv = reorder(as.dendrogram(cluster.col), 37:1),
+          cexRow=1,
+          cexCol=1)
+```
+
+# K562
+
+```{r}
+jaccard.mat.k562_tfbs <-  readRDS("Z:/TAD_data_analysis/jaccard/jaccard.mat.k562_tfbs.rds")
+
+diag(jaccard.mat.k562_tfbs) <- NA
+
+distance.col = as.dist(jaccard.mat.k562_tfbs)
+cluster.col = hclust(distance.col, method = "average")
+my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(jaccard.mat.k562_tfbs))
+heatmap.2(t(jaccard.mat.k562_tfbs),
+          #labRow=rownames(rfegm12878.mat),
+          #labCol=colnames(rfegm12878.mat),
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins=c(12,8),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #keysize = 1.5,
+          #key.title = "Elastic-Net Coefficient",
+          dendrogram="none",     # only draw a row dendrogram,
+          #Rowv = FALSE,
+          #Colv = reorder(as.dendrogram(cluster.col), 37:1),
+          cexRow=1,
+          cexCol=1)
+```
+
