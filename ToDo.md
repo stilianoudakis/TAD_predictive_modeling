@@ -19,9 +19,11 @@
 
 - reorder tfbs plots
 
++ fixed enriched heatmap ordering and formatting
+
 + Make headers "Sentence case"
 
-- change gradient of jaccard to white:red
++ change gradient of jaccard to white:red
 
 - ??? Quantify sparsity, need to substantiate this statement
    - look at sparse matrix
@@ -31,8 +33,6 @@
    - put legend of predicted regions under plot; only include predict bound line in plot
    - make lines thicker
    - use green for predicted
-
-- ??? Need further drill down, as we discussed
 
 + discuss distance plot; what categories to use
    + pick dist to pred for overlaps
