@@ -574,49 +574,83 @@ ggplot(pred_v_called_10_df, aes(x=BoundReg, y = log2AbsoluteDist, fill=BoundReg)
 
 ```{r}
 
-pred_v_called_10_df <- data.frame(LogDist = c(#Predicted
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[4]]))$distance+1),
-    
-    #Called
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[4]]))$distance+1)
-),
-Annotation = c(#Predicted
-    rep("CTCF",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    
-    #Called
-    rep("CTCF",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1)))),
-BoundReg = c(#Predicted
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    
-    #Called
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1)))))
+#predicted but not called
+pbnc <- all_pred_bounds[-unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
 
-pred_v_called_10_df$BoundReg <- factor(pred_v_called_10_df$BoundReg, levels=c("Predicted", "Called"))
+#called and predicted
+cap1 <- all_pred_bounds[unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
+cap2 <- all_true_bounds_r[unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
+cap <- GRangesList(cap1,cap2)
+cap <- do.call("c", cap)
+
+#called by not predicted
+all_true_bounds2 <- all_true_bounds[-unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
+cbnp <- resize(all_true_bounds2, width=1,fix = "center")
+
+
+pred_v_called_10_df <- data.frame(LogDist = c(#PBNC
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[4]]))$distance+1),
+    
+    #CAP
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[4]]))$distance+1),
+    
+    #CBNP
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[4]]))$distance+1)
+),
+Annotation = c(#pbnc
+    rep("CTCF",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    
+    #cap
+    rep("CTCF",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    
+    #cbnp
+    rep("CTCF",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))),
+BoundReg = c(#pbnc
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    
+    #cap
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    
+    #cbnp
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))))
+
+pred_v_called_10_df$BoundReg <- factor(pred_v_called_10_df$BoundReg, levels=c("PBNC", "CAP", "CBNP"))
 
 ggplot(pred_v_called_10_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=BoundReg))  + 
     facet_grid(~ Annotation) +    
     stat_boxplot(geom ='errorbar', width = 0.2) + 
     geom_boxplot(outlier.shape = NA) +
     geom_signif(test = "wilcox.test", 
-                comparisons = list( c("Predicted", "Called")),
+                comparisons = list(c("PBNC", "CAP"),
+                                   c("PBNC", "CBNP"),
+                                   c("CBNP", "CAP")),
                 vjust = 0,
                 textsize = 4,
                 size = .5,
@@ -627,10 +661,12 @@ ggplot(pred_v_called_10_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=Bo
     ylab("Log2 Distance to Annotation")+
     xlab("") +
     scale_fill_manual(name="Boundary Region",
-                      values=c("red",
+                      values=c("green",
+                               "red",
                                "blue"))+
-    scale_color_manual(values=c("red",
-                                "blue")) +
+    scale_color_manual(values=c("green",
+                               "red",
+                               "blue")) +
     guides(color=FALSE, linetype=FALSE)+
     theme(axis.text.x = element_text(size=15,
                                      angle = 45,
@@ -932,53 +968,89 @@ EnrichedHeatmap(mat_called_znf143,
                                                                          yaxis_facing = "left")))
 ```
 
+## Distance Plots
+
 ### Plots v2
 
 ```{r}
 
-pred_v_called_10_df <- data.frame(LogDist = c(#Predicted
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[4]]))$distance+1),
-    
-    #Called
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[4]]))$distance+1)
-),
-Annotation = c(#Predicted
-    rep("CTCF",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    
-    #Called
-    rep("CTCF",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1)))),
-BoundReg = c(#Predicted
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    rep("Predicted", length(log2(mcols(distanceToNearest(all_pred_bounds, annots.GR.f[[1]]))$distance+1))),
-    
-    #Called
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1))),
-    rep("Called", length(log2(mcols(distanceToNearest(all_true_bounds_r, annots.GR.f[[1]]))$distance+1)))))
+#predicted but not called
+pbnc <- all_pred_bounds[-unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
 
-pred_v_called_10_df$BoundReg <- factor(pred_v_called_10_df$BoundReg, levels=c("Predicted", "Called"))
+#called and predicted
+cap1 <- all_pred_bounds[unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
+cap2 <- all_true_bounds_r[unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
+cap <- GRangesList(cap1,cap2)
+cap <- do.call("c", cap)
+
+#called by not predicted
+all_true_bounds2 <- all_true_bounds[-unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds_r)))]
+cbnp <- resize(all_true_bounds2, width=1,fix = "center")
+
+
+pred_v_called_10_df <- data.frame(LogDist = c(#PBNC
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[4]]))$distance+1),
+    
+    #CAP
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(cap, annots.GR.f[[4]]))$distance+1),
+    
+    #CBNP
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1),
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[2]]))$distance+1),
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[3]]))$distance+1),
+    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[4]]))$distance+1)
+),
+Annotation = c(#pbnc
+    rep("CTCF",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    
+    #cap
+    rep("CTCF",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    
+    #cbnp
+    rep("CTCF",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("RAD21",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("SMC3",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("ZNF143",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))),
+BoundReg = c(#pbnc
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
+    
+    #cap
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
+    
+    #cbnp
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
+    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))))
+
+pred_v_called_10_df$BoundReg <- factor(pred_v_called_10_df$BoundReg, levels=c("PBNC", "CAP", "CBNP"))
 
 ggplot(pred_v_called_10_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=BoundReg))  + 
     facet_grid(~ Annotation) +    
     stat_boxplot(geom ='errorbar', width = 0.2) + 
     geom_boxplot(outlier.shape = NA) +
     geom_signif(test = "wilcox.test", 
-                comparisons = list( c("Predicted", "Called")),
+                comparisons = list(c("PBNC", "CAP"),
+                                   c("PBNC", "CBNP"),
+                                   c("CBNP", "CAP")),
                 vjust = 0,
                 textsize = 4,
                 size = .5,
@@ -989,10 +1061,12 @@ ggplot(pred_v_called_10_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=Bo
     ylab("Log2 Distance to Annotation")+
     xlab("") +
     scale_fill_manual(name="Boundary Region",
-                      values=c("red",
+                      values=c("green",
+                               "red",
                                "blue"))+
-    scale_color_manual(values=c("red",
-                                "blue")) +
+    scale_color_manual(values=c("green",
+                               "red",
+                               "blue")) +
     guides(color=FALSE, linetype=FALSE)+
     theme(axis.text.x = element_text(size=15,
                                      angle = 45,
