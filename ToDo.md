@@ -27,6 +27,8 @@
 
 - talk about sparse matrices
 
+- which figs to consider combining?
+
 + reorder tfbs plots
 
 + fixed enriched heatmap ordering and formatting
