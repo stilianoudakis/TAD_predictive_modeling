@@ -17,6 +17,8 @@
 
 ## ToDo
 
+- Make headers "Sentence case"
+
 - change gradient of jaccard to white:red
 
 - ??? Quantify sparsity, need to substantiate this statement
