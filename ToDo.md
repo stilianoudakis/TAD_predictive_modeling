@@ -17,6 +17,8 @@
 
 ## ToDo
 
+- remove main figs from ordered list file
+
 - ??? The former two may be combined, TBD
    - combine under the same header; one supp table
 
