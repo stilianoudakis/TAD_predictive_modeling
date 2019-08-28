@@ -17,15 +17,21 @@
 
 ## ToDo
 
+- change gradient of jaccard to white:red
+
 - ??? Quantify sparsity, need to substantiate this statement
+   - look at sparse matrix
 
 - ??? Where is this figure? It seemed important !!!how best to include? as an example for specific section of genome?
+   - rescale y axis: 0,.5,1
+   - put legend of predicted regions under plot; only include predict bound line in plot
+   - make lines thicker
+   - use green for predicted
 
 - ??? Need further drill down, as we discussed
 
-- ??? Make all in this order!; !!!reasoning of order is to match heatmap; discuss in meeting
-
 - discuss distance plot; what categories to use
+   - pick dist to pred for overlaps
 
 - reconfigure sup fig 1
 
