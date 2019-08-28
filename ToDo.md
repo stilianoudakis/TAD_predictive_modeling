@@ -17,7 +17,7 @@
 
 ## ToDo
 
-- reorder tfbs plots
++ reorder tfbs plots
 
 + fixed enriched heatmap ordering and formatting
 
@@ -25,8 +25,9 @@
 
 + change gradient of jaccard to white:red
 
-- ??? Quantify sparsity, need to substantiate this statement
-   - look at sparse matrix
++ ??? Quantify sparsity, need to substantiate this statement
+   + look at sparse matrix
+   - running 
 
 - ??? Where is this figure? It seemed important !!!how best to include? as an example for specific section of genome?
    - rescale y axis: 0,.5,1
