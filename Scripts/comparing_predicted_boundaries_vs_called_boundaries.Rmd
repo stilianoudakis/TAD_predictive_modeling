@@ -148,16 +148,20 @@ mat_pred_ctcf = normalizeToMatrix(annots.GR.f[[1]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_ctcf, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col ="red", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col ="darkgreen", fontsize = 10,
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 #### Called
@@ -172,15 +176,17 @@ mat_called_ctcf = normalizeToMatrix(annots.GR.f[[1]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_called_ctcf, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red", 
-                                                                                   lwd = 2,
-                                                                                   lty=3), 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
 ```
@@ -199,16 +205,21 @@ mat_pred_rad21 = normalizeToMatrix(annots.GR.f[[2]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_rad21, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "darkgreen", 
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
+
 ```
 
 #### Called
@@ -223,17 +234,21 @@ mat_called_rad21 = normalizeToMatrix(annots.GR.f[[2]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_called_rad21, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red", 
-                                                                                   lwd = 2,
-                                                                                   lty = 3), 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
+
 ```
 
 ### SMC3
@@ -250,16 +265,21 @@ mat_pred_smc3 = normalizeToMatrix(annots.GR.f[[3]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_smc3, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "darkgreen", 
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
+
 ```
 
 #### Called
@@ -274,17 +294,20 @@ mat_called_smc3 = normalizeToMatrix(annots.GR.f[[3]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_called_smc3, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red", 
-                                                                                   lwd = 2,
-                                                                                   lty = 3), 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 ### ZNF143
@@ -301,16 +324,20 @@ mat_pred_znf143 = normalizeToMatrix(annots.GR.f[[4]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_znf143, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "darkgreen", 
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 #### Called
@@ -325,17 +352,21 @@ mat_called_znf143 = normalizeToMatrix(annots.GR.f[[4]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_called_znf143, 
-                col = c("black",colorRampPalette(c("white", "pink", "red"))(99)), 
+                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "red", 
-                                                                                   lwd = 2,
-                                                                                   lty = 3), 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
+
 ```
 
 ## Distance Plots
@@ -778,16 +809,20 @@ mat_pred_ctcf = normalizeToMatrix(annots.GR.f[[1]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_ctcf, 
-                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col ="blue", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col ="darkgreen", fontsize = 10,
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 #### Called
@@ -808,11 +843,15 @@ EnrichedHeatmap(mat_called_ctcf,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
                 top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
-                                                                                   lwd = 2,
-                                                                                   lty=3), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
+
 ```
 
 ### RAD21
@@ -829,16 +868,20 @@ mat_pred_rad21 = normalizeToMatrix(annots.GR.f[[2]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_rad21, 
-                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "darkgreen", 
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 #### Called
@@ -859,11 +902,15 @@ EnrichedHeatmap(mat_called_rad21,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
                 top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
-                                                                                   lwd = 2,
-                                                                                   lty = 3), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
+
 ```
 
 ### SMC3
@@ -880,16 +927,20 @@ mat_pred_smc3 = normalizeToMatrix(annots.GR.f[[3]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_smc3, 
-                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "darkgreen", 
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 #### Called
@@ -910,11 +961,14 @@ EnrichedHeatmap(mat_called_smc3,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
                 top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
-                                                                                   lwd = 2,
-                                                                                   lty = 3), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 ### ZNF143
@@ -931,16 +985,20 @@ mat_pred_znf143 = normalizeToMatrix(annots.GR.f[[4]],
                          keep = c(0,.99))
 
 EnrichedHeatmap(mat_pred_znf143, 
-                col = c("black",colorRampPalette(c("white", "lightblue", "blue"))(99)), 
+                col = c("black",colorRampPalette(c("white", "green", "darkgreen"))(99)), 
                 #heatmap_legend_param = list(show_heatmap_legend = FALSE),
                 row_title="Chromosomes",show_heatmap_legend = FALSE,
                 row_title_side="left", 
                 column_title="Predicted", 
                 axis_name = axis_names,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
+                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "darkgreen", 
                                                                                    lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 #### Called
@@ -961,11 +1019,14 @@ EnrichedHeatmap(mat_called_znf143,
                 row_title_side="left", 
                 column_title="Called", 
                 axis_name = axis_names,
+				column_title_gp = gpar(fontsize = 20),
+				row_title_gp = gpar(fontsize = 20),
+				axis_name_gp = gpar(fontsize = 20),
                 top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = "blue", 
-                                                                                   lwd = 2,
-                                                                                   lty = 3), 
+                                                                                   lwd = 2), 
                                                                          yaxis_side = "right", 
                                                                          yaxis_facing = "left")))
+
 ```
 
 ## Distance Plots
