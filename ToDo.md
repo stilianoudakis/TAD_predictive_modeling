@@ -17,7 +17,9 @@
 
 ## ToDo
 
-- Make headers "Sentence case"
+- reorder tfbs plots
+
++ Make headers "Sentence case"
 
 - change gradient of jaccard to white:red
 
@@ -32,38 +34,14 @@
 
 - ??? Need further drill down, as we discussed
 
-- discuss distance plot; what categories to use
-   - pick dist to pred for overlaps
++ discuss distance plot; what categories to use
+   + pick dist to pred for overlaps
+
++ add distance boxplots as last sup figs
 
 - reconfigure sup fig 1
 
-- add distance boxplots as last sup figs
-
-+ editted methods
-
-+ fix ??? in results
-
-+ put legends at bottom of manuscript
-
-+ make heatmap larger in fig4/sup fig 8
-
-+ fix lines on heatmaps fig4/sup fig 8
-
-+ play around with jaccard heatmaps; consider making diagonal na's
-
-+ change to chromhmm sup fig 7; put A and B; reorder chromhmm and hm
-
-+ combine sup fig 4 and 5; fix xaxis
-
-+ cut sup fig 3 to .2; put A and B
-
-- use arial font
-
-- reference kellens bioarxiv paper
-
 - look at instructions for journals
-
-- make figures in final form
 
 - for predicted regions: provide summaries of widths
 
