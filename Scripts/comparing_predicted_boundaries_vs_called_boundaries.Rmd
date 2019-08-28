@@ -692,10 +692,10 @@ ggplot(pred_v_called_10_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=Bo
     ylab("Log2 Distance to Annotation")+
     xlab("") +
     scale_fill_manual(name="Boundary Region",
-                      values=c("green",
+                      values=c("forestgreen",
                                "red",
                                "blue"))+
-    scale_color_manual(values=c("green",
+    scale_color_manual(values=c("forestgreen",
                                "red",
                                "blue")) +
     guides(color=FALSE, linetype=FALSE)+
@@ -1122,10 +1122,10 @@ ggplot(pred_v_called_10_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=Bo
     ylab("Log2 Distance to Annotation")+
     xlab("") +
     scale_fill_manual(name="Boundary Region",
-                      values=c("green",
+                      values=c("forestgreen",
                                "red",
                                "blue"))+
-    scale_color_manual(values=c("green",
+    scale_color_manual(values=c("forestgreen",
                                "red",
                                "blue")) +
     guides(color=FALSE, linetype=FALSE)+
