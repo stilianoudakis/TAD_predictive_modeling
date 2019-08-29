@@ -1,5 +1,0 @@
-Quantity,Inter-Resolution ICC,95% CI,P-Value
-Number of Genomic Bins,0.464,"[0.244, 0.690]",< 0.001
-Number of TADs called,0.627,"[0.426, 0.802]",< 0.001
-Number of TAD boundaries,0.611,"[0.407, 0.791]",< 0.001
-Imbalance Ratio,0.114,"[-0.058, 0.372]",0.109
