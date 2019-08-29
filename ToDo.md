@@ -34,7 +34,7 @@
 
 + remove sup fig 2
 
-- shrink bottom of fig 5 A
++ shrink bottom of fig 5 A
 
 - write paragraphs of all previous methods; refer them to supplementary
    - Comparison with Mourad? Hong?
