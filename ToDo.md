@@ -14,32 +14,29 @@
 - TBD - Feature selection
 - Prediction
 
-
 ## ToDo
 
+- Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
+    - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
+    - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
+    - Call TADs in individual replicates.
+
+- make error bars thicker and black
+
+- make flowchart nicer
+
+- shink fig5; put x axis lable
+
+- add k562 for table 1
+
 - quantify sparsity
-
-+ remove main figs from ordered list file
-
-+ ??? The former two may be combined, TBD
-   + combine under the same header; one supp table
-+ combine both supp tables; use two sheets; refer to same table in manuscript
-
-+ remove wilcoxon tests from sup fig 11
-
-+ remove sup fig 8
-
-+ remove sup fig 1
-   + combine sup fig 1 and sup fig 3 into table in manuscript (table 1)
-
-+ remove sup fig 2
-
-+ shrink bottom of fig 5 A
 
 - write paragraphs of all previous methods; refer them to supplementary
    - Comparison with Mourad? Hong?
 
 ### For later
+
+- create R package for improve TAD boundary prediction
 
 - for predicted regions: provide summaries of widths
 
@@ -47,11 +44,6 @@
 
 - look into developing a way to enumerate the strength of each predicted region
 
-
-10. Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
-    - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
-    - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
-    - Call TADs in individual replicates.
 
 ### Main Ideas
 
