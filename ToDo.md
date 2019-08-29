@@ -17,23 +17,22 @@
 
 ## ToDo
 
-- remove main figs from ordered list file
-
-- ??? The former two may be combined, TBD
-   - combine under the same header; one supp table
-
 - quantify sparsity
 
-- remove wilcoxon tests from sup fig 11
++ remove main figs from ordered list file
 
-- remove sup fig 8
++ ??? The former two may be combined, TBD
+   + combine under the same header; one supp table
++ combine both supp tables; use two sheets; refer to same table in manuscript
 
-- combine both supp tables; use two sheets; refer to same table in manuscript
++ remove wilcoxon tests from sup fig 11
 
-- remove sup fig 1
-   - combine sup fig 1 and sup fig 3 into table in manuscript (table 1)
++ remove sup fig 8
 
-- remove sup fig 2
++ remove sup fig 1
+   + combine sup fig 1 and sup fig 3 into table in manuscript (table 1)
+
++ remove sup fig 2
 
 - shrink bottom of fig 5 A
 
