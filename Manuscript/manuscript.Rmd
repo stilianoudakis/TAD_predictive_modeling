@@ -55,7 +55,32 @@ Despite the success of Hi-C technologies in revealing the high-order levels of g
 ## PREVIOUS METHODS
 
 <!--[still revising]-->
-Recently, an L1-regularized multiple logistic regression model, called *HiCfeat*, was developed to predict TAD boundary regions using a collection of 69 transcription factor binding sites on the GM12878 cell line [@mourad2016computational]. 
+Recently, an L1-regularized multiple logistic regression model, called *HiCfeat*, 
+was developed to predict TAD boundaries using transcription factor binding sites 
+on GM12878 [@mourad2016computational]. Based on a 1 kb binned genomic data matrix 
+and 20 kb flanked TAD boundaries, the model was trained using proportions of 
+overlaps between ChiP-seq peak defined functional element coordinates and genomic 
+bins. However, several problems exist with this study. First, many transcription 
+factors are known to colocalize, and therefore exhibit high correlations. Given 
+a group of features that are highly correlated, L1-regularization tends to pick 
+only one of them, while shrinking the others to zero [@zou2005regularization]. 
+Here, ensemble learning techniques could offer a more robust method toward 
+identifying  annotations associated with TAD boudaries. Likewise, it is unclear 
+how other sets of epigenomic features affect prediction, including chromatin state 
+segmentations and histone modifications. Secondly, the class imbalance issue was 
+not addressed prior to modelling. Instead, model performance was evaluated using 
+ROC (receiver operating characteristic) curves and subsequent AUC (area under the 
+curve). It has been shown that AUC is insensitive to class imbalance, creating 
+artificially inflated values inlfuenced by the majority class [@prati2011survey; 
+@wei2013role]. It is unclear how simple data level solutions to class imbalance, 
+such random under-sampling and random over-sampling affect TAD boundary prediction. 
+Likewise, a more composite metric such as Matthews Correlation Coefficient (MCC), 
+might provide more sensitive assessment of model performance. Thirdly, the relationship 
+between annotations and boundaries was quantified using proportions of overlaps. This 
+type of predictor ignores distances, which offers a much more spatially descriptive 
+feature space and could improve predictive performance. Lastly, it is unclear how *HiCfeat* 
+would perform on other cell lines and Hi-C data resolutions, giving *HiCfeat* a limited 
+application in TAD boundary prediction.
 
 Another method used an L2-based regularized linear model to discriminate between what was termed as "boundary-" and "TAD-segments" of the hESC cell line [@hong2017computational].
 
@@ -87,11 +112,7 @@ Class imbalance (CI) was defined as the proportion of minority class out of the 
 
 $$CI = \dfrac{C_{min}}{C_{min} + C_{maj}}$$
 
-where $C_{min}$ denotes the set of TAD boundary regions and $C_{maj}$ denotes the set non-TAD boundary regions. CI of heavily imbalanced classes approaches 0, while CI for balanced classes approaches 0.50. To assess the effect of CI on predictive performance, we first used the data with **No Sampling**, that is, the majority and minority classes were used as is. We evaluated three re-sampling techniques: **Random Under-Sampling (RUS)** - all of the data points from the minority class of the training set were used. Sampling without replacement was used to obtain the same number of data points from the majority class. 
-
-3. **Random Over-Sampling (ROS)**: All of the data points from the majority class of the training set were used. Sampling with replacement from minority class was used to obtain the same number of data points as in the majority class. 
-
-4. **SMOTE** (Synthetic Minority Over-Sampling Technique): This method incorporates both random under- and over-sampling [@chawla2002smote]. Under-sampling is performed without replacement from the majority class. Over-sampling is performed by creating new synthetic observations using the minority class. The minority class is over-sampled by taking each minority class sample and introducing synthetic examples along the feature vectors joining any/all of the k=5 (default) minority class nearest neighbors. The SMOTE algorithm can have many variations in the weightinh of over- and under-sampling. In this study we restricted the algorithm to 100% over-sampling and 200% under-sampling. That is, 1 new synthetic observation was to be created for each existing minority class data point, while 2 data points were simultaneously randomly selected from the majority class. This combination results in perfectly balanced classes. The *DMwR* R package was used to perform SMOTE (version 0.4.1). 
+where $C_{min}$ denotes the set of TAD boundary regions and $C_{maj}$ denotes the set non-TAD boundary regions. CI of heavily imbalanced classes approaches 0, while CI for balanced classes approaches 0.50. To assess the effect of CI on predictive performance, we first used the data with **No Sampling**, that is, the majority and minority classes were used as is. We evaluated three re-sampling techniques. For **Random Under-Sampling (RUS)**, all of the data points from the minority class of the training set were used. Then sampling without replacement was used to obtain the same number of data points from the majority class. For **Random Over-Sampling (ROS)**, all of the data points from the majority class of the training set were used. Then, sampling with replacement from minority class was used to obtain the same number of data points as in the majority class. Lastly, for **SMOTE** (Synthetic Minority Over-Sampling Technique), both random under- and over-sampling was incorporated [@chawla2002smote]. Under-sampling was performed without replacement from the majority class, while over-sampling was performed by creating new synthetic observations using the minority class. The minority class was over-sampled by taking each minority class sample and introducing synthetic examples along the feature vectors joining any/all of the k=5 (default) minority class nearest neighbors. The SMOTE algorithm can have many variations in the weighting of over- and under-sampling. In this study we restricted the algorithm to 100% over-sampling and 200% under-sampling. That is, 1 new synthetic observation was to be created for each existing minority class data point, while 2 data points were simultaneously randomly selected from the majority class. This combination results in perfectly balanced classes. The *DMwR* R package was used to perform SMOTE (version 0.4.1). 
 
 [??? Stopped here]
 
@@ -118,13 +139,11 @@ where TP refers to the number of bins correctly identified as containing a TAD b
 
 ### Feature reduction
 
-Many genomic annotations, notably architectural proteins, tend to exhibit an extensive pattern of colocalization (correlation) [@van2014insulator]. <!--This can contribute to high collinearity which can result in overfitting a predictive model.--> To measure the pairwise correlation of each cell line specific annotation, we used the Jaccard Index. The Jaccard Index measures the ratio of the number of intersecting base pairs between two sets to the number of base pairs in the union, subtracted by the intersection [@favorov2012exploring]. The quantity ranges from 0 to 1, where 0 represents no overlap (no correlation) and 1 represent complete overlap (complete correlation). 
-
-In order to suitably reduce the feature space and prevent overfitting, we implemented recursive feature elimination to estimate the optimal number of necessary features to include in the model. The best performing subset was identified, ranging from 2 to the maximum number of features by powers of 2. We then aggregated the predictive importance of the union of the optimal set of features across chromosome using the mean decrease in node impurity. Hierarchical clustering was performed to obtained the most common and top ranked annotations responsible for TAD boundary prediction.
+Many genomic annotations, notably architectural proteins, tend to exhibit an extensive pattern of colocalization (correlation) [@van2014insulator]. To suitably reduce the feature space and prevent overfitting, we implemented recursive feature elimination to estimate the optimal number of necessary features to include in the model. The best performing subset was identified, ranging from 2 to the maximum number of features by powers of 2. We then aggregated the predictive importance of the union of the optimal set of features across chromosomes using the mean decrease in node impurity to determine the most common and top ranked annotations for predicting TAD boundaries. 
 
 ## Using optimally built random forest classifiers for more precise TAD boundary prediction
 
-By leveraging the enrichment of known annotations in our model, we established a *predicted TAD boundary region* as a collection of adjacent base pairs that were given a probability of 1 for being a potentially predicted TAD boundary. To guard against inflating the number of predicted TAD boundaries, we clustered the distances between the midpoints of the *predicted TAD boundary regions*. We then performed partitioning around mediods (PAM) to determine the *predicted TAD boundary region* that was most representative of the cluster. The midpoint, in this case a particular basepair, of the *predicted TAD boundary region* identified as the medoid was defined as a final *predicted TAD boundary*. This process was repeated throughout the chromosome-specific sections of the linear genome.
+By leveraging the enrichment of top ranked annotations in our model, we established *predicted TAD boundary regions* as a collection of adjacent base pairs that were given a probability of 1 for being a potentially predicted TAD boundary. To guard against inflating the number of predicted TAD boundaries, we clustered the distances between the midpoints of the *predicted TAD boundary regions*. We then performed partitioning around mediods (PAM) to determine the *predicted TAD boundary region* that was most representative of the cluster. The midpoint, in this case a particular basepair, of the *predicted TAD boundary region* identified as the medoid was defined as a final *predicted TAD boundary*. This process was repeated throughout the chromosome-specific sections of the linear genome.
 
 # Results
 
