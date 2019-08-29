@@ -25,9 +25,7 @@
 
 - make flowchart nicer
 
-- shink fig5; put x axis lable
-
-- add k562 for table 1
++ add k562 for table 1
 
 - quantify sparsity
 
