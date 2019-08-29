@@ -932,9 +932,9 @@ ggplot(all_rfperfs[all_rfperfs$CL=="K562",], aes(x=Resolution, y=V1, color=Predi
 
 ```{r}
 ggplot(all_rfperfs_mcc[all_rfperfs_mcc$CL=="GM12878",], aes(x=Resolution, y=MCC, color=Predictor, fill=Predictor, group=Predictor)) +
-     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
-                 position=position_dodge(.9), alpha=0.75) +
      geom_bar(stat="identity", position = position_dodge()) +
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.75,
+                 position=position_dodge(.9), alpha=0.75, color="black", size=1) +
      facet_grid(. ~ Resampling)+
      theme_minimal() +
      theme_bw()+
@@ -963,9 +963,9 @@ ggplot(all_rfperfs_mcc[all_rfperfs_mcc$CL=="GM12878",], aes(x=Resolution, y=MCC,
 
 ```{r}
 ggplot(all_rfperfs_mcc[all_rfperfs_mcc$CL=="K562",], aes(x=Resolution, y=MCC, color=Predictor, fill=Predictor, group=Predictor)) +
-     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.5,
-                 position=position_dodge(.9), alpha=0.75) +
      geom_bar(stat="identity", position = position_dodge()) +
+     geom_errorbar(aes(ymin=MCC-MCCSD, ymax=MCC+MCCSD), width=.75,
+                 position=position_dodge(.9), alpha=0.75, color="black", size=1) +
      facet_grid(. ~ Resampling)+
      theme_minimal() +
      theme_bw()+
