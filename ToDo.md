@@ -21,7 +21,7 @@
     - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
     - Call TADs in individual replicates.
 
-- make error bars thicker and black
++ make error bars thicker and black
 
 - make flowchart nicer
 
