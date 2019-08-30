@@ -21,16 +21,13 @@
     - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
     - Call TADs in individual replicates.
 
-+ make error bars thicker and black
-
 - make flowchart nicer
+
++ make error bars thicker and black
 
 + add k562 for table 1
 
 - quantify sparsity
-
-- write paragraphs of all previous methods; refer them to supplementary
-   - Comparison with Mourad? Hong?
 
 ### For later
 
