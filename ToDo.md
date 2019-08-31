@@ -16,11 +16,12 @@
 
 ## ToDo
 
-- Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
-    - Extract Hi-C matrices in text format. Replicates should be in individual matrices.
-    - Call consensus TADs. Ask Kellen how. This is analogous what Arrowhead does now.
-    - Call TADs in individual replicates.
-
++ Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
+    - running
+    
++ Use ConsensusTAD to call TADs
+    - running
+    
 - make flowchart nicer
 
 + make error bars thicker and black
