@@ -24,10 +24,6 @@
     
 - make flowchart nicer
 
-+ make error bars thicker and black
-
-+ add k562 for table 1
-
 - quantify sparsity
 
 ### For later
