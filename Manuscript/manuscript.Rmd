@@ -165,9 +165,30 @@ For each predicted TAD boundary region, we were able to identify the summit loca
 
 # Discussion
 
-In this study we developed an ensemble framework to systematically compare model performances for different combinations of Hi-C resolution, data re-sampling, and feature engineering techniques. By implementing our framework across multiple cell lines, we showed that there exists a consensus approach toward precise TAD boundary prediction. We showed that random forest classification models trained on domain data extracted from 10 kb resolution maps, using random over- and under-sampling to account for class imbalance, with a distance-type predictor space yield optimal model performances for both the GM12878 and K562 cell lines. 
+In this study we developed an ensemble framework to systematically compare the effects of different combinations of Hi-C resolution, data re-sampling, and feature engineering techniques on the performance of models aimed at TAD boundary prediction. By implementing our framework across multiple cell lines, we showed that there exists a consensus approach toward precise TAD boundary prediction. We showed that random forest classification models trained on domain data extracted from 10 kb resolution maps, using random over- and under-sampling to account for class imbalance, with a distance-type predictor space yielded optimal model performances for both the GM12878 and K562 cell lines. 
 
-Previous studies tended to focus only on specific sets of genomic annotations including chromatin states, histone modifications, or transcription factor binding sites alone. Using our framework, we were able to conclude that simply building random forest classifiers on cell line specific transcription factor binding sites alone can yield near optimal model performance, thereby significantly reducing the feature space and computational complexity of the model. Specifically, we found that the CCCTC-binding factor (CTCF) and cohesin complexes (RAD21 and SMC3) were the most important features of TAD boundary prediction, confirming their enrichment at TAD boundaries as part of the loop extrusion model [@sanborn2015chromatin; @fudenberg2016formation; @alipour2012self]. Likewise, we found the the zinc-finger protein ZNF143 was also given high predictive importance. This confirmed the known role of ZNF143 as a chromatin-looping factor that contributes to the architectural foundation of the genome by providing sequence specificity at promoters connected with distal regulatory elements [@bailey2015znf143;@gonzalez2017znf143].
+Previous studies tended to focus only on specific sets of genomic annotations including chromatin states, histone modifications, or transcription factor binding sites (TFBS) alone. Using our framework, we were able to conclude that simply building random forest classifiers only on cell line specific TFBS can yield near optimal model performance, thereby significantly reducing the feature space and computational complexity of the model. Specifically, we found that the CCCTC-binding factor (CTCF) and cohesin complexes (RAD21 and SMC3) were the most important features of TAD boundary prediction, confirming their enrichment at TAD boundaries as part of the loop extrusion model [@sanborn2015chromatin; @fudenberg2016formation; @alipour2012self]. Likewise, we found the the zinc-finger protein ZNF143 was also given high predictive importance. This confirmed the known role of ZNF143 as a chromatin-looping factor that contributes to the structural foundation of the genome by providing sequence specificity at promoters connected with distal regulatory elements [@bailey2015znf143;@gonzalez2017znf143]. 
+
+By leveraging the enrichment of these architectural proteins we were able to more precisely identify TAD boundaries at a much more refined resolution. To do so, we evaluated the ChIP-Seq signal strength between the CTCF, RAD21, SMC3, and ZNF143 transcription factors and a 10 kb flanked window of predicted TAD boundaries identified by our optimally built random forest model. We showed that the genomic signals for each TFBS was much more consolidated near the center of our flanked predicted TAD boundary then the flanked boundary identified by the ARROWHEAD TAD caller. We also evaluated the distal relationships between the same architectural proteins and found that they were statistically significantly closer in base pair distance to our predicted TAD boundaries, than to ones identified by ARROWHEAD. 
+
+In summary, we have shown that TAD boundary prediction is a multi-faceted problem composed of many data irregularities and characteristics that previous methods have failed to address. Through our ensemble framework, we provide a useful guide toward the exploration of chromatin organization, while highlighting the impact of data resolution, class imbalance, and feature engineering in TAD boundary prediction. Lastly, by building models using known enriched transcription factors, we were able to bridge the resolution gap between ChIP-Seq and Hi-C sequencing for more precise TAD boundary prediction. 
+
+
+<!--
+The two proteins differ in that YY1 preferentially
+occupies interacting enhancers and promoters, whereas CTCF
+preferentially occupies sites distal from these regulatory elements that tend to form larger loops and participate in insulation.
+Deletion of YY1 binding sites or depletion of YY1 can disrupt
+enhancer-promoter contacts and normal gene expression.
+Thus, YY1-mediated structuring of enhancer-promoter loops is
+analogous to CTCF-mediated structuring of TADs, CTCF contact domains, and insulated neighborhoods. This model of
+YY1-mediated structuring of enhancer-promoter loops accounts
+for diverse functions reported previously for YY1, including contributions to both gene activation and repression and to gene
+dysregulation in cancer. ["YY1 Is a Structural Regulator
+of Enhancer-Promoter Loops"]
+-->
+
+
 
 
 
