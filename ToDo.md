@@ -22,6 +22,10 @@
 + Use ConsensusTAD to call TADs
     - running
     
++ fix intro
+
++ working draft of discussion
+    
 - make flowchart nicer
 
 - quantify sparsity
