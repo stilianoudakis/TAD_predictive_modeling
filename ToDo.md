@@ -1,34 +1,55 @@
 # Legend
 
-- To do items
+* Statements
+- Todo items
 + Completed to do items (awaiting discussion)
-* Outstanding questions
+Delete minor todo items after completion
 
-## Deliverables
+## Goals
 
-- Class imbalance
-- OC, OP, Distance
-- Metric
-- Resolution
-- Collinearity
-- TBD - Feature selection
-- Prediction
+* TAD boundaries are detected at low resolution, thousands of kilobases
+* Genome was annotated with vast amount of cell type-specific annotations
+    * Annotated regions are small, on the order of tens-hundreds bases
+* Precisely predict TAD boundaries using genomic annotations using a machine learning model
 
-## ToDo
+## Problems to be addressed
 
-+ Use SpectralTAD to call TADs. Read the preprint, the package vignette, talk with Kellen, if needed.
-    - running
-    
-+ Use ConsensusTAD to call TADs
-    - running
-    
-+ fix intro
+- Class imbalance - many more ordinary regions than TAD boundaries
+- Feature engineering - different types of association between TAD boundaties and genomic annotations
+- Metric - Which metric to use to evaluate model performance in class imbalance settings?
+- Resolution - How the model performs across resolutions
+- Collinearity - Many genomic annotations are colocalize (i.e., collinear). How to properly address it?
 
-+ working draft of discussion
-    
-- make flowchart nicer
+## Current methods
 
-- quantify sparsity
+- Class imbalance - random undersampling, random oversampling, SMOTE
+- Feature engineering - OC, OP, Distance
+- Model - currently, Random Forest
+- Metric - currently, Matthew Correlation Coefficient
+- Resolution - currently, 10/25,50/100kb
+- Collinearity - currently, addressed by recursive feature elimination
+- Using optimally trained model, forget about TAD boundary locations used for training and predict the location of TAD boundaries only from genome annotation data
+
+## ToDo, Kellen
+
+- Orient within Methods
+    - Data, Supplementary Table S1 - Add column specifying what type of replicate (technical/biological) the sample is. 
+    - Find how the data was processed. 
+    - Where the processed data is located? We need 10/25,50/100kb data
+
+- Call TADs using consensus score across replicates
+    - Check the number of TADs, Spiro obtained very few TADs using consensus score
+    - Need to update Table 1
+
+- Orient in genome annotation data, Supplementary Table S2
+    - Where the data is located?
+
+- Feature engineering code - where it is?
+
+- Class imbalance code - where it is?
+
+
+
 
 ### For later
 
