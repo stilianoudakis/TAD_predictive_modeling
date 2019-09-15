@@ -3,7 +3,18 @@
 * Statements
 - Todo items
 + Completed to do items (awaiting discussion)
+
 Delete minor todo items after completion
+
+Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel files
+
+### Writing tips
+
+- Write using the structure (https://github.com/mdozmorov/manuscript_template):
+    - What is the question?
+    - What data/methods are used?
+    - Any relevant details/results?
+    - What is the answer (take home message)?
 
 ## Goals
 
@@ -24,7 +35,7 @@ Delete minor todo items after completion
 
 - Class imbalance - random undersampling, random oversampling, SMOTE
 - Feature engineering - OC, OP, Distance
-- Model - currently, Random Forest
+- Model - currently, Random Forest as a balanced combination of performance and interpretability
 - Metric - currently, Matthew Correlation Coefficient
 - Resolution - currently, 10/25,50/100kb
 - Collinearity - currently, addressed by recursive feature elimination
@@ -44,33 +55,20 @@ Delete minor todo items after completion
 - Orient in genome annotation data, Supplementary Table S2
     - Where the data is located?
 
-- Feature engineering code - where it is?
+- Orient within code Spiro created
+    - Feature engineering code - where it is?
+    - Class imbalance code - where it is?
+    - Make README.md annotating each file
 
-- Class imbalance code - where it is?
+### New results
 
+- CTCF and other selected genomic annotations were closer to the predicted than to the Hi-C identified TAD boundaries. Test the significance of it using GenometriCorr.
 
+- For predicted regions: provide summaries of widths
 
+- Predict precise TAD boundary locations for other tissue/cell types using the framework developed above
+    - Release them online, as in http://promoter.bx.psu.edu/hi-c/publications.html
 
-### For later
-
-- create R package for improve TAD boundary prediction
-
-- for predicted regions: provide summaries of widths
-
-- look at distances between called and predicted regions
-
-- look into developing a way to enumerate the strength of each predicted region
-
-
-### Main Ideas
-
-- Write each paragraph using the structure (https://github.com/mdozmorov/manuscript_template):
-    - What is the question?
-    - What data/methods are used?
-    - Any relevant details/results?
-    - What is the answer (take home message)?
-    
-    
 ### Secondary Ideas
 
 - https://sites.google.com/site/raphaelmouradeng/programs
