@@ -45,8 +45,8 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 - Orient within Methods
     - Data, Supplementary Table S1 - Add column specifying what type of replicate (technical/biological) the sample is. 
-    - Find how the data was processed. 
-    - Where the processed data is located? We need 10/25,50/100kb data
+    - Find how the data was processed. Use non-normalized and the combined file (Need to ask Spiro exact)
+    - Where the processed data is located? We need 5/10/25,50/100kb data
 
 - Call TADs using consensus score across replicates
     - Check the number of TADs, Spiro obtained very few TADs using consensus score
