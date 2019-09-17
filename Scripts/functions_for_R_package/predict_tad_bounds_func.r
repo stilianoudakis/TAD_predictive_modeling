@@ -1,5 +1,8 @@
 #function to predict cl, resolution, and chromosome specific tad boundaries using optimal parameters
 predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
+  resolution=as.integer(resolution)
+  
+  bounds.GR <- flank(bounds.GR, width=resolution, both=TRUE)
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
@@ -18,44 +21,33 @@ predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosom
   train <- full_data[inTrainingSet,]
   test <- full_data[-inTrainingSet,]
   
-  # set number of iterations
-  samps = 50
-  
   if(sampling=="ros"){
     #assign sample indeces
-    sampids <- matrix(ncol=samps, 
-                      nrow=length(train$y[which(train$y=="No")]))
-    
-    #filling in the sample ids matrix
     set.seed(seed)
-    for(j in 1:samps){
-      sampids[,j] <- sample(x = which(train$y=="Yes"),
+    sampids.train <- sample(x = which(train$y=="Yes"),
                             size = length(which(train$y=="No")),
                             replace = TRUE)
-    }
+    
     train <- rbind.data.frame(train[which(train$y=="No"),],
-                              train[sampids[,1],])
+                              train[sampids.train,])
+    
     #Randomly shuffle the data
     set.seed(seed)
     train <- train[sample(nrow(train)),]
-  }else if(sampling=="rus"){
-    #assign sample indeces
-    sampids <- matrix(ncol=samps, 
-                      nrow=length(train$y[which(train$y=="Yes")]))
     
-    #filling in the sample ids matrix
-    set.seed(seed)
-    for(j in 1:samps){
-      sampids[,j] <- sample(x = which(train$y=="No"),
+  }else if(sampling=="rus"){
+    set.seed(123)
+    sampids.train <- sample(x = which(train$y=="No"),
                             size = length(which(train$y=="Yes")),
                             replace = FALSE)
-    }
+    
     train <- rbind.data.frame(train[which(train$y=="Yes"),],
-                              train[sampids[,1],])
+                              train[sampids.train,])
     
     #Randomly shuffle the data
-    set.seed(seed)
+    set.seed(321)
     train <- train[sample(nrow(train)),]
+    
   }else if(sampling=="smote"){
     set.seed(seed)
     train <- SMOTE(y ~ ., 
@@ -67,6 +59,7 @@ predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosom
     set.seed(seed)
     train <- train[sample(nrow(train)),]
   }else{train=train}
+  
   
   ##defining one summary function for roc,auprc,f1,and mcc
   allSummary <- function (data, lev = NULL, model = NULL) {

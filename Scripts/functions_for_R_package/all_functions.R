@@ -97,6 +97,7 @@ distance_func <- function(binned_data_center_gr, annot_data_center_gr){
 
 #function to create data matrix for training predictive model
 annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distance", annotationListGR, chromosome){
+  resolution=as.integer(resolution)
   #determining dimensions of chromosome specific data matrix
   
   #genome <- getBSgenome("hg19")
@@ -110,7 +111,10 @@ annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distan
   #                                by=resolution)), 
   #                   ncol=length(annotationListGR))
   
-  seqData <- seqList[[as.numeric(gsub("CHR", "", chromosome))]]
+  #seqData <- seqList[[as.numeric(gsub("CHR", "", chromosome))]]
+  
+  seqData <- c(seqData[1]-1, seqData)
+  
   start=seqData[1]
   end=seqData[length(seqData)] - (seqData[length(seqData)] %% resolution)
   rows = seqData[seqData %in% seq(start, end, 10000)]
@@ -131,22 +135,19 @@ annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distan
     }
     data_mat <- apply(data_mat,2,function(x){log(x + 1, base=2)})
     colnames(data_mat) <- names(annotationListGR)
-  }
-  else if(predictortype=="binary"){
+  }else if(predictortype=="binary"){
     for(i in 1:length(annotationListGR)){
       cb <- binary_func(dat_mat_gr, annotationListGR[[i]])
       data_mat[,i] <- cb
     }
     colnames(data_mat) <- names(annotationListGR)
-  }
-  else if(predictortype=="count"){
+  }else if(predictortype=="count"){
     for(i in 1:length(annotationListGR)){
       co <- count_func(dat_mat_gr, annotationListGR[[i]])
       data_mat[,i] <- co
     }
     colnames(data_mat) <- names(annotationListGR)
-  }
-  else{
+  }else{
     for(i in 1:length(annotationListGR)){
       cp <- percent_func(dat_mat_gr, annotationListGR[[i]])
       data_mat[,i] <- cp
@@ -158,17 +159,19 @@ annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distan
 }
 
 
+
 ################################################################################################################
 
 #function to extract unique chromosome specific TAD boundaries
 extract_boundaries_func <- function(domains.mat, preprocess, chromosome, resolution){
+  resolution=as.integer(resolution)
   domains.mat <- domains.mat[,1:3]
   domains.mat[,1] <- paste0("chr",domains.mat[,1])
   colnames(domains.mat) <- c("Chromosome", "Start", "End")
   if(preprocess==TRUE){
     ##restricting domain data to TADs > 2*resolution and < 2,000,000
     domains.mat <- domains.mat[which((domains.mat$End - domains.mat$Start)>(2*resolution) & (domains.mat$End - domains.mat$Start)<2000000),]
-    }
+  }
   
   ##concatenating boundary coordinates into one long vector
   coords <- domains.mat
@@ -191,10 +194,14 @@ extract_boundaries_func <- function(domains.mat, preprocess, chromosome, resolut
 }
 
 
+
 ##################################################################################################
 
 #function to predict cl, resolution, and chromosome specific tad boundaries using optimal parameters
 predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
+  resolution=as.integer(resolution)
+  
+  bounds.GR <- flank(bounds.GR, width=resolution, both=TRUE)
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
@@ -213,44 +220,33 @@ predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosom
   train <- full_data[inTrainingSet,]
   test <- full_data[-inTrainingSet,]
   
-  # set number of iterations
-  samps = 50
-  
   if(sampling=="ros"){
     #assign sample indeces
-    sampids <- matrix(ncol=samps, 
-                      nrow=length(train$y[which(train$y=="No")]))
-    
-    #filling in the sample ids matrix
     set.seed(seed)
-    for(j in 1:samps){
-      sampids[,j] <- sample(x = which(train$y=="Yes"),
+    sampids.train <- sample(x = which(train$y=="Yes"),
                             size = length(which(train$y=="No")),
                             replace = TRUE)
-    }
+    
     train <- rbind.data.frame(train[which(train$y=="No"),],
-                              train[sampids[,1],])
+                              train[sampids.train,])
+    
     #Randomly shuffle the data
     set.seed(seed)
     train <- train[sample(nrow(train)),]
-  }else if(sampling=="rus"){
-    #assign sample indeces
-    sampids <- matrix(ncol=samps, 
-                      nrow=length(train$y[which(train$y=="Yes")]))
     
-    #filling in the sample ids matrix
-    set.seed(seed)
-    for(j in 1:samps){
-      sampids[,j] <- sample(x = which(train$y=="No"),
+  }else if(sampling=="rus"){
+    set.seed(123)
+    sampids.train <- sample(x = which(train$y=="No"),
                             size = length(which(train$y=="Yes")),
                             replace = FALSE)
-    }
+    
     train <- rbind.data.frame(train[which(train$y=="Yes"),],
-                              train[sampids[,1],])
+                              train[sampids.train,])
     
     #Randomly shuffle the data
-    set.seed(seed)
+    set.seed(321)
     train <- train[sample(nrow(train)),]
+    
   }else if(sampling=="smote"){
     set.seed(seed)
     train <- SMOTE(y ~ ., 
@@ -262,6 +258,7 @@ predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosom
     set.seed(seed)
     train <- train[sample(nrow(train)),]
   }else{train=train}
+  
   
   ##defining one summary function for roc,auprc,f1,and mcc
   allSummary <- function (data, lev = NULL, model = NULL) {
@@ -337,9 +334,12 @@ predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosom
 
 #function to predict TAD boundaries at bp resolution
 predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, seqData, annotationListGR, tadModel){
+  resolution=as.integer(resolution)
   
   test_data <- matrix(nrow=length(seqData),
                       ncol=length(annotationListGR))
+  
+  seqData <- c(seqData[1]-1, seqData)
   
   d <- lapply(annotationListGR, function(x){distance_func(GRanges(seqnames=tolower(chromosome),
                                                                   IRanges(start=seqData,

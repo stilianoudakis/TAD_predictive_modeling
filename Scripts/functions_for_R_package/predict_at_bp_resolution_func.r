@@ -1,8 +1,11 @@
 #function to predict TAD boundaries at bp resolution
 predict_at_bp_resolution_func <- function(bounds.GR, resolution, chromosome, seqData, annotationListGR, tadModel){
+  resolution=as.integer(resolution)
   
   test_data <- matrix(nrow=length(seqData),
                       ncol=length(annotationListGR))
+  
+  seqData <- c(seqData[1]-1, seqData)
   
   d <- lapply(annotationListGR, function(x){distance_func(GRanges(seqnames=tolower(chromosome),
                                                                   IRanges(start=seqData,

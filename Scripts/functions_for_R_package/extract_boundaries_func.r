@@ -1,5 +1,6 @@
 #function to extract unique chromosome specific TAD boundaries
 extract_boundaries_func <- function(domains.mat, preprocess, chromosome, resolution){
+  resolution=as.integer(resolution)
   domains.mat <- domains.mat[,1:3]
   domains.mat[,1] <- paste0("chr",domains.mat[,1])
   colnames(domains.mat) <- c("Chromosome", "Start", "End")
