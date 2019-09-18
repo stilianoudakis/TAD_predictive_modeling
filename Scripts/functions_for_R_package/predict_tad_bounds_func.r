@@ -2,7 +2,7 @@
 predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
   resolution=as.integer(resolution)
   
-  bounds.GR <- flank(bounds.GR, width=resolution, both=TRUE)
+  bounds.GR <- flank(bounds.GR, width=(resolution/2), both=TRUE)
   
   y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
                              IRanges(start = as.numeric(rownames(datamatrix)),
@@ -128,5 +128,68 @@ predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosom
                     rfeControl=control)
   }
   
-  return(tadModel)
+  rfperf <- data.frame(Metric = c("TN",
+                                  "FN",
+                                  "FP",
+                                  "TP",
+                                  "Total",
+                                  "Sensitivity",
+                                  "Specificity",
+                                  "Kappa",
+                                  "Accuracy",
+                                  "Precision",
+                                  "FPR",
+                                  "FNR",
+                                  "FOR",
+                                  "NPV",
+                                  "MCC",
+                                  "F1",
+                                  "AUC",
+                                  "Youden",
+                                  "AUPRC"), 
+                       Performance=NA)
+  
+  pred.tadModel <- as.vector(predict(tadModel, 
+                                     newdata=test[,-1], 
+                                     type="prob")[,"Yes"])
+  
+  fg <- pred.tadModel[test$y == "Yes"]
+  bg <- pred.tadModel[test$y == "No"]
+  pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+  
+  pred.tadModel2 <- predict(tadModel,
+                            newdata=test,
+                            type="raw")
+  
+  
+  confMat <- confusionMatrix(data=pred.tadModel2, test$y, positive="Yes")
+  TN = as.numeric(confMat$table[1,1])
+  FN = as.numeric(confMat$table[1,2])
+  FP = as.numeric(confMat$table[2,1])
+  TP = as.numeric(confMat$table[2,2])
+  rfperf[1,2] <- TN
+  rfperf[2,2] <- FN
+  rfperf[3,2] <- FP
+  rfperf[4,2] <- TP
+  rfperf[5,2] <- sum(confMat$table)
+  rfperf[6,2] <- as.vector(confMat$byClass["Sensitivity"])
+  rfperf[7,2] <- as.vector(confMat$byClass["Specificity"])
+  rfperf[8,2] <- as.vector(confMat$overall["Kappa"])
+  rfperf[9,2] <- as.vector(confMat$overall["Accuracy"])
+  rfperf[10,2] <- TP/(TP+FP)
+  rfperf[11,2] <- FP/(FP+TN)
+  rfperf[12,2] <- FN/(FN+TN)
+  rfperf[13,2] <- FN/(FN+TN)
+  rfperf[14,2] <- TN/(TN+FN)
+  rfperf[15,2] <- (TP*TN - FP*FN)/( sqrt( (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN) ) )
+  rfperf[16,2] <- (2*(TP/(TP+FN))*(TP/(TP+FP)))/((TP/(TP+FN)) + ((TP/(TP+FP))))
+  rfperf[17,2] <- pROC::auc(pROC::roc(test$y, pred.tadModel))
+  rfperf[18,2] <- (TP/(TP + FN)) + (TN/(TN + FP)) - 1
+  rfperf[19,2] <- pr$auc.integral
+  
+  
+  tadModelResults <- list(tadModel, rfperf)
+  names(tadModelResults) <- c("RFModel", "RFPerformances")
+  
+  return(tadModelResults)
 }

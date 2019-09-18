@@ -1,5 +1,5 @@
 #function to create data matrix for training predictive model
-annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distance", annotationListGR, chromosome){
+annots_to_datamatrix_func <- function(seqData, resolution, predictortype="distance", annotationListGR, chromosome){
   resolution=as.integer(resolution)
   #determining dimensions of chromosome specific data matrix
   
@@ -18,9 +18,9 @@ annots_to_datamatrix_func <- function(seqList, resolution, predictortype="distan
   
   seqData <- c(seqData[1]-1, seqData)
   
-  start=seqData[1]
+  start=seqData[1] + (resolution/2)
   end=seqData[length(seqData)] - (seqData[length(seqData)] %% resolution)
-  rows = seqData[seqData %in% seq(start, end, 10000)]
+  rows = seqData[seqData %in% seq(start, end, resolution)]
   
   data_mat <- matrix(nrow=length(rows),
                      ncol=length(annotationListGR))
