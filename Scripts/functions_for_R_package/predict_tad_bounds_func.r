@@ -2,15 +2,9 @@
 predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosome, sampling="smote", metric="MCC", seed=123, crossvalidation=TRUE, number=10, featureSelection=FALSE){
   resolution=as.integer(resolution)
   
-  bounds.GR <- flank(bounds.GR, width=(resolution/2), both=TRUE)
+  y <- ifelse(as.numeric(rownames(data_mat)) %in% start(bounds.GR), 1, 0)
   
-  y <- countOverlaps(GRanges(seqnames = tolower(chromosome),
-                             IRanges(start = as.numeric(rownames(datamatrix)),
-                                     #end = as.numeric(rownames(datamatrix)),
-                                     width = resolution)), bounds.GR)
-  y <- ifelse(y>=1,1,0)
-  
-  full_data <- cbind.data.frame(y, datamatrix)
+  full_data <- cbind.data.frame(y, data_mat)
   ##Changing levels of response (y) to yes no
   full_data$y <- factor(full_data$y)
   levels(full_data$y) <- c("No", "Yes")
@@ -85,48 +79,22 @@ predict_tad_bounds_func <- function(resolution, bounds.GR, datamatrix, chromosom
   #for the last model
   seeds[[11]]<-sample.int(1000, 1)
   
-  if(featureSelection==FALSE){
-    ##setting contols for model
-    fitControl <- trainControl(seeds = seeds,
-                               method = if(crossvalidation==TRUE){"cv"}else{"none"},
-                               number = if(crossvalidation==TRUE){number}else{NULL},
-                               ## Estimate class probabilities
-                               classProbs = TRUE,
-                               ## Evaluate performance using 
-                               ## the following function
-                               summaryFunction = allSummary)
-    
-    #performing model
-    tadModel <- train(y~., data=train, 
-                      method="rf", 
-                      metric=metric, 
-                      tuneLength=10,
-                      trControl=fitControl)
-  }else{
-    rfectrl <- rfFuncs
-    rfectrl$summary <- allSummary
-    control <- rfeControl(functions=rfectrl, 
-                          method=if(crossvalidation==TRUE){"cv"}else{"none"}, 
-                          number=if(crossvalidation==TRUE){number}else{NULL},  
-                          verbose=TRUE)
-    control$returnResamp <- "final"
-    
-    n=dim(train)[2]-1
-    z <- numeric()
-    x=0
-    i=1
-    while(x < n){
-      x = 2^(i);i=i+1;z <- c(z,x)
-    }
-    z[length(z)] <- n
-    
-    set.seed(seed)
-    tadModel <- rfe(train[,-1], 
-                    train[,1],
-                    metric = metric,
-                    sizes=z,
-                    rfeControl=control)
-  }
+  ##setting contols for model
+  fitControl <- trainControl(seeds = seeds,
+                             method = if(crossvalidation==TRUE){"cv"}else{"none"},
+                             number = if(crossvalidation==TRUE){number}else{NULL},
+                             ## Estimate class probabilities
+                             classProbs = TRUE,
+                             ## Evaluate performance using 
+                             ## the following function
+                             summaryFunction = allSummary)
+  
+  #performing model
+  tadModel <- train(y~., data=train, 
+                    method="rf", 
+                    metric=metric, 
+                    tuneLength=10,
+                    trControl=fitControl)
   
   rfperf <- data.frame(Metric = c("TN",
                                   "FN",

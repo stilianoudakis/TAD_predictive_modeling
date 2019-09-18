@@ -1,24 +1,11 @@
 #function to create data matrix for training predictive model
 annots_to_datamatrix_func <- function(seqData, resolution, predictortype="distance", annotationListGR, chromosome){
   resolution=as.integer(resolution)
-  #determining dimensions of chromosome specific data matrix
-  
-  #genome <- getBSgenome("hg19")
-  #seqlength <- genome@seqinfo@seqlengths[which(genome@seqinfo@seqnames==tolower(chromosome))]
-  ##start = first chromosome specific coordinate
-  ##end = last chromosome specific coordinate that is a factor of resolution
-  #start = 0
-  #end = seqlength - (seqlength %% resolution)
-  #data_mat <- matrix(nrow=length(seq.int(start, 
-  #                                end,
-  #                                by=resolution)), 
-  #                   ncol=length(annotationListGR))
-  
-  #seqData <- seqList[[as.numeric(gsub("CHR", "", chromosome))]]
   
   seqData <- c(seqData[1]-1, seqData)
   
-  start=seqData[1] + (resolution/2)
+  start=seqData[1] 
+  start=0
   end=seqData[length(seqData)] - (seqData[length(seqData)] %% resolution)
   rows = seqData[seqData %in% seq(start, end, resolution)]
   
@@ -26,10 +13,10 @@ annots_to_datamatrix_func <- function(seqData, resolution, predictortype="distan
                      ncol=length(annotationListGR))
   rownames(data_mat) <- rows
   
-  dat_mat_gr <- GRanges(seqnames = tolower(chromosome),
-                        IRanges(start = as.numeric(rownames(data_mat)),
-                                #end = as.numeric(rownames(data_mat)),
-                                width=resolution))
+  dat_mat_gr <- flank(GRanges(seqnames = tolower(chromosome),
+                              IRanges(start = as.numeric(rownames(data_mat)),
+                                      #end = as.numeric(rownames(data_mat)),
+                                      width=1)), (resolution/2), both=TRUE)
   
   if(predictortype=="distance"){
     for(i in 1:length(annotationListGR)){
