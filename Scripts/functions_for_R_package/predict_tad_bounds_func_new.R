@@ -4,7 +4,6 @@ predict_tad_bounds_func_new <- function(resolution, bounds.GR, annotationListGR,
   
   seqData <- c(seqData[1]-1, seqData)
   
-  start=seqData[1] 
   start=0
   end=seqData[length(seqData)] - (seqData[length(seqData)] %% resolution)
   rows = seqData[seqData %in% seq(start, end, resolution)]
@@ -18,9 +17,14 @@ predict_tad_bounds_func_new <- function(resolution, bounds.GR, annotationListGR,
                                       #end = as.numeric(rownames(data_mat)),
                                       width=1)), (resolution/2), both=TRUE)
   
+  dat_mat_gr_dist <- GRanges(seqnames = tolower(chromosome),
+                             IRanges(start = as.numeric(rownames(data_mat)),
+                                     #end = as.numeric(rownames(data_mat)),
+                                     width=1))
+  
   if(predictortype=="distance"){
     for(i in 1:length(annotationListGR)){
-      d <- distance_func(dat_mat_gr, annotationListGR[[i]])
+      d <- distance_func(dat_mat_gr_dist, annotationListGR[[i]])
       data_mat[,i] <- d
     }
     data_mat <- apply(data_mat,2,function(x){log(x + 1, base=2)})
@@ -31,7 +35,7 @@ predict_tad_bounds_func_new <- function(resolution, bounds.GR, annotationListGR,
       data_mat[,i] <- cb
     }
     colnames(data_mat) <- names(annotationListGR)
-  }else if(predictortype=="count"){
+  }else if(predictortype=="oc"){
     for(i in 1:length(annotationListGR)){
       co <- count_func(dat_mat_gr, annotationListGR[[i]])
       data_mat[,i] <- co
@@ -122,7 +126,6 @@ predict_tad_bounds_func_new <- function(resolution, bounds.GR, annotationListGR,
   #for the last model
   seeds[[11]]<-sample.int(1000, 1)
   
-  #if(featureSelection==FALSE){
   ##setting contols for model
   fitControl <- trainControl(seeds = seeds,
                              method = if(crossvalidation==TRUE){"cv"}else{"none"},
@@ -139,31 +142,6 @@ predict_tad_bounds_func_new <- function(resolution, bounds.GR, annotationListGR,
                     metric=metric, 
                     tuneLength=10,
                     trControl=fitControl)
-  #}else{
-  rfectrl <- rfFuncs
-  rfectrl$summary <- allSummary
-  control <- rfeControl(functions=rfectrl, 
-                        method=if(crossvalidation==TRUE){"cv"}else{"none"}, 
-                        number=if(crossvalidation==TRUE){number}else{NULL},  
-                        verbose=TRUE)
-  control$returnResamp <- "final"
-  
-  n=dim(train)[2]-1
-  z <- numeric()
-  x=0
-  i=1
-  while(x < n){
-    x = 2^(i);i=i+1;z <- c(z,x)
-  }
-  z[length(z)] <- n
-  
-  set.seed(seed)
-  tadModel <- rfe(train[,-1], 
-                  train[,1],
-                  metric = metric,
-                  sizes=z,
-                  rfeControl=control)
-  #}
   
   rfperf <- data.frame(Metric = c("TN",
                                   "FN",
