@@ -25,33 +25,61 @@ Conveniently we can convert the adjusted precision score to another measure "adj
 
 ## Choosing the neural network hyperparameters
 
-A deep feed forward neural network was fit to predict the location of TAD boundaries. The ideal number of hidden layers (1,2) and nodes (4,8,12,16,32,64), and the resampling scheme ("none", "SMOTE", "RUS", "ROS") was tested based on cross-validation using adjusted precision as our measure of accuracy. To prevent overfitting, a dropout layer was added between every layer. In general, we find that networks with more than 1 layer tend to either overfit the data, resulting in a decrease in prediction quality. As a result, we present results for single layer models exclusively. In addition, we find the choice of activation function to be largely inconsequential to our predictive ability as a result a simple ReLU activation function is used for all layers.
+A deep feed forward [??? terminology: I remember "fully connected" - shall we use it?] neural network was fit to predict the location of TAD boundaries. The ideal number of hidden layers (1,2) and nodes (4,8,12,16,32,64), and the resampling scheme ("none", "SMOTE", "RUS", "ROS") was tested based on cross-validation using adjusted precision as our measure of accuracy. To prevent overfitting, a dropout layer was added between every layer. In general, we find that networks with more than 1 layer tend to either overfit the data, resulting in a decrease in prediction quality. As a result, we present results for single layer models exclusively. [??? So, no dropout?] In addition, we find the choice of activation function to be largely inconsequential to our predictive ability as a result a simple ReLU activation function is used for all layers. 
+
+[??? How standard errors on all plots were generated?]
 
 # Results
 
+[??? Need justification for usind "Adjusted PPV" - what is it, why used?]
+
 ## SMOTE sampling increases predictive ability compared to other methods
 
-We find that SMOTE oversampling outperforms other oversampling methods in terms of TAD boundary detection (Figure 1). In general, we find that the all over sampling methods produce comparable results. However, we find that any oversampling method results in better precision than no oversampling at all. Without oversampling or undersampling, the vast majority of models (74%) fail to predict a single TAD boundary across all data types and resolutions. SMOTE has the smallest proportion of failures (0.5%) followed by RUS (0.9%) and ROS (2%). This demonstrates the need to balance the data before predicting TAD boundaries.
+We find that SMOTE oversampling outperforms other oversampling methods in terms of TAD boundary detection (Figure 1). In general, we find that the all over sampling methods produce comparable results. However, we find that any oversampling method results in better precision than no oversampling at all. Without oversampling or undersampling, the vast majority of models (74%) [??? TBD, I do not understand this number] fail to predict a single TAD boundary across all data types and resolutions [??? making calculation of adj PPV impossible?]. SMOTE has the smallest proportion of failures (0.5%) followed by RUS (0.9%) and ROS (2%). This demonstrates the need to balance the data before predicting TAD boundaries.
+
+[??? figure 1 has results for "none" only for 5Kb resolution - why?]
+[??? Adjusted PPV are too similar. See above, we need a strong justification why not AUC, MCC, F1. Can you try if any of those can be used? I am quite uneassy that we'll be asked to use something else than PPV. So, justify]
+[??? Figure 1 - can we quantify that on average SMOTE is better? It doesn't look so]
+[??? Figure 1 - can we quantify TFBSs are better than others?]
 
 ## TAD prediction is largely invariant to the number of layers
 
 We find that regardless of the number of hidden layers (4,8,12,16,32,64), the neural network is able to predict TAD boundaries near those annotated by TAD callers. The number of layers with the best performance is 16 (Median $PPV_a$ = .941) and the worst is 4 (Median $PPV_a$ = .932). In rare circumstances (Figure 2a,2b,2c), we find that networks with too few layers will have poor predictive ability. As a result, we use a single layer network with 16 layers as our default architecture for comparison of features.
 
+[??? This section may be titled something like "Network architecture engineeting" describing all steps in more details, e.g., playing with dropouts. Need results.]
+[??? A figure illustrating the final architecture.]
+[??? How "Combined" are handled? Visualize. "Combined" - You merge them. Can you try to feed them in in parallel? "Combined in parallel"]
+[??? Another story - performance drops with lower resolution. To be described]
+
 ## Neural network approaches outperform logistic regression for complex datasets
 
-To test, whether the neural network approaches can outperform simple models, we fit a logistic regression with variable selection using an elastic net algorithm and compare results. We find the for overlap, distance and percent overlap, both approaches perform similarly well (Figure 3). For the more complex combined dataset, the neural network approach produces slightly better results than the logistic regression approach. These results suggest a neural network may be optimal for more complex datasets and better at integrating future data.
+To test, whether the neural network approaches can outperform simple models, we fit a logistic regression with variable selection using an elastic net algorithm and compare results. We find the for overlap, distance and percent overlap, both approaches perform similarly well (Figure 3). [??? That's why I don't like PPV. Previously, the story was that distance performs best. How can we show it?] For the more complex combined dataset, the neural network approach produces slightly better results than the logistic regression approach. These results suggest a neural network may be optimal for more complex datasets and better at integrating future data.
+
+[??? How to show distance performs better? Metric other than PPV?]
+[??? Add Random Forest for comparison]
+[??? "Combined in parallel" performance?]
 
 ## Histone modifications, broadHMM and transcription factor binding sites have similar predictive abilities
 
-We fnd that the three tested categories produce similar results in terms of predictive ability. Transcription factor binding sites (Median $PPV_a$ = .941) produced the best results, followed by BroadHMM (Median $PPV_a$ = .940) and histone modifications (Median $PPV_a$ = .925). Figure 4 summarises these results, demonstrating the similarity. These results suggest that boundary prediction is robust to the type of data source used for prediction. 
+We find that the three tested categories produce similar results in terms of predictive ability. Transcription factor binding sites (Median $PPV_a$ = .941) produced the best results, followed by BroadHMM (Median $PPV_a$ = .940) and histone modifications (Median $PPV_a$ = .925). Figure 4 summarises these results, demonstrating the similarity. These results suggest that boundary prediction is robust to the type of data source used for prediction.
+
+[??? Can we use something other than PPV? Previously, TFBS performed better, and that makes sense]
 
 ## Distance provides the best prediction results
 
 To determine the best feature for prediction, we compared distance, overlap, percent overlap and combination of all features. We find that simply using distance (Median $PPV_a$ = .950) outperforms overlap (Median $PPV_a$ = .930) and percent overlap (Median $PPV_a$ = .915). Additionally, we find that the combined (Median $PPV_a$ = .940) approach outperforms overlap and percent overlap but not distance. 
 
+[??? Which figure demonstrates it? Again, PPV seem to give minuscule differences]
+
+## CTCF, RAD21 etc. are the most predictive
+
+[??? Need feature selection results - random forest?]
+
 ## Predicted TADs tend to be near true TADs
 
-To determine the accuracy of predicted TADs in terms of raw distance, we calculate the mean distance of predicted TADs and non-predicted TADs from annotated ones. We find a large difference in mean distance (64.2 vs. 5.87) between predicted TADs and non-predicted TADs. These results suggest that our method is able to succesfully differentiate random regions and TAD regions.
+To determine the accuracy of predicted TADs in terms of raw distance, we calculate the mean distance of predicted TADs and non-predicted TADs from annotated ones. We find a large difference in mean distance (64.2 vs. 5.87) [??? Where those numbers come from? What do they mean, units? Figure?] between predicted TADs and non-predicted TADs. These results suggest that our method is able to succesfully differentiate random regions and TAD regions.
+
+[??? Need figure: Boxplots of distances between CTCF and detected from Hi-C, predicted from genomic annotations, not predicted. For CTCF, RAD21 and other selected features]
 
 ## The profile of TAD predictors is unique to the data type
 
@@ -59,7 +87,7 @@ Distance from predicted TAD boundaries was calculated for a range of features, s
 
 Summarized across all resolutions and features, we find that H3K9me3 co-locates the closest with predicted TAD boundaries followed by heterochromatin. Of the top 10 features, 6 are histones, 2 are from BroadHMM (heterochromatin, insulators) and 2 are TFBS (CTCF, Pu1).
 
-
+[??? Figure 5: Instead of clustering, sort columns by average smallest to largest distance. This way, one can see what is the closest and fartherst]
 
 Boxplot with distance from predicted and TAD caller predicted
 Plot from Spiros paper with predicted and sites around boundaries
