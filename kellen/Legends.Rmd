@@ -1,0 +1,16 @@
+---
+title: "Legends"
+author: "Kellen Cresswell"
+date: "October 16, 2019"
+output: pdf_document
+---
+
+**Figure 1. Oversampling is needed to account for class imbalance**. A feed-forward neural network with a single hidden layer and 16 nodes was used to predict TAD boundaries. Adjusted PPV was calculated to determine the of accuracy predictions. Results are seperated by oversampling approach (None, RUS, ROS, SMOTE) and feature type (TFBS, BroadHMM, Histones). All results were generated using distance. GM12878 cell line, various resolutions. 
+
+**Figure 2. Results are generally consistent with node selection**. A feed-forward neural network with a single hidden layer and varying numbers of nodes (4,8,12,16,24,32,64) was used to predict TAD boundaries. Adjusted PPV was calculated to determine the accuracy of predictions. Results are presented for TFBS (a), histones (b) and broadHMM (c) and feature type (Combined, Distance, Overlap and Percent Overlap). GM12878 cell line, various resolutions. 
+
+**Figure 3. Neural networks and logistic regressions peform similarly**. A feed-forward neural network with a single hidden layer with 16 nodes and an elastic-net logistic regression model was used to predict TAD boundaries. Adjusted PPV was calculated to determine the accuracy of predictions. Results are presented for TFBS across all feature types (Combined, Distance, Overlap and Percent Overlap). GM12878 cell line, various resolutions. 
+
+**Figure 4. Neural network results are robust to feature selection**. A feed-forward neural network with a single hidden layer and 16 nodes was used to predict TAD boundaries. Adjusted PPV was calculated to determine the of accuracy predictions. Results are seperated by data source (TFBS, BroadHMM, Histones) and feature type (Combined, Distance, Overlap and Percent Overlap). All results were generated using distance. GM12878 cell line, various resolutions. 
+
+**Figure 5. Certain features consistently appear near predicted TAD boundaries.**. TAD boundaries were predicted using a feed-forward neural network. The mean distance from predicted TAD boundaries was calculated for all features and are shown in a Heatmap. Results are presented for combined, TFBS (a), histones (b) and broadHMM (c). Rows represent resolution and columns individual features. Clustering was performing using Ward's clustering.
