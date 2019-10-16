@@ -11,9 +11,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Methods
 
-## The data structure
+## Adjusted Precision
 
-For each resolution and genomic feature (histones, broadHMM and transcription factor binding sites) were arranged 
+In the contact matrix domains, TAD boundaries are often noisy with imprecise locations. This noise can cause boundaries to shift by multiple bins depending on the TAD caller used. Additionally, we find that genomic features such as CTCF and RAD21 exist at elevated levels in bins around called TAD boundaries and not just in the bin containing the boundary itself. To account for this imprecision we use a flanked form of the precision metric called adjusted precision ($P_a$). In the framework of boundary prediction, traditional precision takes two inputs: true positives ($TP$) whch are correctly identified TAD boundaries and false positives ($FP$) which are regions incorrectly identified as TAD boundaries. Adjusted precision introduces a flanking region ($f$) such that true positives become all predicted TAD boundaries within $f$ of a true TAD boundary and false positives become those that are not within $f$ of a true TAD boundary. We calculate adjusted precision using the following formula:
+
+$$
+P_{a} = \frac{TP_{a}}{FP_{a}+TP_{a}}
+$$
+
+where $TP_{a}$ is the flanked true positive value and $FP_{a}$ is the flanked false positive value.
+
+Conveniently we can convert the adjusted precision score to another measure "adjusted false discovery rate ($FDR_a$)" by simply taking 1-$P_{a}$. $FDR_a$ can be interpreted as the probability that a TAD boundary identified by a given approach is within $f$ of a true TAD boundary. 
 
 ## Choosing the neural network hyperparameters
 
