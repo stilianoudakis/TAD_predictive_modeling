@@ -11,6 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Methods
 
+## Data sources
+
+All GM12878 Hi-C data were downloaded from GSE63525 [@rao20143d] (Supplementary Table1). TAD boundaries were identified using SpectralTAD [@cresswelkg:2019aa]. Three categories of genomic annotations (BroadHMM, histone modifications and transcription factor binding sites (TFBS)) were downloaded from the UCSC genome browser [@Tyner:2017aa] (Supplementary Table 1). All data corresponds to GRCh37/hg19.
+
+## Feature Engineering
+
+We create four types of feature (distance, overlap, percent overlap and combined). Each method starts with binning the matrix based on resolution. For instance, the start of the bins for a 5kb matrix would be located at 0,5kb,10kb,15kb, etc. Distance is calculated by finding the distance between the start of each bin and the closest location of each genomic feature. Overlap is calculated by taking the start point of each bin, flanking it on both sides by half the resolution and calculating the number of times a given genomic feature appears within the flanking region. Percent overlap calculates the percentage of the flanking region that is covered by a given genomic feature. Combined is simply a combination of them all, combined in side-by-side manner. Prediction is performed using matrices of these features with the response being the location of predicted TAD boundaries.
+
 ## Adjusted Precision
 
 In the contact matrix domains, TAD boundaries are often noisy with imprecise locations. This noise can cause boundaries to shift by multiple bins depending on the TAD caller used. Additionally, we find that genomic features such as CTCF and RAD21 exist at elevated levels in bins around called TAD boundaries and not just in the bin containing the boundary itself. To account for this imprecision we use a flanked form of the precision metric called adjusted precision ($P_a$). In the framework of boundary prediction, traditional precision takes two inputs: true positives ($TP$) whch are correctly identified TAD boundaries and false positives ($FP$) which are regions incorrectly identified as TAD boundaries. Adjusted precision introduces a flanking region ($f$) such that true positives become all predicted TAD boundaries within $f$ of a true TAD boundary and false positives become those that are not within $f$ of a true TAD boundary. We calculate adjusted precision using the following formula:
@@ -25,35 +33,38 @@ Conveniently we can convert the adjusted precision score to another measure "adj
 
 ## Choosing the neural network hyperparameters
 
-A deep feed forward [??? terminology: I remember "fully connected" - shall we use it?] neural network was fit to predict the location of TAD boundaries. The ideal number of hidden layers (1,2) and nodes (4,8,12,16,32,64), and the resampling scheme ("none", "SMOTE", "RUS", "ROS") was tested based on cross-validation using adjusted precision as our measure of accuracy. To prevent overfitting, a dropout layer was added between every layer. In general, we find that networks with more than 1 layer tend to either overfit the data, resulting in a decrease in prediction quality. As a result, we present results for single layer models exclusively. [??? So, no dropout?] In addition, we find the choice of activation function to be largely inconsequential to our predictive ability as a result a simple ReLU activation function is used for all layers. 
-
-[??? How standard errors on all plots were generated?]
+A feed forward neural network was fit to predict the location of TAD boundaries. The ideal number of hidden layers (1,2) and nodes (4,8,12,16,32,64), and the resampling scheme ("none", "SMOTE", "RUS", "ROS") was tested based on cross-validation using adjusted precision as our measure of accuracy. Results were summarized across all chromosomes. To prevent overfitting, a dropout layer was added between every layer. In general, we find that networks with more than 1 layer tend to either overfit the data (Figure 1), resulting in a decrease in prediction quality. As a result, we present results for single layer models exclusively. Additionally, we find that a dropout of 50% on the final layer provides consistently better results (Figure 2). In addition, we find the choice of activation function to be largely inconsequential to our predictive ability as a result a simple ReLU activation function is used for all layers. 
 
 # Results
 
-[??? Need justification for usind "Adjusted PPV" - what is it, why used?]
+## Why use adjusted precision?
 
-## SMOTE sampling increases predictive ability compared to other methods
+TAD boundary data has two unique features, it is heavily imbalanced (there are much less TAD boundaries than non-TAD boundaries) and it is imprecise due to limitations with resolution. An additional complication arises due to the fact that TAD callers are only capable of identifying single points as their best guess for a TAD boundary. As a result, the response vector of any predictive algorithm will be comparitively sparse compared to the features. 
 
-We find that SMOTE oversampling outperforms other oversampling methods in terms of TAD boundary detection (Figure 1). In general, we find that the all over sampling methods produce comparable results. However, we find that any oversampling method results in better precision than no oversampling at all. Without oversampling or undersampling, the vast majority of models (74%) [??? TBD, I do not understand this number] fail to predict a single TAD boundary across all data types and resolutions [??? making calculation of adj PPV impossible?]. SMOTE has the smallest proportion of failures (0.5%) followed by RUS (0.9%) and ROS (2%). This demonstrates the need to balance the data before predicting TAD boundaries.
+The implicit impreciseness of TAD calling leads to inflated false positive values as algorithms will detect TADs not only at the detected TAD boundary but also in regions around it. As a result, traditional measures of prediction quality will return poor results for any algorithm. For this reason, we introduce the flanking region around the boundary allowing us to account for boundaries predicted near TAD boundaries but not exactly on the boundary. Precision is used because it monotonically increases with flank size due to the absence of false negative and true negatives in its formula. This is not the case for measurements such as accuracy, F1 and matthews correlation coefficient which can decrease with increasing flank size due to the removal of negative cases as the flank becomes larger. 
 
-[??? figure 1 has results for "none" only for 5Kb resolution - why?]
+## Oversampling greatly increases predictive ability
+
+We find that SMOTE oversampling slightly outperforms other oversampling methods in terms of TAD boundary detection (Figure 3, Supplementary Table 1). Summarized across all resolutions, feature types and data sources, SMOTE performed best (Mean $PPV_a$ = 0.837, Median $PPV_a$ = 0.933) with a slight advantage over RUS (Mean $PPV_a$ = 0.837, Median $PPV_a$ = 0.930). In general, we find that the all oversampling and undersampling methods produce comparable results. However, we find that any oversampling method results in better precision than no oversampling at all.
+
+Another side-effect of imbalance is algorithms failing to learn the data and simply predicting no positive outcomes (TAD boundaries). To test, how well oversampling approaches deal with this issue we fit models across all resolutions (5kb,10kb,25kb,50kb,100kb), feature types (distance, overlap, percent overlap, combined) and data sources (TFBS, histones, broadHMM) and calculated the percentage of models with zero boundary predictions. In total, there were 1320 models tested for each sampling type. Without oversampling or undersampling, the vast majority of models (74%) fail to predict a single TAD boundary across all data types and resolutions. SMOTE has the smallest proportion of failures (0.5%) followed by RUS (0.9%) and ROS (2%). This demonstrates the need to balance the data before predicting TAD boundaries.
+
+[??? figure 1 has results for "none" only for 5Kb resolution - why?? The rest are zero or below the threshold]
 [??? Adjusted PPV are too similar. See above, we need a strong justification why not AUC, MCC, F1. Can you try if any of those can be used? I am quite uneassy that we'll be asked to use something else than PPV. So, justify]
-[??? Figure 1 - can we quantify that on average SMOTE is better? It doesn't look so]
-[??? Figure 1 - can we quantify TFBSs are better than others?]
+[??? Figure 1 - can we quantify that on average SMOTE is better? It doesn't look so?? Added but very slight]
+[??? Figure 1 - can we quantify TFBSs are better than others?? Added later but very slight]
 
-## TAD prediction is largely invariant to the number of layers
+## Network architecture engineering
 
-We find that regardless of the number of hidden layers (4,8,12,16,32,64), the neural network is able to predict TAD boundaries near those annotated by TAD callers. The number of layers with the best performance is 16 (Median $PPV_a$ = .941) and the worst is 4 (Median $PPV_a$ = .932). In rare circumstances (Figure 2a,2b,2c), we find that networks with too few layers will have poor predictive ability. As a result, we use a single layer network with 16 layers as our default architecture for comparison of features.
+We find that regardless of the number of hidden layers (4,8,12,16,32,64), the neural network is able to predict TAD boundaries near those annotated by TAD callers. The number of layers with the best performance is 16 (Median $PPV_a$ = .941) and the worst is 4 (Median $PPV_a$ = .932). In rare circumstances (Figure 4a,4b,4c, Supplementary Table 2), we find that networks with too few nodes will have poor predictive ability. As a result, we use a single layer network with 16 layers as our default architecture for comparison of features. Using results from testing layers (Figure 1) and dropout (Figure 2), we define a baseline model for testing with a single hidden layer containg 16 nodes and a final dropout of 0.5. This is used for all analysis unless otherwise stated. 
 
-[??? This section may be titled something like "Network architecture engineeting" describing all steps in more details, e.g., playing with dropouts. Need results.]
-[??? A figure illustrating the final architecture.]
-[??? How "Combined" are handled? Visualize. "Combined" - You merge them. Can you try to feed them in in parallel? "Combined in parallel"]
-[??? Another story - performance drops with lower resolution. To be described]
+## Performance drops with lower resolution
 
-## Neural network approaches outperform logistic regression for complex datasets
+TBD, Supplementary Table x
 
-To test, whether the neural network approaches can outperform simple models, we fit a logistic regression with variable selection using an elastic net algorithm and compare results. We find the for overlap, distance and percent overlap, both approaches perform similarly well (Figure 3). [??? That's why I don't like PPV. Previously, the story was that distance performs best. How can we show it?] For the more complex combined dataset, the neural network approach produces slightly better results than the logistic regression approach. These results suggest a neural network may be optimal for more complex datasets and better at integrating future data.
+## Neural network approaches outperform other machine learning algorithms on complex datasets
+
+To test, whether the neural network approaches can outperform simple models, we fit a logistic regression with variable selection using an elastic net algorithm, a random forest model and an linear discriminant analysis model (LDA) (Will add) and compared results. We find the for overlap, distance and percent overlap, both approaches perform similarly well (Figure 5, Supplementary Table 3). [??? That's why I don't like PPV. Previously, the story was that distance performs best. How can we show it?] For the more complex combined dataset, the neural network approach produces slightly better results than the logistic regression approach. Both methods outperform the random forest and LDA models on all datasets. These results suggest a neural network may be optimal for more complex datasets and better at integrating future data.
 
 [??? How to show distance performs better? Metric other than PPV?]
 [??? Add Random Forest for comparison]
@@ -61,29 +72,29 @@ To test, whether the neural network approaches can outperform simple models, we 
 
 ## Histone modifications, broadHMM and transcription factor binding sites have similar predictive abilities
 
-We find that the three tested categories produce similar results in terms of predictive ability. Transcription factor binding sites (Median $PPV_a$ = .941) produced the best results, followed by BroadHMM (Median $PPV_a$ = .940) and histone modifications (Median $PPV_a$ = .925). Figure 4 summarises these results, demonstrating the similarity. These results suggest that boundary prediction is robust to the type of data source used for prediction.
+We find that the three tested categories produce similar results in terms of predictive ability. Transcription factor binding sites (Median $PPV_a$ = .941) produced the best results, followed by BroadHMM (Median $PPV_a$ = .940) and histone modifications (Median $PPV_a$ = .925). Figure 6 summarises these results, demonstrating the similarity. These results suggest that boundary prediction is robust to the type of data source used for prediction.
 
-[??? Can we use something other than PPV? Previously, TFBS performed better, and that makes sense]
+[??? Can we use something other than PPV? Previously, TFBS performed better, and that makes sense.]
 
 ## Distance provides the best prediction results
 
-To determine the best feature for prediction, we compared distance, overlap, percent overlap and combination of all features. We find that simply using distance (Median $PPV_a$ = .950) outperforms overlap (Median $PPV_a$ = .930) and percent overlap (Median $PPV_a$ = .915). Additionally, we find that the combined (Median $PPV_a$ = .940) approach outperforms overlap and percent overlap but not distance. 
+To determine the best feature for prediction, we compared distance, overlap, percent overlap and combination of all features. We find that simply using distance (Median $PPV_a$ = .950) outperforms overlap (Median $PPV_a$ = .930) and percent overlap (Median $PPV_a$ = .915). Additionally, we find that the combined (Median $PPV_a$ = .940) approach outperforms overlap and percent overlap but not distance (Figure 6, Supplementary Table 4). 
 
 [??? Which figure demonstrates it? Again, PPV seem to give minuscule differences]
 
-## CTCF, RAD21 etc. are the most predictive
+## TADs can be predicted by multiple genomic annotations
 
-[??? Need feature selection results - random forest?]
+Variable importance was calculated by creating random forest models across all resolutions and feature types and extracting importance. Among transcription factor binding sites, we find that CTCF, Smc3ab92, Znf143, Rad21 and Pu1 have the highest levels of importance. For histones, the most important features are H3k9me3, H2az, H4k20me1, H3k4me1 and H3k27me3. BroadHMM is mainly explained by insulators, heterochromatin and weak enhancers with repressed and repetive CNV playing a role. Results are summarized in Figure 7 and Supplementary Table 5.
 
 ## Predicted TADs tend to be near true TADs
 
-To determine the accuracy of predicted TADs in terms of raw distance, we calculate the mean distance of predicted TADs and non-predicted TADs from annotated ones. We find a large difference in mean distance (64.2 vs. 5.87) [??? Where those numbers come from? What do they mean, units? Figure?] between predicted TADs and non-predicted TADs. These results suggest that our method is able to succesfully differentiate random regions and TAD regions.
+TAD prediction involves two parts: the prediction of TADs by our algorithm and prediction by the TAD caller. For each bin, there are four unique situations (TAD predicted and TAD called, TAD predicted and TAD not called, TAD not predicted and TAD called, TAD not predicted and TAD not called). As expected TADs predicted by our method hare nearer CTCF, Pu1, RAD21, Smc3ab9263 and Znf143 than those not predicted (Figure 8, Supplementary Table 6). Additionally, we find annotations are also closer in those TAD boundaries that are also called by the TAD caller. 
 
 [??? Need figure: Boxplots of distances between CTCF and detected from Hi-C, predicted from genomic annotations, not predicted. For CTCF, RAD21 and other selected features]
 
 ## The profile of TAD predictors is unique to the data type
 
-Distance from predicted TAD boundaries was calculated for a range of features, seperated by resolution. Features were clustered using Ward.D2 clustering and visualized using a heatmap (Figure 5). TFBS and BroadHMM can be seperated into three distinct groups (Enriched, Depleted and unrelated). The core enriched TFBS group includes CTCF, RAD21, Pu1 and Smc3ab9263. For BroadHMM, the core group is heterochromatin, insulators and weak enhancers. In TFBS, there is heavy depletion in Nfe2 and Tr4. In BroadHMM, repetive CNVs, poised promoters and Txn transitions are all depleted. In the case of histones, a different pattern emerges with two distinct groups (a large enriched group and a smaller depleted group). The large group consists of H3k27me3, H3k9me3, H2az, H3k4me1, H3k4me2, H327ac and H3k4me3. The depleted group consists of H3k36me3, H3k79me2, H3k9ac, H4k20me1. 
+Distance from predicted TAD boundaries was calculated for a range of features, seperated by resolution. Features were clustered using Ward.D2 clustering and visualized using a heatmap (Figure 9). TFBS and BroadHMM can be seperated into three distinct groups (Enriched, Depleted and unrelated). The core enriched TFBS group includes CTCF, RAD21, Pu1 and Smc3ab9263. For BroadHMM, the core group is heterochromatin, insulators and weak enhancers. In TFBS, there is heavy depletion in Nfe2 and Tr4. In BroadHMM, repetive CNVs, poised promoters and Txn transitions are all depleted. In the case of histones, a different pattern emerges with two distinct groups (a large enriched group and a smaller depleted group). The large group consists of H3k27me3, H3k9me3, H2az, H3k4me1, H3k4me2, H327ac and H3k4me3. The depleted group consists of H3k36me3, H3k79me2, H3k9ac, H4k20me1. 
 
 Summarized across all resolutions and features, we find that H3K9me3 co-locates the closest with predicted TAD boundaries followed by heterochromatin. Of the top 10 features, 6 are histones, 2 are from BroadHMM (heterochromatin, insulators) and 2 are TFBS (CTCF, Pu1).
 
