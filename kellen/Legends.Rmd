@@ -5,12 +5,40 @@ date: "October 16, 2019"
 output: pdf_document
 ---
 
-**Figure 1. Oversampling is needed to account for class imbalance**. A feed-forward neural network with a single hidden layer and 16 nodes was used to predict TAD boundaries. Adjusted PPV was calculated to determine the of accuracy predictions. Results are seperated by oversampling approach (None, RUS, ROS, SMOTE) and feature type (TFBS, BroadHMM, Histones). All results were generated using distance. GM12878 cell line, various resolutions. 
+**Figure 1. Performance is mildly dependent on layers**. A feed-forward neural network with either one or two hidden layer(s) and 16 nodes was used to predict TAD boundaries. Adjusted PPV (200kb flank) was calculated to determine the accuracy of predictions. Results are seperated by number of layers (1 or 2) and predictor type (Combined, Distance, Overlap, Percent Overlap). GM12878 cell line, various resolutions.
 
-**Figure 2. Results are generally consistent with node selection**. A feed-forward neural network with a single hidden layer and varying numbers of nodes (4,8,12,16,24,32,64) was used to predict TAD boundaries. Adjusted PPV was calculated to determine the accuracy of predictions. Results are presented for TFBS (a), histones (b) and broadHMM (c) and feature type (Combined, Distance, Overlap and Percent Overlap). GM12878 cell line, various resolutions. 
+**Figure 2. Performance is mildly dependent on dropout**. A feed-forward neural network with one layer and 16 nodes was used to predict TAD boundaries. Adjusted PPV (200kb flank) was calculated to determine the accuracy of predictions. Varying levels of dropout were used (0,0.1,0.2,0.3,0.4,0.5) Results are seperated by dropout level and predictor type (Combined, Distance, Overlap, Percent Overlap). GM12878 cell line, various resolutions. 
 
-**Figure 3. Neural networks and logistic regressions peform similarly**. A feed-forward neural network with a single hidden layer with 16 nodes and an elastic-net logistic regression model was used to predict TAD boundaries. Adjusted PPV was calculated to determine the accuracy of predictions. Results are presented for TFBS across all feature types (Combined, Distance, Overlap and Percent Overlap). GM12878 cell line, various resolutions. 
+**Figure 3. Over or under sampling is needed to account for class imbalance**. A feed-forward neural network with a single hidden layer and 16 nodes was used to predict TAD boundaries. Adjusted PPV was calculated to determine the of accuracy predictions. Results are seperated by oversampling approach (None, RUS, ROS, SMOTE) and feature type (TFBS, BroadHMM, Histones). All results were generated using distance. GM12878 cell line, various resolutions. 
 
-**Figure 4. Neural network results are robust to feature selection**. A feed-forward neural network with a single hidden layer and 16 nodes was used to predict TAD boundaries. Adjusted PPV was calculated to determine the of accuracy predictions. Results are seperated by data source (TFBS, BroadHMM, Histones) and feature type (Combined, Distance, Overlap and Percent Overlap). All results were generated using distance. GM12878 cell line, various resolutions. 
+**Figure 4. Results are generally consistent with node selection**. A feed-forward neural network with a single hidden layer and varying numbers of nodes (4,8,12,16,24,32,64) was used to predict TAD boundaries. Adjusted PPV was calculated to determine the accuracy of predictions. Results are presented for TFBS (a), histones (b) and broadHMM (c) and feature type (Combined, Distance, Overlap and Percent Overlap). GM12878 cell line, various resolutions. 
 
-**Figure 5. Certain features consistently appear near predicted TAD boundaries.**. TAD boundaries were predicted using a feed-forward neural network. The mean distance from predicted TAD boundaries was calculated for all features and are shown in a Heatmap. Results are presented for combined, TFBS (a), histones (b) and broadHMM (c). Rows represent resolution and columns individual features. Clustering was performing using Ward's clustering.
+**Figure 5. Neural networks and logistic regressions peform similarly**. A feed-forward neural network with a single hidden layer with 16 nodes, an elastic-net logistic regression model and a random forest was used to predict TAD boundaries. Adjusted PPV (200kb flank) was calculated to determine the accuracy of predictions. Results are presented for TFBS across all feature types (Combined, Distance, Overlap and Percent Overlap). GM12878 cell line, various resolutions. 
+
+**Figure 6. Neural network results are robust to feature selection**. A feed-forward neural network with a single hidden layer and 16 nodes was used to predict TAD boundaries. Adjusted PPV was calculated to determine the of accuracy predictions. Results are seperated by data source (TFBS, BroadHMM, Histones) and feature type (Combined, Distance, Overlap and Percent Overlap). All results were generated using distance. GM12878 cell line, various resolutions. 
+
+**Figure 7. A small number of features can be used to predict TAD boundaries.** TADs were predicted using a random forest model (500 trees) and variable importance was extracted for TFBS (a), histones(b) and broadHMM (c). Rows correspond to resolution and columns to features. Mean importance is shown. GM12878 cell line, various resolutions.
+
+**Figure 8. Predicted boundary types that are also called by a TAD caller perform best.** TADs were predicted using single layer neural networks with 16 nodes. Predictions were classified into four categories Not Predicted and Called, Not Predicted and Not Called, Predicted and Called, Predicted and Not Called) where called refers to TADs identified using the SpectralTAD TAD caller and predicted refers to boundaries predicted by the neural network. Distance from these boundary types was calculated for a range of genomic annotations. We present the top 5 closest TFBS features. x-axis- Feature, y-axis - Distance from boundary. GM12878 cell line, 50kb resolution.
+
+**Figure 9. Certain features consistently appear near predicted TAD boundaries.**. TAD boundaries were predicted using a feed-forward neural network. The mean distance from predicted TAD boundaries was calculated for all features and are shown in a Heatmap. Results are presented for combined, TFBS (a), histones (b) and broadHMM (c). Rows represent resolution and columns individual features. 
+
+**Supplementary Table 1. Comparison of over/under sampling methods.** Neural network models were fit with 16 nodes and a single layer using no resampling, random undersampling (rus), random oversampling (ros) and SMOTE. Adjusted precision was calculated for each model and summarized across resolutions (5kb, 10kb, 25kb, 50kb, 100kb) and annotation types (TFBS, histones, broadHMM). Results are seperated by predictor type. GM12878 cell line, various resolutions.
+
+**Supplementary Table 2. The effect of nodes on model performance.** Single layer neural networks were fit using varying numbers of nodes (4,8,12,16,24,32,64) and adjusted precision was calculated. Results are seperated by resolution and annotation type. GM12878 cell line, various resolutions.
+
+**Supplementary Table 3. The effect of nodes on model performance.** Single layer neural networks with 16 nodes, penalized logistic regression, random forest and support vector machine models were used to predict TAD boundaries. Adjusted precision was calculated based on these predictions and presented for each method. Results are summarized across resolutions (5kb, 10kb, 25kb, 50kb, 100kb) and annotation type (TFBS, histones, broadHMM). Results are seperated by predictor type. GM12878 cell line, various resolutions.
+
+
+**Supplementary Table 4. The effect of predictor type on model performance.** Single layer neural networks with 16 nodes were used to predict TAD boundaries using different types of predictors. Adjusted precision (200kb flank) was used to assess prediction accuracy. Results are summarized across resolutions (5kb, 10kb, 25kb, 50kb, 100kb) and seperated by annotation type. GM12878 cell line, various resolutions.
+
+
+**Supplementary Table 5. A small set of predictors show high importance for each method.** A random forest model (500 trees) was used to predict TAD boundaries. Variable importance was extracted and summarized. Results are summarized across resolutions (5kb, 10kb, 25kb, 50kb, 100kb) and seperated by annotation type. GM12878 cell line, various resolutions.
+
+**Supplementary Table 6. Summary of distances from TAD boundaries.** TADs were predicted using single layer neural networks with 16 nodes. Predictions were classified into four categories Not Predicted and Called, Not Predicted and Not Called, Predicted and Called, Predicted and Not Called) where called refers to TADs identified using the SpectralTAD TAD caller and predicted refers to boundaries predicted by the neural network. Distance from these boundary types was calculated for a range of genomic annotations. GM12878 cell line, 50kb resolution.
+
+**Supplementary Table x. Summary of resolutions.** 
+
+
+
+
