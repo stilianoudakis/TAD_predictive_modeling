@@ -74,6 +74,9 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Prediction, general
 
+- Prati, Ronaldo C, Gustavo EAPA Batista, and Maria Carolina Monard. “Data Mining with Imbalanced Class Distributions: Concepts and Methods.” In IICAI, 359–376, 2009.
+. Class imbalance problem, methods to address it. From ROS/RUS to heuristic ROS/RUS, cost-sensitive learning. Metrics for evaluation.
+
 - Twitter tread on class imbalance, https://twitter.com/goodfellow_ian/status/1127994332416364549
 
 - Wei, Qiong, and Roland L. Dunbrack. “The Role of Balanced Training and Testing Data Sets for Binary Classifiers in Bioinformatics.” PloS One 8, no. 7 (2013): e67863. https://doi.org/10.1371/journal.pone.0067863. - Class imbalance. Intro into the problem, methods for addressing class imbalance. Balanced _training_ set is crucial for the best classifier performance, balanced _test_set also helps to improve the results. AUROC is not sensitive to class imbalance, MCC is. Illustrated on predicting missense mutations.
