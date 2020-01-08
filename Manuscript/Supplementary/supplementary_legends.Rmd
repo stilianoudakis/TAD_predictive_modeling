@@ -3,9 +3,9 @@ title: "Legends for supplementary material"
 output: pdf_document
 ---
 
-**Supplementary Table 1. Hi-C data.** A complete list of the Hi-C data libraries used to obtain the locations of topologically associating domains.
+**Supplementary Table 1. Hi-C data.** A complete list of the Hi-C data libraries obtained from GEO GSE63525 [@rao20143d] used to obtain the locations of topologically associating domains.
 
-**Supplementary Table 2. Genomic annotations.** A complete list of the genomic annotations used to build the feature space for all downstream models. The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Available Cell Type" - the name of the cell type in which the annotation was available, "Cell Type-Specific Source" - download URL specific to the cell line (not all annotations were provided by the same institutions). 
+**Supplementary Table 2. Genomic annotations.** A complete list of the genomic annotations used to build the feature space for all downstream models. The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Cell Type-Specific Source" - download URL specific to the cell line (not all annotations were provided by the same institutions). 
 
 **Supplementary Figure 1. Performing $log_{2}$ transformations normalized skewed distance densities across resolution for GM12878.** When measured in basepairs, distances were highly right skewed for all resolutions: (A) 10 kb, (B) 25 kb, (C) 50 kb, and (D) 100 kb. After $log_{2}$ transforming the distances, densities became much more gaussian distributed for all resolutions: (E) 10 kb, (F) 25 kb, (G) 50 kb, and (H) 100 kb. Each density curve represents a cell line specific annotation, and its relationship with all resolution specific genomic bins.
 
