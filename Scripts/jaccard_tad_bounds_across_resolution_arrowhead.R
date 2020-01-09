@@ -1,3 +1,7 @@
+library(corrplot)
+library(bedr)
+library(HelloRanges)
+
 source("C:/Users/stili/Documents/preciseTAD_functions/functions/annots_to_granges_func.r")
 source("C:/Users/stili/Documents/preciseTAD_functions/functions/binary_func.r")
 source("C:/Users/stili/Documents/preciseTAD_functions/functions/count_func.r")
