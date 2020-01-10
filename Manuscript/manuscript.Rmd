@@ -125,7 +125,7 @@ To evaluate if our predicted TAD boundaries are biologically significant we will
 Furthermore, we will assess the conservation of our predicted TAD boundaries within cell types and between resolutions, as well as between cell types and within resolutions and compare with ARROWHEAD called TAD boundaries. To do so we will evaluate Jaccard Indices. Jaccard is a metric used to measure overlap between sets (genomic regions). Thus we can use it as measure of overlap between TAD boundaries. Given two sets of TAD boundaries (either between resolution or cell type) A and B, we define the Jaccard Index as,
 
 $$J_{(A,B)} = \dfrac{A \cap B}{A \cup B}.$$
-To give the sets of boundaries A and B dimensionality to enable us to calculate overlap, we flank each boundary point by a flanking factor, *f*=5000. 
+To give the sets of boundaries A and B dimensionality to enable us to calculate overlap, we flank each boundary point by a flanking factor, $f=max\{r_{A},r_{B}\}$, where $r_{A(B)}$ is the Hi-C data resolution used to call TADs for A (B). 
 
 # Results
 
