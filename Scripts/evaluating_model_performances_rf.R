@@ -18,14 +18,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]						   
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -73,14 +73,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]						   
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -128,14 +128,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -182,14 +182,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -237,14 +237,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -398,14 +398,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]						   
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -453,14 +453,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]						   
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -508,14 +508,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -562,14 +562,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/50kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -617,14 +617,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
                                  "/", 
                                  k, 
                                  "/"))
-      if("TADRF_tfbs.rds" %in% files){
+      if("TADRF.rds" %in% files){
         perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/100kb/results_by_chr/",
                                    i, 
                                    "/",
                                    j, 
                                    "/", 
                                    k, 
-                                   "/TADRF_tfbs.rds"))
+                                   "/TADRF.rds"))
         perfdata <- perfdata[[3]]
       }else{perfdata=data.frame(Metric = c("TN",
                                            "FN",
@@ -711,7 +711,7 @@ ggplot(all_rfperfs_mcc, aes(x=Resolution, y=Performance, color=Resampling, group
   theme_minimal() +
   theme_bw()+
   xlab("Resolution") + 
-  ylab("") + #ylim(-.1,.5) +
+  ylab("MCC") + #ylim(-.1,.5) +
   scale_color_discrete(name="Resampling Technique")+
   guides(shape=FALSE, linetype=FALSE)+
   theme(axis.text.x = element_text(size=15,

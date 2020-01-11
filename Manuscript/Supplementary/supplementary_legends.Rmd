@@ -7,7 +7,7 @@ output: pdf_document
 
 **Supplementary Table 2. Genomic annotations.** A complete list of the genomic annotations used to build the feature space for all downstream models. The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Cell Type-Specific Source" - download URL specific to the cell line (not all annotations were provided by the same institutions). 
 
-**Supplementary Table 3.** Domain data and class imbalance summaries across resolutions for GM12878.
+**Supplementary Table 3.** Domain data and class imbalance summaries across resolutions for K562.
 
 **Supplementary Figure 1. Performing $log_{2}$ transformations normalized skewed genomic distance densities across all resolutions.** When measured in basepairs, distances were highly right skewed for all resolutions for both the (A) GM12878 and (B) K562 cell lines. After $log_{2}$ transforming the distances, densities became much more gaussian distributed for all resolutions. 
 
