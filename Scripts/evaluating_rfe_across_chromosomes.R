@@ -1,17 +1,3 @@
----
-title: "Evaluating RFE across chromosomes"
-author: "Spiro Stilianoudakis"
-date: "July 30, 2019"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-# Loading Libraries
-
-```{r}
 library(GenomicRanges)
 library(caret)
 library(data.table)
@@ -49,15 +35,12 @@ library(ggsignif)
 library(Vennerable)
 library(VennDiagram)
 library(ChIPpeakAnno)
-```
 
 # Optimal parameters: 10 kb, TFBS, distance type predictors, SMOTE resampling
 
 ## Determining number of annotations
 
 ### Line plot
-
-```{r}
 
 rfeperchr <- data.frame()
 
@@ -69,7 +52,7 @@ for(i in c("GM12878","K562")){
                                           "/",
                                           "10kb/results_by_chr/",
                                           chrs[k],
-                                          "/smote/distance/enet/rfeModelResultsList.rds"))
+                                          "/rus/distance/TADrfe.rds"))
     rfeModelResults <- rfeModelResultsList[[1]]
     rfeModelResults <- rfeModelResults[,1:2]
     rfeModelResults$CL <- i
@@ -81,24 +64,24 @@ for(i in c("GM12878","K562")){
 rfeperchr_summ <- rfeperchr %>%
   group_by(CL, Variables) %>%
   dplyr::summarise(AveMCC = mean(MCC, na.rm = TRUE),
-            AveMCCSD = sd(MCC, na.rm = TRUE))
+                   AveMCCSD = sd(MCC, na.rm = TRUE))
 
 ggplot(rfeperchr_summ, aes(x=Variables, y=AveMCC, color=CL)) + 
-    geom_errorbar(aes(ymin=AveMCC-AveMCCSD, ymax=AveMCC+AveMCCSD), 
-                  width=2, 
-                  position=position_dodge(2),
-                  size=1) +
-    geom_line(position=position_dodge(2), size=1) +
-    geom_point(position=position_dodge(2), size=2) +
-    xlab("Number of top ranked annotations") +
-    ylab("Cross-Validated MCC") +
-    #ylim(.3,.8)+
-    scale_color_discrete(name="Cell line")+
-    scale_x_continuous(breaks = c(2,4,8,16,32,52),
+  geom_errorbar(aes(ymin=AveMCC-AveMCCSD, ymax=AveMCC+AveMCCSD), 
+                width=2, 
+                position=position_dodge(2),
+                size=1) +
+  geom_line(position=position_dodge(2), size=1) +
+  geom_point(position=position_dodge(2), size=2) +
+  xlab("Number of top ranked annotations") +
+  ylab("Cross-Validated MCC") +
+  #ylim(.3,.8)+
+  scale_color_discrete(name="Cell line")+
+  scale_x_continuous(breaks = c(2,4,8,16,32,52),
                      labels = c(2,4,8,16,32,52))+
-    theme_minimal() +
-    theme_bw()+
-    theme(axis.text.x = element_text(size = 15),
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 20),
         axis.title.y = element_text(size = 20),
@@ -110,11 +93,10 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=AveMCC, color=CL)) +
         legend.title=element_text(size=20),
         plot.title = element_text(size=20),
         legend.position = "bottom")
-```
+
 
 ### Importance heatmap
 
-```{r}
 rfeperchr <- data.frame()
 
 set.size = 8
@@ -126,7 +108,7 @@ for(i in c("GM12878","K562")){
                                           "/",
                                           "10kb/results_by_chr/",
                                           chrs[k],
-                                          "/smote/distance/enet/rfeModelResultsList.rds"))
+                                          "/rus/distance/TADrfe.rds"))
     rfeModelResults <- rfeModelResultsList[[2]]
     rfe.set <- rfeModelResults[rfeModelResults$Variables==set.size,]
     rfe.set <- aggregate(rfe.set[, c("Overall")], list(rfe.set$var), mean)
@@ -152,15 +134,10 @@ names(rfeperchr)[1:2] <- c("Feature", "Importance")
 rfeperchr_summ <- rfeperchr %>%
   group_by(CL, Feature) %>%
   dplyr::summarise(AveImp = mean(Importance, na.rm = TRUE),
-            AveImpSD = sd(Importance, na.rm = TRUE)) %>%
+                   AveImpSD = sd(Importance, na.rm = TRUE)) %>%
   dplyr::arrange(CL, desc(AveImp))
 
-```
-
-
 #### GM12878
-
-```{r}
 
 rfegm12878 <- rfeperchr[which(rfeperchr$CL=="GM12878"),]
 rfegm12878 <- reshape(rfegm12878[,c(1,2,4)], idvar = "Feature", timevar = "Chromosome", direction = "wide")
@@ -202,11 +179,9 @@ heatmap.2(t(rfegm12878.mat),
           sepwidth=c(0.00001,0.00001),
           sepcolor="black"
 ) 
-```
 
 #### K562
 
-```{r}
 rfek562 <- rfeperchr[which(rfeperchr$CL=="K562"),]
 rfek562 <- reshape(rfek562[,c(1,2,4)], idvar = "Feature", timevar = "Chromosome", direction = "wide")
 names(rfek562)[-1] <- paste0("CHR", c(1:8,10:22)) 
@@ -247,5 +222,4 @@ heatmap.2(t(rfek562.mat),
           sepwidth=c(0.00001,0.00001),
           sepcolor="black"
 ) 
-```
 
