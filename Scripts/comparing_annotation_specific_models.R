@@ -223,6 +223,7 @@ ggplot(all_rfperfs_mcc, aes(x=Resolution, y=MCC, group=Annotation, fill=Annotati
   axis.title.y = element_text(size = 20),
   legend.text=element_text(size=15),
   legend.title=element_text(size=20),
+  legend.position = "bottom",
   plot.title = element_text(size=20))
 
 ####################################################################################################
