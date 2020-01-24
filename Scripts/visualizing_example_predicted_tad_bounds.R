@@ -37,7 +37,7 @@ tadModel <- TADRF(bounds.GR=bounds.GR,
                   resolution=10000,
                   genomicElements.GR=genomicElements.GR,
                   featureType="distance",
-                  resampling="smote",
+                  resampling="rus",
                   trainCHR="CHR22",
                   predictCHR="CHR22",
                   number=5,
@@ -193,7 +193,6 @@ if(threshold=="roc"){
   t <- threshold 
 }
 
-rm("test_data")
 
 prob1basenumdiff <- diff(seqDataTest[which(predictions>=t)])
 retain <- numeric()
@@ -211,7 +210,6 @@ for(i in unique(retain)){
   mid[i] <- ceiling((bpdat[1]+bpdat[n])/2)
 }
 
-rm("predictions")
 
 x <- dist(mid, method = "euclidean")
 hc1 <- hclust(x, method = "complete")
@@ -238,8 +236,15 @@ if(verbose==TRUE){
              medoids.x = TRUE)
 }
 
+predBound_gr <- GRanges(seqnames=tolower(CHR),
+                        IRanges(start=seqDataTest[which(seqDataTest %in% c$medoids)],
+                                end=seqDataTest[which(seqDataTest %in% c$medoids)]))
 
-predprobdata <- data.frame(basenum=c(17389000:18011000),
+trueBound_gr <- GRanges(seqnames=tolower(CHR),
+                        IRanges(start=seqDataTest[which(seqDataTest %in% start(bounds.GR))],
+                                end=seqDataTest[which(seqDataTest %in% start(bounds.GR))]))
+
+predprobdata <- data.frame(basenum=c(chromCoords[[1]]:chromCoords[[2]]),
                            prob=predictions)
 predprobdata$predicted <- ifelse(predprobdata$basenum %in% c$medoids, "Yes", "No")
 predprobdata$called <- ifelse(predprobdata$basenum %in% start(trueBound_gr), "Yes", "No")
