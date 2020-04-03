@@ -36,46 +36,28 @@ library(Vennerable)
 library(VennDiagram)
 library(ChIPpeakAnno)
 
-# Optimal parameters: 10 kb, TFBS, distance type predictors, SMOTE resampling
+# GM12878
 
-## Determining number of annotations
+## Optimal parameters: 10 kb, TFBS, distance type predictors, SMOTE resampling
 
-### Line plot
+### Determining number of annotations
 
-rfeperchr <- data.frame()
+#### Line plot
 
-chrs <- paste0("chr", c(1:8,10:22))
-for(i in c("GM12878","K562")){
-  for(k in 1:length(chrs)){
-    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
-                                          i,
-                                          "/",
-                                          "10kb/results_by_chr/",
-                                          chrs[k],
-                                          "/rus/distance/TADrfe.rds"))
-    rfeModelResults <- rfeModelResultsList[[1]]
-    rfeModelResults <- rfeModelResults[,1:2]
-    rfeModelResults$CL <- i
-    rfeModelResults$Chromosome <- chrs[k]
-    rfeperchr <- rbind.data.frame(rfeperchr, rfeModelResults)
-  }
-}
+rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/WHOLE/rus/distance/TADrfe_3.rds"))
+rfeModelResults <- rfeModelResultsList[[1]]
+rfeModelResults <- rfeModelResults[,c(1,11)]
 
-rfeperchr_summ <- rfeperchr %>%
-  group_by(CL, Variables) %>%
-  dplyr::summarise(AveMCC = mean(MCC, na.rm = TRUE),
-                   AveMCCSD = sd(MCC, na.rm = TRUE))
-
-ggplot(rfeperchr_summ, aes(x=Variables, y=AveMCC, color=CL)) + 
-  geom_errorbar(aes(ymin=AveMCC-AveMCCSD, ymax=AveMCC+AveMCCSD), 
-                width=2, 
-                position=position_dodge(2),
-                size=1) +
-  geom_line(position=position_dodge(2), size=1) +
-  geom_point(position=position_dodge(2), size=2) +
+ggplot(rfeModelResults, aes(x=Variables, y=Accuracy)) + 
+  #geom_errorbar(aes(ymin=AveMCC-AveMCCSD, ymax=AveMCC+AveMCCSD), 
+  #              width=2, 
+  #              position=position_dodge(2),
+  #              size=1) +
+  geom_line(size=2, color="red") +
+  geom_point(size=4, color="red") +
+  ylim(.6,.8) +
   xlab("Number of top ranked annotations") +
-  ylab("Cross-Validated MCC") +
-  #ylim(.3,.8)+
+  ylab("Cross-Validated Accuracy") +
   scale_color_discrete(name="Cell line")+
   scale_x_continuous(breaks = c(2,4,8,16,32,52),
                      labels = c(2,4,8,16,32,52))+
@@ -94,66 +76,65 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=AveMCC, color=CL)) +
         plot.title = element_text(size=20),
         legend.position = "bottom")
 
-
-### Importance heatmap
-
-rfeperchr <- data.frame()
+#### Importance barchart/heatmap
 
 set.size = 8
-chrs <- paste0("chr", c(1:8,10:22))
-for(i in c("GM12878","K562")){
-  for(k in 1:length(chrs)){
-    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
-                                          i,
-                                          "/",
-                                          "10kb/results_by_chr/",
-                                          chrs[k],
-                                          "/rus/distance/TADrfe.rds"))
-    rfeModelResults <- rfeModelResultsList[[2]]
-    rfe.set <- rfeModelResults[rfeModelResults$Variables==set.size,]
-    rfe.set <- aggregate(rfe.set[, c("Overall")], list(rfe.set$var), mean)
-    rfe.order <- order(rfe.set[, c("x")], decreasing = TRUE)[1:set.size]
-    rfe.set <- rfe.set[rfe.order, ]
-    rfe.set$CL <- i
-    rfe.set$Chromosome <- chrs[k]
-    
-    rfeperchr <- rbind.data.frame(rfeperchr, rfe.set)
-  }
-}
+rfeModelResults <- rfeModelResultsList[[2]]
+rfe.set <- rfeModelResults[rfeModelResults$Variables==set.size,]
+rfe.set <- aggregate(rfe.set[, c("Overall")], list(rfe.set$var), mean)
+rfe.order <- order(rfe.set[, c("x")], decreasing = TRUE)
+rfe.set <- rfe.set[rfe.order, ]
+rfe.set$Group.1 <- factor(rfe.set$Group.1, levels=c("Smc3ab9263", 
+                                                    "Znf143",
+                                                    "Rad21",
+                                                    "Ctcf",
+                                                    "Pol2",
+                                                    "Elf1sc631",  
+                                                    "Pol24h8",    
+                                                    "Tbp",        
+                                                    "Taf1",      
+                                                    "Mef2a",      
+                                                    "Mxi1",       
+                                                    "Mazab85725"))
+ggplot(rfe.set, aes(x=reorder(Group.1,x), y=x)) +
+  geom_bar(stat='identity', fill="red") +
+  coord_flip() +
+  ylab("Transcription Factor Binding Sites") +
+  xlab("Predictive Importance") +
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        #strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
 
-rfeperchr$Group.1 <- gsub(paste0(c("Gm12878-", 
-                                   "K562-", 
-                                   "-Haib", 
-                                   "-Sydh",
-                                   "-Uta",
-                                   "-Uw",
-                                   "-Broad",
-                                   "-Uchicago"), collapse = "|"), "", rfeperchr$Group.1)
-names(rfeperchr)[1:2] <- c("Feature", "Importance")
 
-rfeperchr_summ <- rfeperchr %>%
-  group_by(CL, Feature) %>%
-  dplyr::summarise(AveImp = mean(Importance, na.rm = TRUE),
-                   AveImpSD = sd(Importance, na.rm = TRUE)) %>%
-  dplyr::arrange(CL, desc(AveImp))
+rfeModelResults <- rfeModelResultsList[[2]]
+rfe.set <- rfeModelResults[rfeModelResults$Variables==set.size,]
+rfe.set <- aggregate(rfe.set[, c("Overall")], list(rfe.set$var,rfe.set$Resample), mean)
+rfe.set <- reshape(rfe.set, idvar = "Group.1", timevar = "Group.2", direction = "wide")
+rfe.set.mat <- as.matrix(rfe.set[,-1])
+rownames(rfe.set.mat) <- rfe.set$Group.1
+rfe.set.mat[is.na(rfe.set.mat)] <- 0
+rfe.set.mat <- rfe.set.mat[ order(rowMeans(rfe.set.mat)), ]
 
-#### GM12878
+rfe.set.mat <- apply(rfe.set.mat,2,rev)
 
-rfegm12878 <- rfeperchr[which(rfeperchr$CL=="GM12878"),]
-rfegm12878 <- reshape(rfegm12878[,c(1,2,4)], idvar = "Feature", timevar = "Chromosome", direction = "wide")
-names(rfegm12878)[-1] <- paste0("CHR", c(1:8,10:22)) 
-rfegm12878.mat <- as.matrix(rfegm12878[,-1])
-rownames(rfegm12878.mat) <- rfegm12878$Feature
-rfegm12878.mat[is.na(rfegm12878.mat)] <- 0
-rfegm12878.mat <- apply(rfegm12878.mat,2,rev)
-
-#using heatmap.2
-distance.col = dist(rfegm12878.mat, method = "euclidean")
+distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
-my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfegm12878.mat))
-heatmap.2(t(rfegm12878.mat),
-          #labRow=rownames(rfegm12878.mat),
-          #labCol=colnames(rfegm12878.mat),
+my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
+
+heatmap.2(t(rfe.set.mat),
+          #labRow=rownames(rfe.set.mat),
+          #labCol=colnames(rfe.set.mat),
           #cellnote = ,  # same data set for cell labels
           #main = "", # heat map title
           notecol="black",      # change font color of cell labels to black
@@ -174,51 +155,8 @@ heatmap.2(t(rfegm12878.mat),
           #labRow = FALSE,
           #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
           #lhei=c(.5,6,0),
-          rowsep=0:nrow(t(rfegm12878.mat)),
-          colsep=0:ncol(t(rfegm12878.mat)),
-          sepwidth=c(0.00001,0.00001),
-          sepcolor="black"
-) 
-
-#### K562
-
-rfek562 <- rfeperchr[which(rfeperchr$CL=="K562"),]
-rfek562 <- reshape(rfek562[,c(1,2,4)], idvar = "Feature", timevar = "Chromosome", direction = "wide")
-names(rfek562)[-1] <- paste0("CHR", c(1:8,10:22)) 
-rfek562.mat <- as.matrix(rfek562[,-1])
-rownames(rfek562.mat) <- rfek562$Feature
-rfek562.mat[is.na(rfek562.mat)] <- 0
-#rfek562.mat <- apply(rfek562.mat,2,rev)
-
-#using heatmap.2
-distance.col = dist(rfek562.mat, method = "euclidean")
-cluster.col = hclust(distance.col, method = "average")
-my_palette <- colorRampPalette(c("white", "lightblue", "blue"))(ncol(rfek562.mat))
-heatmap.2(t(rfek562.mat),
-          #labRow=rownames(rfek562.mat),
-          #labCol=colnames(rfek562.mat),
-          #cellnote = ,  # same data set for cell labels
-          #main = "", # heat map title
-          notecol="black",      # change font color of cell labels to black
-          density.info="none",  # turns off density plot inside color legend
-          trace="none",         # turns off trace lines inside the heat map
-          margins=c(12,8),     # widens margins around plot
-          col=my_palette,       # use on color palette defined earlier
-          na.color = "gray",
-          #breaks=col_breaks,    # enable color transition at specified limits
-          key=FALSE,
-          #keysize = 1.5,
-          #key.title = "Elastic-Net Coefficient",
-          dendrogram="column",     # only draw a row dendrogram,
-          Rowv = FALSE,
-          Colv = reorder(as.dendrogram(cluster.col), 37:1),
-          cexRow=.5,
-          cexCol=1,
-          #labRow = FALSE,
-          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
-          #lhei=c(.5,6,0),
-          rowsep=0:nrow(t(rfek562.mat)),
-          colsep=0:ncol(t(rfek562.mat)),
+          rowsep=0:nrow(t(rfe.set.mat)),
+          colsep=0:ncol(t(rfe.set.mat)),
           sepwidth=c(0.00001,0.00001),
           sepcolor="black"
 ) 
