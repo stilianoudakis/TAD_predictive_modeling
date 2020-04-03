@@ -120,12 +120,13 @@ Using optimally trained models, we established *predicted TAD boundary regions* 
 
 ## Comparing Called vs Predicted TAD boundaries
 
-To evaluate if our predicted TAD boundaries are biologically significant we will asssess the signal strength obtained from key ChIP-Seq peak elements known to be enriched at TAD boundaries including CTCF, RAD21, SMC3, and ZNF143. To do so we will used enrich heatmaps and Student’s t-tests to compare distances from selected ChiP-seq data to our predicted TAD boundaries compared to called TAD boundaries (ARROWHEAD). 
+To evaluate if our predicted TAD boundaries are biologically significant we asssessed the signal strength obtained from key ChIP-Seq peak elements known to be enriched at TAD boundaries including CTCF, RAD21, SMC3, and ZNF143. To do so we used enriched heatmaps and Wilcoxon Rank-Sum tests to compare distances from selected ChiP-seq data to our predicted TAD boundaries compared to ARROWHEAD boundaries. 
 
-Furthermore, we will assess the conservation of our predicted TAD boundaries within cell types and between resolutions, as well as between cell types and within resolutions and compare with ARROWHEAD called TAD boundaries. To do so we will evaluate Jaccard Indices. Jaccard is a metric used to measure overlap between sets (genomic regions). Thus we can use it as measure of overlap between TAD boundaries. Given two sets of TAD boundaries (either between resolution or cell type) A and B, we define the Jaccard Index as,
+Furthermore, we assessed the conservation of our predicted TAD boundaries across cell types and compared with ARROWHEAD. Boundaries were flanked by resolution and overlaps were evaluated visually using venn diagrams and Jaccard Indices. Jaccard is a metric used to measure overlap between sets defined as
 
-$$J_{(A,B)} = \dfrac{A \cap B}{A \cup B}.$$
-To give the sets of boundaries A and B dimensionality to enable us to calculate overlap, we flank each boundary point by a flanking factor, $f=max\{r_{A},r_{B}\}$, where $r_{A(B)}$ is the Hi-C data resolution used to call TADs for A (B). 
+$$J_{(A,B)} = \dfrac{A \cap B}{A \cup B}$$
+
+where A and B are genomic regions.
 
 # Results
 
