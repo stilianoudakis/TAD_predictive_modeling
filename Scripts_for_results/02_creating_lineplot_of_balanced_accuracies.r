@@ -322,8 +322,15 @@ all_rfperfs$Resampling <- c(rep("None", 4),
                             rep("RUS", 4),
                             rep("SMOTE", 4))
 all_rfperfs$Predictor <- c("Distance", "OC", "OP", "Signal")
+all_rfperfs$Predictor <- factor(all_rfperfs$Predictor, levels=c("Signal","OC","OP","Distance"))
+all_rfperfs$Resolution <- factor(all_rfperfs$Resolution, c("5 kb",
+                                                           "10 kb",
+                                                           "25 kb",
+                                                           "50 kb",
+                                                           "100 kb"))
 
-ggplot(all_rfperfs, aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
+
+ggplot(all_rfperfs, aes(x=Resolution, y=V1, color=Resampling, group=Resampling)) +
   geom_line(size=2, position=position_dodge(0.5))+
   geom_point(size=5, position=position_dodge(0.5))+
   #geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
@@ -334,7 +341,7 @@ ggplot(all_rfperfs, aes(x=Resolution, y=Performance, color=Resampling, group=Res
   xlab("Resolution") + 
   ylab("Balanced Accuracy") + 
   #ylim(-.1,.5) +
-  scale_color_discrete(name="Resampling Technique")+
+  scale_color_discrete(name="Resampling\nTechnique")+
   guides(shape=FALSE, linetype=FALSE)+
   theme(axis.text.x = element_text(size=15,
                                    angle = 45, 
@@ -617,7 +624,7 @@ all_rfperfs$Resampling <- c(rep("None", 4),
                             rep("SMOTE", 4))
 all_rfperfs$Predictor <- c("Distance", "OC", "OP", "Signal")
 
-ggplot(all_rfperfs, aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
+ggplot(all_rfperfs, aes(x=Resolution, y=V1, color=Resampling, group=Resampling)) +
   geom_line(size=2, position=position_dodge(0.5))+
   geom_point(size=5, position=position_dodge(0.5))+
   #geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
@@ -628,7 +635,7 @@ ggplot(all_rfperfs, aes(x=Resolution, y=Performance, color=Resampling, group=Res
   xlab("Resolution") + 
   ylab("Balanced Accuracy") + 
   #ylim(-.1,.5) +
-  scale_color_discrete(name="Resampling Technique")+
+  scale_color_discrete(name="Resampling\nTechnique")+
   guides(shape=FALSE, linetype=FALSE)+
   theme(axis.text.x = element_text(size=15,
                                    angle = 45, 

@@ -62,7 +62,7 @@ source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
 
 ## Extracting TAD boundaries using the extract_boundaries_func function for ARROWHEAD defined TADs at 10kb resolution
 
-domains <- read.table("Z:/TAD_data_analysis/GM12878/10kb/GM12878_domain_data_5000.b.txt")
+domains <- read.table("Z:/TAD_data_analysis/GM12878/5kb/GM12878_domain_data_5000.b.txt")
 bounds.GR <- extract_boundaries_func(domains.mat=domains, 
                                      preprocess=FALSE, 
                                      CHR=paste0("CHR", c(1:8,10:22)), 
@@ -83,9 +83,9 @@ tadModel <- TADRF(bounds.GR=bounds.GR,
                   resampling="rus",
                   trainCHR=paste0("CHR", c(1:8,10:22)),
                   predictCHR=NULL,
-                  cvFolds=5,
-                  ntrees=500,
-                  cvMetric="MCC",
+                  cvFolds=3,
+                  ntrees=100,
+                  cvMetric="Accuracy",
                   verbose=TRUE,
                   seed=123,
                   model=TRUE,
@@ -112,7 +112,7 @@ pt <- preciseTAD(bounds.GR=bounds.GR,
                       splits=NULL,
                       method.Dist="euclidean",
                       DBSCAN=TRUE,
-                      DBSCAN_params,
+                      DBSCAN_params=list(5000,3),
                       method.Clust=NULL,
                       PTBR=TRUE,
                       CLARA=TRUE,
@@ -150,7 +150,9 @@ makeHg19 <- function(){
 hg19 <- makeHg19()
 hg19$chrom <- paste0("CHR",hg19$chrom)
 
-seqDataTest <- c(chromCoords[[1]]:chromCoords[[2]])
+seqDataTest <- c(17389000:18011000)
+
+CHR="CHR22"
   
   if("TRUE" %in% table(seqDataTest %in% c(hg19$centromerStart[hg19$chrom==CHR]:hg19$centromerEnd[hg19$chrom==CHR]))){
     centromereTestStart <- hg19$centromerStart[hg19$chrom==CHR]
@@ -172,7 +174,7 @@ test_data <- apply(test_data,2,function(x){log(x + 1, base=2)})
 predictions <- predict(tadModel[[1]],newdata=test_data,type="prob")[,"Yes"]
 															
 
-predprobdata <- data.frame(basenum=c(chromCoords[[1]]:chromCoords[[2]]),
+predprobdata <- data.frame(basenum=c(17389000:18011000),
                            prob=predictions)
 predprobdata$predicted <- ifelse(predprobdata$basenum %in% start(pt[[2]]), "Yes", "No")
 predprobdata$called <- ifelse(predprobdata$basenum %in% start(pt[[3]]), "Yes", "No")
@@ -181,14 +183,17 @@ calleddata <- predprobdata[which(predprobdata$called=="Yes"),]
 
 predicteddata <- predprobdata[which(predprobdata$prob>=1.0),]
 
+predicteddata2 <- predprobdata[which(predprobdata$predicted=="Yes"),]
+predicteddata2 <- predicteddata2[-c(3),]
+
 ggplot() + 
-  geom_vline(data=predicteddata, aes(xintercept=basenum, 
-                                     color="red"),
-             size=.5,
-             show.legend = TRUE)+
   geom_line(data=predprobdata, aes(x=basenum, y=prob), 
             color='black',
             size=1)+
+  #geom_vline(data=predicteddata, aes(xintercept=basenum, 
+  #                                   color="red"),
+  #           size=.5,
+  #           show.legend = TRUE)+
   geom_vline(data=calleddata, aes(xintercept=basenum, 
                                   color="blue"),
              size=.75,
@@ -200,10 +205,9 @@ ggplot() +
   xlab("Base Pair Coordinate") +
   ylab("Probability") +
   scale_color_manual(name = '', 
-                     values =c("blue", "green", "red"),
-                     labels = c("Called Boundary",
-                                "PTBP",
-                                "PTBA"))+
+                     values =c("blue", "green"),
+                     labels = c("ARROWHEAD",
+                                "preciseTAD"))+
   theme_minimal() +
   theme_bw() +
   theme(axis.text.x = element_text(size=15),
@@ -218,4 +222,4 @@ ggplot() +
         legend.position = "bottom")
 
 
-predicteddata2 <- predprobdata[which(predprobdata$predicted=="Yes"),]
+

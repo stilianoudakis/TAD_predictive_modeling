@@ -69,7 +69,7 @@ true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
 chrs <- paste0("CHR", c(2:8,10:15,17:22))
 for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                     chrs[i],
                                     "/rus/distance/preciseTAD.rds"))
   
@@ -91,7 +91,7 @@ true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
 chrs <- paste0("CHR", c(2:8,10:15,17:22))
 for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
                                     chrs[i],
                                     "/rus/distance/preciseTAD.rds"))
   

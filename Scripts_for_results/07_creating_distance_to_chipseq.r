@@ -73,9 +73,8 @@ genomicElements.GR <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/an
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(2:8,10:15,17:22))
 for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                     chrs[i],
                                     "/rus/distance/preciseTAD.rds"))
   
@@ -87,117 +86,83 @@ for(i in 1:length(chrs)){
 all_true_bounds <- do.call("c", true_bound_list)
 all_pred_bounds <- do.call("c", pred_bound_list)
 
-length(all_true_bounds) #
-length(all_pred_bounds) #
+#all_true_bounds <- flank(all_true_bounds, 2500, both=TRUE)
+#all_pred_bounds <- flank(all_pred_bounds, 2500, both=TRUE)
+
 
 ###### Distance plots
 
-#predicted but not called
-pbnc <- all_pred_bounds[-unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-
-#called and predicted
-cap1 <- all_pred_bounds[unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-cap2 <- all_true_bounds_r[unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-cap <- GRangesList(cap1,cap2)
-cap <- do.call("c", cap)
-
-#called by not predicted
-all_true_bounds2 <- all_true_bounds[-unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-cbnp <- resize(all_true_bounds2, width=1,fix = "center")
-
-pred_v_called_df <- data.frame(LogDist = c(#PBNC
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[4]]))$distance+1),
-    
-    #CAP
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[4]]))$distance+1),
-    
-    #CBNP
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[4]]))$distance+1)
+pred_v_called_df <- data.frame(LogDist = c(#preciseTAD
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[1]]))$distance+1),
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[2]]))$distance+1),
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[3]]))$distance+1),
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[4]]))$distance+1),
+  
+  #ARROWHEAD
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[1]]))$distance+1),
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[2]]))$distance+1),
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[3]]))$distance+1),
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[4]]))$distance+1)
 ),
-Annotation = c(#pbnc
-    rep("CTCF",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    
-    #cap
-    rep("CTCF",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    
-    #cbnp
-    rep("CTCF",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))),
-BoundReg = c(#pbnc
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    
-    #cap
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    
-    #cbnp
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))))
+Annotation = c(#preciseTAD
+  rep("CTCF",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("RAD21",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("SMC3",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("ZNF143",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[4]]))$distance+1))),
+  
+  #ARROWHEAD
+  rep("CTCF",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("RAD21",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("SMC3",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("ZNF143",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[4]]))$distance+1)))),
+BoundReg = c(#preciseTAD
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[4]]))$distance+1))),
+  
+  #ARROWHEAD
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[4]]))$distance+1)))))
 
-pred_v_called_df$BoundReg <- factor(pred_v_called_df$BoundReg, levels=c("PBNC", "CAP", "CBNP"))
+pred_v_called_df$BoundReg <- factor(pred_v_called_df$BoundReg, levels=c("preciseTAD", "ARROWHEAD"))
 
 ggplot(pred_v_called_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=BoundReg))  + 
-    facet_grid(~ Annotation) +    
-    stat_boxplot(geom ='errorbar', width = 0.2) + 
-    geom_boxplot(outlier.shape = NA) +
-    geom_signif(test = "wilcox.test", 
-                comparisons = list(c("PBNC", "CAP"),
-                                   c("PBNC", "CBNP"),
-                                   c("CBNP", "CAP")),
-                vjust = 0,
-                textsize = 4,
-                size = .5,
-                step_increase = .08,
-                color="black") +
-    theme_minimal()+
-    theme_bw()+
-    ylab("Log2 Distance to Annotation")+
-    xlab("") +
-    scale_fill_manual(name="Boundary Region",
-                      values=c("forestgreen",
-                               "red",
-                               "blue"))+
-    scale_color_manual(values=c("forestgreen",
-                               "red",
-                               "blue")) +
-    guides(color=FALSE, linetype=FALSE)+
-    theme(axis.text.x = element_text(size=15,
-                                     angle = 45,
-                                     hjust = 1),
-          axis.text.y = element_text(size = 15),
-          axis.title.x = element_text(size = 20),
-          axis.title.y = element_text(size = 20),
-          strip.text.x = element_text(size = 15),
-          #panel.spacing = unit(2, "lines"),
-          legend.text=element_text(size=15),
-          legend.title=element_text(size=20),
-          plot.title = element_text(size=20),
-          legend.position = "bottom")
-		  
+  facet_grid(~ Annotation) +    
+  stat_boxplot(geom ='errorbar', width = 0.2) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_signif(test = "wilcox.test", 
+              comparisons = list(c("preciseTAD","ARROWHEAD")),
+              vjust = 0,
+              textsize = 4,
+              size = .5,
+              step_increase = .08,
+              color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to Annotation")+
+  xlab("") +
+  scale_fill_manual(name="Boundary",
+                    values=c("forestgreen",
+                             "blue"))+
+  scale_color_manual(values=c("black",
+                              "black")) +
+  guides(color=FALSE, linetype=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+
 ###########################################################################
 
 ### K562
@@ -215,7 +180,7 @@ true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
 chrs <- paste0("CHR", c(2:8,10:15,17:22))
 for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
                                     chrs[i],
                                     "/rus/distance/preciseTAD.rds"))
   
@@ -227,114 +192,79 @@ for(i in 1:length(chrs)){
 all_true_bounds <- do.call("c", true_bound_list)
 all_pred_bounds <- do.call("c", pred_bound_list)
 
-length(all_true_bounds) #
-length(all_pred_bounds) #
+#all_true_bounds <- flank(all_true_bounds, 5000, both=TRUE)
+#all_pred_bounds <- flank(all_pred_bounds, 5000, both=TRUE)
+
 
 ###### Distance plots
 
-#predicted but not called
-pbnc <- all_pred_bounds[-unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-
-#called and predicted
-cap1 <- all_pred_bounds[unique(subjectHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-cap2 <- all_true_bounds_r[unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-cap <- GRangesList(cap1,cap2)
-cap <- do.call("c", cap)
-
-#called by not predicted
-all_true_bounds2 <- all_true_bounds[-unique(queryHits(findOverlaps(all_true_bounds,all_pred_bounds)))]
-cbnp <- resize(all_true_bounds2, width=1,fix = "center")
-
-pred_v_called_df <- data.frame(LogDist = c(#PBNC
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(pbnc, annots.GR.f[[4]]))$distance+1),
-    
-    #CAP
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(cap, annots.GR.f[[4]]))$distance+1),
-    
-    #CBNP
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1),
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[2]]))$distance+1),
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[3]]))$distance+1),
-    log2(mcols(distanceToNearest(cbnp, annots.GR.f[[4]]))$distance+1)
+pred_v_called_df <- data.frame(LogDist = c(#preciseTAD
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[1]]))$distance+1),
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[2]]))$distance+1),
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[3]]))$distance+1),
+  log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[4]]))$distance+1),
+  
+  #ARROWHEAD
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[1]]))$distance+1),
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[2]]))$distance+1),
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[3]]))$distance+1),
+  log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[4]]))$distance+1)
 ),
-Annotation = c(#pbnc
-    rep("CTCF",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    
-    #cap
-    rep("CTCF",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    
-    #cbnp
-    rep("CTCF",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("RAD21",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("SMC3",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("ZNF143",length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))),
-BoundReg = c(#pbnc
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    rep("PBNC", length(log2(mcols(distanceToNearest(pbnc, annots.GR.f[[1]]))$distance+1))),
-    
-    #cap
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    rep("CAP", length(log2(mcols(distanceToNearest(cap, annots.GR.f[[1]]))$distance+1))),
-    
-    #cbnp
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1))),
-    rep("CBNP", length(log2(mcols(distanceToNearest(cbnp, annots.GR.f[[1]]))$distance+1)))))
+Annotation = c(#preciseTAD
+  rep("CTCF",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("RAD21",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("SMC3",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("ZNF143",length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[4]]))$distance+1))),
+  
+  #ARROWHEAD
+  rep("CTCF",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("RAD21",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("SMC3",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("ZNF143",length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[4]]))$distance+1)))),
+BoundReg = c(#preciseTAD
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("preciseTAD", length(log2(mcols(distanceToNearest(all_pred_bounds, genomicElements.GR[[4]]))$distance+1))),
+  
+  #ARROWHEAD
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[1]]))$distance+1))),
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[2]]))$distance+1))),
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[3]]))$distance+1))),
+  rep("ARROWHEAD", length(log2(mcols(distanceToNearest(all_true_bounds, genomicElements.GR[[4]]))$distance+1)))))
 
-pred_v_called_df$BoundReg <- factor(pred_v_called_df$BoundReg, levels=c("PBNC", "CAP", "CBNP"))
+pred_v_called_df$BoundReg <- factor(pred_v_called_df$BoundReg, levels=c("preciseTAD", "ARROWHEAD"))
 
 ggplot(pred_v_called_df, aes(x=BoundReg, y = LogDist, fill=BoundReg, color=BoundReg))  + 
-    facet_grid(~ Annotation) +    
-    stat_boxplot(geom ='errorbar', width = 0.2) + 
-    geom_boxplot(outlier.shape = NA) +
-    geom_signif(test = "wilcox.test", 
-                comparisons = list(c("PBNC", "CAP"),
-                                   c("PBNC", "CBNP"),
-                                   c("CBNP", "CAP")),
-                vjust = 0,
-                textsize = 4,
-                size = .5,
-                step_increase = .08,
-                color="black") +
-    theme_minimal()+
-    theme_bw()+
-    ylab("Log2 Distance to Annotation")+
-    xlab("") +
-    scale_fill_manual(name="Boundary Region",
-                      values=c("forestgreen",
-                               "red",
-                               "blue"))+
-    scale_color_manual(values=c("forestgreen",
-                               "red",
-                               "blue")) +
-    guides(color=FALSE, linetype=FALSE)+
-    theme(axis.text.x = element_text(size=15,
-                                     angle = 45,
-                                     hjust = 1),
-          axis.text.y = element_text(size = 15),
-          axis.title.x = element_text(size = 20),
-          axis.title.y = element_text(size = 20),
-          strip.text.x = element_text(size = 15),
-          #panel.spacing = unit(2, "lines"),
-          legend.text=element_text(size=15),
-          legend.title=element_text(size=20),
-          plot.title = element_text(size=20),
-          legend.position = "bottom")
-		  
+  facet_grid(~ Annotation) +    
+  stat_boxplot(geom ='errorbar', width = 0.2) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_signif(test = "wilcox.test", 
+              comparisons = list(c("preciseTAD","ARROWHEAD")),
+              vjust = 0,
+              textsize = 4,
+              size = .5,
+              step_increase = .08,
+              color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to Annotation")+
+  xlab("") +
+  scale_fill_manual(name="Boundary",
+                    values=c("forestgreen",
+                             "blue"))+
+  scale_color_manual(values=c("black",
+                              "black")) +
+  guides(color=FALSE, linetype=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
