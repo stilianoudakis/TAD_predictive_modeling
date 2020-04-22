@@ -50,7 +50,7 @@ library(ChIPpeakAnno)
 library(EnrichedHeatmap)
 
 source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
-source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADrf.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/distance_func.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/percent_func.R")
@@ -76,7 +76,7 @@ genomicElements.GR <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/an
 
 ## running TADRF
 
-tadModel <- TADRF(bounds.GR=bounds.GR,
+tadModel <- TADrf(bounds.GR=bounds.GR,
                   resolution=5000,
                   genomicElements.GR=genomicElements.GR,
                   featureType="distance",
@@ -112,11 +112,16 @@ pt <- preciseTAD(bounds.GR=bounds.GR,
                       splits=NULL,
                       method.Dist="euclidean",
                       DBSCAN=TRUE,
-                      DBSCAN_params=list(5000,3),
+                      DBSCAN_params=list(5000,3), #or list(10000,3)
                       method.Clust=NULL,
                       PTBR=TRUE,
                       CLARA=TRUE,
                       samples=100)
+
+####################################################################################################
+#OR                                                                                                #
+#pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR22/rus/distance/preciseTAD.rds")#		
+####################################################################################################
 
 getChrLength <- function(genome = "BSgenome.Hsapiens.UCSC.hg19"){
   g <- getBSgenome(genome, masked=FALSE)
@@ -172,7 +177,6 @@ for(i in 1:length(genomicElements.GR)){
 colnames(test_data) <- gsub(paste0(c("K562", "Gm12878", "-", "Broad", "Haib", "Sydh", "Uta", "Uw", "Uchicago"), collapse = "|"),"",names(genomicElements.GR))
 test_data <- apply(test_data,2,function(x){log(x + 1, base=2)})
 predictions <- predict(tadModel[[1]],newdata=test_data,type="prob")[,"Yes"]
-															
 
 predprobdata <- data.frame(basenum=c(17389000:18011000),
                            prob=predictions)
@@ -184,7 +188,7 @@ calleddata <- predprobdata[which(predprobdata$called=="Yes"),]
 predicteddata <- predprobdata[which(predprobdata$prob>=1.0),]
 
 predicteddata2 <- predprobdata[which(predprobdata$predicted=="Yes"),]
-predicteddata2 <- predicteddata2[-c(3),]
+#predicteddata2 <- predicteddata2[-c(3),]
 
 ggplot() + 
   geom_line(data=predprobdata, aes(x=basenum, y=prob), 
