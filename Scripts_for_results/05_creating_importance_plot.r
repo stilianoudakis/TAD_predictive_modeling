@@ -164,17 +164,17 @@ rfe.set <- aggregate(rfe.set[, c("Overall")], list(rfe.set$var), mean)
 rfe.order <- order(rfe.set[, c("x")], decreasing = TRUE)
 rfe.set <- rfe.set[rfe.order, ]
 rfe.set$Group.1 <- factor(rfe.set$Group.1, levels=c("Smc3ab9263", 
-                                                    "Znf143",
                                                     "Rad21",
                                                     "Ctcf",
-                                                    "Pol2",
-                                                    "Elf1sc631",  
-                                                    "Pol24h8",    
-                                                    "Tbp",        
+                                                    "Znf143",
+                                                    "Mazab85725",
+                                                    "Tbp",  
+                                                    "Elf1sc631",    
+                                                    "Chd1a301218a",        
+                                                    "Corestsc30189",      
                                                     "Taf1",      
-                                                    "Mef2a",      
-                                                    "Mxi1",       
-                                                    "Mazab85725"))
+                                                    "Pol2",       
+                                                    "Egr1"))
 ggplot(rfe.set, aes(x=reorder(Group.1,x), y=x)) +
   geom_bar(stat='identity', fill="red") +
   coord_flip() +
