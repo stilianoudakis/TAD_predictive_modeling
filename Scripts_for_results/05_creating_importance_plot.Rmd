@@ -111,6 +111,8 @@ rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing =
 rfe.set.mat <- as.matrix(rfeperchr[,-1])
 rownames(rfe.set.mat) <- rfeperchr$TFBS
 
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
 distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
 my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
@@ -123,7 +125,7 @@ heatmap.2(t(rfe.set.mat),
           notecol="black",      # change font color of cell labels to black
           density.info="none",  # turns off density plot inside color legend
           trace="none",         # turns off trace lines inside the heat map
-          margins=c(12,8),     # widens margins around plot
+          margins=c(10,4),     # widens margins around plot
           col=my_palette,       # use on color palette defined earlier
           na.color = "gray",
           #breaks=col_breaks,    # enable color transition at specified limits
@@ -182,9 +184,11 @@ rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing =
 rfe.set.mat <- as.matrix(rfeperchr[,-1])
 rownames(rfe.set.mat) <- rfeperchr$TFBS
 
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
 distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
-my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
+my_palette <- colorRampPalette(c("white", "lightblue", "blue"))(ncol(rfe.set.mat))
 
 heatmap.2(t(rfe.set.mat),
           #labRow=rownames(rfe.set.mat),
@@ -194,7 +198,7 @@ heatmap.2(t(rfe.set.mat),
           notecol="black",      # change font color of cell labels to black
           density.info="none",  # turns off density plot inside color legend
           trace="none",         # turns off trace lines inside the heat map
-          margins=c(12,8),     # widens margins around plot
+          margins=c(10,4),     # widens margins around plot
           col=my_palette,       # use on color palette defined earlier
           na.color = "gray",
           #breaks=col_breaks,    # enable color transition at specified limits
@@ -231,7 +235,7 @@ for(i in c("GM12878")){
     rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
                                           i,
                                           "/",
-                                          "5kb/results_by_chr/",
+                                          "10kb/results_by_chr/",
                                           chrs[k],
                                           "/rus/distance/TADrfe_peakachu.rds"))
     
@@ -255,6 +259,8 @@ rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing =
 rfe.set.mat <- as.matrix(rfeperchr[,-1])
 rownames(rfe.set.mat) <- rfeperchr$TFBS
 
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
 distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
 my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
@@ -267,7 +273,7 @@ heatmap.2(t(rfe.set.mat),
           notecol="black",      # change font color of cell labels to black
           density.info="none",  # turns off density plot inside color legend
           trace="none",         # turns off trace lines inside the heat map
-          margins=c(12,8),     # widens margins around plot
+          margins=c(10,4),     # widens margins around plot
           col=my_palette,       # use on color palette defined earlier
           na.color = "gray",
           #breaks=col_breaks,    # enable color transition at specified limits
@@ -302,7 +308,7 @@ for(i in c("K562")){
     rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
                                           i,
                                           "/",
-                                          "5kb/results_by_chr/",
+                                          "10kb/results_by_chr/",
                                           chrs[k],
                                           "/rus/distance/TADrfe_peakachu.rds"))
     
@@ -326,9 +332,11 @@ rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing =
 rfe.set.mat <- as.matrix(rfeperchr[,-1])
 rownames(rfe.set.mat) <- rfeperchr$TFBS
 
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
 distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
-my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
+my_palette <- colorRampPalette(c("white", "lightblue", "blue"))(ncol(rfe.set.mat))
 
 heatmap.2(t(rfe.set.mat),
           #labRow=rownames(rfe.set.mat),
@@ -338,7 +346,7 @@ heatmap.2(t(rfe.set.mat),
           notecol="black",      # change font color of cell labels to black
           density.info="none",  # turns off density plot inside color legend
           trace="none",         # turns off trace lines inside the heat map
-          margins=c(12,8),     # widens margins around plot
+          margins=c(10,4),     # widens margins around plot
           col=my_palette,       # use on color palette defined earlier
           na.color = "gray",
           #breaks=col_breaks,    # enable color transition at specified limits
@@ -375,7 +383,7 @@ for(i in c("GM12878")){
     rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
                                           i,
                                           "/",
-                                          "5kb/results_by_chr/",
+                                          "10kb/results_by_chr/",
                                           chrs[k],
                                           "/rus/distance/TADrfe_lollipop.rds"))
     
@@ -399,6 +407,8 @@ rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing =
 rfe.set.mat <- as.matrix(rfeperchr[,-1])
 rownames(rfe.set.mat) <- rfeperchr$TFBS
 
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
 distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
 my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
@@ -411,7 +421,7 @@ heatmap.2(t(rfe.set.mat),
           notecol="black",      # change font color of cell labels to black
           density.info="none",  # turns off density plot inside color legend
           trace="none",         # turns off trace lines inside the heat map
-          margins=c(12,8),     # widens margins around plot
+          margins=c(10,4),     # widens margins around plot
           col=my_palette,       # use on color palette defined earlier
           na.color = "gray",
           #breaks=col_breaks,    # enable color transition at specified limits
@@ -446,7 +456,7 @@ for(i in c("K562")){
     rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
                                           i,
                                           "/",
-                                          "5kb/results_by_chr/",
+                                          "10kb/results_by_chr/",
                                           chrs[k],
                                           "/rus/distance/TADrfe_lollipop.rds"))
     
@@ -470,9 +480,11 @@ rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing =
 rfe.set.mat <- as.matrix(rfeperchr[,-1])
 rownames(rfe.set.mat) <- rfeperchr$TFBS
 
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
 distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
-my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
+my_palette <- colorRampPalette(c("white", "lightblue", "blue"))(ncol(rfe.set.mat))
 
 heatmap.2(t(rfe.set.mat),
           #labRow=rownames(rfe.set.mat),
@@ -482,7 +494,7 @@ heatmap.2(t(rfe.set.mat),
           notecol="black",      # change font color of cell labels to black
           density.info="none",  # turns off density plot inside color legend
           trace="none",         # turns off trace lines inside the heat map
-          margins=c(12,8),     # widens margins around plot
+          margins=c(10,4),     # widens margins around plot
           col=my_palette,       # use on color palette defined earlier
           na.color = "gray",
           #breaks=col_breaks,    # enable color transition at specified limits

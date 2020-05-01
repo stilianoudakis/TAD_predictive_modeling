@@ -115,14 +115,17 @@ tadModel <- TADrf(bounds.GR=bounds.GR,
 
 bounds.GR <- extract_boundaries_func(domains.mat=domains, 
                                      preprocess=FALSE, 
-                                     CHR="CHR22", 
+                                     #CHR="CHR22", 
+                                     CHR="CHR21", 
                                      resolution=5000)
 
 pt <- preciseTAD(bounds.GR=bounds.GR,
                       genomicElements.GR=genomicElements.GR,
                       featureType="distance",
                       CHR="CHR22",
-                      chromCoords=list(17389000,18011000),
+                      CHR="CHR21",
+                      #chromCoords=list(17389000,18011000),
+                      chromCoords=list(15150000,17270000),
                       tadModel=tadModel[[1]],
                       threshold=1.0,
                       flank=NULL,
@@ -136,13 +139,15 @@ pt <- preciseTAD(bounds.GR=bounds.GR,
                       DBSCAN_params=list(5000,3), #or list(10000,3)
                       method.Clust=NULL,
                       PTBR=TRUE,
-                      CLARA=TRUE,
+                      CLARA=FALSE,
                       samples=100)
 
 ```
 
 
-##OR (pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR22/rus/distance/preciseTAD.rds"))	
+##OR 
+##(pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR22/rus/distance/preciseTAD.rds"))
+##(pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR21/rus/distance/preciseTAD.rds"))
 
 ## Plotting
 
@@ -179,9 +184,12 @@ makeHg19 <- function(){
 hg19 <- makeHg19()
 hg19$chrom <- paste0("CHR",hg19$chrom)
 
-seqDataTest <- c(17389000:18011000)
+#seqDataTest <- c(17389000:18011000)
+#seqDataTest <- c(25745000:26176000)
+seqDataTest <- c(15150000:17270000)
 
-CHR="CHR22"
+#CHR="CHR22"
+CHR="CHR21"
   
   if("TRUE" %in% table(seqDataTest %in% c(hg19$centromerStart[hg19$chrom==CHR]:hg19$centromerEnd[hg19$chrom==CHR]))){
     centromereTestStart <- hg19$centromerStart[hg19$chrom==CHR]
@@ -202,7 +210,8 @@ colnames(test_data) <- gsub(paste0(c("K562", "Gm12878", "-", "Broad", "Haib", "S
 test_data <- apply(test_data,2,function(x){log(x + 1, base=2)})
 predictions <- predict(tadModel[[1]],newdata=test_data,type="prob")[,"Yes"]
 
-predprobdata <- data.frame(basenum=c(17389000:18011000),
+predprobdata <- data.frame(#basenum=c(17389000:18011000),
+                           basenum=c(15150000:17270000),
                            prob=predictions)
 predprobdata$predicted <- ifelse(predprobdata$basenum %in% start(pt[[2]]), "Yes", "No")
 predprobdata$called <- ifelse(predprobdata$basenum %in% start(pt[[3]]), "Yes", "No")

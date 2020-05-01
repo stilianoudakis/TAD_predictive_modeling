@@ -162,9 +162,9 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) +
   geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), 
                 width=2, 
                 size=1, 
-                color="red") +
-  geom_line(size=2, color="red") +
-  geom_point(size=4, color="red") +
+                color="blue") +
+  geom_line(size=2, color="blue") +
+  geom_point(size=4, color="blue") +
   xlab("Number of top ranked annotations") +
   ylab("Cross-Validated Accuracy") +
   scale_color_discrete(name="Cell line")+
@@ -276,9 +276,9 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) +
   geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), 
                 width=2, 
                 size=1, 
-                color="red") +
-  geom_line(size=2, color="red") +
-  geom_point(size=4, color="red") +
+                color="blue") +
+  geom_line(size=2, color="blue") +
+  geom_point(size=4, color="blue") +
   xlab("Number of top ranked annotations") +
   ylab("Cross-Validated Accuracy") +
   scale_color_discrete(name="Cell line")+
@@ -390,9 +390,9 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) +
   geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), 
                 width=2, 
                 size=1, 
-                color="red") +
-  geom_line(size=2, color="red") +
-  geom_point(size=4, color="red") +
+                color="blue") +
+  geom_line(size=2, color="blue") +
+  geom_point(size=4, color="blue") +
   xlab("Number of top ranked annotations") +
   ylab("Cross-Validated Accuracy") +
   scale_color_discrete(name="Cell line")+
