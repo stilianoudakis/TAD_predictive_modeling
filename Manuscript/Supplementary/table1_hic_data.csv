@@ -1,25 +1,27 @@
-Library,Cell line ,Source
-HIC001,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551550
-HIC002,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551551
-HIC003,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551552
-HIC004,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551553
-HIC005,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551554
-HIC006,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551555
-HIC007,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551556
-HIC008,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551557
-HIC009,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551558
-HIC010,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551559
-HIC011,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551560
-HIC012,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551561
-HIC013,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551562
-HIC014,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551563
-HIC015,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551564
-HIC016,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551565
-HIC017,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551566
-HIC018,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551567
-HIC069,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551618
-HIC070,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551619
-HIC071,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551620
-HIC072,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551621
-HIC073,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551622
-HIC074,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551623
+Publisher,Tool,Library,Cell line ,Source
+Rao et al,ARROWHEAD,HIC001,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551550
+Rao et al,ARROWHEAD,HIC002,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551551
+Rao et al,ARROWHEAD,HIC003,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551552
+Rao et al,ARROWHEAD,HIC004,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551553
+Rao et al,ARROWHEAD,HIC005,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551554
+Rao et al,ARROWHEAD,HIC006,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551555
+Rao et al,ARROWHEAD,HIC007,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551556
+Rao et al,ARROWHEAD,HIC008,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551557
+Rao et al,ARROWHEAD,HIC009,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551558
+Rao et al,ARROWHEAD,HIC010,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551559
+Rao et al,ARROWHEAD,HIC011,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551560
+Rao et al,ARROWHEAD,HIC012,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551561
+Rao et al,ARROWHEAD,HIC013,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551562
+Rao et al,ARROWHEAD,HIC014,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551563
+Rao et al,ARROWHEAD,HIC015,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551564
+Rao et al,ARROWHEAD,HIC016,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551565
+Rao et al,ARROWHEAD,HIC017,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551566
+Rao et al,ARROWHEAD,HIC018,GM12878,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551567
+Rao et al,ARROWHEAD,HIC069,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551618
+Rao et al,ARROWHEAD,HIC070,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551619
+Rao et al,ARROWHEAD,HIC071,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551620
+Rao et al,ARROWHEAD,HIC072,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551621
+Rao et al,ARROWHEAD,HIC073,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551622
+Rao et al,ARROWHEAD,HIC074,K562,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1551623
+Salameh et al,PEAKACHU,,GM12878,http://promoter.bx.psu.edu/hi-c/publications.html
+Salameh et al,PEAKACHU,,K562,http://promoter.bx.psu.edu/hi-c/publications.html
