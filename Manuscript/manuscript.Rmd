@@ -52,7 +52,7 @@ Extensive research using high resolution maps (ranging from 750 bp to 1 mb) have
 
 ## TAD boundary data
 
-Biological replicate Hi-C data were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1) for the GM12878 and K562 cell lines. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from Hi-C data at 5 kb, 10 kb, 25 kb, 50 kb, and 100 kb resolution using the ARROWHEAD algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all resolutions and cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line. 
+Biological replicate [??? Didn't you use combined Arrowhead calls? Replicates seem irrelevant] Hi-C data were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1) for the GM12878 and K562 cell lines. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from Hi-C data at 5 kb, 10 kb, 25 kb, 50 kb, and 100 kb resolution using the ARROWHEAD algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all resolutions and cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line. [??? Can you look up closer? If Arrowhead could call boundaries at 5kb, but not 10kb, it is strange]
 
 ## Genomic annotation and TAD boundary data
 
