@@ -50,13 +50,9 @@ Extensive research using high resolution maps (ranging from 750 bp to 1 mb) have
 
 # Methods
 
-## TAD boundary data
+## Data sources
 
-Biological replicate [??? Didn't you use combined Arrowhead calls? Replicates seem irrelevant] Hi-C data were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1) for the GM12878 and K562 cell lines. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from Hi-C data at 5 kb, 10 kb, 25 kb, 50 kb, and 100 kb resolution using the ARROWHEAD algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all resolutions and cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line. [??? Can you look up closer? If Arrowhead could call boundaries at 5kb, but not 10kb, it is strange]
-
-## Genomic annotation and TAD boundary data
-
-A total of 78 cell type-specific ChIP-Seq annotations in the form of cell cis-regulatory elements (CRE), histone modifications (HM), and transcription factor binding sites (TFBS) were obtained from the UCSC Genome Browser Database for both GM12878 and K562 (GRCh37/hg19 human genome assembly) [@Tyner:2017aa] (Supplementary Table 2). 
+Biological replicate [??? Didn't you use combined Arrowhead calls? Replicates seem irrelevant] Hi-C data were downloaded from GEO GSE63525 [@rao20143d] (Supplementary Table 1) for the GM12878 and K562 cell lines. The autosomal genomic coordinates (GRCh37/hg19 human genome assembly) of TAD boundaries were obtained from Hi-C data at 5 kb, 10 kb, 25 kb, 50 kb, and 100 kb resolution using the ARROWHEAD algorithm [@durand2016juicebox]. TAD boundaries called on chromosome 9 were omitted from all downstream analyses, for all resolutions and cell lines, due to the sparsity of the contact matrix at the 10 kb resolution for the K562 cell line. [??? Can you look up closer? If Arrowhead could call boundaries at 5kb, but not 10kb, it is strange] Cell type-specific genomic annotations (BroadHMM chromatin segmentations, histone modifications, and transcription factor binding sites) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (GRCh37/hg19 human genome assembly, Supplementary Table 2). [??? Change "cis-regulatory elements (CRE)" to "C]
 
 ## Computational framework for TAD boundary prediction using random forests
 
