@@ -215,6 +215,9 @@ Previous studies tended to focus only on specific sets of genomic annotations in
 
 By leveraging the enrichment of these architectural proteins we were able to more precisely identify TAD boundaries at a much more refined resolution. To do so, we evaluated the ChIP-Seq signal strength between the CTCF, RAD21, SMC3, and ZNF143 transcription factors and a 10 kb flanked window of predicted TAD boundaries identified by our optimally built random forest model. We showed that the genomic signals for each TFBS was much more consolidated near the center of our flanked predicted TAD boundary then the flanked boundary identified by the ARROWHEAD TAD caller. We also evaluated the distal relationships between the same architectural proteins and found that they were statistically significantly closer in base pair distance to our predicted TAD boundaries, than to those identified by ARROWHEAD. 
 
+<!-- Discuss advantages and disadvantages of Balanced Accuracy. The disadvantage is that we restrict TP to the originally detected TAD boundaries. While there are likely many more that couldn't be detected but are TP. We currently count them as FP -->
+
+
 # Conclusion
 
 In summary, we have shown that TAD boundary prediction is a multi-faceted problem composed of many data irregularities and characteristics that previous methods have failed to address. Through our ensemble framework, we provide a useful guide toward the exploration of chromatin organization, while highlighting the impact of data resolution, class imbalance, and feature engineering in TAD boundary prediction. Lastly, by building models using known enriched transcription factors, we were able to bridge the resolution gap between 1D ChIP-Seq annotations and 3D Hi-C sequencing for more precise TAD boundary prediction. This improved precision in TAD boundary location offers the potential for further exploration into the 3D organization of the human genome.
