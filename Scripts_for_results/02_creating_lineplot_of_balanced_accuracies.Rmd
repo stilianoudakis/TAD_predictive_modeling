@@ -1111,7 +1111,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 
 ```{r}
 all_rfperfs <- rbind.data.frame(badata_gm12878_10kb)
-all_rfperfs$CL <- rep("GM12878", length(badata_gm12878_5kb))
+all_rfperfs$CL <- rep("GM12878", length(badata_gm12878_10kb))
 all_rfperfs$Resolution <- rep("10 kb", length(badata_gm12878_10kb))
 all_rfperfs$Resampling <- c(rep("None", 4),
                             rep("ROS", 4),
@@ -1151,32 +1151,32 @@ all_rfperfs_ba <- all_rfperfs %>%
                    PerformanceSD = sd(V1, na.rm = TRUE))
 
 
-ggplot(all_rfperfs_ba, aes(x=Predictor, y=Performance, fill=Resampling)) +
-  geom_bar(stat = "identity", position_dodge(0.9))+
-  geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
-                position=position_dodge(0.9)) +
-  facet_grid(. ~ Predictor)+
-  theme_minimal() +
-  theme_bw()+
-  xlab("Predictor Type") + 
-  ylab("Balanced Accuracy") + #ylim(-.1,.5) +
-  scale_color_discrete(name="Resampling Technique")+
-  guides(shape=FALSE, linetype=FALSE)+
-  theme(axis.text.x = element_text(size=15,
-                                   angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1
-  ),
-  axis.text.y = element_text(size = 15),
-  axis.title.x = element_text(size = 20),
-  axis.title.y = element_text(size = 20),
-  strip.text.x = element_text(size = 15),
-  strip.text.y = element_text(size = 15),
-  #panel.spacing = unit(2, "lines"),
-  legend.text=element_text(size=15),
-  legend.title=element_text(size=20),
-  plot.title = element_text(size=20),
-  legend.position="bottom")
+ggplot(d, aes(x=Predictor, y=Performance,fill=Resampling)) +
+    geom_bar(position=position_dodge(), stat="identity")+
+    geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
+                  position=position_dodge(0.9)) +
+    #facet_grid(. ~ Predictor)+
+    theme_minimal() +
+    theme_bw()+
+    xlab("Predictor Type") + 
+    ylab("Balanced Accuracy") + #ylim(-.1,.5) +
+    scale_color_discrete(name="Resampling Technique")+
+    guides(shape=FALSE, linetype=FALSE)+
+    theme(axis.text.x = element_text(size=15,
+                                     angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    strip.text.x = element_text(size = 15),
+    strip.text.y = element_text(size = 15),
+    #panel.spacing = unit(2, "lines"),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20),
+    legend.position="bottom")
 ```
 
 ### K562
