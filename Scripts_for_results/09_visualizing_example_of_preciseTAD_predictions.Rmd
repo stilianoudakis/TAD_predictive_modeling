@@ -239,10 +239,10 @@ ggplot() +
                                       color="forestgreen"),
              size=1,
              show.legend = TRUE)+
-  annotate(geom = "segment",x = 15492234, xend = 15519798,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-  annotate(geom = "segment",x = 15635994, xend = 15792137,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-  annotate(geom = "segment",x = 16147181, xend = 16244962,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-  annotate(geom = "segment",x = 16845543, xend = 16958034,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+  #annotate(geom = "segment",x = 15492234, xend = 15519798,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+  #annotate(geom = "segment",x = 15635994, xend = 15792137,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+  #annotate(geom = "segment",x = 16147181, xend = 16244962,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+  #annotate(geom = "segment",x = 16845543, xend = 16958034,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
   xlab("Base Pair Coordinate") +
   ylab("Probability") +
   scale_color_manual(name = '', 
@@ -263,6 +263,58 @@ ggplot() +
         plot.title = element_text(size=20),
         legend.position = "bottom")
 
+ptbrdata <- data.frame(basenum=c(15770000:15780000))
+
+ggplot(predprobdata, aes(x=basenum, y=prob)) + 
+    geom_line(data=predprobdata, aes(x=basenum, y=prob), 
+              color='black',
+              size=.5)+
+    #geom_smooth(method = "loess",span = 0.0001, color="red")+
+    #geom_vline(data=predicteddata, aes(xintercept=basenum, 
+    #                                   color="red"),
+    #           size=.5,
+    #           show.legend = TRUE)+
+    geom_vline(data=calleddata, aes(xintercept=basenum, 
+                                    color="blue"),
+               size=2.5,
+               show.legend = FALSE)+
+    geom_vline(data=predicteddata2, aes(xintercept=basenum, 
+                                        color="forestgreen"),
+               size=2.5,
+               show.legend = FALSE)+
+    geom_vline(data=ptbrdata, aes(xintercept=basenum, 
+                                        color="yellow"),
+               size=1,
+               show.legend = TRUE,
+               alpha=.5)+
+    #annotate(geom = "segment",x = 15492234, xend = 15519798,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+    #annotate(geom = "segment",x = 15635994, xend = 15792137,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+    #annotate(geom = "segment",x = 16147181, xend = 16244962,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+    #annotate(geom = "segment",x = 16845543, xend = 16958034,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
+    xlab("Base Pair Coordinate") +
+    ylab("Probability") + 
+    xlim(15776433-50000,15776433+50000)+
+    scale_color_manual(name = '', 
+                       values =c("blue", "forestgreen","yellow"),
+                       labels = c("ARROWHEAD",
+                                  "preciseTAD",
+                                  "PTBR"))+
+    #scale_y_continuous(breaks=c(0,.5,1), limits=c(0,1))+
+    #theme_minimal() +
+    theme_bw() +
+    theme(axis.text.x = element_text(size=15),
+          axis.text.y = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          #strip.text.x = element_text(size = 15),
+          #panel.spacing = unit(2, "lines"),
+          panel.background = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank(),
+          legend.text=element_blank(),
+          legend.title=element_blank(),
+          #plot.title = element_text(size=20),
+          legend.position = "bottom")
 
 ```
 
