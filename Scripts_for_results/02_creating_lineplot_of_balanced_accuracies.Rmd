@@ -302,7 +302,7 @@ ggplot(all_rfperfs_ba, aes(x=Resolution, y=Performance, color=Resampling, group=
   theme_bw()+
   xlab("Resolution") + 
   ylab("Balanced Accuracy") + #ylim(-.1,.5) +
-  scale_color_discrete(name="Resampling Technique")+
+  scale_color_discrete(name="Resampling\nTechnique")+
   guides(shape=FALSE, linetype=FALSE)+
   theme(axis.text.x = element_text(size=15,
                                    angle = 45, 
@@ -314,7 +314,7 @@ ggplot(all_rfperfs_ba, aes(x=Resolution, y=Performance, color=Resampling, group=
   axis.title.y = element_text(size = 20),
   strip.text.x = element_text(size = 15),
   strip.text.y = element_text(size = 15),
-  #panel.spacing = unit(2, "lines"),
+  panel.spacing = unit(2, "lines"),
   legend.text=element_text(size=15),
   legend.title=element_text(size=20),
   plot.title = element_text(size=20),
@@ -544,33 +544,32 @@ all_rfperfs_ba <- all_rfperfs %>%
 
 
 ggplot(all_rfperfs_ba, aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
-  geom_line(size=2, position=position_dodge(0.5))+
-  geom_point(size=5, position=position_dodge(0.5))+
-  geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
-                position=position_dodge(0.5)) +
-  facet_grid(. ~ Predictor)+
-  theme_minimal() +
-  theme_bw()+
-  xlab("Resolution") + 
-  ylab("Balanced Accuracy") + #ylim(-.1,.5) +
-  scale_color_discrete(name="Resampling Technique")+
-  guides(shape=FALSE, linetype=FALSE)+
-  theme(axis.text.x = element_text(size=15,
-                                   angle = 45, 
-                                   #margin = ggplot2::margin(t = 35),
-                                   hjust = 1
-  ),
-  axis.text.y = element_text(size = 15),
-  axis.title.x = element_text(size = 20),
-  axis.title.y = element_text(size = 20),
-  strip.text.x = element_text(size = 15),
-  strip.text.y = element_text(size = 15),
-  #panel.spacing = unit(2, "lines"),
-  legend.text=element_text(size=15),
-  legend.title=element_text(size=20),
-  plot.title = element_text(size=20),
-  legend.position="bottom")
-
+    geom_line(size=2, position=position_dodge(0.5))+
+    geom_point(size=5, position=position_dodge(0.5))+
+    geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
+                  position=position_dodge(0.5)) +
+    facet_grid(. ~ Predictor)+
+    theme_minimal() +
+    theme_bw()+
+    xlab("Resolution") + 
+    ylab("Balanced Accuracy") + #ylim(-.1,.5) +
+    scale_color_discrete(name="Resampling\nTechnique")+
+    guides(shape=FALSE, linetype=FALSE)+
+    theme(axis.text.x = element_text(size=15,
+                                     angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    strip.text.x = element_text(size = 15),
+    strip.text.y = element_text(size = 15),
+    panel.spacing = unit(2, "lines"),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    plot.title = element_text(size=20),
+    legend.position="bottom")
 ```
 
 ## SpectralTAD
