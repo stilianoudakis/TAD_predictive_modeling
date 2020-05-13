@@ -146,6 +146,19 @@ heatmap.2(t(rfe.set.mat),
           sepcolor="black"
 ) 
 
+Heatmap(t(rfe.set.mat),
+        col=my_palette,
+        border=TRUE,
+        cluster_rows=FALSE,
+        clustering_distance_columns = "euclidean",
+        clustering_method_columns = "complete",
+        show_row_names = FALSE,
+        column_names_rot = 90,
+        column_names_centered = FALSE,
+        show_heatmap_legend = FALSE,
+        heatmap_legend_param = list(title = "Predictive\nImportance"),
+        rect_gp = gpar(col = "black", lwd = 1),
+        column_dend_side = "bottom",column_names_side = "bottom")
 ```
 
 ### K562
@@ -294,6 +307,19 @@ heatmap.2(t(rfe.set.mat),
           sepcolor="black"
 ) 
 
+Heatmap(t(rfe.set.mat),
+        col=my_palette,
+        border=TRUE,
+        cluster_rows=FALSE,
+        clustering_distance_columns = "euclidean",
+        clustering_method_columns = "complete",
+        show_row_names = FALSE,
+        column_names_rot = 90,
+        column_names_centered = FALSE,
+        show_heatmap_legend = FALSE,
+        heatmap_legend_param = list(title = "Predictive\nImportance"),
+        rect_gp = gpar(col = "black", lwd = 1),
+        column_dend_side = "top",column_names_side = "top")
 ```
 
 ### K562
