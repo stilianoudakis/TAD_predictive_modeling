@@ -1,0 +1,258 @@
+---
+title: "Evaluating Jaccard Indices"
+author: "Spiro Stilianoudakis"
+date: "5/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading packages and functions
+
+```{r}
+library(S4Vectors)
+library(GenomicRanges)
+library(ggplot2)
+library(caret)
+library(randomForest)
+library(glmnet)
+library(gbm)
+library(DMwR)
+library(rtracklayer)
+library(Biostrings)
+library(BSgenome)
+library(cluster)
+library(pROC)
+library(SuperLearner)
+library(data.table)
+library(PRROC)
+library(bigmemory)
+library(ranger)
+library(dplyr)
+library(parallel)
+library(doSNOW)
+library(foreach)
+library(pbapply)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(GenometriCorr)
+library(ggsignif)
+library(Vennerable)
+library(VennDiagram)
+library(ChIPpeakAnno)
+library(EnrichedHeatmap)
+
+source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/distance_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/percent_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/count_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/binary_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/signal_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/annots_to_granges_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
+
+```
+
+# ARROWHEAD
+
+## GM12878
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+chrs <- paste0("CHR", c(21:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD.rds"))
+  
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  
+}
+
+all_true_bounds_gm12878 <- do.call("c", true_bound_list)
+all_pred_bounds_gm12878 <- do.call("c", pred_bound_list)
+
+all_true_bounds_gm12878_arrowhead <- flank(all_true_bounds_gm12878, 5000, both=TRUE)
+all_pred_bounds_gm12878_arrowhead <- flank(all_pred_bounds_gm12878, 5000, both=TRUE)
+
+```
+
+## K562
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+chrs <- paste0("CHR", c(21:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD.rds"))
+  
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  
+}
+
+all_true_bounds_k562 <- do.call("c", true_bound_list)
+all_pred_bounds_k562 <- do.call("c", pred_bound_list)
+
+all_true_bounds_k562_arrowhead <- flank(all_true_bounds_k562, 5000, both=TRUE)
+all_pred_bounds_k562_arrowhead <- flank(all_pred_bounds_k562, 5000, both=TRUE)
+
+```
+
+## Jaccard Indices
+
+```{r}
+#original
+jaccard_o <- numeric()
+for(i in 1:length(chrs)){
+  g1 <- all_true_bounds_gm12878_arrowhead[which(as.character(seqnames(all_true_bounds_gm12878_arrowhead))==tolower(chrs[i]))]
+  g2 <- all_true_bounds_k562_arrowhead[which(as.character(seqnames(all_true_bounds_k562_arrowhead))==tolower(chrs[i]))]
+  
+  co <- countOverlaps(g1,g2)
+  
+  int <- length(co[which(co>0)])
+  
+  uni <- length(g1) + length(g2) - int
+  
+  jaccard_o[i] <- int/uni
+}
+summary(jaccard_o)
+
+#preciseTAD
+jaccard_p <- numeric()
+for(i in 1:length(chrs)){
+  g1 <- all_pred_bounds_gm12878_arrowhead[which(as.character(seqnames(all_pred_bounds_gm12878_arrowhead))==tolower(chrs[i]))]
+  g2 <- all_pred_bounds_k562_arrowhead[which(as.character(seqnames(all_pred_bounds_k562_arrowhead))==tolower(chrs[i]))]
+  
+  co <- countOverlaps(g1,g2)
+  
+  int <- length(co[which(co>0)])
+  
+  uni <- length(g1) + length(g2) - int
+  
+  jaccard_p[i] <- int/uni
+}
+summary(jaccard_p)
+
+
+wilcox.test(jaccard_o,jaccard_p)
+```
+
+
+# PEAKACHU
+
+## GM12878
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+chrs <- paste0("CHR", c(21:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_peakachu.rds"))
+  
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  
+}
+
+all_true_bounds_gm12878 <- do.call("c", true_bound_list)
+all_pred_bounds_gm12878 <- do.call("c", pred_bound_list)
+
+all_true_bounds_gm12878_peakachu <- flank(all_true_bounds_gm12878, 10000, both=TRUE)
+all_pred_bounds_gm12878_peakachu <- flank(all_pred_bounds_gm12878, 10000, both=TRUE)
+
+```
+
+## K562
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+chrs <- paste0("CHR", c(21:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_peakachu.rds"))
+  
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  
+}
+
+all_true_bounds_k562 <- do.call("c", true_bound_list)
+all_pred_bounds_k562 <- do.call("c", pred_bound_list)
+
+all_true_bounds_k562_peakachu <- flank(all_true_bounds_k562, 10000, both=TRUE)
+all_pred_bounds_k562_peakachu <- flank(all_pred_bounds_k562, 10000, both=TRUE)
+
+```
+
+## Jaccard Indices
+
+```{r}
+#original
+jaccard_o <- numeric()
+for(i in 1:length(chrs)){
+  g1 <- all_true_bounds_gm12878_peakachu[which(as.character(seqnames(all_true_bounds_gm12878_peakachu))==tolower(chrs[i]))]
+  g2 <- all_true_bounds_k562_peakachu[which(as.character(seqnames(all_true_bounds_k562_peakachu))==tolower(chrs[i]))]
+  
+  co <- countOverlaps(g1,g2)
+  
+  int <- length(co[which(co>0)])
+  
+  uni <- length(g1) + length(g2) - int
+  
+  jaccard_o[i] <- int/uni
+}
+summary(jaccard_o)
+
+#preciseTAD
+jaccard_p <- numeric()
+for(i in 1:length(chrs)){
+  g1 <- all_pred_bounds_gm12878_peakachu[which(as.character(seqnames(all_pred_bounds_gm12878_peakachu))==tolower(chrs[i]))]
+  g2 <- all_pred_bounds_k562_peakachu[which(as.character(seqnames(all_pred_bounds_k562_peakachu))==tolower(chrs[i]))]
+  
+  co <- countOverlaps(g1,g2)
+  
+  int <- length(co[which(co>0)])
+  
+  uni <- length(g1) + length(g2) - int
+  
+  jaccard_p[i] <- int/uni
+}
+summary(jaccard_p)
+
+
+wilcox.test(jaccard_o,jaccard_p)
+```
+
+
