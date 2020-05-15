@@ -1219,7 +1219,7 @@ for(i in paste0("CHR", c(1:8,10:22))){
 
 ```{r}
 all_rfperfs <- rbind.data.frame(badata_k562_10kb)
-all_rfperfs$CL <- rep("K562", length(badata_k562_5kb))
+all_rfperfs$CL <- rep("K562", length(badata_k562_10kb))
 all_rfperfs$Resolution <- rep("10 kb", length(badata_k562_10kb))
 all_rfperfs$Resampling <- c(rep("None", 4),
                             rep("ROS", 4),
@@ -1505,3 +1505,63 @@ ggplot(all_rfperfs_ba, aes(x=Predictor, y=Performance, fill=Resampling)) +
 
 
 ## ARROWHEAD WHOLE GENOME
+
+```{r}
+t_whole_arrowhead_gm12878 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/GM12878/5kb/results_by_chr/WHOLE/rus/distance/TADRF_3.rds")
+t_whole_arrowhead_gm12878 <- t_whole_arrowhead_gm12878[[3]][10,2]
+t_whole_arrowhead_k562 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/K562/5kb/results_by_chr/WHOLE/rus/distance/TADRF_3.rds")
+t_whole_arrowhead_k562 <- t_whole_arrowhead_k562[[3]][10,2]
+
+t_whole_peakachu_gm12878 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/GM12878/10kb/results_by_chr/WHOLE/rus/distance/TADRF_3_peakachu.rds")
+t_whole_peakachu_gm12878 <- t_whole_peakachu_gm12878[[3]][10,2]
+t_whole_peakachu_k562 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/K562/10kb/results_by_chr/WHOLE/rus/distance/TADRF_3_peakachu.rds")
+t_whole_peakachu_k562 <- t_whole_peakachu_k562[[3]][10,2]
+
+
+t_chr_arrowhead_gm12878 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/miscellaneous/saved_rds_files/all_rfperfs_ba_arrowhead_gm12878.rds")
+t_chr_arrowhead_k562 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/miscellaneous/saved_rds_files/all_rfperfs_ba_arrowhead_k562.rds")
+t_chr_peakachu_gm12878 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/miscellaneous/saved_rds_files/all_rfperfs_ba_peakachu_gm12878.rds")
+t_chr_peakachu_k562 <- readRDS("/home/stilianoudakisc/TAD_data_analysis/miscellaneous/saved_rds_files/all_rfperfs_ba_peakachu_k562.rds")
+
+
+all_rfperfs_chr_vs_whole_arrowhead_peakachu <- data.frame(BA=c(t_whole_arrowhead_gm12878,
+                      t_whole_arrowhead_k562,
+					  t_whole_peakachu_gm12878,
+					  t_whole_peakachu_k562,
+					  as.numeric(t_chr_arrowhead_gm12878[12,4]),
+					  as.numeric(t_chr_arrowhead_k562[12,4]),
+					  as.numeric(t_chr_peakachu_gm12878[12,4]),
+					  as.numeric(t_chr_peakachu_k562[12,4])),
+				CL=rep(c("GM12878","K562"),4),
+				Tool=rep(c("ARROWHEAD","ARROWHEAD","PEAKACHU","PEAKACHU"),2),
+				Method=c(rep("Whole",4),rep("Per CHR",4)))
+
+#all_rfperfs_chr_vs_whole_arrowhead_peakachu <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved_rds_files/all_rfperfs_chr_vs_whole_arrowhead_peakachu.rds")
+
+ggplot(all_rfperfs_chr_vs_whole_arrowhead_peakachu, 
+       aes(x=Method, y=BA, fill=Method)) +
+  geom_bar(stat = "identity")+
+  facet_grid(CL ~ Tool)+
+  theme_minimal() +
+  theme_bw()+
+  xlab("Method") + 
+  ylab("Balanced Accuracy") + 
+  guides(fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1
+  ),
+  axis.text.y = element_text(size = 15),
+  axis.title.x = element_text(size = 20),
+  axis.title.y = element_text(size = 20),
+  strip.text.x = element_text(size = 15),
+  strip.text.y = element_text(size = 15),
+  #panel.spacing = unit(2, "lines"),
+  legend.text=element_text(size=15),
+  legend.title=element_text(size=20),
+  plot.title = element_text(size=20),
+  legend.position="bottom")
+```
+
+

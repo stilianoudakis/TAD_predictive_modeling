@@ -82,7 +82,7 @@ source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(2:8,10:15,17:22))
+chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                     chrs[i],
@@ -109,7 +109,7 @@ all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 5000, both=TRUE)
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(2:8,10:15,17:22))
+chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
                                     chrs[i],
@@ -237,7 +237,7 @@ gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Uni
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(2:8,10:15,17:22))
+chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
                                     chrs[i],
@@ -251,8 +251,8 @@ for(i in 1:length(chrs)){
 all_true_bounds_gm12878 <- do.call("c", true_bound_list)
 all_pred_bounds_gm12878 <- do.call("c", pred_bound_list)
 
-all_true_bounds_gm12878 <- flank(all_true_bounds_gm12878, 5000, both=TRUE)
-all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 5000, both=TRUE)
+all_true_bounds_gm12878 <- flank(all_true_bounds_gm12878, 10000, both=TRUE)
+all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 10000, both=TRUE)
 
 ```
 
@@ -264,7 +264,7 @@ all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 5000, both=TRUE)
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(2:8,10:15,17:22))
+chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
                                     chrs[i],
@@ -278,8 +278,8 @@ for(i in 1:length(chrs)){
 all_true_bounds_k562 <- do.call("c", true_bound_list)
 all_pred_bounds_k562 <- do.call("c", pred_bound_list)
 
-all_true_bounds_k562 <- flank(all_true_bounds_k562, 5000, both=TRUE)
-all_pred_bounds_k562 <- flank(all_pred_bounds_k562, 5000, both=TRUE)
+all_true_bounds_k562 <- flank(all_true_bounds_k562, 10000, both=TRUE)
+all_pred_bounds_k562 <- flank(all_pred_bounds_k562, 10000, both=TRUE)
 
 ```
 

@@ -142,6 +142,7 @@ pt <- preciseTAD(bounds.GR=bounds.GR,
                       CLARA=FALSE,
                       samples=100)
 
+saveRDS(pt, "C:/Users/stili/Downloads/pt_chr21_15150000_17270000")
 ```
 
 
