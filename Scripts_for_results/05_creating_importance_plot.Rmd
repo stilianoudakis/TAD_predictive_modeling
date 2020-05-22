@@ -115,7 +115,7 @@ rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
 
 distance.col = dist(rfe.set.mat, method = "euclidean")
 cluster.col = hclust(distance.col, method = "average")
-my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
+my_palette <- colorRampPalette(c("white", "lightblue", "blue"))(ncol(rfe.set.mat))
 
 heatmap.2(t(rfe.set.mat),
           #labRow=rownames(rfe.set.mat),
@@ -238,7 +238,7 @@ heatmap.2(t(rfe.set.mat),
 
 ### GM12878
 
-#### Optimal parameters: 5 kb, TFBS, distance type predictors, RUS
+#### Optimal parameters: 10 kb, TFBS, distance type predictors, RUS
 
 ```{r}
 chrs <- paste0("CHR",c(1:8,10:22))
@@ -324,7 +324,7 @@ Heatmap(t(rfe.set.mat),
 
 ### K562
 
-#### Optimal parameters: 5 kb, TFBS, distance type predictors, RUS
+#### Optimal parameters: 10 kb, TFBS, distance type predictors, RUS
 
 ```{r}
 chrs <- paste0("CHR",c(1:8,10:22))
@@ -399,7 +399,7 @@ heatmap.2(t(rfe.set.mat),
 
 ### GM12878
 
-#### Optimal parameters: 5 kb, TFBS, distance type predictors, RUS
+#### Optimal parameters: 10 kb, TFBS, distance type predictors, RUS
 
 ```{r}
 chrs <- paste0("CHR",c(1:8,10:22))
@@ -472,7 +472,7 @@ heatmap.2(t(rfe.set.mat),
 
 ### K562
 
-#### Optimal parameters: 5 kb, TFBS, distance type predictors, RUS
+#### Optimal parameters: 10 kb, TFBS, distance type predictors, RUS
 
 ```{r}
 chrs <- paste0("CHR",c(1:8,10:22))
@@ -485,6 +485,167 @@ for(i in c("K562")){
                                           "10kb/results_by_chr/",
                                           chrs[k],
                                           "/rus/distance/TADrfe_lollipop.rds"))
+    
+    set.size = 8
+    rfeModelResults <- rfeModelResultsList[[2]]
+    rfe.set <- rfeModelResults[rfeModelResults$Variables==set.size & rfeModelResults$Resample=="Fold1",]
+    rfe.set <- aggregate(rfe.set[, c("Overall")], list(rfe.set$var), mean)
+    rfe.order <- order(rfe.set[, c("x")], decreasing = TRUE)
+    rfe.set <- rfe.set[rfe.order, ]
+    rfe.set$CHR <- chrs[k]
+    rfeperchr[[k]] <- rfe.set
+  }
+}
+
+rfeperchr <- do.call(rbind.data.frame, rfeperchr)
+rfeperchr <- reshape(rfeperchr, idvar = "Group.1", timevar = "CHR", direction = "wide")
+names(rfeperchr) <- c("TFBS", chrs)
+rfeperchr[is.na(rfeperchr)] <- 0
+rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing = TRUE),]
+
+rfe.set.mat <- as.matrix(rfeperchr[,-1])
+rownames(rfe.set.mat) <- rfeperchr$TFBS
+
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
+distance.col = dist(rfe.set.mat, method = "euclidean")
+cluster.col = hclust(distance.col, method = "average")
+my_palette <- colorRampPalette(c("white", "lightblue", "blue"))(ncol(rfe.set.mat))
+
+heatmap.2(t(rfe.set.mat),
+          #labRow=rownames(rfe.set.mat),
+          #labCol=colnames(rfe.set.mat),
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins=c(10,4),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #keysize = 1.5,
+          #key.title = "Elastic-Net Coefficient",
+          dendrogram="column",     # only draw a row dendrogram,
+          Rowv = FALSE,
+          Colv = reorder(as.dendrogram(cluster.col), 37:1),
+          cexRow=.5,
+          cexCol=1,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          rowsep=0:nrow(t(rfe.set.mat)),
+          colsep=0:ncol(t(rfe.set.mat)),
+          sepwidth=c(0.00001,0.00001),
+          sepcolor="black"
+) 
+
+```
+
+## SpectralTAD
+
+### GM12878
+
+#### Optimal parameters: 25 kb, TFBS, distance type predictors, RUS
+
+```{r}
+chrs <- paste0("CHR",c(1:8,10:22))
+rfeperchr <- list()
+for(i in c("GM12878")){
+  for(k in 1:length(chrs)){
+    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
+                                          i,
+                                          "/",
+                                          "25kb/results_by_chr/",
+                                          chrs[k],
+                                          "/rus/distance/TADrfe_spectralTAD.rds"))
+    
+    set.size = 8
+    rfeModelResults <- rfeModelResultsList[[2]]
+    rfe.set <- rfeModelResults[rfeModelResults$Variables==set.size & rfeModelResults$Resample=="Fold1",]
+    rfe.set <- aggregate(rfe.set[, c("Overall")], list(rfe.set$var), mean)
+    rfe.order <- order(rfe.set[, c("x")], decreasing = TRUE)
+    rfe.set <- rfe.set[rfe.order, ]
+    rfe.set$CHR <- chrs[k]
+    rfeperchr[[k]] <- rfe.set
+  }
+}
+
+rfeperchr <- do.call(rbind.data.frame, rfeperchr)
+rfeperchr <- reshape(rfeperchr, idvar = "Group.1", timevar = "CHR", direction = "wide")
+names(rfeperchr) <- c("TFBS", chrs)
+rfeperchr[is.na(rfeperchr)] <- 0
+rfeperchr <- rfeperchr[order(rowMeans(rfeperchr[,-1], na.rm = TRUE),decreasing = TRUE),]
+
+rfe.set.mat <- as.matrix(rfeperchr[,-1])
+rownames(rfe.set.mat) <- rfeperchr$TFBS
+
+rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
+
+distance.col = dist(rfe.set.mat, method = "euclidean")
+cluster.col = hclust(distance.col, method = "average")
+my_palette <- colorRampPalette(c("white", "pink", "red"))(ncol(rfe.set.mat))
+
+heatmap.2(t(rfe.set.mat),
+          #labRow=rownames(rfe.set.mat),
+          #labCol=colnames(rfe.set.mat),
+          #cellnote = ,  # same data set for cell labels
+          #main = "", # heat map title
+          notecol="black",      # change font color of cell labels to black
+          density.info="none",  # turns off density plot inside color legend
+          trace="none",         # turns off trace lines inside the heat map
+          margins=c(10,4),     # widens margins around plot
+          col=my_palette,       # use on color palette defined earlier
+          na.color = "gray",
+          #breaks=col_breaks,    # enable color transition at specified limits
+          key=FALSE,
+          #keysize = 1.5,
+          #key.title = "Elastic-Net Coefficient",
+          dendrogram="column",     # only draw a row dendrogram,
+          Rowv = FALSE,
+          Colv = reorder(as.dendrogram(cluster.col), 37:1),
+          cexRow=.5,
+          cexCol=1,
+          #labRow = FALSE,
+          #lmat=rbind( c(0, 3), c(2,1), c(0,4) ), 
+          #lhei=c(.5,6,0),
+          rowsep=0:nrow(t(rfe.set.mat)),
+          colsep=0:ncol(t(rfe.set.mat)),
+          sepwidth=c(0.00001,0.00001),
+          sepcolor="black"
+) 
+
+Heatmap(t(rfe.set.mat),
+        col=my_palette,
+        border=TRUE,
+        cluster_rows=FALSE,
+        clustering_distance_columns = "euclidean",
+        clustering_method_columns = "complete",
+        show_row_names = FALSE,
+        column_names_rot = 90,
+        column_names_centered = FALSE,
+        show_heatmap_legend = FALSE,
+        heatmap_legend_param = list(title = "Predictive\nImportance"),
+        rect_gp = gpar(col = "black", lwd = 1),
+        column_dend_side = "top",column_names_side = "top")
+```
+
+### K562
+
+#### Optimal parameters: 25 kb, TFBS, distance type predictors, RUS
+
+```{r}
+chrs <- paste0("CHR",c(1:8,10:22))
+rfeperchr <- list()
+for(i in c("K562")){
+  for(k in 1:length(chrs)){
+    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
+                                          i,
+                                          "/",
+                                          "25kb/results_by_chr/",
+                                          chrs[k],
+                                          "/rus/distance/TADrfe_spectralTAD.rds"))
     
     set.size = 8
     rfeModelResults <- rfeModelResultsList[[2]]

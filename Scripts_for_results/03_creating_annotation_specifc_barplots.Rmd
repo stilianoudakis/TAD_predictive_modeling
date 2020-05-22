@@ -599,3 +599,180 @@ ggplot(all_rfperfs, aes(x=Annotation, y=Performance, fill=Annotation)) +
     legend.position = "bottom",
     plot.title = element_text(size=20))
 ```
+
+## SpectralTAD
+
+### GM12878 (rus; distance types)
+
+#### 25kb
+
+```{r}
+badata_gm12878_25kb <- numeric()
+for(i in paste0("CHR", c(1:8,10:22))){
+ for(j in c("BroadHMM", "HistoneModifications", "TFBS", "all")){
+   print(c(i,j))
+  if(j %in% c("BroadHMM", "HistoneModifications", "TFBS")){
+    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+                               i,
+                               "/rus/distance/TADRF_spectralTAD_",
+                               j, 
+                               ".rds"))
+    perfdata <- perfdata[[3]]
+  }else{
+    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/",
+                               i,
+                               "/rus/distance/TADRF_spectralTAD.rds"))
+    perfdata <- perfdata[[3]]
+  }
+  
+  badata_gm12878_25kb <- rbind(badata_gm12878_25kb,
+                               perfdata[10,2])
+  
+ }
+}  
+
+```
+
+#### Plotting
+
+```{r}
+all_rfperfs <- data.frame(Perf=badata_gm12878_25kb)
+all_rfperfs$Resolution <- rep("25 kb", length(badata_gm12878_25kb))
+all_rfperfs$Annotation <- c("BroadHMM","HM","TFBS","ALL")
+all_rfperfs$Annotation <- factor(all_rfperfs$Annotation, levels = c("HM", "BroadHMM", "TFBS", "ALL"))
+all_rfperfs$Chromosome <- c(rep("CHR1", 4),
+                            rep("CHR2", 4),
+                            rep("CHR3", 4),
+                            rep("CHR4", 4),
+                            rep("CHR5", 4),
+                            rep("CHR6", 4),
+                            rep("CHR7", 4),
+                            rep("CHR8", 4),
+                            rep("CHR10", 4),
+                            rep("CHR11", 4),
+                            rep("CHR12", 4),
+                            rep("CHR13", 4),
+                            rep("CHR14", 4),
+                            rep("CHR15", 4),
+                            rep("CHR16", 4),
+                            rep("CHR17", 4),
+                            rep("CHR18", 4),
+                            rep("CHR19", 4),
+                            rep("CHR20", 4),
+                            rep("CHR21", 4),
+                            rep("CHR22", 4))
+
+all_rfperfs <- all_rfperfs %>% 
+  group_by(Resolution, Annotation) %>% 
+  dplyr::summarise(Performance = mean(Perf, na.rm = TRUE),
+                   PerformanceSD = sd(Perf, na.rm = TRUE))
+
+ggplot(all_rfperfs, aes(x=Annotation, y=Performance, fill=Annotation)) +
+    geom_bar(stat="identity") +
+    geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=.75) +
+    theme_minimal() +
+    theme_bw()+
+    xlab("Resolution") + 
+    ylab("Balanced Accuracy") + 
+    scale_fill_discrete(name="Genomic Class")+
+    theme(axis.text.x = element_text(size=15,
+                                     angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    legend.position = "bottom",
+    plot.title = element_text(size=20))
+```
+
+### K562 (rus; distance types)
+
+#### 25kb
+
+```{r}
+badata_k562_25kb <- numeric()
+for(i in paste0("CHR", c(1:8,10:22))){
+ for(j in c("BroadHMM", "HistoneModifications", "TFBS", "all")){
+   print(c(i,j))
+  if(j %in% c("BroadHMM", "HistoneModifications", "TFBS")){
+    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+                               i,
+                               "/rus/distance/TADRF_spectralTAD_",
+                               j, 
+                               ".rds"))
+    perfdata <- perfdata[[3]]
+  }else{
+    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/25kb/results_by_chr/",
+                               i,
+                               "/rus/distance/TADRF_spectralTAD.rds"))
+    perfdata <- perfdata[[3]]
+  }
+  
+  badata_k562_25kb <- rbind(badata_k562_25kb,
+                               perfdata[10,2])
+  
+ }
+}  
+
+```
+
+#### Plotting
+
+```{r}
+all_rfperfs <- data.frame(Perf=badata_k562_25kb)
+all_rfperfs$Resolution <- rep("10 kb", length(badata_k562_25kb))
+all_rfperfs$Annotation <- c("BroadHMM","HM","TFBS","ALL")
+all_rfperfs$Annotation <- factor(all_rfperfs$Annotation, levels = c("HM", "BroadHMM", "TFBS", "ALL"))
+all_rfperfs$Chromosome <- c(rep("CHR1", 4),
+                            rep("CHR2", 4),
+                            rep("CHR3", 4),
+                            rep("CHR4", 4),
+                            rep("CHR5", 4),
+                            rep("CHR6", 4),
+                            rep("CHR7", 4),
+                            rep("CHR8", 4),
+                            rep("CHR10", 4),
+                            rep("CHR11", 4),
+                            rep("CHR12", 4),
+                            rep("CHR13", 4),
+                            rep("CHR14", 4),
+                            rep("CHR15", 4),
+                            rep("CHR16", 4),
+                            rep("CHR17", 4),
+                            rep("CHR18", 4),
+                            rep("CHR19", 4),
+                            rep("CHR20", 4),
+                            rep("CHR21", 4),
+                            rep("CHR22", 4))
+
+all_rfperfs <- all_rfperfs %>% 
+  group_by(Resolution, Annotation) %>% 
+  dplyr::summarise(Performance = mean(Perf, na.rm = TRUE),
+                   PerformanceSD = sd(Perf, na.rm = TRUE))
+
+ggplot(all_rfperfs, aes(x=Annotation, y=Performance, fill=Annotation)) +
+    geom_bar(stat="identity") +
+    geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=.75) +
+    theme_minimal() +
+    theme_bw()+
+    xlab("Resolution") + 
+    ylab("Balanced Accuracy") + 
+    scale_fill_discrete(name="Genomic Class")+
+    theme(axis.text.x = element_text(size=15,
+                                     angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    legend.position = "bottom",
+    plot.title = element_text(size=20))
+```
+
