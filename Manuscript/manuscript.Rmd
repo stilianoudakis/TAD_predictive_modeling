@@ -205,9 +205,9 @@ Besides balanced accuracy (BA), we investigated five other performance metrics t
 
 The performance of *preciseTAD* was found to be empirically better than both ARROWHEAD and PEAKACHU ground truth boundaries. *preciseTAD* provides bp resolution predicted boundaries, thereby alleviating resolution limitations of conventional TAD-callers. We show that, unlike ARROWHEAD, *preciseTAD* does not inflate the number of predicted boundaries, instead, providing only the most biologically meaningful boundaries. *preciseTAD* boundaries we found to be more enriched for known architectural transcription factors including CTCF, RAD21, SMC3, and ZNF143. Likewise *preciseTAD* boundaries were found to be more conserved between GM12878 and K562 cell lines, further highlighting their biological significance.
 
+A limitation of *preciseTAD* is that it is dependent on "ground truth" boundaries provided by a user-defined TAD(loop)-caller. Ideally we would perform simulation studies to benchmark *preciseTAD* against simulated boundaries. While there are existing methods for simulating Hi-C data sets [@forcato2017comparison; @zheng2020freehi], of which boundaries can be extracted from, to date, there are no such methods for simulating ChIP-seq data. However, given *preciseTAD* is applied on chromosome-specific sections of the linear genome, we feel that aggregating results across chromosomes provides strong empirical evidence of the superiority of *preciseTAD*. Another limitation is that *preciseTAD* does not provide hierarchical boundaries, but instead simply provides the bp coordinate that demarcates TADs(loops). Studies have shown evidence of the hierarchical nature to the 3D architecture of the human genome [@hansen2018recent; @weinreb2016identification; @fraser2015hierarchical]. In such a hierarchy, the boundaries provided by *preciseTAD* can be interpreted as the lowest level of boundaries.
+
 ???stopped here
-
-
 
 # Conclusion
 
