@@ -77,8 +77,6 @@ First the vector, $p_{n_{i}}$, denoting each base pair's probability of being a 
 
 ## Comparing called vs predicted boundaries
 
-afgan2018galaxy, ramirez2016deeptools2
-
 Next, we assessed the biological significance of our predicted boundaries with respect to the enrichment profiles of several known molecular drivers of 3D chromatin architecture including CTCF, RAD21, SMC3, and ZNF143 ChIP-Seq peaks. To do so, we used the computeMatrix and plotHeatmap tools offered by DeepTools [@ramirez2016deeptools2] via integration with the Galaxy project [@afgan2018galaxy]. Additionally, we compared the median $log_2$ genomic distances between TAD boundaries and the same top predictive ChIP-seq annotations using Wilcoxon Rank-Sum test. Furthermore, we assessed the hypothesis that TADs and chromatin loops are conserved  [@dixon2012topological; @nora2012spatial; @dixon2015chromatin; @rao20143d; @Schmitt2016aa] by comparing predicted and called boundaries between the GM12878 and K562 cell lines. Boundaries were first flanked by resolution, *r*, and overlaps were visualized using Venn diagrams from the `Vennerable` R package (version 3.1.0) and evaluated using the Jaccard index defined as
 
 $$J_{(A,B)} = \dfrac{A \cap B}{A \cup B}$$
