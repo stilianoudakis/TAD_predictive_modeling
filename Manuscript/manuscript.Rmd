@@ -1,10 +1,10 @@
 ---
-title: Computational Prediction of Boundaries of 3D Genomic Domains in Class Imbalance Settings
+title: preciseTAD: A machine learning framework for precise TAD boundary prediction at base pair resolution
 csl: styles.ref/genomebiology.csl
 output:
-  pdf_document: default
   word_document:
     reference_docx: styles.doc/NIH_grant_style.docx
+  pdf_document: default
 bibliography: References/references.bib
 --- 
 
