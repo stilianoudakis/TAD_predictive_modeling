@@ -79,15 +79,29 @@ source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
 # Jaccard Function
 
 ```{r}
-jaccard_mod <- function (query, reference, restrict = NULL, modified=TRUE) {
+jaccard_mod <- function (query, reference, restrict = NULL, modified=FALSE) {
   if(isTRUE(modified)){
-    int = sum(width(intersect(query, reference)))
-    minunion = min(sum(as.numeric(width(intersect(query, reference)))),sum(as.numeric(width(union(query, reference)))))
+    int = sum(width(GenomicRanges::intersect(query, reference)))
+    minunion = min(sum(as.numeric(width(GenomicRanges::intersect(query, reference)))),sum(as.numeric(width(GenomicRanges::union(query, reference)))))
     res = int/minunion
   }else{
-    res = sum(width(intersect(query, reference)))/sum(as.numeric(width(union(query, reference)))) 
+    res = sum(width(GenomicRanges::intersect(query, reference)))/sum(as.numeric(width(GenomicRanges::union(query, reference)))) 
   }
   return(res)
+}
+
+genomicCorr.jaccard = function(query, reference, restrict = NULL) {
+	if(is.null(restrict)) {
+		res = sum(width(GenomicRanges::intersect(query, reference))) / sum(as.numeric(width(GenomicRanges::union(query, reference))))
+	} else {
+		gr1 = GenomicRanges::intersect(query, reference)
+		gr1 = GenomicRanges::intersect(gr1, restrict)
+
+		gr2 = GenomicRanges::union(query, reference)
+		gr2 = GenomicRanges::intersect(gr2, restrict)
+		res = sum(width(gr1)) / sum(width(gr2))
+	}
+	return(res)
 }
 ```
 

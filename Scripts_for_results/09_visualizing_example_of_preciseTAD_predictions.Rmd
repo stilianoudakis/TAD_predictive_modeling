@@ -59,8 +59,9 @@ library(VennDiagram)
 library(ChIPpeakAnno)
 library(EnrichedHeatmap)
 
+source("Z:/TAD_data_analysis/functions_for_R_package/createTADdata.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
-source("Z:/TAD_data_analysis/functions_for_R_package/TADrf.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADrandomForest.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/distance_func.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/percent_func.R")
@@ -93,39 +94,50 @@ genomicElements.GR <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/an
                                              signal=4)
 ```
 
-
-## Running TADrf and preciseTAD
+## Creating data matrix
 
 ```{r}
-tadModel <- TADrf(bounds.GR=bounds.GR,
-                  resolution=5000,
-                  genomicElements.GR=genomicElements.GR,
-                  featureType="distance",
-                  resampling="rus",
-                  trainCHR=paste0("CHR", c(1:8,10:22)),
-                  predictCHR=NULL,
-                  cvFolds=3,
-                  ntrees=100,
-                  cvMetric="Accuracy",
-                  verbose=TRUE,
-                  seed=123,
-                  model=TRUE,
-                  importances=TRUE,
-                  performances=FALSE)
+tadData <- createTADdata(bounds.GR=bounds.GR,
+                         resolution=5000,
+                         genomicElements.GR=genomicElements.GR,
+                         featureType="distance",
+                         resampling="rus",
+                         trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))=="CHR22")],
+                         predictCHR=NULL,
+                         seed=123)
+```
 
+## Running TADrandomForest
+
+```{r}
+tadModel <- TADrandomForest(trainData=tadData[[1]],
+                            testData=NULL,
+                            tuneParams=list(mtry=2,
+                                            ntree=500,
+                                            nodesize=1),
+                            cvFolds=3,
+                            cvMetric="Accuracy",
+                            verbose=TRUE,
+                            seed=123,
+                            model=TRUE,
+                            importances=TRUE,
+                            impMeasure="MDA",
+                            performances=FALSE)
+```
+
+## Running preciseTAD
+
+```{r}
 bounds.GR <- extract_boundaries_func(domains.mat=domains, 
                                      preprocess=FALSE, 
-                                     #CHR="CHR22", 
-                                     CHR="CHR21", 
+                                     CHR="CHR22", 
                                      resolution=5000)
 
 pt <- preciseTAD(bounds.GR=bounds.GR,
                       genomicElements.GR=genomicElements.GR,
                       featureType="distance",
-                      #CHR="CHR22",
-                      CHR="CHR21",
-                      #chromCoords=list(17389000,18011000),
-                      chromCoords=list(15150000,17270000),
+                      CHR="CHR22",
+                      chromCoords=list(17000000,19000000),
                       tadModel=tadModel[[1]],
                       threshold=1.0,
                       flank=NULL,
@@ -136,7 +148,7 @@ pt <- preciseTAD(bounds.GR=bounds.GR,
                       splits=NULL,
                       method.Dist="euclidean",
                       DBSCAN=TRUE,
-                      DBSCAN_params=list(5000,3), #or list(10000,3)
+                      DBSCAN_params=list(5000,3), 
                       method.Clust=NULL,
                       PTBR=TRUE,
                       CLARA=FALSE,
@@ -153,6 +165,9 @@ saveRDS(pt, "C:/Users/stili/Downloads/pt_chr21_15150000_17270000")
 ## Plotting
 
 ```{r}
+tadModel <- readRDS("Z:/TAD_data_analysis/miscellaneous/tadModel.rds")
+pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
+
 getChrLength <- function(genome = "BSgenome.Hsapiens.UCSC.hg19"){
   g <- getBSgenome(genome, masked=FALSE)
   data.frame(chrom=1:24, length=seqlengths(g)[1:24])
@@ -187,10 +202,12 @@ hg19$chrom <- paste0("CHR",hg19$chrom)
 
 #seqDataTest <- c(17389000:18011000)
 #seqDataTest <- c(25745000:26176000)
-seqDataTest <- c(15150000:17270000)
+#seqDataTest <- c(15150000:17270000)
+seqDataTest <- c(70595000:71525000)
 
 #CHR="CHR22"
-CHR="CHR21"
+#CHR="CHR21"
+CHR="CHR1"
   
   if("TRUE" %in% table(seqDataTest %in% c(hg19$centromerStart[hg19$chrom==CHR]:hg19$centromerEnd[hg19$chrom==CHR]))){
     centromereTestStart <- hg19$centromerStart[hg19$chrom==CHR]
@@ -212,7 +229,8 @@ test_data <- apply(test_data,2,function(x){log(x + 1, base=2)})
 predictions <- predict(tadModel[[1]],newdata=test_data,type="prob")[,"Yes"]
 
 predprobdata <- data.frame(#basenum=c(17389000:18011000),
-                           basenum=c(15150000:17270000),
+                           #basenum=c(15150000:17270000),
+                           basenum=c(70595000:71525000),
                            prob=predictions)
 predprobdata$predicted <- ifelse(predprobdata$basenum %in% start(pt[[2]]), "Yes", "No")
 predprobdata$called <- ifelse(predprobdata$basenum %in% start(pt[[3]]), "Yes", "No")
@@ -234,11 +252,11 @@ ggplot() +
   #           show.legend = TRUE)+
   geom_vline(data=calleddata, aes(xintercept=basenum, 
                                   color="blue"),
-             size=.75,
+             size=1.5,
              show.legend = TRUE)+
   geom_vline(data=predicteddata2, aes(xintercept=basenum, 
                                       color="forestgreen"),
-             size=1,
+             size=1.5,
              show.legend = TRUE)+
   #annotate(geom = "segment",x = 15492234, xend = 15519798,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
   #annotate(geom = "segment",x = 15635994, xend = 15792137,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
@@ -264,7 +282,8 @@ ggplot() +
         plot.title = element_text(size=20),
         legend.position = "bottom")
 
-ptbrdata <- data.frame(basenum=c(15770000:15780000))
+#ptbrdata <- data.frame(basenum=c(15770000:15780000))
+ptbrdata <- data.frame(basenum=c(70900000:70950000))
 
 ggplot(predprobdata, aes(x=basenum, y=prob)) + 
     geom_line(data=predprobdata, aes(x=basenum, y=prob), 
