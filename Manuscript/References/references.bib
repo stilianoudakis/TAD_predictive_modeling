@@ -1,7 +1,7 @@
 %% This BibTeX bibliography file was created using BibDesk.
 %% https://bibdesk.sourceforge.io/
 
-%% Created for Mikhail Dozmorov at 2020-07-23 12:42:59 -0400 
+%% Created for Mikhail Dozmorov at 2020-07-23 13:19:59 -0400 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
@@ -10,6 +10,46 @@
 @comment{jabref-meta: databaseType:bibtex;}
 
 
+
+@article{Cresswell:2020ab,
+	Abstract = {BACKGROUND: The three-dimensional (3D) structure of the genome plays a crucial role in gene expression regulation. Chromatin conformation capture technologies (Hi-C) have revealed that the genome is organized in a hierarchy of topologically associated domains (TADs), sub-TADs, and chromatin loops. Identifying such hierarchical structures is a critical step in understanding genome regulation. Existing tools for TAD calling are frequently sensitive to biases in Hi-C data, depend on tunable parameters, and are computationally inefficient.
+METHODS: To address these challenges, we developed a novel sliding window-based spectral clustering framework that uses gaps between consecutive eigenvectors for TAD boundary identification.
+RESULTS: Our method, implemented in an R package, SpectralTAD, detects hierarchical, biologically relevant TADs, has automatic parameter selection, is robust to sequencing depth, resolution, and sparsity of Hi-C data. SpectralTAD outperforms four state-of-the-art TAD callers in simulated and experimental settings. We demonstrate that TAD boundaries shared among multiple levels of the TAD hierarchy were more enriched in classical boundary marks and more conserved across cell lines and tissues. In contrast, boundaries of TADs that cannot be split into sub-TADs showed less enrichment and conservation, suggesting their more dynamic role in genome regulation.
+CONCLUSION: SpectralTAD is available on Bioconductor, http://bioconductor.org/packages/SpectralTAD/ .},
+	Author = {Cresswell, Kellen G and Stansfield, John C and Dozmorov, Mikhail G},
+	Date-Added = {2020-07-23 13:19:03 -0400},
+	Date-Modified = {2020-07-23 13:19:03 -0400},
+	Doi = {10.1186/s12859-020-03652-w},
+	Journal = {BMC Bioinformatics},
+	Journal-Full = {BMC bioinformatics},
+	Keywords = {Chromosome conformation capture; Hi-C; Hierarchy; SpectralTAD; TADs; Topologically associated domains},
+	Month = {Jul},
+	Number = {1},
+	Pages = {319},
+	Pmc = {PMC7372752},
+	Pmid = {32689928},
+	Pst = {epublish},
+	Title = {SpectralTAD: an R package for defining a hierarchy of topologically associated domains using spectral clustering},
+	Volume = {21},
+	Year = {2020},
+	Bdsk-Url-1 = {https://doi.org/10.1186/s12859-020-03652-w}}
+
+@article{Harrold:2020aa,
+	Author = {Harrold, Caroline L and Gosden, Matthew E and Hanssen, Lars L P and Stolper, Rosa J and Downes, Damien J and Telenius, Jelena M. and Biggs, Daniel and Preece, Chris and Alghadban, Samy and Sharpe, Jacqueline A and Davies, Benjamin and Sloane-Stanley, Jacqueline A. and Kassouf, Mira T and Hughes, Jim R and Higgs, Douglas R},
+	Date = {2020/01/01},
+	Date-Added = {2020-07-23 13:06:13 -0400},
+	Date-Modified = {2020-07-23 13:06:13 -0400},
+	Doi = {10.1101/2020.07.01.182089},
+	Journal = {bioRxiv},
+	Month = {01},
+	N2 = {Mammalian genomes are subdivided into large (50-2000 kb) regions of chromatin referred to as Topologically Associating Domains (TADs or sub-TADs). Chromatin within an individual TAD contacts itself more frequently than with regions in surrounding TADs thereby directing enhancer-promoter interactions. In many cases, the borders of TADs are defined by convergently orientated boundary elements associated with CCCTC-binding factor (CTCF), which stabilises the cohesin complex on chromatin and prevents its translocation. This delimits chromatin loop extrusion which is thought to underlie the formation of TADs. However, not all CTCF-bound sites act as boundaries and, importantly, not all TADs are flanked by convergent CTCF sites. Here, we examined the CTCF binding sites within a ∼70 kb sub-TAD containing the duplicated mouse α-like globin genes and their five enhancers (5'-R1-R2-R3-Rm-R4-α1-α2-3'). The 5'border of this sub-TAD is defined by a pair of CTCF sites. Surprisingly, we show that deletion of the CTCF binding sites within and downstream of the α-globin locus leaves the sub-TAD largely intact. The predominant 3'border of the sub-TAD is defined by a steep reduction in contacts: this corresponds to the transcribed α2-globin gene rather than the CTCF sites at the 3'-end of the sub-TAD. Of interest, the almost identical α1- and α2-globin genes interact differently with the enhancers, resulting in preferential expression of the proximal α1-globin gene which behaves as a partial boundary between the enhancers and the distal α2-globin gene. Together, these observations provide direct evidence that actively transcribed genes can behave as boundary elements.Significance Statement Mammalian genomes are complex, organised 3D structures, partitioned into Topologically Associating Domains (TADs): chromatin regions that preferentially self-interact. These chromatin interactions are thought to be driven by a mechanism that continuously extrudes chromatin loops, forming structures delimited by chromatin boundary elements and reflecting the activity of enhancers and promoters. Boundary elements bind architectural proteins such as CCCTC-binding factor (CTCF). Previously, an overlap between the functional roles of enhancers and promoters has been shown. However, whether there is overlap between enhancers/promoters and boundary elements is not known. Here, we show that actively transcribed genes can also behave as boundary elements, similar to CTCF boundaries. In both cases, multi-protein complexes bound to these regions may stall the process of chromatin loop extrusion.Competing Interest StatementJ.R.H is a founder and shareholder of Nucleome Therapeutics.},
+	Pages = {2020.07.01.182089},
+	Title = {A functional overlap between actively transcribed genes and chromatin boundary elements},
+	Ty = {JOUR},
+	Url = {http://biorxiv.org/content/early/2020/07/01/2020.07.01.182089.abstract},
+	Year = {2020},
+	Bdsk-Url-1 = {http://biorxiv.org/content/early/2020/07/01/2020.07.01.182089.abstract},
+	Bdsk-Url-2 = {https://doi.org/10.1101/2020.07.01.182089}}
 
 @article{Skene:2017aa,
 	Abstract = {We describe Cleavage Under Targets and Release Using Nuclease (CUT&RUN), a chromatin profiling strategy in which antibody-targeted controlled cleavage by micrococcal nuclease releases specific protein-DNA complexes into the supernatant for paired-end DNA sequencing. Unlike Chromatin Immunoprecipitation (ChIP), which fragments and solubilizes total chromatin, CUT&RUN is performed in situ, allowing for both quantitative high-resolution chromatin mapping and probing of the local chromatin environment. When applied to yeast and human nuclei, CUT&RUN yielded precise transcription factor profiles while avoiding crosslinking and solubilization issues. CUT&RUN is simple to perform and is inherently robust, with extremely low backgrounds requiring only ~1/10th the sequencing depth as ChIP, making CUT&RUN especially cost-effective for transcription factor and chromatin profiling. When used in conjunction with native ChIP-seq and applied to human CTCF, CUT&RUN mapped directional long range contact sites at high resolution. We conclude that in situ mapping of protein-DNA interactions by CUT&RUN is an attractive alternative to ChIP-seq.},
@@ -1010,14 +1050,6 @@ CONCLUSIONS: This study provides a reference for the analysis of chromatin domai
 	Title = {Three-dimensional disorganization of the cancer genome occurs coincident with long-range genetic and epigenetic alterations},
 	Volume = {26},
 	Year = {2016}}
-
-@article{cresswell2019spectraltad,
-	Author = {Cresswell, Kellen G and Stansfield, John C and Dozmorov, Mikhail G},
-	Journal = {BioRxiv},
-	Pages = {549170},
-	Publisher = {Cold Spring Harbor Laboratory},
-	Title = {SpectralTAD: an R package for defining a hierarchy of Topologically Associated Domains using spectral clustering},
-	Year = {2019}}
 
 @article{nora2012spatial,
 	Author = {Nora, Elph{\`e}ge P and Lajoie, Bryan R and Schulz, Edda G and Giorgetti, Luca and Okamoto, Ikuhiro and Servant, Nicolas and Piolot, Tristan and van Berkum, Nynke L and Meisig, Johannes and Sedat, John and others},
