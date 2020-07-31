@@ -443,7 +443,7 @@ r = "10000"
 #for(i in 1:length(r)){
 resolution = as.integer(r)
 
-domains <- readRDS("/home/stilianoudakisc/TAD_data_analysis/peakachu/peakachu_GM12878.rds")
+domains <- readRDS("Z:/TAD_data_analysis/peakachu/peakachu_GM12878.rds")
 
 domains <- domains[which(domains$chr %in% as.numeric(gsub("CHR","",CHR))),]
 
@@ -513,149 +513,7 @@ r = "10000"
 #for(i in 1:length(r)){
 resolution = as.integer(r)
 
-domains <- readRDS("/home/stilianoudakisc/TAD_data_analysis/peakachu/peakachu_K562.rds")
-
-domains <- domains[which(domains$chr %in% as.numeric(gsub("CHR","",CHR))),]
-
-numtads <- nrow(domains)
-
-bounds <- extract_boundaries_func(domains.mat=domains, 
-                                  preprocess=FALSE, 
-                                  CHR=CHR, 
-                                  resolution=resolution)
-
-numbounds <- length(bounds)
-
-bounds.GR.flank <- flank(bounds, width=(resolution/2), both=TRUE)
-
-data_mat_list <- list()
-outcome_list <- list()
-#full_list <- list()
-#train_list <- list()
-#test_list <- list()
-
-for(j in 1:length(CHR)){
-  print(c(r,CHR[j]))
-  #start = 0
-  start = (resolution/2)
-  end = seqDataList[[j]][length(seqDataList[[j]])] - (seqDataList[[j]][length(seqDataList[[j]])] %% resolution) + (resolution/2)
-  #end = seqDataList[[j]][length(seqDataList[[j]])] - (seqDataList[[j]][length(seqDataList[[j]])] %% (resolution/2))
-  rows = seqDataList[[j]][seqDataList[[j]] %in% seq(start, end, resolution)]
-  
-  #data_mat_list[[j]] <- matrix(nrow=length(rows),
-  #                             ncol=length(genomicElements.GR))
-  #rownames(data_mat_list[[j]]) <- rows
-  
-  outcome_list[[j]] <- countOverlaps(GRanges(seqnames = tolower(CHR[j]),
-                                             IRanges(#start = as.numeric(rownames(data_mat_list[[j]])),
-                                               start = rows,
-                                               width = resolution)), bounds.GR.flank)
-  outcome_list[[j]] <- ifelse(outcome_list[[j]],1,0)
-  outcome_list[[j]] <- factor(outcome_list[[j]])
-  levels(outcome_list[[j]]) <- c("No", "Yes")
-  
-  #full_list[[j]] <- cbind.data.frame(outcome_list[[j]], data_mat_list[[j]])
-  #names(full_list[[j]])[1] <- "y"
-}
-ci <- unlist(outcome_list)
-numbins <- length(ci)
-imbalance <- as.numeric(round(table(ci)[2]/sum(table(ci)),2))
-#}
-
-data.frame(resolution = c("10 kb"),
-           numtads=numtads,
-           numbounds=numbounds,
-           numbins=numbins,
-           imbalance=imbalance)
-
-```
-
-## LOLLIPOP
-
-### GM12878
-
-```{r}
-CHR = paste0("CHR", c(1:8,10:22))
-numtads <- numeric()
-numbounds <- numeric()
-numbins <- numeric()
-imbalance <- numeric()
-r = "10000"
-
-#for(i in 1:length(r)){
-resolution = as.integer(r)
-
-domains <- readRDS("/home/stilianoudakisc/TAD_data_analysis/lollipop/lollipop_GM12878.rds")
-
-domains <- domains[which(domains$chr %in% as.numeric(gsub("CHR","",CHR))),]
-
-numtads <- nrow(domains)
-
-bounds <- extract_boundaries_func(domains.mat=domains, 
-                                  preprocess=FALSE, 
-                                  CHR=CHR, 
-                                  resolution=resolution)
-
-numbounds <- length(bounds)
-
-bounds.GR.flank <- flank(bounds, width=(resolution/2), both=TRUE)
-
-data_mat_list <- list()
-outcome_list <- list()
-#full_list <- list()
-#train_list <- list()
-#test_list <- list()
-
-for(j in 1:length(CHR)){
-  print(c(r,CHR[j]))
-  #start = 0
-  start = (resolution/2)
-  end = seqDataList[[j]][length(seqDataList[[j]])] - (seqDataList[[j]][length(seqDataList[[j]])] %% resolution) + (resolution/2)
-  #end = seqDataList[[j]][length(seqDataList[[j]])] - (seqDataList[[j]][length(seqDataList[[j]])] %% (resolution/2))
-  rows = seqDataList[[j]][seqDataList[[j]] %in% seq(start, end, resolution)]
-  
-  #data_mat_list[[j]] <- matrix(nrow=length(rows),
-  #                             ncol=length(genomicElements.GR))
-  #rownames(data_mat_list[[j]]) <- rows
-  
-  outcome_list[[j]] <- countOverlaps(GRanges(seqnames = tolower(CHR[j]),
-                                             IRanges(#start = as.numeric(rownames(data_mat_list[[j]])),
-                                               start = rows,
-                                               width = resolution)), bounds.GR.flank)
-  outcome_list[[j]] <- ifelse(outcome_list[[j]],1,0)
-  outcome_list[[j]] <- factor(outcome_list[[j]])
-  levels(outcome_list[[j]]) <- c("No", "Yes")
-  
-  #full_list[[j]] <- cbind.data.frame(outcome_list[[j]], data_mat_list[[j]])
-  #names(full_list[[j]])[1] <- "y"
-}
-ci <- unlist(outcome_list)
-numbins <- length(ci)
-imbalance <- as.numeric(round(table(ci)[2]/sum(table(ci)),2))
-#}
-
-data.frame(resolution = c("10 kb"),
-           numtads=numtads,
-           numbounds=numbounds,
-           numbins=numbins,
-           imbalance=imbalance)
-
-```
-
-### K562
-
-```{r}
-CHR = paste0("CHR", c(1:8,10:22))
-numtads <- numeric()
-numbounds <- numeric()
-numbins <- numeric()
-imbalance <- numeric()
-r = "10000"
-
-#for(i in 1:length(r)){
-resolution = as.integer(r)
-
-domains <- readRDS("/home/stilianoudakisc/TAD_data_analysis/lollipop/lollipop_K562.rds")
+domains <- readRDS("Z:/TAD_data_analysis/peakachu/peakachu_K562.rds")
 
 domains <- domains[which(domains$chr %in% as.numeric(gsub("CHR","",CHR))),]
 

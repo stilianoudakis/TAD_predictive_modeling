@@ -62,6 +62,7 @@ library(ComplexHeatmap)
 library(circlize)
 library(cotools)
 library(ggcorrplot)
+library(circlize)
 
 source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
@@ -109,11 +110,11 @@ genomicCorr.jaccard = function(query, reference, restrict = NULL) {
 ## GM12878
 
 ```{r}
-gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR22/rus/distance/preciseTAD_holdout.rds")
-gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR22/rus/distance/preciseTAD_holdout.rds")
-gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/CHR22/rus/distance/preciseTAD_holdout.rds")
-gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/CHR22/rus/distance/preciseTAD_holdout.rds")
-gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/CHR22/rus/distance/preciseTAD_holdout.rds")
+gm12878_5kb <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
+gm12878_10kb <- readRDS("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
+gm12878_25kb <- readRDS("Z:/TAD_data_analysis/GM12878/25kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
+gm12878_50kb <- readRDS("Z:/TAD_data_analysis/GM12878/50kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
+gm12878_100kb <- readRDS("Z:/TAD_data_analysis/GM12878/100kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
 
 pt_gm12878_5kb <- flank(gm12878_5kb[[2]], 5000, both=TRUE)
 pt_gm12878_10kb <- flank(gm12878_10kb[[2]], 10000, both=TRUE)

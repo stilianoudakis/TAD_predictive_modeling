@@ -82,11 +82,10 @@ source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                     chrs[i],
-                                    "/rus/distance/preciseTAD.rds"))
+                                    "/rus/distance/preciseTAD_holdout.rds"))
   
   true_bound_list[[i]] <- called_and_pred[[3]]
   pred_bound_list[[i]] <- called_and_pred[[2]]
@@ -109,11 +108,10 @@ all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 5000, both=TRUE)
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
                                     chrs[i],
-                                    "/rus/distance/preciseTAD.rds"))
+                                    "/rus/distance/preciseTAD_holdout.rds"))
   
   true_bound_list[[i]] <- called_and_pred[[3]]
   pred_bound_list[[i]] <- called_and_pred[[2]]
@@ -181,7 +179,7 @@ gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Uni
 
 ```
 
-#### Across cell line 
+### Across cell line 
 
 ```{r}
 ###### preciseTAD
@@ -199,10 +197,12 @@ gp[["Face"]][["10"]]$fill <-  "red"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
+
+genomicCorr.jaccard(all_pred_bounds_gm12878,all_pred_bounds_k562)
 
 ###### ARROWHEAD
 
@@ -219,11 +219,12 @@ gp[["Face"]][["10"]]$fill <-  "red"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
+genomicCorr.jaccard(all_true_bounds_gm12878,all_true_bounds_k562)
 ```
 
 
@@ -237,11 +238,10 @@ gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Uni
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
                                     chrs[i],
-                                    "/rus/distance/preciseTAD_peakachu.rds"))
+                                    "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
   true_bound_list[[i]] <- called_and_pred[[3]]
   pred_bound_list[[i]] <- called_and_pred[[2]]
@@ -264,11 +264,10 @@ all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 10000, both=TRUE)
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
                                     chrs[i],
-                                    "/rus/distance/preciseTAD_peakachu.rds"))
+                                    "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
   true_bound_list[[i]] <- called_and_pred[[3]]
   pred_bound_list[[i]] <- called_and_pred[[2]]
@@ -354,10 +353,12 @@ gp[["Face"]][["10"]]$fill <-  "red"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
+
+genomicCorr.jaccard(all_pred_bounds_gm12878,all_pred_bounds_k562)
 
 ###### PEAKACHU
 
@@ -374,8 +375,8 @@ gp[["Face"]][["10"]]$fill <-  "red"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
@@ -407,8 +408,8 @@ gp[["Face"]][["10"]]$fill <-  "lightblue"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
@@ -428,165 +429,83 @@ gp[["Face"]][["10"]]$fill <-  "lightblue"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
 ```
 
 
-## LOLLIPOP
-
-### GM12878
-
-#### Extracting called and predicted boundaries
+# Jaccard Indices
 
 ```{r}
-pred_bound_list <- GRangesList()
-true_bound_list <- GRangesList()
+genomicCorr.jaccard = function(query, reference, restrict = NULL) {
+  if(is.null(restrict)) {
+    res = sum(width(GenomicRanges::intersect(query, reference))) / sum(as.numeric(width(GenomicRanges::union(query, reference))))
+  } else {
+    gr1 = GenomicRanges::intersect(query, reference)
+    gr1 = GenomicRanges::intersect(gr1, restrict)
+    
+    gr2 = GenomicRanges::union(query, reference)
+    gr2 = GenomicRanges::intersect(gr2, restrict)
+    res = sum(width(gr1)) / sum(width(gr2))
+  }
+  return(res)
+}
+
+
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(2:8,10:15,17:22))
+ji_pred <- numeric()
+ji_true <- numeric()
 for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+  called_and_pred_gm12878 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                     chrs[i],
-                                    "/rus/distance/preciseTAD_lollipop.rds"))
+                                    "/rus/distance/preciseTAD_holdout.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  called_and_pred_k562 <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+                                            chrs[i],
+                                            "/rus/distance/preciseTAD_holdout.rds"))
   
+  called_and_pred_gm12878[[2]] <- flank(called_and_pred_gm12878[[2]], 5000, both=TRUE)
+  called_and_pred_gm12878[[3]] <- flank(called_and_pred_gm12878[[3]], 5000, both=TRUE)
+  called_and_pred_k562[[2]] <- flank(called_and_pred_k562[[2]], 5000, both=TRUE)
+  called_and_pred_k562[[3]] <- flank(called_and_pred_k562[[3]], 5000, both=TRUE)
+  
+  ji_pred[i] <- genomicCorr.jaccard(called_and_pred_gm12878[[2]],called_and_pred_k562[[2]])
+  ji_true[i] <- genomicCorr.jaccard(called_and_pred_gm12878[[3]],called_and_pred_k562[[3]])
 }
 
-all_true_bounds_gm12878 <- do.call("c", true_bound_list)
-all_pred_bounds_gm12878 <- do.call("c", pred_bound_list)
+summary(ji_pred)
+summary(ji_true)
+wilcox.test(ji_pred,ji_true)
 
-all_true_bounds_gm12878 <- flank(all_true_bounds_gm12878, 5000, both=TRUE)
-all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 5000, both=TRUE)
+##############################################################################################
 
-```
-
-### K562
-
-#### Extracting called and predicted boundaries
-
-```{r}
-pred_bound_list <- GRangesList()
-true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(2:8,10:15,17:22))
+ji_pred <- numeric()
+ji_true <- numeric()
 for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
-                                    chrs[i],
-                                    "/rus/distance/preciseTAD_lollipop.rds"))
+  called_and_pred_gm12878 <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                                            chrs[i],
+                                            "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  called_and_pred_k562 <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+                                         chrs[i],
+                                         "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
+  called_and_pred_gm12878[[2]] <- flank(called_and_pred_gm12878[[2]], 10000, both=TRUE)
+  called_and_pred_gm12878[[3]] <- flank(called_and_pred_gm12878[[3]], 10000, both=TRUE)
+  called_and_pred_k562[[2]] <- flank(called_and_pred_k562[[2]], 10000, both=TRUE)
+  called_and_pred_k562[[3]] <- flank(called_and_pred_k562[[3]], 10000, both=TRUE)
+  
+  ji_pred[i] <- genomicCorr.jaccard(called_and_pred_gm12878[[2]],called_and_pred_k562[[2]])
+  ji_true[i] <- genomicCorr.jaccard(called_and_pred_gm12878[[3]],called_and_pred_k562[[3]])
 }
 
-all_true_bounds_k562 <- do.call("c", true_bound_list)
-all_pred_bounds_k562 <- do.call("c", pred_bound_list)
-
-all_true_bounds_k562 <- flank(all_true_bounds_k562, 5000, both=TRUE)
-all_pred_bounds_k562 <- flank(all_pred_bounds_k562, 5000, both=TRUE)
-
-```
-
-### Within cell line (preciseTAD vs LOLLIPOP)
-
-```{r}
-venn_cnt2venn <- function(venn_cnt){
-  n <- which(colnames(venn_cnt)=="Counts") - 1
-  SetNames=colnames(venn_cnt)[1:n]
-  Weight=venn_cnt[,"Counts"]
-  names(Weight) <- apply(venn_cnt[,1:n], 1, paste, collapse="")
-  Venn(SetNames=SetNames, Weight=Weight)
-}
-
-###### GM12878
-
-res <- makeVennDiagram(Peaks=list(all_pred_bounds_gm12878,
-                                  all_true_bounds_gm12878),
-                       NameOfPeaks=c("preciseTAD", "LOLLIPOP"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
-
-###### K562
-
-res <- makeVennDiagram(Peaks=list(all_pred_bounds_k562,
-                                  all_true_bounds_k562),
-                       NameOfPeaks=c("preciseTAD", "LOLLIPOP"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
-
-```
-
-#### Across cell line 
-
-```{r}
-###### preciseTAD
-
-res <- makeVennDiagram(Peaks=list(all_pred_bounds_gm12878,
-                                  all_pred_bounds_k562),
-                       NameOfPeaks=c("GM12878", "K562"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
-
-###### LOLLIPOP
-
-res <- makeVennDiagram(Peaks=list(all_true_bounds_gm12878,
-                                  all_true_bounds_k562),
-                       NameOfPeaks=c("GM12878", "K562"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- 2
-gp[["SetText"]][["Set2"]]$cex <- 2
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
+summary(ji_pred)
+summary(ji_true)
+wilcox.test(ji_pred,ji_true)
 
 ```
 

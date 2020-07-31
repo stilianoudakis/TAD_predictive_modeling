@@ -96,8 +96,11 @@ enriched_func <- function(boundaries, annotations, e=5, w=50, ct){
                         axis_name = axis_names,
                         column_title_gp = gpar(fontsize = 10),
                         row_title_gp = gpar(fontsize = 10),
-                        axis_name_gp = gpar(fontsize = 10),
-                        top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = ifelse(ct=="ARROWHEAD", "blue", "red"), 
+                        axis_name_gp = gpar(fontsize = 10),height=unit(2, "in"),
+                        width=unit(2, "in")
+                        top_annotation = HeatmapAnnotation(height=unit(2, "in"),
+                                                           width=unit(2, "in"),
+                                                           lines = anno_enriched(gp = gpar(col = ifelse(ct=="ARROWHEAD", "blue", "red"), 
                                                                                            fontsize = 10,
                                                                                            lwd = 2), 
                                                                                  axis_param = list(side = "right",
@@ -126,11 +129,10 @@ genomicElements.GR <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/an
 pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10:22))
-chrs <- paste0("CHR", c(21:22))
 for(i in 1:length(chrs)){
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                     chrs[i],
-                                    "/rus/distance/preciseTAD.rds"))
+                                    "/rus/distance/preciseTAD_holdout.rds"))
   
   true_bound_list[[i]] <- called_and_pred[[3]]
   pred_bound_list[[i]] <- called_and_pred[[2]]
