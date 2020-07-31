@@ -1,0 +1,584 @@
+---
+title: "Cross cell line performance"
+author: "Spiro Stilianoudakis"
+date: "7/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading packages and functions
+
+```{r}
+library(S4Vectors)
+library(GenomicRanges)
+library(ggplot2)
+library(caret)
+library(randomForest)
+library(glmnet)
+library(gbm)
+library(DMwR)
+library(rtracklayer)
+library(Biostrings)
+library(BSgenome)
+library(cluster)
+library(pROC)
+library(SuperLearner)
+library(data.table)
+library(PRROC)
+library(bigmemory)
+library(ranger)
+library(dplyr)
+library(parallel)
+library(doSNOW)
+library(foreach)
+library(pbapply)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(GenometriCorr)
+library(ggsignif)
+library(Vennerable)
+library(VennDiagram)
+library(ChIPpeakAnno)
+library(EnrichedHeatmap)
+library(ComplexHeatmap)
+library(circlize)
+library(cotools)
+library(ggcorrplot)
+library(circlize)
+
+source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/createTADdata.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/distance_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/percent_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/count_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/binary_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/signal_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/annots_to_granges_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
+
+```
+
+
+# ARROWHEAD
+
+```{r}
+arrowhead_g_on_g <- list()
+arrowhead_g_on_g_auc <- numeric()
+arrowhead_g_on_k <- list()
+arrowhead_g_on_k_auc <- numeric()
+arrowhead_k_on_k <- list()
+arrowhead_k_on_k_auc <- numeric()
+arrowhead_k_on_g <- list()
+arrowhead_k_on_g_auc <- numeric()
+
+peakachu_g_on_g <- list()
+peakachu_g_on_g_auc <- numeric()
+peakachu_g_on_k <- list()
+peakachu_g_on_k_auc <- numeric()
+peakachu_k_on_k <- list()
+peakachu_k_on_k_auc <- numeric()
+peakachu_k_on_g <- list()
+peakachu_k_on_g_auc <- numeric()
+
+genomicElements.GR_gm12878 <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/topTFBS_nonames",
+                                             pattern="*.bed",
+                                             signal=4)
+genomicElements.GR_k562 <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/annotations/all_common_annotations/k562/topTFBS_nonames",
+                                             pattern="*.bed",
+                                             signal=4)
+
+
+domains_arrowhead_gm12878 <- read.table("Z:/TAD_data_analysis/GSE63525_data/arrowhead_output/GM12878/GM12878_domain_data_5000.b.txt", header=F)
+bounds.GR_arrowhead_gm12878 <- extract_boundaries_func(domains.mat=domains_arrowhead_gm12878, 
+                                     preprocess=FALSE, 
+                                     CHR=paste0("CHR", c(1:8,10:22)), 
+                                     resolution=5000)
+domains_arrowhead_k562 <- read.table("Z:/TAD_data_analysis/GSE63525_data/arrowhead_output/K562/K562_domain_data_5000.b.txt", header=F)
+bounds.GR_arrowhead_k562 <- extract_boundaries_func(domains.mat=domains_arrowhead_k562, 
+                                     preprocess=FALSE, 
+                                     CHR=paste0("CHR", c(1:8,10:22)), 
+                                     resolution=5000)
+
+
+domains_peakachu_gm12878 <- readRDS("Z:/TAD_data_analysis/peakachu/peakachu_GM12878.rds")
+bounds.GR_peakachu_gm12878 <- extract_boundaries_func(domains.mat=domains_peakachu_gm12878, 
+                                     preprocess=FALSE, 
+                                     CHR=paste0("CHR", c(1:8,10:22)), 
+                                     resolution=5000)
+domains_peakachu_k562 <- readRDS("Z:/TAD_data_analysis/peakachu/peakachu_K562.rds")
+bounds.GR_peakachu_k562 <- extract_boundaries_func(domains.mat=domains_peakachu_k562, 
+                                     preprocess=FALSE, 
+                                     CHR=paste0("CHR", c(1:8,10:22)), 
+                                     resolution=5000)
+
+
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  print(chrs[i])
+  
+  #ARROWHEAD
+  
+  TADRF_arrowhead_g_on_g <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_gm12878_on_gm12878.rds"))
+  
+  arrowhead_g_on_g_auc[i] <- TADRF_arrowhead_g_on_g[[3]][18,2]
+  
+  TADRF_arrowhead_g_on_k <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_gm12878_on_k562.rds"))
+  
+  arrowhead_g_on_k_auc[i] <- TADRF_arrowhead_g_on_k[[3]][18,2]
+  
+  TADRF_arrowhead_k_on_k <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/5kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_k562_on_k562.rds"))
+  
+  arrowhead_k_on_k_auc[i] <- TADRF_arrowhead_k_on_k[[3]][18,2]
+  
+  TADRF_arrowhead_k_on_g <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/5kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_k562_on_gm12878.rds"))
+  
+  arrowhead_k_on_g_auc[i] <- TADRF_arrowhead_k_on_g[[3]][18,2]
+  
+  tadData_arrowhead_gm12878 <- createTADdata(bounds.GR=bounds.GR_arrowhead_gm12878,
+                         resolution=5000,
+                         genomicElements.GR=genomicElements.GR_gm12878,
+                         featureType="distance",
+                         resampling="rus",
+                         trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))==chrs[i])],
+                         predictCHR=chrs[i],
+                         seed=123)
+  tadData_arrowhead_k562 <- createTADdata(bounds.GR=bounds.GR_arrowhead_k562,
+                         resolution=5000,
+                         genomicElements.GR=genomicElements.GR_k562,
+                         featureType="distance",
+                         resampling="rus",
+                         trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))==chrs[i])],
+                         predictCHR=chrs[i],
+                         seed=123)
+  
+  pred <- as.vector(predict(TADRF_arrowhead_g_on_g[[1]], 
+                                       newdata=tadData_arrowhead_gm12878[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_arrowhead_gm12878[[2]]$y, pred, quiet = TRUE)
+  arrowhead_g_on_g[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+  pred <- as.vector(predict(TADRF_arrowhead_g_on_k[[1]], 
+                                       newdata=tadData_arrowhead_k562[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_arrowhead_k562[[2]]$y, pred, quiet = TRUE)
+  arrowhead_g_on_k[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+  pred <- as.vector(predict(TADRF_arrowhead_k_on_k[[1]], 
+                                       newdata=tadData_arrowhead_k562[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_arrowhead_k562[[2]]$y, pred, quiet = TRUE)
+  arrowhead_k_on_k[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+  pred <- as.vector(predict(TADRF_arrowhead_k_on_g[[1]], 
+                                       newdata=tadData_arrowhead_gm12878[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_arrowhead_gm12878[[2]]$y, pred, quiet = TRUE)
+  arrowhead_k_on_g[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+  #########################################################################################################
+  
+  #PEAKACHU
+  
+  TADRF_peakachu_g_on_g <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_gm12878_on_gm12878_peakachu.rds"))
+  
+  peakachu_g_on_g_auc[i] <- TADRF_peakachu_g_on_g[[3]][18,2]
+  
+  TADRF_peakachu_g_on_k <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_gm12878_on_k562_peakachu.rds"))
+  
+  peakachu_g_on_k_auc[i] <- TADRF_peakachu_g_on_k[[3]][18,2]
+  
+  TADRF_peakachu_k_on_k <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/10kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_k562_on_k562_peakachu.rds"))
+  
+  peakachu_k_on_k_auc[i] <- TADRF_peakachu_k_on_k[[3]][18,2]
+  
+  TADRF_peakachu_k_on_g <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/10kb/results_by_chr/",
+                                           chrs[i],
+                                           "/rus/distance/TADRF_holdout_k562_on_gm12878_peakachu.rds"))
+  
+  peakachu_k_on_g_auc[i] <- TADRF_peakachu_k_on_g[[3]][18,2]
+  
+  tadData_peakachu_gm12878 <- createTADdata(bounds.GR=bounds.GR_peakachu_gm12878,
+                         resolution=5000,
+                         genomicElements.GR=genomicElements.GR_gm12878,
+                         featureType="distance",
+                         resampling="rus",
+                         trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))==chrs[i])],
+                         predictCHR=chrs[i],
+                         seed=123)
+  tadData_peakachu_k562 <- createTADdata(bounds.GR=bounds.GR_peakachu_k562,
+                         resolution=5000,
+                         genomicElements.GR=genomicElements.GR_k562,
+                         featureType="distance",
+                         resampling="rus",
+                         trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))==chrs[i])],
+                         predictCHR=chrs[i],
+                         seed=123)
+  
+  pred <- as.vector(predict(TADRF_peakachu_g_on_g[[1]], 
+                                       newdata=tadData_peakachu_gm12878[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_peakachu_gm12878[[2]]$y, pred, quiet = TRUE)
+  peakachu_g_on_g[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+  pred <- as.vector(predict(TADRF_peakachu_g_on_k[[1]], 
+                                       newdata=tadData_peakachu_k562[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_peakachu_k562[[2]]$y, pred, quiet = TRUE)
+  peakachu_g_on_k[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+  pred <- as.vector(predict(TADRF_peakachu_k_on_k[[1]], 
+                                       newdata=tadData_peakachu_k562[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_peakachu_k562[[2]]$y, pred, quiet = TRUE)
+  peakachu_k_on_k[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+  pred <- as.vector(predict(TADRF_peakachu_k_on_g[[1]], 
+                                       newdata=tadData_peakachu_gm12878[[2]][,-1], 
+                                       type="prob")[,"Yes"])
+  ROC <- pROC::roc(tadData_peakachu_gm12878[[2]]$y, pred, quiet = TRUE)
+  peakachu_k_on_g[[i]] <- data.frame(specificity=ROC$specificities,sensitivity=ROC$sensitivities,chr=chrs[i])
+  
+}
+
+
+saveRDS(arrowhead_g_on_g, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_g_on_g.rds")
+saveRDS(arrowhead_g_on_g_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_g_on_g_auc.rds") 
+saveRDS(arrowhead_g_on_k, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_g_on_k.rds")
+saveRDS(arrowhead_g_on_k_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_g_on_k_auc.rds")
+saveRDS(arrowhead_k_on_k, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_k_on_k.rds")
+saveRDS(arrowhead_k_on_k_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_k_on_k_auc.rds")
+saveRDS(arrowhead_k_on_g, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_k_on_g.rds")
+saveRDS(arrowhead_k_on_g_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/arrowhead_k_on_g_auc.rds") 
+
+saveRDS(peakachu_g_on_g, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_g_on_g.rds")
+saveRDS(peakachu_g_on_g_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_g_on_g_auc.rds") 
+saveRDS(peakachu_g_on_k, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_g_on_k.rds")
+saveRDS(peakachu_g_on_k_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_g_on_k_auc.rds") 
+saveRDS(peakachu_k_on_k, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_k_on_k.rds")
+saveRDS(peakachu_k_on_k_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_k_on_k_auc.rds") 
+saveRDS(peakachu_k_on_g, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_k_on_g.rds")
+saveRDS(peakachu_k_on_g_auc, "/home/stilianoudakisc/TAD_data_analysis/miscellaneous/peakachu_k_on_g_auc.rds") 
+
+
+```
+
+# Plotting
+
+```{r}
+arrowhead_g_on_g <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_g_on_k.rds")
+arrowhead_g_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_g_on_k_auc.rds") 
+arrowhead_g_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_g_on_g.rds")
+arrowhead_g_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_g_on_g_auc.rds") 
+arrowhead_k_on_g <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_k_on_k.rds")
+arrowhead_k_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_k_on_k_auc.rds") 
+arrowhead_k_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_k_on_g.rds")
+arrowhead_k_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/arrowhead_k_on_g_auc.rds") 
+
+
+peakachu_g_on_g <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_g_on_g.rds")
+peakachu_g_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_g_on_g_auc.rds") 
+peakachu_g_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_g_on_k.rds")
+peakachu_g_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_g_on_k_auc.rds") 
+peakachu_k_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_k_on_k.rds")
+peakachu_k_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_k_on_k_auc.rds") 
+peakachu_k_on_g <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_k_on_g.rds")
+peakachu_k_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/peakachu_k_on_g_auc.rds") 
+
+
+arrowhead_g_on_k <- do.call("rbind.data.frame", arrowhead_g_on_k)
+
+arrowhead_g_on_g[[12]] <- rbind.data.frame(arrowhead_g_on_g[[12]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR13"),
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR13"),
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR13"))
+arrowhead_g_on_g[[13]] <- rbind.data.frame(arrowhead_g_on_g[[13]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR14"))
+arrowhead_g_on_g[[20]] <- rbind.data.frame(arrowhead_g_on_g[[20]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"),
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"),
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"),
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"))
+arrowhead_g_on_g <- do.call("rbind.data.frame", arrowhead_g_on_g)
+
+arrowhead_k_on_k[[15]] <- rbind.data.frame(arrowhead_k_on_k[[15]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR16"))
+arrowhead_k_on_k[[17]] <- rbind.data.frame(arrowhead_k_on_k[[17]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR18"),
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR18"))
+arrowhead_k_on_k[[20]] <- rbind.data.frame(arrowhead_k_on_k[[20]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"),
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"))
+arrowhead_k_on_k <- do.call("rbind.data.frame", arrowhead_k_on_k)
+
+arrowhead_k_on_g[[12]] <- rbind.data.frame(arrowhead_k_on_g[[12]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR13"))
+arrowhead_k_on_g <- do.call("rbind.data.frame", arrowhead_k_on_g)
+
+
+
+peakachu_g_on_g[[20]] <- rbind.data.frame(peakachu_g_on_g[[20]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"))
+peakachu_g_on_g <- do.call("rbind.data.frame", peakachu_g_on_g)
+
+peakachu_g_on_k[[20]] <- rbind.data.frame(peakachu_g_on_k[[20]],
+                                           data.frame(specificity=1,sensitivity=0,chr="CHR21"))
+peakachu_g_on_k <- do.call("rbind.data.frame", peakachu_g_on_k)
+
+peakachu_k_on_g[[20]] <- rbind.data.frame(peakachu_k_on_g[[20]],
+                                          data.frame(specificity=1,sensitivity=0,chr="CHR21"),
+                                          data.frame(specificity=1,sensitivity=0,chr="CHR21"))
+peakachu_k_on_g <- do.call("rbind.data.frame", peakachu_k_on_g)
+
+peakachu_k_on_k <- do.call("rbind.data.frame", peakachu_k_on_k)
+
+
+# GM12878 
+##arrowhead
+data <- rbind.data.frame(arrowhead_g_on_g, arrowhead_g_on_k)
+data$id <- rep(factor(rep(c(1:502),21)),2)
+data$CL <- c(rep("GM12878 on GM12878", nrow(arrowhead_g_on_g)),
+                 rep("GM12878 on K562", nrow(arrowhead_g_on_k)))
+
+a1 <- reshape(data[which(data$CL=="GM12878 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a1 <- rowMeans(a1[,-c(1:3)])
+b1 <- reshape(data[which(data$CL=="GM12878 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b1 <- rowMeans(b1[,-c(1:3)])
+ave_sens_spec_gm12878_on_gm12878 <- data.frame(specificity=a1, sensitivity=b1)
+
+a2 <- reshape(data[which(data$CL=="GM12878 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a2 <- rowMeans(a2[,-c(1:3)])
+b2 <- reshape(data[which(data$CL=="GM12878 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b2 <- rowMeans(b2[,-c(1:3)])
+ave_sens_spec_gm12878_on_k562 <- data.frame(specificity=a2, sensitivity=b2)
+
+ave_sens_spec_arrow <- rbind.data.frame(ave_sens_spec_gm12878_on_gm12878,ave_sens_spec_gm12878_on_k562)
+ave_sens_spec_arrow$Training_Testing <- c(rep("GM12878 on GM12878", nrow(ave_sens_spec_gm12878_on_gm12878)),
+                                       rep("GM12878 on K562", nrow(ave_sens_spec_gm12878_on_k562)))
+ave_sens_spec_arrow$Tool <- "ARROWHEAD"
+
+##peakachu
+data <- rbind.data.frame(peakachu_g_on_g, peakachu_g_on_k)
+data$id <- rep(factor(rep(c(1:502),21)),2)
+data$CL <- c(rep("GM12878 on GM12878", nrow(peakachu_g_on_g)),
+                 rep("GM12878 on K562", nrow(peakachu_g_on_k)))
+
+a1 <- reshape(data[which(data$CL=="GM12878 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a1 <- rowMeans(a1[,-c(1:3)])
+b1 <- reshape(data[which(data$CL=="GM12878 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b1 <- rowMeans(b1[,-c(1:3)])
+ave_sens_spec_gm12878_on_gm12878 <- data.frame(specificity=a1, sensitivity=b1)
+
+a2 <- reshape(data[which(data$CL=="GM12878 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a2 <- rowMeans(a2[,-c(1:3)])
+b2 <- reshape(data[which(data$CL=="GM12878 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b2 <- rowMeans(b2[,-c(1:3)])
+ave_sens_spec_gm12878_on_k562 <- data.frame(specificity=a2, sensitivity=b2)
+
+ave_sens_spec_peak <- rbind.data.frame(ave_sens_spec_gm12878_on_gm12878,ave_sens_spec_gm12878_on_k562)
+ave_sens_spec_peak$Training_Testing <- c(rep("GM12878 on GM12878", nrow(ave_sens_spec_gm12878_on_gm12878)),
+                                       rep("GM12878 on K562", nrow(ave_sens_spec_gm12878_on_k562)))
+ave_sens_spec_peak$Tool <- "PEAKACHU"
+
+all_ave_sens_spec_df <- rbind.data.frame(ave_sens_spec_arrow,ave_sens_spec_peak)
+
+ggplot(all_ave_sens_spec_df, aes(x=1-specificity, y=sensitivity, linetype=Training_Testing, color=Tool)) +
+  facet_grid(. ~ Tool) +
+  geom_line(size=1) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("1-Specificity") + 
+  ylab("Sensitivity") + 
+  scale_linetype_discrete(name="Training/Testing") +
+  scale_color_manual(values = c("blue","red")) +
+  guides(color=FALSE, linetype=guide_legend(nrow=2,byrow=TRUE)) +
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+  
+##################################################################################################################
+
+# K562
+##arrowhead
+data <- rbind.data.frame(arrowhead_k_on_k, arrowhead_k_on_g)
+data$id <- rep(factor(rep(c(1:502),21)),2)
+data$CL <- c(rep("K562 on K562", nrow(arrowhead_k_on_k)),
+                 rep("K562 on GM12878", nrow(arrowhead_k_on_g)))
+
+a1 <- reshape(data[which(data$CL=="K562 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a1 <- rowMeans(a1[,-c(1:3)])
+b1 <- reshape(data[which(data$CL=="K562 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b1 <- rowMeans(b1[,-c(1:3)])
+ave_sens_spec_k562_on_k562 <- data.frame(specificity=a1, sensitivity=b1)
+
+a2 <- reshape(data[which(data$CL=="K562 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a2 <- rowMeans(a2[,-c(1:3)])
+b2 <- reshape(data[which(data$CL=="K562 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b2 <- rowMeans(b2[,-c(1:3)])
+ave_sens_spec_k562_on_gm12878 <- data.frame(specificity=a2, sensitivity=b2)
+
+ave_sens_spec_arrow <- rbind.data.frame(ave_sens_spec_k562_on_k562,ave_sens_spec_k562_on_gm12878)
+ave_sens_spec_arrow$Training_Testing <- c(rep("K562 on K562", nrow(ave_sens_spec_k562_on_k562)),
+                                       rep("K562 on GM12878", nrow(ave_sens_spec_k562_on_gm12878)))
+ave_sens_spec_arrow$Tool <- "ARROWHEAD"
+
+##peakachu
+data <- rbind.data.frame(peakachu_k_on_k, peakachu_k_on_g)
+data$id <- rep(factor(rep(c(1:502),21)),2)
+data$CL <- c(rep("K562 on K562", nrow(peakachu_k_on_k)),
+                 rep("K562 on GM12878", nrow(peakachu_k_on_g)))
+
+a1 <- reshape(data[which(data$CL=="K562 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a1 <- rowMeans(a1[,-c(1:3)])
+b1 <- reshape(data[which(data$CL=="K562 on K562"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b1 <- rowMeans(b1[,-c(1:3)])
+ave_sens_spec_k562_on_k562 <- data.frame(specificity=a1, sensitivity=b1)
+
+a2 <- reshape(data[which(data$CL=="K562 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "specificity")
+a2 <- rowMeans(a2[,-c(1:3)])
+b2 <- reshape(data[which(data$CL=="K562 on GM12878"),], 
+             idvar = "id",
+             timevar="chr",
+             direction="wide",
+             v.names = "sensitivity")
+b2 <- rowMeans(b2[,-c(1:3)])
+ave_sens_spec_k562_on_gm12878 <- data.frame(specificity=a2, sensitivity=b2)
+
+ave_sens_spec_peak <- rbind.data.frame(ave_sens_spec_k562_on_k562,ave_sens_spec_k562_on_gm12878)
+ave_sens_spec_peak$Training_Testing <- c(rep("K562 on K562", nrow(ave_sens_spec_k562_on_k562)),
+                                       rep("K562 on GM12878", nrow(ave_sens_spec_k562_on_gm12878)))
+ave_sens_spec_peak$Tool <- "PEAKACHU"
+
+all_ave_sens_spec_df <- rbind.data.frame(ave_sens_spec_arrow,ave_sens_spec_peak)
+
+ggplot(all_ave_sens_spec_df, aes(x=1-specificity, y=sensitivity, linetype=Training_Testing, color=Tool)) +
+  facet_grid(. ~ Tool) +
+  geom_line(size=1) +
+  geom_abline(slope = 1, intercept = 0) +
+  xlab("1-Specificity") + 
+  ylab("Sensitivity") + 
+  scale_linetype_discrete(name="Training/Testing") +
+  scale_color_manual(values = c("blue","red")) +
+  guides(color=FALSE, linetype=guide_legend(nrow=2,byrow=TRUE)) +
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.text.x = element_text(size = 10),
+        #panel.spacing = unit(2, "lines"),
+        legend.text=element_text(size=10),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+  
+
+
+```
+
