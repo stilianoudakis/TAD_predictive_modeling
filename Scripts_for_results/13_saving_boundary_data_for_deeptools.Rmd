@@ -1,0 +1,253 @@
+---
+title: "Saving boundary datasets for DeepTools"
+author: "Spiro Stilianoudakis"
+date: "7/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading packages and functions
+
+```{r}
+library(S4Vectors)
+library(GenomicRanges)
+library(ggplot2)
+library(caret)
+library(randomForest)
+library(glmnet)
+library(gbm)
+library(DMwR)
+library(rtracklayer)
+library(Biostrings)
+library(BSgenome)
+library(cluster)
+library(pROC)
+library(SuperLearner)
+library(data.table)
+library(PRROC)
+library(bigmemory)
+library(ranger)
+library(dplyr)
+library(parallel)
+library(doSNOW)
+library(foreach)
+library(pbapply)
+library(ggpubr)
+library(scales)
+library(GGally)
+library(VennDiagram)
+library(network)
+library(sna)
+library(gtable)
+library(grid)
+library(magrittr) 
+library(DT)
+library(tidyverse)
+library(reshape)
+library(ROSE)
+library(lattice)
+library(corrplot)
+library(cluster)
+library(RColorBrewer)
+library(ggsignif)
+library(Vennerable)
+library(VennDiagram)
+library(ChIPpeakAnno)
+library(EnrichedHeatmap)
+
+source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/distance_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/percent_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/count_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/binary_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/signal_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/annots_to_granges_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
+
+```
+
+# ARROWHEAD
+
+## GM12878
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_holdout.rds"))
+  
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  
+}
+
+all_true_bounds <- do.call("c", true_bound_list)
+all_pred_bounds <- do.call("c", pred_bound_list)
+
+length(all_true_bounds) #15468
+length(all_pred_bounds) #7846
+
+all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
+                                 start=start(all_true_bounds),
+                                 end=start(all_true_bounds)+1)
+
+all_pred_bounds_df <- data.frame(chr=as.character(seqnames(all_pred_bounds)),
+                                 start=start(all_pred_bounds),
+                                 end=start(all_pred_bounds)+1)
+
+write.table(all_true_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/arrowhead_gm12878_5kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+
+write.table(all_pred_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/preciseTAD_arrowhead_gm12878_5kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+```
+
+
+## K562
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_holdout.rds"))
+  
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  
+}
+
+all_true_bounds <- do.call("c", true_bound_list)
+all_pred_bounds <- do.call("c", pred_bound_list)
+
+length(all_true_bounds) #9316
+length(all_pred_bounds) #8883
+
+all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
+                                 start=start(all_true_bounds),
+                                 end=start(all_true_bounds)+1)
+
+all_pred_bounds_df <- data.frame(chr=as.character(seqnames(all_pred_bounds)),
+                                 start=start(all_pred_bounds),
+                                 end=start(all_pred_bounds)+1)
+
+write.table(all_true_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/arrowhead_k562_5kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+
+write.table(all_pred_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/preciseTAD_arrowhead_k562_5kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+```
+
+
+# PEAKACHU
+
+## GM12878
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_holdout_peakachu.rds"))
+  
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  
+}
+
+all_true_bounds <- do.call("c", true_bound_list)
+all_pred_bounds <- do.call("c", pred_bound_list)
+
+length(all_true_bounds) #21421
+length(all_pred_bounds) #15838
+
+all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
+                                 start=start(all_true_bounds),
+                                 end=start(all_true_bounds)+1)
+
+all_pred_bounds_df <- data.frame(chr=as.character(seqnames(all_pred_bounds)),
+                                 start=start(all_pred_bounds),
+                                 end=start(all_pred_bounds)+1)
+
+write.table(all_true_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/peakachu_gm12878_10kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+
+write.table(all_pred_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/preciseTAD_peakachu_gm12878_10kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+```
+
+
+## K562
+
+```{r}
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10,11,13:22))
+for(i in 1:length(chrs)){
+  print(i)
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_holdout_peakachu.rds"))
+  
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  
+}
+
+all_true_bounds <- do.call("c", true_bound_list)
+all_pred_bounds <- do.call("c", pred_bound_list)
+
+length(all_true_bounds) #20773
+length(all_pred_bounds) #10379
+
+all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
+                                 start=start(all_true_bounds),
+                                 end=start(all_true_bounds)+1)
+
+all_pred_bounds_df <- data.frame(chr=as.character(seqnames(all_pred_bounds)),
+                                 start=start(all_pred_bounds),
+                                 end=start(all_pred_bounds)+1)
+
+write.table(all_true_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/peakachu_k562_10kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+
+write.table(all_pred_bounds_df, "C:/Users/stili/Documents/TAD_miscellaneous/data/bedfiles_for_deeptools/preciseTAD_peakachu_k562_10kb.bed",
+            col.names = FALSE,
+            row.names = FALSE,
+            quote = FALSE,
+            sep = "\t")
+```
+
