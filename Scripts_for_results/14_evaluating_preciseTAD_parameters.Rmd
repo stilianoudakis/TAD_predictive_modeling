@@ -1,0 +1,590 @@
+---
+title: "Evaluating preciseTAD parameters"
+author: "Spiro Stilianoudakis"
+date: "8/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(GenomicRanges)
+library(ggplot2)
+
+source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/distance_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/percent_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/count_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/binary_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/signal_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/annots_to_granges_func.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
+
+```
+
+# Extracting boundaries for juicer
+
+```{r}
+juicer_func <- function(grdat){
+  #n <- length(unique(as.character(seqnames(grdat)))) 
+  
+  chrs <- unique(as.character(seqnames(grdat)))
+  
+  mat_list <- list()
+  
+  for(i in 1:length(chrs)){
+    grdat_chr <- grdat[which(as.character(seqnames(grdat))==chrs[i])]
+    
+    if(length(grdat_chr)>1){
+      mymat <- matrix(nrow=(length(grdat_chr)-1),
+                      ncol=6)
+      mymat[,1] <- mymat[,4] <- chrs[i]
+      for(j in 1:(length(grdat_chr)-1)){
+        mymat[j,2] <- mymat[j,5] <- start(grdat_chr)[j]
+        mymat[j,3] <- mymat[j,6] <- start(grdat_chr)[j+1]
+      }
+      
+      mat_list[[i]] <- mymat
+      
+    }
+    
+    
+  }
+  
+  mat_list <- do.call("rbind",mat_list)
+  return(mat_list)
+  
+}
+
+```
+
+
+## Chromosome 22
+
+### t=1
+
+#### e=1000
+
+```{r}
+pt_1_1000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_1_1000_22.rds")
+
+length(pt_1_1000_22[[2]]) #447
+length(pt_1_1000_22[[3]]) #306
+
+pt_1_1000_22_juicer <- juicer_func(pt_1_1000_22[[2]])
+write.table(pt_1_1000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_1_1000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+
+arrowhead_22_juicer <- juicer_func(pt_1_1000_22[[3]])
+write.table(arrowhead_22_juicer, 
+            "C:/Users/stili/Downloads/arrowhead_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+#### e=2500
+
+```{r}
+pt_1_2500_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_1_2500_22.rds")
+
+length(pt_1_2500_22[[2]]) #351
+length(pt_1_2500_22[[3]]) #306
+
+pt_1_2500_22_juicer <- juicer_func(pt_1_2500_22[[2]])
+write.table(pt_1_2500_22_juicer, 
+            "C:/Users/stili/Downloads/pt_1_2500_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=5000
+
+```{r}
+pt_1_5000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_1_5000_22.rds")
+#pt_1_5000_22_o <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR22/rus/distance/preciseTAD_holdout.rds")
+
+length(pt_1_5000_22[[2]]) #247
+#length(pt_1_5000_22_o[[2]]) #119
+length(pt_1_5000_22[[3]]) #306
+
+pt_1_5000_22_juicer <- juicer_func(pt_1_5000_22[[2]])
+write.table(pt_1_5000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_1_5000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+
+#pt_1_5000_22_juicer_o <- juicer_func(pt_1_5000_22_o[[2]])
+#write.table(pt_1_5000_22_juicer_o, 
+#            "C:/Users/stili/Downloads/pt_1_5000_22_juicer_o.bed",
+#            quote = FALSE,
+#            col.names = FALSE,
+#            row.names = FALSE,
+#            sep = "\t")
+```
+
+
+#### e=10000
+
+```{r}
+pt_1_10000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_1_10000_22.rds")
+
+length(pt_1_10000_22[[2]]) #226
+length(pt_1_10000_22[[3]]) #306
+
+pt_1_10000_22_juicer <- juicer_func(pt_1_10000_22[[2]])
+write.table(pt_1_10000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_1_10000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+### t=.99
+
+#### e=1000
+
+```{r}
+pt_99_1000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_99_1000_22.rds")
+
+length(pt_99_1000_22[[2]]) #
+length(pt_99_1000_22[[3]]) #306
+
+pt_99_1000_22_juicer <- juicer_func(pt_99_1000_22[[2]])
+write.table(pt_99_1000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_99_1000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=2500
+
+```{r}
+pt_99_2500_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_99_2500_22.rds")
+
+length(pt_99_2500_22[[2]]) #486
+length(pt_99_2500_22[[3]]) #306
+
+pt_99_2500_22_juicer <- juicer_func(pt_99_2500_22[[2]])
+write.table(pt_99_2500_22_juicer, 
+            "C:/Users/stili/Downloads/pt_99_2500_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=5000
+
+```{r}
+pt_99_5000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_99_5000_22.rds")
+
+length(pt_99_5000_22[[2]]) #368
+length(pt_99_5000_22[[3]]) #306
+
+pt_99_5000_22_juicer <- juicer_func(pt_99_5000_22[[2]])
+write.table(pt_99_5000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_99_5000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=10000
+
+```{r}
+pt_99_10000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_99_10000_22.rds")
+
+length(pt_99_10000_22[[2]]) #299
+length(pt_99_10000_22[[3]]) #306
+
+pt_99_10000_22_juicer <- juicer_func(pt_99_10000_22[[2]])
+write.table(pt_99_10000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_99_10000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+### t=.975
+
+#### e=1000
+
+```{r}
+pt_975_1000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_975_1000_22.rds")
+
+length(pt_975_1000_22[[2]]) #
+length(pt_975_1000_22[[3]]) #306
+
+pt_975_1000_22_juicer <- juicer_func(pt_975_1000_22[[2]])
+write.table(pt_975_1000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_975_1000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=2500
+
+```{r}
+pt_975_2500_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_975_2500_22.rds")
+
+length(pt_975_2500_22[[2]]) #599
+length(pt_975_2500_22[[3]]) #306
+
+pt_975_2500_22_juicer <- juicer_func(pt_975_2500_22[[2]])
+write.table(pt_975_2500_22_juicer, 
+            "C:/Users/stili/Downloads/pt_975_2500_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=5000
+
+```{r}
+pt_975_5000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_975_5000_22.rds")
+
+length(pt_975_5000_22[[2]]) #418
+length(pt_975_5000_22[[3]]) #306
+
+pt_975_5000_22_juicer <- juicer_func(pt_975_5000_22[[2]])
+write.table(pt_975_5000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_975_5000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=10000
+
+```{r}
+pt_975_10000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_975_10000_22.rds")
+
+length(pt_975_10000_22[[2]]) #312
+length(pt_975_10000_22[[3]]) #306
+
+pt_975_10000_22_juicer <- juicer_func(pt_975_10000_22[[2]])
+write.table(pt_975_10000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_975_10000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+### t=.95
+
+#### e=1000
+
+```{r}
+#pt_95_1000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/t_95_1000_22.rds")
+
+#length(pt_95_1000_22[[2]]) #
+#length(pt_95_1000_22[[3]]) #306
+
+#pt_95_1000_22_juicer <- juicer_func(pt_95_1000_22[[2]])
+#write.table(pt_95_1000_22_juicer, 
+#            "C:/Users/stili/Downloads/pt_95_1000_22_juicer.bed",
+#            quote = FALSE,
+#            col.names = FALSE,
+#            row.names = FALSE,
+#            sep = "\t")
+```
+
+
+#### e=2500
+
+```{r}
+pt_95_2500_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_95_2500_22.rds")
+
+length(pt_95_2500_22[[2]]) #636
+length(pt_95_2500_22[[3]]) #306
+
+pt_95_2500_22_juicer <- juicer_func(pt_95_2500_22[[2]])
+write.table(pt_95_2500_22_juicer, 
+            "C:/Users/stili/Downloads/pt_95_2500_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=5000
+
+```{r}
+pt_95_5000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_95_5000_22.rds")
+
+length(pt_95_5000_22[[2]]) #396
+length(pt_95_5000_22[[3]]) #306
+
+pt_95_5000_22_juicer <- juicer_func(pt_95_5000_22[[2]])
+write.table(pt_95_5000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_95_5000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+
+#### e=10000
+
+```{r}
+pt_95_10000_22 <- readRDS("Z:/TAD_data_analysis/miscellaneous/evaluating_preciseTAD_parameters/pt_95_10000_22.rds")
+
+length(pt_95_10000_22[[2]]) #298
+length(pt_95_10000_22[[3]]) #306
+
+pt_95_10000_22_juicer <- juicer_func(pt_95_10000_22[[2]])
+write.table(pt_95_10000_22_juicer, 
+            "C:/Users/stili/Downloads/pt_95_10000_22_juicer.bed",
+            quote = FALSE,
+            col.names = FALSE,
+            row.names = FALSE,
+            sep = "\t")
+```
+
+# Plotting density of distances between boundaries
+
+```{r}
+dist_dens <- data.frame(Distance = c(diff(start(pt_1_1000_22[[2]]))[-which(diff(start(pt_1_1000_22[[2]]))>2000000)],
+                                     diff(start(pt_1_2500_22[[2]]))[-which(diff(start(pt_1_2500_22[[2]]))>2000000)],
+                                     diff(start(pt_1_5000_22[[2]]))[-which(diff(start(pt_1_5000_22[[2]]))>2000000)],
+                                     diff(start(pt_1_10000_22[[2]]))[-which(diff(start(pt_1_10000_22[[2]]))>2000000)],
+                                     diff(start(pt_99_1000_22[[2]])),
+                                     diff(start(pt_99_2500_22[[2]])),
+                                     diff(start(pt_99_5000_22[[2]])),
+                                     diff(start(pt_99_10000_22[[2]])),
+                                     diff(start(pt_975_1000_22[[2]])),
+                                     diff(start(pt_975_2500_22[[2]])),
+                                     diff(start(pt_975_5000_22[[2]]))[-which(diff(start(pt_975_5000_22[[2]]))>2000000)],
+                                     diff(start(pt_975_10000_22[[2]]))[-which(diff(start(pt_975_10000_22[[2]]))>2000000)],
+                                     #diff(start(pt_95_1000_22[[2]]))[-which(diff(start(pt_95_1000_22[[2]]))>2000000)],
+                                     diff(start(pt_95_2500_22[[2]])),
+                                     diff(start(pt_95_5000_22[[2]])),
+                                     diff(start(pt_95_10000_22[[2]]))),
+                        Threshold = c(rep("t=1.0", length(diff(start(pt_1_1000_22[[2]]))[-which(diff(start(pt_1_1000_22[[2]]))>2000000)])+
+                                        length(diff(start(pt_1_2500_22[[2]]))[-which(diff(start(pt_1_2500_22[[2]]))>2000000)])+
+                                        length(diff(start(pt_1_5000_22[[2]]))[-which(diff(start(pt_1_5000_22[[2]]))>2000000)])+
+                                        length(diff(start(pt_1_10000_22[[2]]))[-which(diff(start(pt_1_10000_22[[2]]))>2000000)])),
+                                      rep("t=0.99", length(diff(start(pt_99_1000_22[[2]])))+
+                                        length(diff(start(pt_99_2500_22[[2]])))+
+                                        length(diff(start(pt_99_5000_22[[2]])))+
+                                        length(diff(start(pt_99_10000_22[[2]])))),
+                                      rep("t=0.975", length(diff(start(pt_975_1000_22[[2]])))+
+                                        length(diff(start(pt_975_2500_22[[2]])))+
+                                        length(diff(start(pt_975_5000_22[[2]]))[-which(diff(start(pt_975_5000_22[[2]]))>2000000)])+
+                                        length(diff(start(pt_975_10000_22[[2]]))[-which(diff(start(pt_975_10000_22[[2]]))>2000000)])),
+                                      rep("t=0.95", #length(diff(start(pt_95_1000_22[[2]]))[-which(diff(start(pt_95_1000_22[[2]]))>2000000)])+
+                                        length(diff(start(pt_95_2500_22[[2]])))+
+                                        length(diff(start(pt_95_5000_22[[2]])))+
+                                        length(diff(start(pt_95_10000_22[[2]]))))),
+                        Epsilon = c(rep("eps=0.2r", length(diff(start(pt_1_1000_22[[2]]))[-which(diff(start(pt_1_1000_22[[2]]))>2000000)])),
+                                    rep("eps=0.5r", length(diff(start(pt_1_2500_22[[2]]))[-which(diff(start(pt_1_2500_22[[2]]))>2000000)])),
+                                    rep("eps=r", length(diff(start(pt_1_5000_22[[2]]))[-which(diff(start(pt_1_5000_22[[2]]))>2000000)])),
+                                    rep("eps=2r", length(diff(start(pt_1_10000_22[[2]]))[-which(diff(start(pt_1_10000_22[[2]]))>2000000)])),
+                                    rep("eps=0.2r", length(diff(start(pt_99_1000_22[[2]])))),
+                                    rep("eps=0.5r", length(diff(start(pt_99_2500_22[[2]])))),
+                                    rep("eps=r", length(diff(start(pt_99_5000_22[[2]])))),
+                                    rep("eps=2r", length(diff(start(pt_99_10000_22[[2]])))),
+                                    rep("eps=0.2r", length(diff(start(pt_975_1000_22[[2]])))),
+                                    rep("eps=0.5r", length(diff(start(pt_975_2500_22[[2]])))),
+                                    rep("eps=r", length(diff(start(pt_975_5000_22[[2]]))[-which(diff(start(pt_975_5000_22[[2]]))>2000000)])),
+                                    rep("eps=2r", length(diff(start(pt_975_10000_22[[2]]))[-which(diff(start(pt_975_10000_22[[2]]))>2000000)])),
+                                    #rep("eps=0.2r", length(diff(start(pt_95_1000_22[[2]]))[-which(diff(start(pt_95_1000_22[[2]]))>2000000)])),
+                                    rep("eps=0.5r", length(diff(start(pt_95_2500_22[[2]])))),
+                                    rep("eps=r", length(diff(start(pt_95_5000_22[[2]])))),
+                                    rep("eps=2r", length(diff(start(pt_95_10000_22[[2]]))))))
+
+dist_dens$Epsilon <- factor(dist_dens$Epsilon, levels=c("eps=0.2r",
+                                                        "eps=0.5r",
+                                                        "eps=r",
+                                                        "eps=2r"))
+
+ggplot(data=dist_dens, aes(x=Distance)) +
+  facet_grid(Epsilon ~ Threshold) +
+  geom_density(fill="gray", color="black", alpha=0.8) +
+  ylab("Density") +
+  xlab("Distance between predicted TAD boundaries") +
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size=10,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        #strip.background.x = element_blank(),
+        #strip.background.y = element_blank(),
+        legend.text=element_text(size=10),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15))
+```
+
+# Overlaps per boundaries
+
+```{r}
+genomicElements.GR <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/topTFBS",
+                                             pattern="*.bed",
+											 signal=4)
+
+
+df <- data.frame(Overlap = c(length(unique(subjectHits(findOverlaps(flank(pt_1_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_1_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_1_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_1_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_1_10000_22[[2]])-.1,
+
+length(unique(subjectHits(findOverlaps(flank(pt_99_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_99_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_99_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_99_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_99_10000_22[[2]]),
+
+length(unique(subjectHits(findOverlaps(flank(pt_975_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_975_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_975_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_975_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_975_10000_22[[2]]),
+
+NA,
+length(unique(subjectHits(findOverlaps(flank(pt_95_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_95_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_95_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[1]]))))/length(pt_95_10000_22[[2]]),
+
+length(unique(subjectHits(findOverlaps(flank(pt_1_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_1_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_1_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_1_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_1_10000_22[[2]])-.1,
+
+length(unique(subjectHits(findOverlaps(flank(pt_99_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_99_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_99_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_99_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_99_10000_22[[2]]),
+
+length(unique(subjectHits(findOverlaps(flank(pt_975_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_975_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_975_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_975_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_975_10000_22[[2]]),
+
+NA,
+length(unique(subjectHits(findOverlaps(flank(pt_95_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_95_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_95_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[2]]))))/length(pt_95_10000_22[[2]]),
+
+length(unique(subjectHits(findOverlaps(flank(pt_1_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_1_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_1_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_1_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_1_10000_22[[2]])-.1,
+
+length(unique(subjectHits(findOverlaps(flank(pt_99_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_99_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_99_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_99_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_99_10000_22[[2]]),
+
+length(unique(subjectHits(findOverlaps(flank(pt_975_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_975_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_975_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_975_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_975_10000_22[[2]]),
+
+NA,
+length(unique(subjectHits(findOverlaps(flank(pt_95_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_95_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_95_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[3]]))))/length(pt_95_10000_22[[2]]),
+
+length(unique(subjectHits(findOverlaps(flank(pt_1_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_1_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_1_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_1_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_1_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_1_10000_22[[2]])-.1,
+
+length(unique(subjectHits(findOverlaps(flank(pt_99_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_99_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_99_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_99_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_99_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_99_10000_22[[2]]),
+
+length(unique(subjectHits(findOverlaps(flank(pt_975_1000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_975_1000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_975_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_975_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_975_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_975_10000_22[[2]]),
+
+NA,
+length(unique(subjectHits(findOverlaps(flank(pt_95_2500_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_95_2500_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_5000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_95_5000_22[[2]]),
+length(unique(subjectHits(findOverlaps(flank(pt_95_10000_22[[2]], width = 5000, both = TRUE),genomicElements.GR[[4]]))))/length(pt_95_10000_22[[2]])),
+
+Threshold = c(rep(c(rep("t=1.0",4),
+              rep("t=0.99",4),
+              rep("t=0.975",4),
+              rep("t=0.95",4)),4)),
+
+Epsilon = rep(c("eps=1000",
+              "eps=2500",
+			  "eps=5000",
+			  "eps=10000"),16),
+
+Annotation = c(rep("CTCF", 16),
+               rep("RAD21", 16),
+			   rep("SMC3", 16),
+			   rep("ZNF143", 16))
+)
+
+df$Epsilon <- factor(df$Epsilon, levels=c("eps=1000", "eps=2500", "eps=5000", "eps=10000"))
+
+ggplot(data=df, aes(x=Annotation, y=Overlap, fill=Annotation)) +
+  facet_grid(Epsilon ~ Threshold) +
+  geom_bar(stat='identity') +
+  ylim(0,1.5)+
+  ylab("Normalized Overlap") +
+  xlab("Annotation") +
+  guides(fill=FALSE) +
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size=10,
+                                   angle = 45, 
+                                   #margin = ggplot2::margin(t = 35),
+                                   hjust = 1),
+        axis.text.y = element_text(size = 10),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        #strip.background.x = element_blank(),
+        #strip.background.y = element_blank(),
+        legend.text=element_text(size=10),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15))
+```
+
