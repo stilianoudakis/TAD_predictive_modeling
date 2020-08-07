@@ -8,6 +8,12 @@ Delete minor todo items after completion
 
 Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel files
 
+## Current questions
+
+- _Methods_ for training on one and testing on another cell line - where they are described
+- Supplementary Tables 4-5 - Merge them into one Excel with two sheets - same message. Change numbering in text
+- Lastly, AUPRC is insensitive toward class imbalance and also omits from its calculation TN values [??? So why didn't you use it?]
+
 ### Writing tips
 
 - Write using the structure (https://github.com/mdozmorov/manuscript_template):
