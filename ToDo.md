@@ -10,9 +10,15 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 ## Current questions
 
-- _Methods_ for training on one and testing on another cell line - where they are described
+- Check ???
+- Supplementary Table 1 - what is "ARROWHEAD/SpectralTAD"?
+- All tables/figures/supplementary should be consequent. I am using original numbers while editing, you rename throughout:
+    - Make Supp. Table 3 as 2
+- Important! Discuss cross cell-line performance. It seems you use boundaries and annotations from cell line X and then boundaries from cell line X and annotations from cell line Y to evaluate performance. We need to train a classifier on boundaries and annotations from cell line X and evaluate it on boundaries and annotations in cell line Y.
 - Supplementary Tables 4-5 - Merge them into one Excel with two sheets - same message. Change numbering in text
 - Lastly, AUPRC is insensitive toward class imbalance and also omits from its calculation TN values [??? So why didn't you use it?]
+    - Especially, for Figure 4D???
+- Create chromosome-specific and full BED files with genomic coordinates of PTBRs and PTBPs, for GM12878 and K562, hg19
 
 ### Writing tips
 
