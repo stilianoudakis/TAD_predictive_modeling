@@ -565,17 +565,17 @@ ggplot(all_ave_sens_spec_df, aes(x=1-specificity, y=sensitivity, linetype=Traini
   guides(color=FALSE, linetype=guide_legend(nrow=2,byrow=TRUE)) +
   theme_minimal() +
   theme_bw()+
-  theme(axis.text.x = element_text(size = 10),
-        axis.text.y = element_text(size = 10),
-        axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15),
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 10),
+        strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
-        legend.text=element_text(size=10),
-        legend.title=element_text(size=15),
-        plot.title = element_text(size=15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
         legend.position = "bottom")
   
 
