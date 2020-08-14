@@ -10,13 +10,15 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 ## Current questions
 
-
-+ Figure 5A - TBD, why so many obvious boundaries are NOT detected by preciseTAD? Like, ~71200000 region?
-    - pick better region for fig5
-
 - Create chromosome-specific and full BED files with genomic coordinates of PTBRs and PTBPs, for GM12878 and K562, hg19
+   - get pointwise coordinates for now
+   - create new github repo for preciseTAD supplementary files
 
-- make figures publication worthy
+- look into permutation test as replacement for normalized overlap
+
+- refer to supp tables 4 and 5 in discussion when ready
+
+- make lettering level with top of figure
 
 ### Writing tips
 
