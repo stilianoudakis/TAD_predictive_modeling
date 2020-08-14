@@ -62,7 +62,7 @@ library(EnrichedHeatmap)
 source("Z:/TAD_data_analysis/functions_for_R_package/createTADdata.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/TADrandomForest.R")
-source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe.R")
+source("Z:/TAD_data_analysis/functions_for_R_package/TADrfe2.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/distance_func.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/percent_func.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/count_func.R")
@@ -102,8 +102,8 @@ tadData <- createTADdata(bounds.GR=bounds.GR,
                          genomicElements.GR=genomicElements.GR,
                          featureType="distance",
                          resampling="rus",
-                         trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))=="CHR22")],
-                         predictCHR=NULL,
+                         trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))=="CHR14")],
+                         predictCHR="CHR14",
                          seed=123)
 ```
 
@@ -130,16 +130,16 @@ tadModel <- TADrandomForest(trainData=tadData[[1]],
 ```{r}
 bounds.GR <- extract_boundaries_func(domains.mat=domains, 
                                      preprocess=FALSE, 
-                                     CHR="CHR22", 
+                                     CHR="CHR14", 
                                      resolution=5000)
 
 pt <- preciseTAD(bounds.GR=bounds.GR,
                       genomicElements.GR=genomicElements.GR,
                       featureType="distance",
-                      CHR="CHR22",
-                      chromCoords=list(17000000,19000000),
+                      CHR="CHR14",
+                      chromCoords=list(50085000,50800000),
                       tadModel=tadModel[[1]],
-                      threshold=1.0,
+                      threshold=1,
                       flank=NULL,
                       verbose=TRUE,
                       seed=123,
@@ -148,13 +148,13 @@ pt <- preciseTAD(bounds.GR=bounds.GR,
                       splits=NULL,
                       method.Dist="euclidean",
                       DBSCAN=TRUE,
-                      DBSCAN_params=list(5000,3), 
+                      DBSCAN_params=list(5000,3),
                       method.Clust=NULL,
                       PTBR=TRUE,
-                      CLARA=FALSE,
+                      CLARA=TRUE,
                       samples=100)
 
-saveRDS(pt, "C:/Users/stili/Downloads/pt_chr21_15150000_17270000")
+#saveRDS(pt, "C:/Users/stili/Downloads/pt_chr21_15150000_17270000")
 ```
 
 
@@ -165,8 +165,8 @@ saveRDS(pt, "C:/Users/stili/Downloads/pt_chr21_15150000_17270000")
 ## Plotting
 
 ```{r}
-tadModel <- readRDS("Z:/TAD_data_analysis/miscellaneous/tadModel.rds")
-pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
+#tadModel <- readRDS("Z:/TAD_data_analysis/miscellaneous/tadModel.rds")
+#pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
 
 getChrLength <- function(genome = "BSgenome.Hsapiens.UCSC.hg19"){
   g <- getBSgenome(genome, masked=FALSE)
@@ -203,11 +203,11 @@ hg19$chrom <- paste0("CHR",hg19$chrom)
 #seqDataTest <- c(17389000:18011000)
 #seqDataTest <- c(25745000:26176000)
 #seqDataTest <- c(15150000:17270000)
-seqDataTest <- c(70595000:71525000)
+seqDataTest <- c(50085000:50800000)
 
 #CHR="CHR22"
 #CHR="CHR21"
-CHR="CHR1"
+CHR="CHR14"
   
   if("TRUE" %in% table(seqDataTest %in% c(hg19$centromerStart[hg19$chrom==CHR]:hg19$centromerEnd[hg19$chrom==CHR]))){
     centromereTestStart <- hg19$centromerStart[hg19$chrom==CHR]
@@ -230,7 +230,7 @@ predictions <- predict(tadModel[[1]],newdata=test_data,type="prob")[,"Yes"]
 
 predprobdata <- data.frame(#basenum=c(17389000:18011000),
                            #basenum=c(15150000:17270000),
-                           basenum=c(70595000:71525000),
+                           basenum=c(50085000:50800000),
                            prob=predictions)
 predprobdata$predicted <- ifelse(predprobdata$basenum %in% start(pt[[2]]), "Yes", "No")
 predprobdata$called <- ifelse(predprobdata$basenum %in% start(pt[[3]]), "Yes", "No")

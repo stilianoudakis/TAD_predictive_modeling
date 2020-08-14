@@ -84,14 +84,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
  for(j in c("BroadHMM", "HistoneModifications", "TFBS", "all")){
    print(c(i,j))
   if(j %in% c("BroadHMM", "HistoneModifications", "TFBS")){
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF_",
                                j, 
                                ".rds"))
     perfdata <- perfdata[[3]]
   }else{
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/5kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF.rds"))
     perfdata <- perfdata[[3]]
@@ -171,14 +171,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
  for(j in c("BroadHMM", "HistoneModifications", "TFBS", "all")){
    print(c(i,j))
   if(j %in% c("BroadHMM", "HistoneModifications", "TFBS")){
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/5kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF_",
                                j, 
                                ".rds"))
     perfdata <- perfdata[[3]]
   }else{
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/5kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF.rds"))
     perfdata <- perfdata[[3]]
@@ -260,14 +260,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
  for(j in c("BroadHMM", "HistoneModifications", "TFBS", "all")){
    print(c(i,j))
   if(j %in% c("BroadHMM", "HistoneModifications", "TFBS")){
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/10kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF_peakachu_",
                                j, 
                                ".rds"))
     perfdata <- perfdata[[3]]
   }else{
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/GM12878/10kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF_peakachu.rds"))
     perfdata <- perfdata[[3]]
@@ -347,14 +347,14 @@ for(i in paste0("CHR", c(1:8,10:22))){
  for(j in c("BroadHMM", "HistoneModifications", "TFBS", "all")){
    print(c(i,j))
   if(j %in% c("BroadHMM", "HistoneModifications", "TFBS")){
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/10kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF_peakachu_",
                                j, 
                                ".rds"))
     perfdata <- perfdata[[3]]
   }else{
-    perfdata <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
+    perfdata <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/K562/10kb/results_by_chr/",
                                i,
                                "/rus/distance/TADRF_peakachu.rds"))
     perfdata <- perfdata[[3]]
@@ -594,6 +594,38 @@ ggplot(all_rfperfs, aes(x=Annotation, y=Performance, fill=Annotation)) +
     axis.text.y = element_text(size = 15),
     axis.title.x = element_text(size = 20),
     axis.title.y = element_text(size = 20),
+    legend.text=element_text(size=15),
+    legend.title=element_text(size=20),
+    legend.position = "bottom",
+    plot.title = element_text(size=20))
+```
+
+
+
+#############################################
+
+#Plotting
+
+```{r}
+ggplot(all_rfperfs_a_p, aes(x=Annotation, y=Performance, fill=Tool)) +
+    facet_grid(. ~ Tool) +
+    geom_bar(stat="identity") +
+    geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=.75, size=1) +
+    guides(fill=FALSE) +
+    scale_fill_manual(values = c("blue", "red"))+
+    theme_minimal() +
+    theme_bw()+
+    xlab("Genomic Class") + 
+    ylab("Balanced Accuracy") + 
+    theme(axis.text.x = element_text(size=15,
+                                     angle = 45, 
+                                     #margin = ggplot2::margin(t = 35),
+                                     hjust = 1
+    ),
+    axis.text.y = element_text(size = 15),
+    axis.title.x = element_text(size = 20),
+    axis.title.y = element_text(size = 20),
+    strip.text.x = element_text(size = 20),
     legend.text=element_text(size=15),
     legend.title=element_text(size=20),
     legend.position = "bottom",

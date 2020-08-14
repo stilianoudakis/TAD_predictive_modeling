@@ -83,12 +83,12 @@ chrs <- paste0("CHR",c(1:8,10:22))
 rfeperchr <- data.frame()
 for(i in c("GM12878")){
   for(k in 1:length(chrs)){print(c(i,k));
-    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
+    rfeModelResultsList <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/",
                                           i,
                                           "/",
                                           "5kb/results_by_chr/",
                                           chrs[k],
-                                          "/rus/distance/TADrfe.rds"))
+                                          "/rus/distance/TADrfe_holdout.rds"))
     rfeModelResults <- rfeModelResultsList[[1]]
     rfeModelResults <- rfeModelResults[,c(1,4:5)]
     rfeModelResults$CL <- i
@@ -97,10 +97,16 @@ for(i in c("GM12878")){
   }
 }
 rfeperchr$BA <- (rfeperchr$Sens+rfeperchr$Spec)/2
-rfeperchr_summ <- rfeperchr %>%
+rfeperchr_summ_mean <- rfeperchr %>%
   dplyr::group_by(Variables) %>%
   dplyr::summarise(Performance = mean(BA, na.rm = TRUE),
                    PerformanceSD = sd(BA, na.rm = TRUE))
+rfeperchr_summ_med <- rfeperchr %>%
+  dplyr::group_by(Variables) %>%
+  dplyr::summarise(Performance = median(BA, na.rm = TRUE),
+                   PerformanceIQR = IQR(BA, na.rm = TRUE))
+
+
 
 ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) + 
   geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), 
@@ -139,24 +145,29 @@ chrs <- paste0("CHR",c(1:8,10:22))
 rfeperchr <- data.frame()
 for(i in c("K562")){
   for(k in 1:length(chrs)){print(c(i,k));
-    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
+    rfeModelResultsList <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/",
                                           i,
                                           "/",
                                           "5kb/results_by_chr/",
                                           chrs[k],
-                                          "/rus/distance/TADrfe.rds"))
+                                          "/rus/distance/TADrfe_holdout.rds"))
     rfeModelResults <- rfeModelResultsList[[1]]
-    rfeModelResults <- rfeModelResults[,c(1,11)]
+    rfeModelResults <- rfeModelResults[,c(1,4:5)]
     rfeModelResults$CL <- i
     rfeModelResults$Chromosome <- chrs[k]
     rfeperchr <- rbind.data.frame(rfeperchr, rfeModelResults)
   }
 }
-
-rfeperchr_summ <- rfeperchr %>%
+rfeperchr$BA <- (rfeperchr$Sens+rfeperchr$Spec)/2
+rfeperchr_summ_mean <- rfeperchr %>%
   dplyr::group_by(Variables) %>%
-  dplyr::summarise(Performance = mean(Accuracy, na.rm = TRUE),
-                   PerformanceSD = sd(Accuracy, na.rm = TRUE))
+  dplyr::summarise(Performance = mean(BA, na.rm = TRUE),
+                   PerformanceSD = sd(BA, na.rm = TRUE))
+rfeperchr_summ_med <- rfeperchr %>%
+  dplyr::group_by(Variables) %>%
+  dplyr::summarise(Performance = median(BA, na.rm = TRUE),
+                   PerformanceIQR = IQR(BA, na.rm = TRUE))
+
 
 ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) + 
   geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), 
@@ -197,12 +208,12 @@ chrs <- paste0("CHR",c(1:8,10:22))
 rfeperchr <- data.frame()
 for(i in c("GM12878")){
   for(k in 1:length(chrs)){print(c(i,k));
-    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
+    rfeModelResultsList <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/",
                                           i,
                                           "/",
                                           "10kb/results_by_chr/",
                                           chrs[k],
-                                          "/rus/distance/TADrfe_peakachu.rds"))
+                                          "/rus/distance/TADrfe_holdout_peakachu.rds"))
     rfeModelResults <- rfeModelResultsList[[1]]
     rfeModelResults <- rfeModelResults[,c(1,4:5)]
     rfeModelResults$CL <- i
@@ -211,10 +222,15 @@ for(i in c("GM12878")){
   }
 }
 rfeperchr$BA <- (rfeperchr$Sens+rfeperchr$Spec)/2
-rfeperchr_summ <- rfeperchr %>%
+rfeperchr_summ_mean <- rfeperchr %>%
   dplyr::group_by(Variables) %>%
   dplyr::summarise(Performance = mean(BA, na.rm = TRUE),
                    PerformanceSD = sd(BA, na.rm = TRUE))
+rfeperchr_summ_med <- rfeperchr %>%
+  dplyr::group_by(Variables) %>%
+  dplyr::summarise(Performance = median(BA, na.rm = TRUE),
+                   PerformanceIQR = IQR(BA, na.rm = TRUE))
+
 
 ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) + 
   geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), 
@@ -253,24 +269,30 @@ chrs <- paste0("CHR",c(1:8,10:22))
 rfeperchr <- data.frame()
 for(i in c("K562")){
   for(k in 1:length(chrs)){print(c(i,k));
-    rfeModelResultsList <- readRDS(paste0("Z:/TAD_data_analysis/",
+    rfeModelResultsList <- readRDS(paste0("/home/stilianoudakisc/TAD_data_analysis/",
                                           i,
                                           "/",
                                           "10kb/results_by_chr/",
                                           chrs[k],
-                                          "/rus/distance/TADrfe_peakachu.rds"))
+                                          "/rus/distance/TADrfe_holdout_peakachu.rds"))
     rfeModelResults <- rfeModelResultsList[[1]]
-    rfeModelResults <- rfeModelResults[,c(1,11)]
+    rfeModelResults <- rfeModelResults[,c(1,4:5)]
     rfeModelResults$CL <- i
     rfeModelResults$Chromosome <- chrs[k]
     rfeperchr <- rbind.data.frame(rfeperchr, rfeModelResults)
   }
 }
-
-rfeperchr_summ <- rfeperchr %>%
+rfeperchr$BA <- (rfeperchr$Sens+rfeperchr$Spec)/2
+rfeperchr_summ_mean <- rfeperchr %>%
   dplyr::group_by(Variables) %>%
-  dplyr::summarise(Performance = mean(Accuracy, na.rm = TRUE),
-                   PerformanceSD = sd(Accuracy, na.rm = TRUE))
+  dplyr::summarise(Performance = mean(BA, na.rm = TRUE),
+                   PerformanceSD = sd(BA, na.rm = TRUE))
+rfeperchr_summ_med <- rfeperchr %>%
+  dplyr::group_by(Variables) %>%
+  dplyr::summarise(Performance = median(BA, na.rm = TRUE),
+                   PerformanceIQR = IQR(BA, na.rm = TRUE))
+
+
 
 ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) + 
   geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), 
@@ -415,42 +437,53 @@ ggplot(rfeperchr_summ, aes(x=Variables, y=Performance)) +
         legend.position = "bottom")
 ```
 
+###########################
+
 # Plotting
 
 ```{r}
-rfeperchr_summ_arrowhead <- rfeperchr_summ
-rfeperchr_summ_peakachu <- rfeperchr_summ
+rfeperchr_gm12878_5kb_arrowhead_med <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved_rds_files/rfeperchr_gm12878_5kb_arrowhead_med.rds")
+rfeperchr_gm12878_10kb_peakachu_med <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved_rds_files/rfeperchr_gm12878_10kb_peakachu_med.rds")
+ 
+rfeperchr_summ_gm12878 <- rbind.data.frame(rfeperchr_gm12878_5kb_arrowhead_med,rfeperchr_gm12878_10kb_peakachu_med)
+rfeperchr_summ_gm12878$Tool <- c(rep("Arrowhead", nrow(rfeperchr_gm12878_5kb_arrowhead_med)),
+                                 rep("Peakachu", nrow(rfeperchr_gm12878_10kb_peakachu_med)))
 
-rfeperchr_summ_gm12878 <- rbind.data.frame(rfeperchr_summ_arrowhead,rfeperchr_summ_peakachu)
-rfeperchr_summ_gm12878$Tool <- c(rep("ARROWHEAD", nrow(rfeperchr_summ_arrowhead)),
-                                 rep("PEAKACHU", nrow(rfeperchr_summ_peakachu)))
+
+rfeperchr_k562_5kb_arrowhead_med <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved_rds_files/rfeperchr_k562_5kb_arrowhead_med.rds")
+rfeperchr_k562_10kb_peakachu_med <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved_rds_files/rfeperchr_k562_10kb_peakachu_med.rds")
+ 
+rfeperchr_summ_k562 <- rbind.data.frame(rfeperchr_k562_5kb_arrowhead_med,rfeperchr_k562_10kb_peakachu_med)
+rfeperchr_summ_k562$Tool <- c(rep("Arrowhead", nrow(rfeperchr_k562_5kb_arrowhead_med)),
+                                 rep("Peakachu", nrow(rfeperchr_k562_10kb_peakachu_med)))
+
 
 ggplot(rfeperchr_summ_gm12878, aes(x=Variables, y=Performance, color=Tool)) + 
-  geom_line(size=2,) +
-  geom_point(size=4, position = position_dodge(.9)) +
-  geom_errorbar(aes(ymin=Performance-(PerformanceSD+.01), ymax=Performance+(PerformanceSD+.01)), 
-                width=4, 
-                size=1,
-                position = position_dodge(.9)) +
-  xlab("Number of top ranked annotations") +
-  ylab("Cross-Validated BA") +
-  scale_color_manual(name="Boundary Type", 
+    geom_line(size=2,) +
+    geom_point(size=4, position = position_dodge(.9)) +
+    geom_errorbar(aes(ymin=Performance-(PerformanceIQR+.01), ymax=Performance+(PerformanceIQR+.01)), 
+                  width=4, 
+                  size=1,
+                  position = position_dodge(.9)) +
+    xlab("Number of top ranked annotations") +
+    ylab("Cross-Validated BA") + guides(color=guide_legend(nrow=2))+
+    scale_color_manual(name="Boundary Type", 
                        values=c("blue", "red"))+
-  scale_x_continuous(breaks = c(2,4,8,16,32,52),
-                     labels = c(2,4,8,16,32,52))+
-  theme_minimal() +
-  theme_bw()+
-  theme(axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        #strip.text.x = element_text(size = 15),
-        #panel.spacing = unit(2, "lines"),
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
-        legend.position = "right")
+    scale_x_continuous(breaks = c(2,4,8,16,32,52),
+                       labels = c(2,4,8,16,32,52))+
+    theme_minimal() +
+    theme_bw()+
+    theme(axis.text.x = element_text(size = 15),
+          axis.text.y = element_text(size = 15),
+          axis.title.x = element_text(size = 20),
+          axis.title.y = element_text(size = 20),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          #strip.text.x = element_text(size = 15),
+          #panel.spacing = unit(2, "lines"),
+          legend.text=element_text(size=15),
+          legend.title=element_text(size=20),
+          plot.title = element_text(size=20),
+          legend.position = c(.75,.1))
 ```
 
