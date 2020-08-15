@@ -2,9 +2,9 @@
 title: "preciseTAD: A machine learning framework for precise TAD boundary prediction at base level resolution"
 csl: styles.ref/genomebiology.csl
 output:
+  pdf_document: 
   word_document:
     reference_docx: styles.doc/NIH_grant_style.docx
-  pdf_document: 
 bibliography: References/references.bib
 --- 
 
@@ -159,7 +159,7 @@ Having demonstrated the optimal performance in our framework's ability to predic
 
 Using our optimally built random forest model trained on Arrowhead/Peakachu boundaries, we attempted to predict boundaries at base resolution. Intuitively, instead of bin-level annotations, the predictor-response space was built on a base-level, that is, each base was associated with the corresponding genomic annotation. The model trained on a bin-level space was then applied on a base-level space to predict each base's probability of being a boundary. Our method, referred to as *preciseTAD*, uses density-based hierarchical clustering (DBSCAN) and a scalable partitioning around medoids clustering (CLARA) to predict the boundary location at base resolution (see Methods).
 
-When built using Arrowhead and Peakachu ground truth boundaries at 5 kb and 10 kb, respectively, *preciseTAD* was able to predict a total of 7,846 TAD and 15,838 chromatin loop boundaries on GM12878, as well as 8,883 TAD and 11,016 chromatin loop boundaries on K562 [??? Need them in Supplementary Table 4, Excel, BED format, sheet 1 - GM12878 PTBR, sheet 2 - GM12878 PTBP, sheet 3,4 - K562. Supp tables 1, 2, 3 are OK, renumber subsequent. Write legend]. We reported less predicted TAD boundaries at 5 kb than Arrowhead on both cell lines (Table 1, Supplementary Table 3). This can be attributed to Arrowhead's inflation of called TADs, especially at higher resolutions, that, when visualized, often do not correspond to intra-chromosomal contacts featured on a contact matrix. Additionally, *preciseTAD* boundaries were visually more likely to demarcate high concentrations of intra-chromosomal contacts [??? Do not understand], as can be seen on a Hi-C contact matrix (Figure 5A). *preciseTAD* also predicted fewer chromatin loop boundaries than Peakachu (Table 1, Supplementary Table 3). This can be attributed to the fact that *preciseTAD* leverages four known drivers of 3D chromatin, including CTCF, RAD21, SMC3, and ZNF143. This is in contrast to Peakachu, which considers only CTCF sites to mark the predicted boundaries as true positives. These results suggest that genome annotation-driven predicted boundaries may be more biologically relevant than those detected from Hi-C data alone.
+When built using Arrowhead and Peakachu ground truth boundaries at 5 kb and 10 kb, respectively, *preciseTAD* was able to predict a total of 7,846 TAD and 15,838 chromatin loop boundaries on GM12878, as well as 8,883 TAD and 11,016 chromatin loop boundaries on K562 (Supplementary Table 4). We reported less predicted TAD boundaries at 5 kb than Arrowhead on both cell lines (Table 1, Supplementary Table 3). This can be attributed to Arrowhead's inflation of called TADs, especially at higher resolutions, that, when visualized, often do not correspond to intra-chromosomal contacts featured on a contact matrix (Figure 5A). *preciseTAD* also predicted fewer chromatin loop boundaries than Peakachu (Table 1, Supplementary Table 3). This can be attributed to the fact that *preciseTAD* leverages four known drivers of 3D chromatin, including CTCF, RAD21, SMC3, and ZNF143. This is in contrast to Peakachu, which considers only CTCF sites to mark the predicted boundaries as true positives. These results suggest that genome annotation-driven predicted boundaries may be more biologically relevant than those detected from Hi-C data alone.
 
 Next, we evaluated the biological significance of *preciseTAD* boundaries. Peak regions associated with known molecular drivers of 3D chromatin, including CTCF, RAD21, SMC3, and ZNF143, were found to co-localize more frequently around *preciseTAD* predicted boundaries (Figure 5B). Furthermore, signal heatmaps indicated that our predicted boundaries were more enriched for the same genomic annotations than either Arrowhead or Peakachu boundaries alone (Figure 5 C-D; Supplementary Figures 5-6). When compared to called TAD or loop boundaries, *preciseTAD* boundaries were statistically significantly closer to the same cell line-specific top-ranked TFBS (p<0.001 and p<0.001 versus Arrowhead and Peakachu respectively) (Figure 5E, Supplementary Figure 7). These results indicate that *preciseTAD*-predicted boundaries better reflected the known biology of boundary formation.
 
@@ -168,7 +168,7 @@ Next, we evaluated the biological significance of *preciseTAD* boundaries. Peak 
 TAD boundaries are relatively conserved across cell lines [@dixon2012topological; @krefting2018evolutionary; @nora2012spatial; @sexton2012three]. To assess conservation, we evaluated the overlap between cell line-specific boundaries detected by *preciseTAD*, Arrowhead, and Peakachu after flanking them by the resolution of the Hi-C data. Boundaries involving Arrowhead were flanked by 5 kb, while boundaries involving Peakachu were flanked by 10 kb. We found that 35% of *preciseTAD* predicted TAD boundaries and 55% of *preciseTAD* predicted loop boundaries were conserved between cell lines, compared to only 26% and 55% for Arrowhead and Peakachu alone (Figure 5F). The better conservation of *preciseTAD*-predicted boundaries further supports the notion of their higher biological relevance.
 
 
-![**preciseTAD boundaries are enriched for known molecular drivers of 3D chromatin.** (A) The location of preciseTAD (green) vs. ARROWHEAD (blue) boundaries on GM12878 (chr 14: 50085000-50800000). The black line represents the predicted probability of each base being a TAD boundary. (B) Genome browse visualization of bigwig files for known molecular drivers of 3D chromatin including CTCF, RAD21, SMC3, and ZNF143. (C) Enriched heatmaps comparing the enrichment of CTCF signal around ARROWHEAD TAD boundaries and preciseTAD boundaries, and (D) around Peakachu loop boundaries and preciseTAD for the entire genome. (E) Log 2 genomic distances from boundaries to the nearest CTCF sites. (F) Venn diagrams illustrating the levels of conservation between TAD/loop boundaries for GM12878 (red) and K562 (blue) identified by preciseTAD (using ARROWHEAD; top left), ARROWHEAD (top right), preciseTAD (using PEAKACHU; bottom left), and PEAKACHU (bottom right). The median Jaccard Index (IQR) across each chromosome is provided below each Venn diagram](Figures/figure5.png) 
+![**preciseTAD boundaries are enriched for known molecular drivers of 3D chromatin.** (A) The location of preciseTAD (green) vs. Arrowhead (blue) boundaries on GM12878 (chr 14: 50085000-50800000). The black line represents the predicted probability of each base being a TAD boundary. (B) Genome browse visualization of bigwig files for known molecular drivers of 3D chromatin including CTCF, RAD21, SMC3, and ZNF143. (C) Enriched heatmaps comparing the enrichment of CTCF signal around Arrowhead TAD boundaries and preciseTAD boundaries, and (D) around Peakachu loop boundaries and preciseTAD for the entire genome. (E) Log 2 genomic distances from boundaries to the nearest CTCF sites. (F) Venn diagrams illustrating the levels of conservation between TAD/loop boundaries for GM12878 (red) and K562 (blue) identified by preciseTAD (using Arrowhead; top left), Arrowhead (top right), preciseTAD (using Peakachu; bottom left), and Peakachu (bottom right). The median Jaccard Index (IQR) across each chromosome is provided below each Venn diagram](Figures/figure5.png) 
 
 ## *preciseTAD* predicted TAD boundaries are nested within predicted loop boundaries
 
@@ -220,11 +220,15 @@ of Enhancer-Promoter Loops"]
 
 **Supplementary Table 3.** TAD/loop boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on the K562 cell line. Class imbalance is calculated as the ratio of the total number of unique boundaries to the total number of genomic bins.
 
-**Supplementary Table 4.** Additional performance metrics when implementing a random forest using
-Arrowhead ground truth TAD boundaries. Performances are averaged across each holdout chromosome that was reserved for testing.
+**Supplementary Table 4.** GM12878(K562)_PTBR - The start and end coordinates defining the clusters of *preciseTAD* predicted TAD boundary regions (PTBRs) for each chromosome on GM12878 (K562). GM12878(k562)_TAD - The start and end coordinates defining TADs demarcated by a unique *preciseTAD* predicted TAD boundary point (PTBP) for each chromosome on GM12878 (K562).
 
-**Supplementary Table 5.** Additional performance metrics when implementing a random forest using
-Peakachu ground truth chromatin loop boundaries. Performances are averaged across each holdout chromosome that was reserved for testing.
+*preciseTAD* predicted boundary regions (PTBR) and points (PTBP) for GM12878 and k562, using Arrowhead TAD boundary coordinates as ground truth. For PTBP, 
+
+<!--
+**Supplementary Table 5.** Additional performance metrics when implementing a random forest using Arrowhead ground truth TAD boundaries. Performances are averaged across each holdout chromosome that was reserved for testing.
+
+**Supplementary Table 6.** Additional performance metrics when implementing a random forest using Peakachu ground truth chromatin loop boundaries. Performances are averaged across each holdout chromosome that was reserved for testing.
+-->
 
 **Supplementary Figure 1.** Density curves of distances before (red) and after (blue) performing a $log_{2}$ transformation across 10 kb, 25 kb, 50 kb, and 100 kb data resolutions for both the (A) GM12878 and (B) K562 cell lines, respectively. Distances are measured as the number of bases from the center of a genomic bin to the nearest genomic annotation center. Each density curve represents an individual genomic annotation (77 total).
 
@@ -246,6 +250,9 @@ Peakachu ground truth chromatin loop boundaries. Performances are averaged acros
 
 
 # Abbreviations
+
+AUC-Area Under the Curve; BA-Balance Accuracyl; bp-base pair; BroadHMM-BroadHMM cis-regulated elements; ChIP-seq-Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI-Class Imbalance; CLARA-Clustering Large Applications ;DBSCAN-Density-Based Spatial Clustering of Applications with Noise; FN-False Negatives; FP-False Positives; Hi-C-High-througput chromosome conformation capture; HM-Histone Modifications; kb-kilobase; ML-Machine Learning; OC-Overlap Counts; OP-Overlap Percents; PAM-Partitioning Around Medoids; PTBP-preciseTAD Boundary Point; PTBR-preciseTAD Boundary Region; RF-Random Forest; RFE-Recursive Feature Elimination; ROC-Receiver Operating Characteristic; ROS-Random Over-Sampling
+RUS	Random Under-Sampling; SMOTE-Synthetic Minority Over-sampling Technique; TAD-Topologically Associated Domains; TFBS-Transcription Factor Binding Sites; TN-True Negatives; TP-True Positives
 
 
 # Acknowledgements

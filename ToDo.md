@@ -11,16 +11,16 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 ## For preprint
 
 - Create chromosome-specific and full BED files with genomic coordinates of PTBRs and PTBPs, for GM12878 and K562, hg19
-   - get pointwise coordinates for now
-   - ??? Need them in Supplementary Table 4, Excel, BED format, sheet 1 - GM12878 PTBR, sheet 2 - GM12878 PTBP, sheet 3,4 - K562. Supp tables 1, 2, 3 are OK, renumber subsequent. Write legend
+   + get pointwise coordinates for now
+   + ??? Need them in Supplementary Table 4, Excel, BED format, sheet 1 - GM12878 PTBR, sheet 2 - GM12878 PTBP, sheet 3,4 - K562. Supp tables 1, 2, 3 are OK, renumber subsequent. Write legend
 
-- Check for Arrowhead/Peakachu capitalization. Supplementary tables and legend for Fig 5 still have them in capitals. Use case-sensitive search.
++ Check for Arrowhead/Peakachu capitalization. Supplementary tables and legend for Fig 5 still have them in capitals. Use case-sensitive search.
 
-- Add abbreviations to the section at the end
++ Add abbreviations to the section at the end
 
-- For preprint, compile to PDF
++ For preprint, compile to PDF
 
-- Ask on GitHub what's going on with your package?
++ Ask on GitHub what's going on with your package?
 
 ## For publication
 
