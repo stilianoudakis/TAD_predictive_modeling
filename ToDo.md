@@ -8,17 +8,31 @@ Delete minor todo items after completion
 
 Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel files
 
-## Current questions
+## For preprint
 
 - Create chromosome-specific and full BED files with genomic coordinates of PTBRs and PTBPs, for GM12878 and K562, hg19
    - get pointwise coordinates for now
-   - create new github repo for preciseTAD supplementary files
+   - ??? Need them in Supplementary Table 4, Excel, BED format, sheet 1 - GM12878 PTBR, sheet 2 - GM12878 PTBP, sheet 3,4 - K562. Supp tables 1, 2, 3 are OK, renumber subsequent. Write legend
 
-- look into permutation test as replacement for normalized overlap
+- Check for Arrowhead/Peakachu capitalization. Supplementary tables and legend for Fig 5 still have them in capitals. Use case-sensitive search.
 
-- refer to supp tables 4 and 5 in discussion when ready
+- Add abbreviations to the section at the end
+
+- For preprint, compile to PDF
+
+- Ask on GitHub what's going on with your package?
+
+## For publication
+
+- look into permutation test as replacement for normalized overlap. Quantify permutation enrichment p-values for two things:
+    - Supplementary Figure 9, when described. Also, Discussion
+    - Figure 5 C, D - to statistically show that CTCF et al. are more significantly enriched.
+
+- refer to supp tables 4 and 5 in discussion when ready. Currently, I commented out this section in Discussion
 
 - make lettering level with top of figure
+
+
 
 ### Writing tips
 
