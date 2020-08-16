@@ -13,15 +13,20 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 - Create chromosome-specific and full BED files with genomic coordinates of PTBRs and PTBPs, for GM12878 and K562, hg19
    - Legend for Supplementary Table 4 is malformatted with some incomplete sentence. Sheet names and capitalization do not correspond to legend names. Unacceptable
    - Mind "BED format". Both PTBRs and PTBPs need to be in BED format. E.g., PTBR: chr1 100 200; PTBP: chr1 130 131. The first is _region_, the second is _point_. There should be identical number of them for a given cell line. preciseTAD boundaries does not always define TADs, so GM12878(k562)_TAD is wrong
-   - Where are Arrowhead- and Peakachu-specific data? It should correspond exactly to " *preciseTAD* was able to predict a total of 7,846 TAD and 15,838 chromatin loop boundaries on GM12878, as well as 8,883 TAD and 11,016 chromatin loop boundaries on K562"
+   - Where are Arrowhead- and Peakachu-specific data? It should correspond exactly to "*preciseTAD* was able to predict a total of 7,846 TAD and 15,838 chromatin loop boundaries on GM12878, as well as 8,883 TAD and 11,016 chromatin loop boundaries on K562"
    - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
 
+- Make Background of all figures white
 
 ## For publication
 
 - look into permutation test as replacement for normalized overlap. Quantify permutation enrichment p-values for two things:
     - Supplementary Figure 9, when described. Also, Discussion
     - Figure 5 C, D - to statistically show that CTCF et al. are more significantly enriched.
+
+- Resolution of all figures should be >300dpi. Currently, they are 150dpi
+
+- Figure width should be either 7 in (full page width) or 3.5 in (half-page width). Current figures are all over the place.
 
 - refer to supp tables 5 and 6 in discussion when ready. Currently, I commented out this section in Discussion
 
