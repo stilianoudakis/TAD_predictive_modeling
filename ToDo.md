@@ -30,7 +30,7 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 - refer to supp tables 4 and 5 in discussion when ready. Currently, I commented out this section in Discussion
 
-- make lettering level with top of figure
++ make lettering level with top of figure
 
 
 

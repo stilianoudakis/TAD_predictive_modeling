@@ -1,5 +1,5 @@
 Publisher,Tool,Library,Cell line ,Source
-Rao et al,ARROWHEAD,HIC001-HIC018,GM12878,https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63525&format=file&file=GSE63525%5FGM12878%5Finsitu%5Fprimary%2Ehic
-Rao et al,ARROWHEAD,HIC069-HIC074,K562,https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63525&format=file&file=GSE63525%5FK562%5Fcombined%2Ehic
-Salameh et al,PEAKACHU,,GM12878,http://promoter.bx.psu.edu/hi-c/publications.html
-Salameh et al,PEAKACHU,,K562,http://promoter.bx.psu.edu/hi-c/publications.html
+Rao et al,Arrowhead,HIC001-HIC018,GM12878,https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63525&format=file&file=GSE63525%5FGM12878%5Finsitu%5Fprimary%2Ehic
+Rao et al,Arrowhead,HIC069-HIC074,K562,https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE63525&format=file&file=GSE63525%5FK562%5Fcombined%2Ehic
+Salameh et al,Peakachu,,GM12878,http://promoter.bx.psu.edu/hi-c/publications.html
+Salameh et al,Peakachu,,K562,http://promoter.bx.psu.edu/hi-c/publications.html
