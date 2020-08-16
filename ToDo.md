@@ -11,16 +11,11 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 ## For preprint
 
 - Create chromosome-specific and full BED files with genomic coordinates of PTBRs and PTBPs, for GM12878 and K562, hg19
-   + get pointwise coordinates for now
-   + ??? Need them in Supplementary Table 4, Excel, BED format, sheet 1 - GM12878 PTBR, sheet 2 - GM12878 PTBP, sheet 3,4 - K562. Supp tables 1, 2, 3 are OK, renumber subsequent. Write legend
+   - Legend for Supplementary Table 4 is malformatted with some incomplete sentence. Sheet names and capitalization do not correspond to legend names. Unacceptable
+   - Mind "BED format". Both PTBRs and PTBPs need to be in BED format. E.g., PTBR: chr1 100 200; PTBP: chr1 130 131. The first is _region_, the second is _point_. There should be identical number of them for a given cell line. preciseTAD boundaries does not always define TADs, so GM12878(k562)_TAD is wrong
+   - Where are Arrowhead- and Peakachu-specific data? It should correspond exactly to " *preciseTAD* was able to predict a total of 7,846 TAD and 15,838 chromatin loop boundaries on GM12878, as well as 8,883 TAD and 11,016 chromatin loop boundaries on K562"
+   - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
 
-+ Check for Arrowhead/Peakachu capitalization. Supplementary tables and legend for Fig 5 still have them in capitals. Use case-sensitive search.
-
-+ Add abbreviations to the section at the end
-
-+ For preprint, compile to PDF
-
-+ Ask on GitHub what's going on with your package?
 
 ## For publication
 
@@ -28,9 +23,7 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
     - Supplementary Figure 9, when described. Also, Discussion
     - Figure 5 C, D - to statistically show that CTCF et al. are more significantly enriched.
 
-- refer to supp tables 4 and 5 in discussion when ready. Currently, I commented out this section in Discussion
-
-+ make lettering level with top of figure
+- refer to supp tables 5 and 6 in discussion when ready. Currently, I commented out this section in Discussion
 
 
 
