@@ -251,9 +251,8 @@ of Enhancer-Promoter Loops"]
 
 # Abbreviations
 
-AUC-Area Under the Curve; BA-Balance Accuracyl; bp-base pair; BroadHMM-BroadHMM cis-regulated elements; ChIP-seq-Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI-Class Imbalance; CLARA-Clustering Large Applications ;DBSCAN-Density-Based Spatial Clustering of Applications with Noise; FN-False Negatives; FP-False Positives; Hi-C-High-througput chromosome conformation capture; HM-Histone Modifications; kb-kilobase; ML-Machine Learning; OC-Overlap Counts; OP-Overlap Percents; PAM-Partitioning Around Medoids; PTBP-preciseTAD Boundary Point; PTBR-preciseTAD Boundary Region; RF-Random Forest; RFE-Recursive Feature Elimination; ROC-Receiver Operating Characteristic; ROS-Random Over-Sampling
-RUS	Random Under-Sampling; SMOTE-Synthetic Minority Over-sampling Technique; TAD-Topologically Associated Domains; TFBS-Transcription Factor Binding Sites; TN-True Negatives; TP-True Positives
-
+AUC - Area Under the Curve; BA - Balance Accuracy; bp - base pair; BroadHMM - BroadHMM chromatin segmentation states; ChIP-seq - Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI - Class Imbalance; CLARA - Clustering Large Applications; DBSCAN - Density-Based Spatial Clustering of Applications with Noise; FN - False Negatives; FP - False Positives; Hi-C - High-throughput chromosome conformation capture technology; HM - Histone Modifications; kb - kilobase; ML - Machine Learning; OC - Overlap Counts; OP - Overlap Percents; PAM - Partitioning Around Medoids; PTBP - preciseTAD Boundary Point; PTBR - preciseTAD Boundary Region; RF - Random Forest; RFE - Recursive Feature Elimination; ROC - Receiver Operating Characteristic; ROS - Random Over-Sampling
+RUS	Random Under-Sampling; SMOTE - Synthetic Minority Over-sampling Technique; TAD - Topologically Associated Domains; TFBS - Transcription Factor Binding Sites; TN - True Negatives; TP - True Positives
 
 # Acknowledgements
 
