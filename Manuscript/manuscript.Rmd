@@ -220,9 +220,7 @@ of Enhancer-Promoter Loops"]
 
 **Supplementary Table 3.** TAD/loop boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on the K562 cell line. Class imbalance is calculated as the ratio of the total number of unique boundaries to the total number of genomic bins.
 
-**Supplementary Table 4.** GM12878(K562)_PTBR - The start and end coordinates defining the clusters of *preciseTAD* predicted TAD boundary regions (PTBRs) for each chromosome on GM12878 (K562). GM12878(k562)_TAD - The start and end coordinates defining TADs demarcated by a unique *preciseTAD* predicted TAD boundary point (PTBP) for each chromosome on GM12878 (K562).
-
-*preciseTAD* predicted boundary regions (PTBR) and points (PTBP) for GM12878 and k562, using Arrowhead TAD boundary coordinates as ground truth. For PTBP, 
+**Supplementary Table 4.** *preciseTAD* predicted boundary regions (PTBR) and points (PTBP) for GM12878 and K562, using Arrowhead TAD and Peakachu chromatin loop boundary coordinates as ground truth. For PTBRs, the start and end coordinates define the clusters of spatially proximate bases with probabilities equal to 1. For PTBPs, the start and end (start+1) coordinates define the uniquely identified boundary coordinate predicted by *preciseTAD* within each PTBR.
 
 <!--
 **Supplementary Table 5.** Additional performance metrics when implementing a random forest using Arrowhead ground truth TAD boundaries. Performances are averaged across each holdout chromosome that was reserved for testing.
@@ -251,8 +249,7 @@ of Enhancer-Promoter Loops"]
 
 # Abbreviations
 
-AUC - Area Under the Curve; BA - Balance Accuracy; bp - base pair; BroadHMM - BroadHMM chromatin segmentation states; ChIP-seq - Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI - Class Imbalance; CLARA - Clustering Large Applications; DBSCAN - Density-Based Spatial Clustering of Applications with Noise; FN - False Negatives; FP - False Positives; Hi-C - High-throughput chromosome conformation capture technology; HM - Histone Modifications; kb - kilobase; ML - Machine Learning; OC - Overlap Counts; OP - Overlap Percents; PAM - Partitioning Around Medoids; PTBP - preciseTAD Boundary Point; PTBR - preciseTAD Boundary Region; RF - Random Forest; RFE - Recursive Feature Elimination; ROC - Receiver Operating Characteristic; ROS - Random Over-Sampling
-RUS	Random Under-Sampling; SMOTE - Synthetic Minority Over-sampling Technique; TAD - Topologically Associated Domains; TFBS - Transcription Factor Binding Sites; TN - True Negatives; TP - True Positives
+AUC - Area Under the Curve; BA - Balance Accuracy; bp - base pair; BroadHMM - BroadHMM chromatin segmentation states; ChIP-seq - Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI - Class Imbalance; CLARA - Clustering Large Applications; DBSCAN - Density-Based Spatial Clustering of Applications with Noise; FN - False Negatives; FP - False Positives; Hi-C - High-throughput chromosome conformation capture technology; HM - Histone Modifications; kb - kilobase; ML - Machine Learning; OC - Overlap Counts; OP - Overlap Percents; PAM - Partitioning Around Medoids; PTBP - preciseTAD Boundary Point; PTBR - preciseTAD Boundary Region; RF - Random Forest; RFE - Recursive Feature Elimination; ROC - Receiver Operating Characteristic; ROS - Random Over-Sampling; RUS	Random Under-Sampling; SMOTE - Synthetic Minority Over-sampling Technique; TAD - Topologically Associated Domains; TFBS - Transcription Factor Binding Sites; TN - True Negatives; TP - True Positives
 
 # Acknowledgements
 
