@@ -16,7 +16,7 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
    + Where are Arrowhead- and Peakachu-specific data? It should correspond exactly to "*preciseTAD* was able to predict a total of 7,846 TAD and 15,838 chromatin loop boundaries on GM12878, as well as 8,883 TAD and 11,016 chromatin loop boundaries on K562"
    - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
 
-- Make Background of all figures white
++ Make Background of all figures white
 
 ## For publication
 
