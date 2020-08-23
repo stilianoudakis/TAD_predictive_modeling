@@ -1,17 +1,5 @@
----
-title: "Visualizing example of predicted TAD boundaries"
-author: "Spiro Stilianoudakis"
-date: "4/29/2020"
-output: html_document
----
+#09_visualizing_example_of_preciseTAD
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## Loading packages and functions
-
-```{r}
 library(S4Vectors)
 library(GenomicRanges)
 library(ggplot2)
@@ -52,7 +40,7 @@ library(lattice)
 library(corrplot)
 library(cluster)
 library(RColorBrewer)
-library(GenometriCorr)
+#library(GenometriCorr)
 library(ggsignif)
 library(Vennerable)
 library(VennDiagram)
@@ -71,32 +59,16 @@ source("Z:/TAD_data_analysis/functions_for_R_package/signal_func.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/annots_to_granges_func.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/extract_boundaries_func.R")
 
-```
-
-# ARROWHEAD
-
-## Extracting TAD boundaries using the extract_boundaries_func function for ARROWHEAD defined TADs at 10kb resolution
-
-```{r}
 domains <- read.table("Z:/TAD_data_analysis/GM12878/5kb/GM12878_domain_data_5000.b.txt")
 bounds.GR <- extract_boundaries_func(domains.mat=domains, 
                                      preprocess=FALSE, 
                                      CHR=paste0("CHR", c(1:8,10:22)), 
                                      resolution=5000)
-```
 
-
-## Obtaining list of GRanges objects of ChIP-seq data used for modelling
-
-```{r}
 genomicElements.GR <- annots_to_granges_func(filepath = "Z:/TAD_data_analysis/annotations/all_common_annotations/gm12878/topTFBS",
                                              pattern="*.bed",
                                              signal=4)
-```
 
-## Creating data matrix
-
-```{r}
 tadData <- createTADdata(bounds.GR=bounds.GR,
                          resolution=5000,
                          genomicElements.GR=genomicElements.GR,
@@ -105,11 +77,7 @@ tadData <- createTADdata(bounds.GR=bounds.GR,
                          trainCHR=paste0("CHR",c(1:8,10:22))[-which(paste0("CHR",c(1:8,10:22))=="CHR14")],
                          predictCHR="CHR14",
                          seed=123)
-```
 
-## Running TADrandomForest
-
-```{r}
 tadModel <- TADrandomForest(trainData=tadData[[1]],
                             testData=NULL,
                             tuneParams=list(mtry=2,
@@ -123,50 +91,32 @@ tadModel <- TADrandomForest(trainData=tadData[[1]],
                             importances=TRUE,
                             impMeasure="MDA",
                             performances=FALSE)
-```
 
-## Running preciseTAD
-
-```{r}
 bounds.GR <- extract_boundaries_func(domains.mat=domains, 
                                      preprocess=FALSE, 
                                      CHR="CHR14", 
                                      resolution=5000)
 
 pt <- preciseTAD(bounds.GR=bounds.GR,
-                      genomicElements.GR=genomicElements.GR,
-                      featureType="distance",
-                      CHR="CHR14",
-                      chromCoords=list(50085000,50800000),
-                      tadModel=tadModel[[1]],
-                      threshold=1,
-                      flank=NULL,
-                      verbose=TRUE,
-                      seed=123,
-                      parallel=FALSE,
-                      cores=NULL,
-                      splits=NULL,
-                      method.Dist="euclidean",
-                      DBSCAN=TRUE,
-                      DBSCAN_params=list(5000,3),
-                      method.Clust=NULL,
-                      PTBR=TRUE,
-                      CLARA=TRUE,
-                      samples=100)
-
-#saveRDS(pt, "C:/Users/stili/Downloads/pt_chr21_15150000_17270000")
-```
-
-
-##OR 
-##(pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR22/rus/distance/preciseTAD.rds"))
-##(pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR21/rus/distance/preciseTAD.rds"))
-
-## Plotting
-
-```{r}
-#tadModel <- readRDS("Z:/TAD_data_analysis/miscellaneous/tadModel.rds")
-#pt <- readRDS("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/CHR1/rus/distance/preciseTAD_holdout.rds")
+                 genomicElements.GR=genomicElements.GR,
+                 featureType="distance",
+                 CHR="CHR14",
+                 chromCoords=list(50085000,50800000),
+                 tadModel=tadModel[[1]],
+                 threshold=1,
+                 flank=NULL,
+                 verbose=TRUE,
+                 seed=123,
+                 parallel=FALSE,
+                 cores=NULL,
+                 splits=NULL,
+                 method.Dist="euclidean",
+                 DBSCAN=TRUE,
+                 DBSCAN_params=list(5000,3),
+                 method.Clust=NULL,
+                 PTBR=TRUE,
+                 CLARA=TRUE,
+                 samples=100)
 
 getChrLength <- function(genome = "BSgenome.Hsapiens.UCSC.hg19"){
   g <- getBSgenome(genome, masked=FALSE)
@@ -208,19 +158,19 @@ seqDataTest <- c(50085000:50800000)
 #CHR="CHR22"
 #CHR="CHR21"
 CHR="CHR14"
-  
-  if("TRUE" %in% table(seqDataTest %in% c(hg19$centromerStart[hg19$chrom==CHR]:hg19$centromerEnd[hg19$chrom==CHR]))){
-    centromereTestStart <- hg19$centromerStart[hg19$chrom==CHR]
-    centromereTestEnd <- hg19$centromerEnd[hg19$chrom==CHR]
-    seqDataTest <- seqDataTest[-which(seqDataTest %in% c(centromereTestStart:centromereTestEnd))]
-  }
-  
+
+if("TRUE" %in% table(seqDataTest %in% c(hg19$centromerStart[hg19$chrom==CHR]:hg19$centromerEnd[hg19$chrom==CHR]))){
+  centromereTestStart <- hg19$centromerStart[hg19$chrom==CHR]
+  centromereTestEnd <- hg19$centromerEnd[hg19$chrom==CHR]
+  seqDataTest <- seqDataTest[-which(seqDataTest %in% c(centromereTestStart:centromereTestEnd))]
+}
+
 test_data <- matrix(nrow=length(seqDataTest),
                     ncol=length(genomicElements.GR))
 p <- lapply(genomicElements.GR, function(x){distance_func(GRanges(seqnames=tolower(CHR),
-                                                                    IRanges(start=seqDataTest,
-                                                                            end=seqDataTest)), 
-                                                            x)})
+                                                                  IRanges(start=seqDataTest,
+                                                                          end=seqDataTest)), 
+                                                          x)})
 for(i in 1:length(genomicElements.GR)){
   test_data[,i] <- p[[i]]
 }
@@ -229,10 +179,12 @@ test_data <- apply(test_data,2,function(x){log(x + 1, base=2)})
 predictions <- predict(tadModel[[1]],newdata=test_data,type="prob")[,"Yes"]
 
 predprobdata <- data.frame(#basenum=c(17389000:18011000),
-                           #basenum=c(15150000:17270000),
-                           basenum=c(50085000:50800000),
-                           prob=predictions)
-predprobdata$predicted <- ifelse(predprobdata$basenum %in% start(pt[[2]]), "Yes", "No")
+  #basenum=c(15150000:17270000),
+  basenum=c(50085000:50800000),
+  prob=predictions)
+
+predprobdata$predicted <- ifelse(predprobdata$basenum %in% c(50101115,50343720,50571497,50787832), "Yes", "No")
+
 predprobdata$called <- ifelse(predprobdata$basenum %in% start(pt[[3]]), "Yes", "No")
 
 calleddata <- predprobdata[which(predprobdata$called=="Yes"),]
@@ -240,16 +192,11 @@ calleddata <- predprobdata[which(predprobdata$called=="Yes"),]
 predicteddata <- predprobdata[which(predprobdata$prob>=1.0),]
 
 predicteddata2 <- predprobdata[which(predprobdata$predicted=="Yes"),]
-#predicteddata2 <- predicteddata2[-c(3),]
 
 ggplot() + 
   geom_line(data=predprobdata, aes(x=basenum, y=prob), 
             color='black',
             size=1)+
-  #geom_vline(data=predicteddata, aes(xintercept=basenum, 
-  #                                   color="red"),
-  #           size=.5,
-  #           show.legend = TRUE)+
   geom_vline(data=calleddata, aes(xintercept=basenum, 
                                   color="blue"),
              size=1.5,
@@ -258,17 +205,16 @@ ggplot() +
                                       color="forestgreen"),
              size=1.5,
              show.legend = TRUE)+
-  #annotate(geom = "segment",x = 15492234, xend = 15519798,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-  #annotate(geom = "segment",x = 15635994, xend = 15792137,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-  #annotate(geom = "segment",x = 16147181, xend = 16244962,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-  #annotate(geom = "segment",x = 16845543, xend = 16958034,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-  xlab("Base Pair Coordinate") +
-  ylab("Probability") +
+  xlab("Base Coordinate (mb)") +
+  ylab("") +
   scale_color_manual(name = '', 
                      values =c("blue", "forestgreen"),
                      labels = c("ARROWHEAD",
                                 "preciseTAD"))+
   scale_y_continuous(breaks=c(0,.5,1), limits=c(0,1))+
+  scale_x_continuous(breaks=c(50200000,50400000,50600000,50800000), 
+                     labels=c("50.2","50.4","50.6","50.8"))+
+  guides(color=guide_legend(nrow=2,byrow=TRUE)) +
   theme_minimal() +
   theme_bw() +
   theme(axis.text.x = element_text(size=15),
@@ -281,62 +227,3 @@ ggplot() +
         legend.title=element_text(size=20),
         plot.title = element_text(size=20),
         legend.position = "bottom")
-
-#ptbrdata <- data.frame(basenum=c(15770000:15780000))
-ptbrdata <- data.frame(basenum=c(70900000:70950000))
-
-ggplot(predprobdata, aes(x=basenum, y=prob)) + 
-    geom_line(data=predprobdata, aes(x=basenum, y=prob), 
-              color='black',
-              size=.5)+
-    #geom_smooth(method = "loess",span = 0.0001, color="red")+
-    #geom_vline(data=predicteddata, aes(xintercept=basenum, 
-    #                                   color="red"),
-    #           size=.5,
-    #           show.legend = TRUE)+
-    geom_vline(data=calleddata, aes(xintercept=basenum, 
-                                    color="blue"),
-               size=2.5,
-               show.legend = FALSE)+
-    geom_vline(data=predicteddata2, aes(xintercept=basenum, 
-                                        color="forestgreen"),
-               size=2.5,
-               show.legend = FALSE)+
-    geom_vline(data=ptbrdata, aes(xintercept=basenum, 
-                                        color="yellow"),
-               size=1,
-               show.legend = TRUE,
-               alpha=.5)+
-    #annotate(geom = "segment",x = 15492234, xend = 15519798,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-    #annotate(geom = "segment",x = 15635994, xend = 15792137,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-    #annotate(geom = "segment",x = 16147181, xend = 16244962,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-    #annotate(geom = "segment",x = 16845543, xend = 16958034,y = -Inf, yend = -Inf,color = "yellow",size = 5) +
-    xlab("Base Pair Coordinate") +
-    ylab("Probability") + 
-    xlim(15776433-50000,15776433+50000)+
-    scale_color_manual(name = '', 
-                       values =c("blue", "forestgreen","yellow"),
-                       labels = c("ARROWHEAD",
-                                  "preciseTAD",
-                                  "PTBR"))+
-    #scale_y_continuous(breaks=c(0,.5,1), limits=c(0,1))+
-    #theme_minimal() +
-    theme_bw() +
-    theme(axis.text.x = element_text(size=15),
-          axis.text.y = element_blank(),
-          axis.title.x = element_blank(),
-          axis.title.y = element_blank(),
-          #strip.text.x = element_text(size = 15),
-          #panel.spacing = unit(2, "lines"),
-          panel.background = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.grid.major = element_blank(),
-          legend.text=element_blank(),
-          legend.title=element_blank(),
-          #plot.title = element_text(size=20),
-          legend.position = "bottom")
-
-```
-
-
-

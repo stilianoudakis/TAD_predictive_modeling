@@ -513,3 +513,260 @@ enriched_func(all_true_bounds, genomicElements.GR[[3]], e=5, w=50, ct="preciseTA
 enriched_func(all_pred_bounds, genomicElements.GR[[4]], e=5, w=50, ct="LOLLIPOP")
 enriched_func(all_true_bounds, genomicElements.GR[[4]], e=5, w=50, ct="preciseTAD")
 ```
+
+
+########################################3
+
+# Plotting
+
+```{r}
+
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_holdout.rds"))
+  
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  
+}
+
+all_true_bounds <- do.call("c", true_bound_list)
+all_pred_bounds <- do.call("c", pred_bound_list)
+
+length(all_true_bounds) #
+length(all_pred_bounds) #
+
+
+e=5
+norm_mat_pt_ctcf <- normalizeToMatrix(genomicElements.GR[[1]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_ctcf <- colSums(norm_mat_pt_ctcf[])
+norm_mat_pt_rad21 <- normalizeToMatrix(genomicElements.GR[[2]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_rad21 <- colSums(norm_mat_pt_rad21[])
+norm_mat_pt_smc3 <- normalizeToMatrix(genomicElements.GR[[3]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_smc3 <- colSums(norm_mat_pt_smc3[])
+norm_mat_pt_znf143 <- normalizeToMatrix(genomicElements.GR[[4]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_znf143 <- colSums(norm_mat_pt_znf143[])
+
+
+
+norm_mat_a_ctcf <- normalizeToMatrix(genomicElements.GR[[1]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_a_ctcf <- colSums(norm_mat_a_ctcf[])
+norm_mat_a_rad21 <- normalizeToMatrix(genomicElements.GR[[2]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_a_rad21 <- colSums(norm_mat_a_rad21[])
+norm_mat_a_smc3 <- normalizeToMatrix(genomicElements.GR[[3]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_a_smc3 <- colSums(norm_mat_a_smc3[])
+norm_mat_a_znf143 <- normalizeToMatrix(genomicElements.GR[[4]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_a_znf143 <- colSums(norm_mat_a_znf143[])
+
+
+df <- data.frame(X = rep(c(1:200),8),
+                 E = c(norm_mat_pt_ctcf,
+                       norm_mat_pt_rad21,
+                       norm_mat_pt_smc3,
+                       norm_mat_pt_znf143,
+                       norm_mat_a_ctcf,
+                       norm_mat_a_rad21,
+                       norm_mat_a_smc3,
+                       norm_mat_a_znf143),
+                 Tool = c(rep("preciseTAD", 200*4),
+                          rep("Arrowhead", 200*4)),
+                 A = rep(c(rep("CTCF", 200),
+                       rep("RAD21", 200),
+                       rep("SMC3", 200),
+                       rep("ZNF143", 200)),2))
+
+ggplot(data=df, aes(x=X, y=E/5000, group=Tool, color=Tool)) +
+  facet_grid(. ~ A) +
+  geom_line(alpha=.75, size=1.5) +
+  xlab("Distance from boundary (kb)") +
+  ylab("") +
+  scale_color_manual(name="Tool", 
+                       values=c("blue", "forestgreen"))+
+  scale_x_continuous(breaks=c(0,100,200),
+                     label=c("-5", "Center", "5")) +
+  theme_minimal() +
+    theme_bw()+
+    theme(axis.text.x = element_text(size = 15),
+          axis.text.y = element_text(size = 20),
+          axis.title.x = element_text(size = 20),
+          axis.title.y = element_text(size = 20),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          strip.text.x = element_text(size = 20),
+          #panel.spacing = unit(2, "lines"),
+          legend.text=element_text(size=20),
+          legend.title=element_text(size=20),
+          plot.title = element_text(size=20),
+          legend.position = "bottom")
+
+
+################################################################################
+
+pred_bound_list <- GRangesList()
+true_bound_list <- GRangesList()
+chrs <- paste0("CHR", c(1:8,10:22))
+for(i in 1:length(chrs)){
+  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
+                                    chrs[i],
+                                    "/rus/distance/preciseTAD_holdout_peakachu.rds"))
+  
+  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred[[2]]
+  
+}
+
+all_true_bounds <- do.call("c", true_bound_list)
+all_pred_bounds <- do.call("c", pred_bound_list)
+
+length(all_true_bounds) #
+length(all_pred_bounds) #
+
+
+e=10
+norm_mat_pt_ctcf <- normalizeToMatrix(genomicElements.GR[[1]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_ctcf <- colSums(norm_mat_pt_ctcf[])
+norm_mat_pt_rad21 <- normalizeToMatrix(genomicElements.GR[[2]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_rad21 <- colSums(norm_mat_pt_rad21[])
+norm_mat_pt_smc3 <- normalizeToMatrix(genomicElements.GR[[3]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_smc3 <- colSums(norm_mat_pt_smc3[])
+norm_mat_pt_znf143 <- normalizeToMatrix(genomicElements.GR[[4]], 
+                              all_pred_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_pt_znf143 <- colSums(norm_mat_pt_znf143[])
+
+
+
+norm_mat_p_ctcf <- normalizeToMatrix(genomicElements.GR[[1]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_p_ctcf <- colSums(norm_mat_p_ctcf[])
+norm_mat_p_rad21 <- normalizeToMatrix(genomicElements.GR[[2]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_p_rad21 <- colSums(norm_mat_p_rad21[])
+norm_mat_p_smc3 <- normalizeToMatrix(genomicElements.GR[[3]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_p_smc3 <- colSums(norm_mat_p_smc3[])
+norm_mat_p_znf143 <- normalizeToMatrix(genomicElements.GR[[4]], 
+                              all_true_bounds, 
+                              value_column = "coverage", 
+                              extend = e*1000, 
+                              w = 50,
+                              mean_mode = "coverage")
+norm_mat_p_znf143 <- colSums(norm_mat_p_znf143[])
+
+
+df <- data.frame(X = rep(c(1:400),8),
+                 E = c(norm_mat_pt_ctcf,
+                       norm_mat_pt_rad21,
+                       norm_mat_pt_smc3,
+                       norm_mat_pt_znf143,
+                       norm_mat_p_ctcf,
+                       norm_mat_p_rad21,
+                       norm_mat_p_smc3,
+                       norm_mat_p_znf143),
+                 Tool = c(rep("preciseTAD", 400*4),
+                          rep("Peakachu", 400*4)),
+                 A = rep(c(rep("CTCF", 400),
+                       rep("RAD21", 400),
+                       rep("SMC3", 400),
+                       rep("ZNF143", 400)),2))
+
+
+ggplot(data=df, aes(x=X, y=E/10000, group=Tool, color=Tool)) +
+    facet_grid(. ~ A) +
+    geom_line(alpha=.75, size=1.5) +
+    xlab("Distance from boundary (kb)") +
+    ylab("") +
+    scale_color_manual(name="Tool", 
+                       values=c("red", "forestgreen"))+
+    scale_x_continuous(breaks=c(0,200,400),
+                       label=c("-10", "Center", "10")) +
+    theme_minimal() +
+    theme_bw()+
+    theme(axis.text.x = element_text(size = 15),
+          axis.text.y = element_text(size = 20),
+          axis.title.x = element_text(size = 20),
+          axis.title.y = element_text(size = 20),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          strip.text.x = element_text(size = 20),
+          #panel.spacing = unit(2, "lines"),
+          legend.text=element_text(size=20),
+          legend.title=element_text(size=20),
+          plot.title = element_text(size=20),
+          legend.position = "bottom")
+```
+
