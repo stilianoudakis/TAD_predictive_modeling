@@ -10,7 +10,25 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 ## For preprint
 
-- Figures need polishing
+- Figure 5 - Move Arrowhead/preciseTAD label on panel A
+- Figure 4D - AUC numbers missing
+- All figures - check for white background. Crop. Keep high resolution
+- Adjust the location of figures in the compiled PDF. They should intermingle with text, along with the narrative. Currently, Figure 1, 2, 3 are page after page, ugly
+- Supplementary figure 6 A, ZNF143 - are the panels misplaced 
+- Add code for deeptool plotting Figure 5BC and the like to the Additional File 1
+    - Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
+    - Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
+
+## For Package
+
+- Adjust functions as discussed
+- Add required/default clarification for all arguments of all functions
+- Save genome-wide model object for GM12878 abd K562
+    - Vignette (add !!! for changes): Describe prediction in another cell type using this model, with code examples
+    - If too large, put in new `dozmorovlab/preciseTAD_supplementary` repository (for preprint) and on ExperimentHub (for publication)
+    - After completing, MD should revisit the text and describe cross-cell-type prediction (Discussion and 'Training in one cell line accurately predicts boundary regions in other cell lines' section)
+- pkgdown web site - we need new link
+- Revert back Author/Maintainer section
 
 ## For publication
 
@@ -19,13 +37,19 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 - look into permutation test as replacement for normalized overlap. Quantify permutation enrichment p-values for two things:
     - Supplementary Figure 9, when described. Also, Discussion
-    - Figure 5 C, D - to statistically show that CTCF et al. are more significantly enriched.
+    - Figure 5 B,C (and supplementary 5) - to statistically show that CTCF et al. are more significantly enriched.
 
-- Resolution of all figures should be >300dpi. Currently, they are 150dpi
-
+- Resolution of all figures should be >300dpi. Currently, they are 150dpi STILL
 - Figure width should be either 7 in (full page width) or 3.5 in (half-page width). Current figures are all over the place.
 
+- Figure 4D - fonts are too small
+- Figure 4C - need equal number 
+- Figure 6A, Supplementary Figure 8 - should have exact p-values, and in text
+    - Arrowhead and Peakachu should be the right case
+- Figure 6B - disambiguate preciseTAD trained on Arrowhead and Peakachu
+
 - refer to supp tables 5 and 6 in discussion when ready. Currently, I commented out this section in Discussion
+
 
 
 
