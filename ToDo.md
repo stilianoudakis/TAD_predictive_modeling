@@ -10,16 +10,18 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 ## For preprint
 
-+ Figure 5 - Move Arrowhead/preciseTAD label on panel A
-+ Figure 4D - AUC numbers missing
-+ fixed fig4C
-+ All figures - check for white background. Crop. Keep high resolution
+- Figure 5 - add white background
+- Figure 6B - why IRQ was removed? It is OK, but why the legend was not adjusted? 
+ 
 - Adjust the location of figures in the compiled PDF. They should intermingle with text, along with the narrative. Currently, Figure 1, 2, 3 are page after page, ugly
-+ Supplementary figure 6 A, ZNF143 - are the panels misplaced 
-+ Add code for deeptool plotting Figure 5BC and the like to the Additional File 1
+
 - Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
-    + got spectralTAD
+    + got spectralTAD - where?
+
 - Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
+    - Add README.md. For each script, specify input, what it does, what is the output
+
+- PTBRs - where are we? 
 
 ## For Package
 
@@ -41,18 +43,17 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
     - Supplementary Figure 9, when described. Also, Discussion
     - Figure 5 B,C (and supplementary 5) - to statistically show that CTCF et al. are more significantly enriched.
 
-- Resolution of all figures should be >300dpi. Currently, they are 150dpi STILL
+- Resolution of all figures should be >300dpi. Currently, they are 150dpi
 - Figure width should be either 7 in (full page width) or 3.5 in (half-page width). Current figures are all over the place.
+- Crop should leave no continuous white spaces, crop by the farthest non-white points
 
-- Figure 4D - fonts are too small
-- Figure 4C - need equal number 
+- Figure 4D - remove diagonal line, it tells nothing. Then, enlarge AUC rectangles and font
 - Figure 6A, Supplementary Figure 8 - should have exact p-values, and in text
-    - Arrowhead and Peakachu should be the right case
 - Figure 6B - disambiguate preciseTAD trained on Arrowhead and Peakachu
 
 - refer to supp tables 5 and 6 in discussion when ready. Currently, I commented out this section in Discussion
 
-
+- We talked about relaxing t threshold, but it requires extensive reruns. Where are we on that?
 
 
 ### Writing tips
