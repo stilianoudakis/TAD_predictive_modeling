@@ -93,7 +93,7 @@ rfe.set.mat <- as.matrix(rfeperchr[,-1])
 rownames(rfe.set.mat) <- rfeperchr$TFBS
 rfe.set.mat <- t(apply(rfe.set.mat,1,rev))
 
-#rfe.set.mat <- rfe.set.mat[-12,]
+rfe.set.mat <- rfe.set.mat[-12,]
 rownames(rfe.set.mat)[2] <- "Znf143"
 
 distance.col = dist(rfe.set.mat, method = "euclidean")

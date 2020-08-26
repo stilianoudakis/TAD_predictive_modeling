@@ -15,4 +15,43 @@ for i in 5000 10000 25000 50000 100000;
 			done;
 	done;
 	
+#############################################################################################
+#Script for applying computeMatrix, plotProfle, and plotHeatmap from deepTools for          #
+comparing CTCF enrichment of Arrowhead called boundaries vs preciseTAD predicted boundaries # 
+#############################################################################################
+
+computeMatrix reference-point --referencePoint TSS /
+              -S ~/CTCF.bigWig /
+			  -R ~/arrowhead.bed ~/preciseTAD.bed \
+			  --binSize 50 \
+			  -a 5000 -b 5000 \
+			  -o ~/computeMatrix.ctcf.gz
+			  
+plotProfile -m ~/computeMatrix.ctcf.gz \
+              -out ~/plotProfile.ctcf.png \
+			  --dpi 300 \
+              --colors blue green \
+			  --regionsLabel Arrowhead preciseTAD \
+			  --samplesLabel CTCF \
+			  --refPointLabel Center \
+			  --plotHeight 7 \
+			  --plotWidth 7
+			  
+plotHeatmap -m ~/computeMatrix.ctcf.gz \
+              --regionsLabel CTCF \
+			  --yAxisLabel \
+			  --samplesLabel \
+			  --referencePointLabel Center \
+			  --xAxisLabel \
+			  --dpi 300 \
+			  --heatmapHeight 25 \
+			  --heatmapWidth 5 \
+              -out ~/plotHeatmap.png
+
+
+
+
+
+
+
 	

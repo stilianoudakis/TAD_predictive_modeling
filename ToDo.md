@@ -10,14 +10,16 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 ## For preprint
 
-- Figure 5 - Move Arrowhead/preciseTAD label on panel A
-- Figure 4D - AUC numbers missing
-- All figures - check for white background. Crop. Keep high resolution
++ Figure 5 - Move Arrowhead/preciseTAD label on panel A
++ Figure 4D - AUC numbers missing
++ fixed fig4C
++ All figures - check for white background. Crop. Keep high resolution
 - Adjust the location of figures in the compiled PDF. They should intermingle with text, along with the narrative. Currently, Figure 1, 2, 3 are page after page, ugly
-- Supplementary figure 6 A, ZNF143 - are the panels misplaced 
-- Add code for deeptool plotting Figure 5BC and the like to the Additional File 1
-    - Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
-    - Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
++ Supplementary figure 6 A, ZNF143 - are the panels misplaced 
++ Add code for deeptool plotting Figure 5BC and the like to the Additional File 1
+- Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
+    + got spectralTAD
+- Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
 
 ## For Package
 
