@@ -19,6 +19,7 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 + Add code for deeptool plotting Figure 5BC and the like to the Additional File 1
 - Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
     + got spectralTAD
+    + topdom 50/100kb
 - Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
 
 ## For Package
