@@ -1,24 +1,12 @@
-# Legend
-
-* Statements
-- Todo items
-+ Completed to do items (awaiting discussion)
-
-Delete minor todo items after completion
-
-Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel files
-
 ## For preprint
 
-+ Figure 5 - add white background
-+ Figure 6B - why IRQ was removed? It is OK, but why the legend was not adjusted? 
-    + whole genome instead of per chr
- 
-- Adjust the location of figures in the compiled PDF. They should intermingle with text, along with the narrative. Currently, Figure 1, 2, 3 are page after page, ugly
+- Figure 5 - add white background
+    - It is not added
 
 - Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
     + got spectralTAD - where?
     + topdom 50/100kb
+    - TBD
 
 - Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
     - Add README.md. For each script, specify input, what it does, what is the output
@@ -29,12 +17,22 @@ Share binary files by e-mail. Figures - pasted in PPT, tables - as CSV or Excel 
 
 + Adjust functions as discussed
 + Add required/default clarification for all arguments of all functions
+    - Summarize chages in the NEWS file, add them to my summary for version 0.99.5
+    - preciseTAD() - TBD need for DBSCAN arguments, method.Clust. Same for CLARA, method.Dist, samples
+    - Juicer - why an extra parameter? It looks as simple as explaining the reformatting of PTBPs into BED format
+
 + Save genome-wide model object for GM12878 abd K562
-+ Vignette (add !!! for changes): Describe prediction in another cell type using this model, with code examples
-    + If too large, put in new `dozmorovlab/preciseTAD_supplementary` repository (for preprint) and on ExperimentHub (for publication)
-    - After completing, MD should revisit the text and describe cross-cell-type prediction (Discussion and 'Training in one cell line accurately predicts boundary regions in other cell lines' section)
+   - TBD, need actual models, not the BED files and a bunch of code for the full pipeline
+   - Cross cell type prediction still unacceptable
+
++ Vignette (add !!! for changes)
+    - Describe prediction in another cell type using this model, with code examples. If too large, put in new `dozmorovlab/preciseTAD_supplementary` repository (for preprint) and on ExperimentHub (for publication)
+        - Supplementary repository should be `dozmorovlab/preciseTAD_supplementary`
+        - ExperimentalHub is TBD
+    - Avoid referring to section numbers, no "described in Section 1.1 and 1.2" and the like
+
 - pkgdown web site - we need new link
-- Revert back Author/Maintainer section
+
 
 ## For publication
 
