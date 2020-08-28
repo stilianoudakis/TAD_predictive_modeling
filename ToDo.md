@@ -1,7 +1,7 @@
 ## For preprint
 
-- Figure 5 - add white background
-    - It is not added
++ Figure 5 - add white background
+    + It is not added
 
 - Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
     + got spectralTAD - where?
@@ -22,7 +22,7 @@
     - Juicer - why an extra parameter? It looks as simple as explaining the reformatting of PTBPs into BED format
 
 + Save genome-wide model object for GM12878 abd K562
-   - TBD, need actual models, not the BED files and a bunch of code for the full pipeline
+   + TBD, need actual models, not the BED files and a bunch of code for the full pipeline
    - Cross cell type prediction still unacceptable
 
 + Vignette (add !!! for changes)
@@ -30,8 +30,6 @@
         - Supplementary repository should be `dozmorovlab/preciseTAD_supplementary`
         - ExperimentalHub is TBD
     - Avoid referring to section numbers, no "described in Section 1.1 and 1.2" and the like
-
-- pkgdown web site - we need new link
 
 
 ## For publication
@@ -55,6 +53,7 @@
 
 - We talked about relaxing t threshold, but it requires extensive reruns. Where are we on that?
 
+- pkgdown web site - we need new link
 
 ### Writing tips
 
