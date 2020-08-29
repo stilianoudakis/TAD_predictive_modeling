@@ -1,41 +1,36 @@
 ## For preprint
 
-+ Figure 5 - add white background
-    + It is not added
-
-- Need more examples of signal plotting. Use SpectralTAD vs. preciseTAD boundaries, CTCF only. Ideally, TopDom, HiCSeg, rGMAP. For publication, it has to be a Supplementary figure
-    + got spectralTAD - where?
-    + topdom 50/100kb
-    - TBD
-
-- Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
-    - Add README.md. For each script, specify input, what it does, what is the output
+- Need more examples of signal plotting. Supplementary Figure 5, panels C and D, showing Arrowhead, SpectralTAD, and Peakachu signals. 10kb data, GM12878, whole genome boundaries
 
 - PTBRs - where are we? 
+- Supplementary Table 4: genomic coordinates of PTBRs , for GM12878 and K562, Arrowhead and Peakachu, hg19
+   - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
+
+- Figure 4D - remove diagonal lines, they tell nothing. Then, enlarge AUC rectangles and font
 
 ## For Package
 
-+ Adjust functions as discussed
-+ Add required/default clarification for all arguments of all functions
-    - Summarize chages in the NEWS file, add them to my summary for version 0.99.5
-    - preciseTAD() - TBD need for DBSCAN arguments, method.Clust. Same for CLARA, method.Dist, samples
-    - Juicer - why an extra parameter? It looks as simple as explaining the reformatting of PTBPs into BED format
+- Model filenames should be simplified to remove the obvious ("tadRF", "holdout", "gt" are redundant). Use <CHRXX>_<CELLINE>_<RESOLUTION>_<BOUNDARYTYPE>. E.g., `CHR22_GM12878_5kb_Peakachu.rds`. 
+    - Change all file names
+    - Upload to https://1drv.ms/u/s!AhmbAyu-bORbgutlR0_b-DJP9jTNKw?e=zZhASJ . I will change settings to read-only then.
+    - Adjust the vignette links and code (currently, ???)
 
-+ Save genome-wide model object for GM12878 abd K562
-   + TBD, need actual models, not the BED files and a bunch of code for the full pipeline
-   - Cross cell type prediction still unacceptable
+- preciseTAD() DBSCAN parameters. It makes sense to use epsilon 5000 for 5kb data. Does it make sense to keep it the same for base-level prediction? Important, TBD.
 
-+ Vignette (add !!! for changes)
-    - Describe prediction in another cell type using this model, with code examples. If too large, put in new `dozmorovlab/preciseTAD_supplementary` repository (for preprint) and on ExperimentHub (for publication)
-        - Supplementary repository should be `dozmorovlab/preciseTAD_supplementary`
-        - ExperimentalHub is TBD
-    - Avoid referring to section numbers, no "described in Section 1.1 and 1.2" and the like
+- Before BioC push, check NEWS and DESCRIPTION files
 
+- When running the examples in the README file, the last code breaks with error:
+```
+Error in makePSOCKcluster(names = spec, ...) : 
+  Cluster setup failed. 2 of 2 workers failed to connect.
+```
+The error is reproducible. Look into it, important
+
+- pkgdown - I'll do when all of the above completed.
 
 ## For publication
 
-- Supplementary Table 4: genomic coordinates of PTBRs , for GM12878 and K562, Arrowhead and Peakachu, hg19
-   - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
+- ExperimentHub
 
 - look into permutation test as replacement for normalized overlap. Quantify permutation enrichment p-values for two things:
     - Supplementary Figure 9, when described. Also, Discussion
@@ -45,7 +40,6 @@
 - Figure width should be either 7 in (full page width) or 3.5 in (half-page width). Current figures are all over the place.
 - Crop should leave no continuous white spaces, crop by the farthest non-white points
 
-- Figure 4D - remove diagonal line, it tells nothing. Then, enlarge AUC rectangles and font
 - Figure 6A, Supplementary Figure 8 - should have exact p-values, and in text
 - Figure 6B - disambiguate preciseTAD trained on Arrowhead and Peakachu
 
@@ -53,7 +47,9 @@
 
 - We talked about relaxing t threshold, but it requires extensive reruns. Where are we on that?
 
-- pkgdown web site - we need new link
+- Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
+    - Add README.md. For each script, specify input, what it does, what is the output
+
 
 ### Writing tips
 
