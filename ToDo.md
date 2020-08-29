@@ -10,21 +10,14 @@
 
 ## For Package
 
-- Model filenames should be simplified to remove the obvious ("tadRF", "holdout", "gt" are redundant). Use <CHRXX>_<CELLINE>_<RESOLUTION>_<BOUNDARYTYPE>. E.g., `CHR22_GM12878_5kb_Peakachu.rds`. 
-    - Change all file names
-    - Upload to https://1drv.ms/u/s!AhmbAyu-bORbgutlR0_b-DJP9jTNKw?e=zZhASJ . I will change settings to read-only then.
-    - Adjust the vignette links and code (currently, ???)
-
-- preciseTAD() DBSCAN parameters. It makes sense to use epsilon 5000 for 5kb data. Does it make sense to keep it the same for base-level prediction? Important, TBD.
-
-- Before BioC push, check NEWS and DESCRIPTION files
-
 - When running the examples in the README file, the last code breaks with error:
 ```
 Error in makePSOCKcluster(names = spec, ...) : 
   Cluster setup failed. 2 of 2 workers failed to connect.
 ```
 The error is reproducible. Look into it, important
+
+- Before BioC push, check NEWS and DESCRIPTION files
 
 - pkgdown - I'll do when all of the above completed.
 
