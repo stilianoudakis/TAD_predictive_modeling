@@ -1,12 +1,5 @@
 ## For preprint
 
-- OneDrive downloadable models. GM12878 models for Arrowhead and Peakachu are OK. 
-    - Why CHR9 is not available for Peakachu? We need all models for Peakachu (recommended for usage), and can have missing Arrowhead models
-    - CHR9 for Arrowhead is missing - is it still possible to use it for 5kb data?
-    - OneDrive has 5Gb, so some models won't fit. Discard models for the last chromosomes (chr22, chr21, ...) until the rest fits.
-
-- Need more examples of signal plotting. Supplementary Figure 5, panels C and D, showing Arrowhead, SpectralTAD, and Peakachu signals. 10kb data, GM12878, whole genome boundaries
-
 - PTBRs - where are we? 
 - Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
    - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
@@ -14,6 +7,11 @@
 - Figure 4D - remove diagonal lines, they tell nothing. Then, enlarge AUC rectangles and font
 
 ## For Package
+
+- OneDrive downloadable models. GM12878 models for Arrowhead and Peakachu are OK. 
+    - Why CHR9 is not available for Peakachu? We need all models for Peakachu (recommended for usage), and can have missing Arrowhead models
+    - CHR9 for Arrowhead is missing - is it still possible to use it for 5kb data?
+    - OneDrive has 5Gb, so some models won't fit. Discard models for the last chromosomes (chr22, chr21, ...) until the rest fits.
 
 - Run the examples in the README. The last one, with `verbose = TRUE`, outputs a lot of non-informative text. Is this normal?
 
