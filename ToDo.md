@@ -6,6 +6,8 @@
 
 - Figure 4D - remove diagonal lines, they tell nothing. Then, enlarge AUC rectangles and font
 
+- Supplementary Figure 5 - Add white background
+
 ## For Package
 
 - OneDrive downloadable models. GM12878 models for Arrowhead and Peakachu are OK. 
