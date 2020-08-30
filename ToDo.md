@@ -1,29 +1,39 @@
 ## For preprint
 
+- OneDrive downloadable models. GM12878 models for Arrowhead and Peakachu are OK. 
+    - Why CHR9 is not available for Peakachu? We need all models for Peakachu (recommended for usage), and can have missing Arrowhead models
+    - CHR9 for Arrowhead is missing - is it still possible to use it for 5kb data?
+    - OneDrive has 5Gb, so some models won't fit. Discard models for the last chromosomes (chr22, chr21, ...) until the rest fits.
+
 - Need more examples of signal plotting. Supplementary Figure 5, panels C and D, showing Arrowhead, SpectralTAD, and Peakachu signals. 10kb data, GM12878, whole genome boundaries
 
 - PTBRs - where are we? 
-- Supplementary Table 4: genomic coordinates of PTBRs , for GM12878 and K562, Arrowhead and Peakachu, hg19
+- Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
    - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
 
 - Figure 4D - remove diagonal lines, they tell nothing. Then, enlarge AUC rectangles and font
 
 ## For Package
 
-- When running the examples in the README file, the last code breaks with error:
+- Run the examples in the README. The last one, with `verbose = TRUE`, outputs a lot of non-informative text. Is this normal?
+
+- When running the last example in the README file (line 120) and the cell-type-specific predictions in the vignette (line 318), the code breaks with error:
 ```
 Error in makePSOCKcluster(names = spec, ...) : 
   Cluster setup failed. 2 of 2 workers failed to connect.
 ```
-The error is reproducible. Look into it, important
+The error is in `preciseTAD()` function, when the `parallel` argument is a number (`=2`, `=1`). The error occurs on Mac. Setting `parallel = NULL` allows error-free execution. The error does not occur on Windows, but multiple CPUs seem not to be utilized. Something wrong with parallelization, investigate.
 
-- Before BioC push, check NEWS and DESCRIPTION files
-
-- pkgdown - I'll do when all of the above completed.
 
 ## For publication
 
-- ExperimentHub
+- Look into DBSCAN parameters for base-level predictions. Strategy:
+    - Use CHR1, GM12878, Peakachu pre-trained model
+    - Run the model to detect precise boundaries at different DBSCAN epsilon settings - 100, 500, 1000, 2500, 5000
+    - Make signal plots (like Supplementary Figure 5C,D) for CTCF, RAD21 etc., centered on the detected boundary points. This will be supplementary figure
+    - Hypothesis: At some epsilon settings, we will detect too much "noise". We can visually detect the optimal epsilon settings for the base-level prediction, given there's no ground truth at this level
+
+- Look into ExperimentalHub
 
 - look into permutation test as replacement for normalized overlap. Quantify permutation enrichment p-values for two things:
     - Supplementary Figure 9, when described. Also, Discussion
