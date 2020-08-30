@@ -1,12 +1,12 @@
-## For preprint
+## Last things for preprint/package submission
 
-- PTBRs - where are we? 
-- Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
+- PTBRs, Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
    - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
 
-- Figure 4D - remove diagonal lines, they tell nothing. Then, enlarge AUC rectangles and font
+- Check Figure 6B and the percentages in "preciseTAD boundaries are more conserved across cell lines". The percentages seem wrong, like "26% and 63% for Arrowhead and Peakachu boundaries", should be larger?
+    - Double-check percentages in the "Boundaries predicted by *preciseTAD* models trained on TAD and loop boundaries are highly overlapping" section
 
-- Supplementary Figure 5 - Add white background
+- After completing the above, let me know, so I can work on it. And check if you can quickly do/answer other questions.
 
 ## For Package
 
@@ -27,15 +27,23 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
+- Supplementary Figure 5 - Add white background
+
+- Figure 4D - remove diagonal lines, they tell nothing. Then, enlarge AUC rectangles and font
+
+- Figure 6A, Supplementary Figure 8 - should have exact p-values, and in text
+
+- Figure 6B - disambiguate preciseTAD trained on Arrowhead and Peakachu
+
 - Look into DBSCAN parameters for base-level predictions. Strategy:
     - Use CHR1, GM12878, Peakachu pre-trained model
-    - Run the model to detect precise boundaries at different DBSCAN epsilon settings - 100, 500, 1000, 2500, 5000
+    - Run the model for all pairwise combinations of "DBSCAN-epsilon"={100, 1000, 5000} and "t"={1, 0.99, 0.95}
     - Make signal plots (like Supplementary Figure 5C,D) for CTCF, RAD21 etc., centered on the detected boundary points. This will be supplementary figure
-    - Hypothesis: At some epsilon settings, we will detect too much "noise". We can visually detect the optimal epsilon settings for the base-level prediction, given there's no ground truth at this level
+    - Hypothesis: At some "epsilon" and "t" settings, we will detect too much "noise". We can visually detect the optimal epsilon settings for the base-level prediction, given there's no ground truth at this level
 
 - Look into ExperimentalHub
 
-- look into permutation test as replacement for normalized overlap. Quantify permutation enrichment p-values for two things:
+- Look into permutation test as replacement for normalized overlap. Quantify permutation enrichment p-values for two things:
     - Supplementary Figure 9, when described. Also, Discussion
     - Figure 5 B,C (and supplementary 5) - to statistically show that CTCF et al. are more significantly enriched.
 
@@ -43,15 +51,13 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 - Figure width should be either 7 in (full page width) or 3.5 in (half-page width). Current figures are all over the place.
 - Crop should leave no continuous white spaces, crop by the farthest non-white points
 
-- Figure 6A, Supplementary Figure 8 - should have exact p-values, and in text
-- Figure 6B - disambiguate preciseTAD trained on Arrowhead and Peakachu
-
 - refer to supp tables 5 and 6 in discussion when ready. Currently, I commented out this section in Discussion
-
-- We talked about relaxing t threshold, but it requires extensive reruns. Where are we on that?
 
 - Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
     - Add README.md. For each script, specify input, what it does, what is the output
+
+
+
 
 
 ### Writing tips
