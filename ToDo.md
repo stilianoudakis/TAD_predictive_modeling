@@ -9,6 +9,9 @@
       - _Number_ of sub-regions in all PTBRs. Take PTBRs only, count the number of sub-regions in each
       - _Width_ of sub-regions in all PTBRs. Take PTBRs only, measure width of sub-regions in each
       - _Distance between sub-regions_ within PTBRs. Take PTBRs only, measure distance between sub-regions in each
+- Can you return all these parameters in the [[3]] slot of the predicted boundaries, along with normalized enrichment? So, the [[3]] slot will contain a (named) list with all those summaries, including one entry for normalized score
+
+- Check/Change Methods in the manuscript and package's vignette. E.g., describe the use of PAM only
 
 - Check Figure 6B and the percentages in "preciseTAD boundaries are more conserved across cell lines". The percentages seem wrong, like "26% and 63% for Arrowhead and Peakachu boundaries", should be larger?
     - Double-check percentages in the "Boundaries predicted by *preciseTAD* models trained on TAD and loop boundaries are highly overlapping" section
