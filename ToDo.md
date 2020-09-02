@@ -1,7 +1,14 @@
 ## Last things for preprint/package submission
 
 - PTBRs, Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
-   - Need `summary()` of PTBR lengths for Arrowhead GM12878 and K562 and Peakachu GM12878 and K562 PRBRs
+   - Use GM12989, CHR22, Arrowhead, epsilon=10000
+   - We have PTBRs (regions) that comprise of multiple consecutive sub-regions. Need the following summaries `summary()`, in bases:
+      + _Number_ of PTBRs
+      + _Width_ of PTBRs
+      + _Distance between PTBRa_
+      - _Number_ of sub-regions in all PTBRs. Take PTBRs only, count the number of sub-regions in each
+      - _Width_ of sub-regions in all PTBRs. Take PTBRs only, measure width of sub-regions in each
+      - _Distance between sub-regions_ within PTBRs. Take PTBRs only, measure distance between sub-regions in each
 
 - Check Figure 6B and the percentages in "preciseTAD boundaries are more conserved across cell lines". The percentages seem wrong, like "26% and 63% for Arrowhead and Peakachu boundaries", should be larger?
     - Double-check percentages in the "Boundaries predicted by *preciseTAD* models trained on TAD and loop boundaries are highly overlapping" section
