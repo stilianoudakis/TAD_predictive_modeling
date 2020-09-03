@@ -1,36 +1,24 @@
 ## Last things for preprint/package submission
 
-+ remove noise cluster before hand
-+ normalized NumBPperPTBR to ptbr length (PTBRCoverage)
+- Can you return all these parameters in the [[3]] slot of the predicted boundaries, along with normalized enrichment? So, the [[3]] slot will contain a (named) list with all those summaries, including one entry for normalized score
+    - Note "slot [[3]]". PTBR - slot 1, PTBP - slot 2, diagnostic info - slot 3
+    - Note "along with normalized enrichment". It makes no sense to separate diagnostic information into different slots (2 and 4 currently). All should be in slot [[3]]
+    - Remove "TotalCoordperPTBR" - noninformative given you provide "PTBRcoverage"
+    - Add "SubregionWidth" at the end of the list. Analogout to "PTBRwidth", it will be informative
 
-+ PTBRs, Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
-   + Use GM12989, CHR22, Arrowhead, epsilon=10000
-   + We have PTBRs (regions) that comprise of multiple consecutive sub-regions. Need the following summaries `summary()`, in bases:
-      + _Number_ of PTBRs
-      + _Width_ of PTBRs
-      + _Distance between PTBRa_
-      + _Number_ of sub-regions in all PTBRs. Take PTBRs only, count the number of sub-regions in each
-      + _Width_ of sub-regions in all PTBRs. Take PTBRs only, measure width of sub-regions in each
-      + _Distance between sub-regions_ within PTBRs. Take PTBRs only, measure distance between sub-regions in each
-      + _Number of bp per sub region_
-      
-+ Can you return all these parameters in the [[3]] slot of the predicted boundaries, along with normalized enrichment? So, the [[3]] slot will contain a (named) list with all those summaries, including one entry for normalized score
+- After completing the above, let me know, so I can work on it
 
-+ Check/Change Methods in the manuscript and package's vignette. E.g., describe the use of PAM only
+- The schematic figure how you calculate all the above values/summaries is important. Modify it after addressing the above and include in the vignette
+    - Normalized score is a part of the diagnostic info - describe it in the vignette's text
+
+- Do we have new figures 5, 6, supplementary?
+
+- PTBRs, Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
 
 - Check Figure 6B and the percentages in "preciseTAD boundaries are more conserved across cell lines". The percentages seem wrong, like "26% and 63% for Arrowhead and Peakachu boundaries", should be larger?
     - Double-check percentages in the "Boundaries predicted by *preciseTAD* models trained on TAD and loop boundaries are highly overlapping" section
 
-- After completing the above, let me know, so I can work on it. And check if you can quickly do/answer other questions.
-
 ## For Package
-
-- OneDrive downloadable models. GM12878 models for Arrowhead and Peakachu are OK. 
-    - Why CHR9 is not available for Peakachu? We need all models for Peakachu (recommended for usage), and can have missing Arrowhead models
-    - CHR9 for Arrowhead is missing - is it still possible to use it for 5kb data?
-    - OneDrive has 5Gb, so some models won't fit. Discard models for the last chromosomes (chr22, chr21, ...) until the rest fits.
-
-- Run the examples in the README. The last one, with `verbose = TRUE`, outputs a lot of non-informative text. Is this normal?
 
 - When running the last example in the README file (line 120) and the cell-type-specific predictions in the vignette (line 318), the code breaks with error:
 ```
