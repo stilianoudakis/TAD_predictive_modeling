@@ -1,15 +1,15 @@
 ## Last things for preprint/package submission
 
-- Can you return all these parameters in the [[3]] slot of the predicted boundaries, along with normalized enrichment? So, the [[3]] slot will contain a (named) list with all those summaries, including one entry for normalized score
-    - Note "slot [[3]]". PTBR - slot 1, PTBP - slot 2, diagnostic info - slot 3
-    - Note "along with normalized enrichment". It makes no sense to separate diagnostic information into different slots (2 and 4 currently). All should be in slot [[3]]
-    - Remove "TotalCoordperPTBR" - noninformative given you provide "PTBRcoverage"
-    - Add "SubregionWidth" at the end of the list. Analogout to "PTBRwidth", it will be informative
++ Can you return all these parameters in the [[3]] slot of the predicted boundaries, along with normalized enrichment? So, the [[3]] slot will contain a (named) list with all those summaries, including one entry for normalized score
+    + Note "slot [[3]]". PTBR - slot 1, PTBP - slot 2, diagnostic info - slot 3
+    + Note "along with normalized enrichment". It makes no sense to separate diagnostic information into different slots (2 and 4 currently). All should be in slot [[3]]
+    + Remove "TotalCoordperPTBR" - noninformative given you provide "PTBRcoverage"
+    + Add "SubregionWidth" at the end of the list. Analogout to "PTBRwidth", it will be informative
 
-- After completing the above, let me know, so I can work on it
++ After completing the above, let me know, so I can work on it
 
-- The schematic figure how you calculate all the above values/summaries is important. Modify it after addressing the above and include in the vignette
-    - Normalized score is a part of the diagnostic info - describe it in the vignette's text
++ The schematic figure how you calculate all the above values/summaries is important. Modify it after addressing the above and include in the vignette
+    + Normalized score is a part of the diagnostic info - describe it in the vignette's text
 
 - Do we have new figures 5, 6, supplementary?
 
