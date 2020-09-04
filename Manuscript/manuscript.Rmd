@@ -261,7 +261,7 @@ AUC - Area Under the Curve; BA - Balance Accuracy; bp - base pair; BroadHMM - Br
 
 _Conflict of Interest._ None.
 
-# Funding
+<!-- # Funding -->
 
 # References
 
