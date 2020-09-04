@@ -222,7 +222,7 @@ of Enhancer-Promoter Loops"]
 
 **Supplementary Table 3.** Domain boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on the K562 cell line. Class imbalance is calculated as the ratio of the total number of unique boundaries to the total number of genomic bins.
 
-**Supplementary Table 4.** Genomic coordinates of *preciseTAD*-predicted boundary regions (PTBR) and points (PTBP) for GM12878 and K562, using Arrowhead TAD and Peakachu chromatin loop boundary coordinates as ground truth. For PTBRs, the start and end coordinates define the clusters of spatially proximal bases with the probability of being a boundary equal to 1. For PTBPs, the start and end (start+1) coordinates define the uniquely identified boundary coordinate within each PTBR. All coordinates are in hg19/GRCh37 reference genome.
+**Supplementary Table 4.** Genomic coordinates of *preciseTAD*-predicted boundary regions (PTBR) and points (PTBP) for GM12878 and K562, using Arrowhead TAD and Peakachu chromatin loop boundary coordinates as ground truth. For PTBRs, the start and end coordinates define the clusters of spatially proximal bases with the probability of being a boundary equal to 1. For PTBPs, the start and end (start+1) coordinates define the uniquely identified boundary coordinate within each PTBR. All coordinates are in hg19/GRCh37 reference genome. (Work in progress)
 
 <!--
 **Supplementary Table 5.** Additional performance metrics when implementing a random forest using Arrowhead ground truth TAD boundaries. Performances are averaged across each holdout chromosome that was reserved for testing.
