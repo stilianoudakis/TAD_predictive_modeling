@@ -1,0 +1,76 @@
+---
+title: "psuedocode"
+author: "Spiro Stilianoudakis"
+date: "9/6/2020"
+output: pdf_document
+header-includes:
+- \usepackage{stackengine}
+- \usepackage{amsmath}
+- \usepackage{algorithm2e}
+- \usepackage[noend]{algpseudocode}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# preciseTAD (CV)
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\SetAlgoLined
+1. Consider an optimized RF model (M) built on the set of autosomal chromosomes $\{ k |i \notin k \}$ binned at some resolution $r$
+\BlankLine
+2. \For{each chr $i$ do}{
+\BlankLine
+3.    Construct the base-level resolution predictor space $A_{n \times p}$ where $n$ is the length of chr $i$ and $p$ is the number of predictors\;
+\BlankLine
+4.    Assign threshold $\{t | 0 \le t \le 1 \}$ and $\{\epsilon | \epsilon > 0 \}$\;
+\BlankLine
+5.    \eIf{$|t| > 1$ or $|\epsilon| > 1$}{
+\BlankLine
+6.          Assign grid $(g)$ of combinations of $t$ and $\epsilon$ \;
+\BlankLine
+7.               \For{each combination $l$ in g}{
+\BlankLine
+8.                  Evaluate M on $A_{n \times p}$ to get the probability of each genomic coordinate as being a domain boundary $\pi_{n}$\;
+\BlankLine
+9.                  Subset $\{\pi_{n} | \pi_{n} \ge t_{l} \}$\;
+\BlankLine
+10.                 Construct the pairwise distance matrix $D$ between genomic coordinates where $\pi_{n} \ge t_{l}$\;
+\BlankLine
+11.                 Apply DBSCAN on $D$ with $MinPts=3$ and $\epsilon=\epsilon_{l}$\;
+\BlankLine
+12.                 \For{each cluster $k$ identified by DBSCAN}{
+\BlankLine
+13.                     Assign $w_{k}$ as the number of coordinates that span each cluster of bases in $k$ (PTBR)\;
+\BlankLine
+14.                     Perform PAM on the sub-distance matrix $D_{k}$ to extract the cluster medoid $b_{k}$ (PTBP)\;
+\BlankLine
+15.                     \For{each predictor p}{
+\BlankLine
+16.                         Calculate the normalized enrichment (NE) over all predictors
+                            $$NE = \dfrac{1}{p} \left[ \Sigma_{s=1}^{p} \left[ \dfrac{1}{b} \Sigma_{k=1}^{b} e_{ks} \times c_{k} \right] \right]$$
+                            where $e_{ks} = \textbf{I}\{ r_{s} \in (b_{k}-f, b_{k}+f)\}$ is the number of elemental regions $r$ of predictor $p$ that overlap with each flanked boundary and $c_{k} = \dfrac{ \textbf{I}\{ \pi_{n} \ge t_{l} \in w_{k} \} }{w_{k}}$ is the coverage probability of each PTBR\;
+\BlankLine
+17.                         Determine where $NE$ converges as optimal $\{t,\epsilon\}$ combination\;
+\BlankLine
+18.                         Repeat steps 12-18 on $A_{nxp}$ with optimal $\{t,\epsilon\}$\;
+\BlankLine
+                     }
+\BlankLine
+                 }
+\BlankLine
+              }
+\BlankLine
+   }{
+\BlankLine
+19.  Perform steps 12-18 on $A_{nxp}$ such that $t=t_{0}$ and $\epsilon=\epsilon_{0}$\;
+\BlankLine
+   }
+\BlankLine
+}
+\caption{Psuedocode for $preciseTAD$ implementation.}
+\end{algorithm} 
+
+
