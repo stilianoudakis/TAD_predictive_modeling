@@ -11,6 +11,8 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
+- make split plots for fig5 C/D
+
 + supp tables 5 and 6
 
 + Do we have new figures 5 supplementary?
