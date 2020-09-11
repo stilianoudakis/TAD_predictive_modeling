@@ -84,8 +84,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  pred_bound_list[[i]] <- called_and_pred[[2]]
-  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred$PTBP
+  true_bound_list[[i]] <- called_and_pred$CTBP
   
 }
 
@@ -93,7 +93,7 @@ all_true_bounds <- do.call("c", true_bound_list)
 all_pred_bounds <- do.call("c", pred_bound_list)
 
 length(all_true_bounds) #15468
-length(all_pred_bounds) #7846
+length(all_pred_bounds) #12258
 
 all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
                                  start=start(all_true_bounds),
@@ -128,8 +128,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  pred_bound_list[[i]] <- called_and_pred[[2]]
-  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred$PTBP
+  true_bound_list[[i]] <- called_and_pred$CTBP
   
 }
 
@@ -137,7 +137,7 @@ all_true_bounds <- do.call("c", true_bound_list)
 all_pred_bounds <- do.call("c", pred_bound_list)
 
 length(all_true_bounds) #9316
-length(all_pred_bounds) #8883
+length(all_pred_bounds) #9603
 
 all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
                                  start=start(all_true_bounds),
@@ -174,8 +174,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  pred_bound_list[[i]] <- called_and_pred[[2]]
-  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred$PTBP
+  true_bound_list[[i]] <- called_and_pred$CTBP
   
 }
 
@@ -183,7 +183,7 @@ all_true_bounds <- do.call("c", true_bound_list)
 all_pred_bounds <- do.call("c", pred_bound_list)
 
 length(all_true_bounds) #21421
-length(all_pred_bounds) #15838
+length(all_pred_bounds) #15707
 
 all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
                                  start=start(all_true_bounds),
@@ -214,13 +214,12 @@ pred_bound_list <- GRangesList()
 true_bound_list <- GRangesList()
 chrs <- paste0("CHR", c(1:8,10,11,13:22))
 for(i in 1:length(chrs)){
-  print(i)
   called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  pred_bound_list[[i]] <- called_and_pred[[2]]
-  true_bound_list[[i]] <- called_and_pred[[3]]
+  pred_bound_list[[i]] <- called_and_pred$PTBP
+  true_bound_list[[i]] <- called_and_pred$CTBP
   
 }
 
@@ -228,7 +227,7 @@ all_true_bounds <- do.call("c", true_bound_list)
 all_pred_bounds <- do.call("c", pred_bound_list)
 
 length(all_true_bounds) #20773
-length(all_pred_bounds) #10379
+length(all_pred_bounds) #10516
 
 all_true_bounds_df <- data.frame(chr=as.character(seqnames(all_true_bounds)),
                                  start=start(all_true_bounds),

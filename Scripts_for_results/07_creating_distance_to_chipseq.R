@@ -72,8 +72,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 
@@ -127,8 +127,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 
@@ -262,8 +262,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 
@@ -317,8 +317,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 
@@ -362,3 +362,76 @@ BoundReg = c(#preciseTAD
 
 pred_v_called_df_p$BoundReg <- factor(pred_v_called_df_p$BoundReg, levels=c("Peakachu", "preciseTAD"))
 
+######################
+
+#plotting
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +   
+  stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2) +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Distance to CTCF")+
+  xlab("") + ylim(0,20) +
+  scale_fill_manual(values=c("blue",
+                             "forestgreen"))+
+  scale_color_manual(values=c("blue",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=20,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        strip.text.x = element_text(size = 20),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=20),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg, color=BoundReg))  +   
+  stat_boxplot(geom ='errorbar', width = 0.2, size=1.2, color="black") + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2) +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Peakachu")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("")+
+  xlab("") + ylim(0,20) +
+  scale_fill_manual(values=c("red",
+                             "forestgreen"))+
+  scale_color_manual(values=c("red",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=20,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20),
+        strip.text.x = element_text(size = 20),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=20),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+
+ggarrange(a,b,ncol = 2)

@@ -92,8 +92,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 
@@ -110,8 +110,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
 }
 
 all_true_bounds_k562 <- do.call("c", true_bound_list)
@@ -132,8 +132,8 @@ gp[["Face"]][["10"]]$fill <-  "red"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- .1
-gp[["SetText"]][["Set2"]]$cex <- .1
+gp[["SetText"]][["Set1"]]$cex <- .01
+gp[["SetText"]][["Set2"]]$cex <- .01
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
@@ -152,8 +152,8 @@ gp[["Face"]][["10"]]$fill <-  "red"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- .1
-gp[["SetText"]][["Set2"]]$cex <- .1
+gp[["SetText"]][["Set1"]]$cex <- .01
+gp[["SetText"]][["Set2"]]$cex <- .01
 
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
@@ -169,8 +169,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 
@@ -187,8 +187,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
 }
 
 all_true_bounds_k562 <- do.call("c", true_bound_list)
@@ -248,8 +248,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 all_true_bounds_gm12878_a <- do.call("c", true_bound_list)
@@ -266,8 +266,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
   
 }
 all_true_bounds_gm12878_p <- do.call("c", true_bound_list)
@@ -284,8 +284,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
 }
 all_true_bounds_k562_a <- do.call("c", true_bound_list)
 all_pred_bounds_k562_a <- do.call("c", pred_bound_list)
@@ -301,8 +301,8 @@ for(i in 1:length(chrs)){
                                     chrs[i],
                                     "/rus/distance/preciseTAD_holdout_peakachu.rds"))
   
-  true_bound_list[[i]] <- called_and_pred[[3]]
-  pred_bound_list[[i]] <- called_and_pred[[2]]
+  true_bound_list[[i]] <- called_and_pred$CTBP
+  pred_bound_list[[i]] <- called_and_pred$PTBP
 }
 all_true_bounds_k562_p <- do.call("c", true_bound_list)
 all_pred_bounds_k562_p <- do.call("c", pred_bound_list)
