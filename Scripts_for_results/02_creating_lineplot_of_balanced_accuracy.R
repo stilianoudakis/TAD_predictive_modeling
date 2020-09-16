@@ -248,8 +248,8 @@ all_rfperfs_ba_gm12878_arrow <- readRDS("Z:/TAD_data_analysis/miscellaneous/save
 ggplot(all_rfperfs_ba_gm12878_arrow, aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
   geom_line(size=1.5, position=position_dodge(0.5))+
   geom_point(size=4, position=position_dodge(0.5))+
-  #geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
-  #              position=position_dodge(0.5)) +
+  geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
+                position=position_dodge(0.5)) +
   facet_grid(. ~ Predictor)+
   theme_minimal() +
   theme_bw()+
@@ -268,6 +268,8 @@ ggplot(all_rfperfs_ba_gm12878_arrow, aes(x=Resolution, y=Performance, color=Resa
   strip.text.x = element_text(size = 15),
   strip.text.y = element_text(size = 15),
   #panel.spacing = unit(2, "lines"),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
   legend.text=element_text(size=15),
   legend.title=element_text(size=15),
   plot.title = element_text(size=15),
@@ -333,8 +335,8 @@ all_rfperfs_ba_gm12878_peak <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved
 
 ggplot(all_rfperfs_ba_gm12878_peak, aes(x=Predictor, y=Performance,fill=Resampling)) +
   geom_bar(position=position_dodge(), stat="identity")+
-  #geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
-  #              position=position_dodge(0.9)) +
+  geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=.9,size=1,
+                position=position_dodge(0.9)) +
   #facet_grid(. ~ Predictor)+
   theme_minimal() +
   theme_bw()+
@@ -353,6 +355,8 @@ ggplot(all_rfperfs_ba_gm12878_peak, aes(x=Predictor, y=Performance,fill=Resampli
   strip.text.x = element_text(size = 15),
   strip.text.y = element_text(size = 15),
   #panel.spacing = unit(2, "lines"),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
   legend.text=element_text(size=15),
   legend.title=element_text(size=15),
   plot.title = element_text(size=15),
@@ -549,8 +553,8 @@ all_rfperfs_ba_k562_arrow <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved_r
 ggplot(all_rfperfs_ba_k562_arrow, aes(x=Resolution, y=Performance, color=Resampling, group=Resampling)) +
   geom_line(size=1.5, position=position_dodge(0.5))+
   geom_point(size=4, position=position_dodge(0.5))+
-  #geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
-  #              position=position_dodge(0.5)) +
+  geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
+                position=position_dodge(0.5)) +
   facet_grid(. ~ Predictor)+
   theme_minimal() +
   theme_bw()+
@@ -569,6 +573,8 @@ ggplot(all_rfperfs_ba_k562_arrow, aes(x=Resolution, y=Performance, color=Resampl
   strip.text.x = element_text(size = 15),
   strip.text.y = element_text(size = 15),
   #panel.spacing = unit(2, "lines"),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
   legend.text=element_text(size=15),
   legend.title=element_text(size=15),
   plot.title = element_text(size=15),
@@ -634,8 +640,8 @@ all_rfperfs_ba_k562_peak <- readRDS("Z:/TAD_data_analysis/miscellaneous/saved_rd
 
 ggplot(all_rfperfs_ba_k562_peak, aes(x=Predictor, y=Performance,fill=Resampling)) +
   geom_bar(position=position_dodge(), stat="identity")+
-  #geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=1,
-  #              position=position_dodge(0.9)) +
+  geom_errorbar(aes(ymin=Performance-PerformanceSD, ymax=Performance+PerformanceSD), width=.9,size=1,
+                position=position_dodge(0.9)) +
   #facet_grid(. ~ Predictor)+
   theme_minimal() +
   theme_bw()+
@@ -654,6 +660,8 @@ ggplot(all_rfperfs_ba_k562_peak, aes(x=Predictor, y=Performance,fill=Resampling)
   strip.text.x = element_text(size = 15),
   strip.text.y = element_text(size = 15),
   #panel.spacing = unit(2, "lines"),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
   legend.text=element_text(size=15),
   legend.title=element_text(size=15),
   plot.title = element_text(size=15),

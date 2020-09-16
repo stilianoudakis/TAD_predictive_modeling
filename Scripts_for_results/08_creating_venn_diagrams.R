@@ -80,163 +80,6 @@ genomicCorr.jaccard = function(query, reference, restrict = NULL) {
   return(res)
 }
 
-# across cell line
-
-## arrowhead
-
-pred_bound_list <- GRangesList()
-true_bound_list <- GRangesList()
-chrs <- paste0("CHR", c(1:8,10:22))
-for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/5kb/results_by_chr/",
-                                    chrs[i],
-                                    "/rus/distance/preciseTAD_holdout.rds"))
-  
-  true_bound_list[[i]] <- called_and_pred$CTBP
-  pred_bound_list[[i]] <- called_and_pred$PTBP
-  
-}
-
-all_true_bounds_gm12878 <- do.call("c", true_bound_list)
-all_pred_bounds_gm12878 <- do.call("c", pred_bound_list)
-all_true_bounds_gm12878 <- flank(all_true_bounds_gm12878, 5000, both=TRUE)
-all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 5000, both=TRUE)
-
-pred_bound_list <- GRangesList()
-true_bound_list <- GRangesList()
-chrs <- paste0("CHR", c(1:8,10:22))
-for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/5kb/results_by_chr/",
-                                    chrs[i],
-                                    "/rus/distance/preciseTAD_holdout.rds"))
-  
-  true_bound_list[[i]] <- called_and_pred$CTBP
-  pred_bound_list[[i]] <- called_and_pred$PTBP
-}
-
-all_true_bounds_k562 <- do.call("c", true_bound_list)
-all_pred_bounds_k562 <- do.call("c", pred_bound_list)
-all_true_bounds_k562 <- flank(all_true_bounds_k562, 5000, both=TRUE)
-all_pred_bounds_k562 <- flank(all_pred_bounds_k562, 5000, both=TRUE)
-
-res <- makeVennDiagram(Peaks=list(all_true_bounds_gm12878,
-                                  all_true_bounds_k562),
-                       NameOfPeaks=c("GM12878", "K562"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- .01
-gp[["SetText"]][["Set2"]]$cex <- .01
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
-
-genomicCorr.jaccard(all_true_bounds_gm12878,all_true_bounds_k562)
-
-res <- makeVennDiagram(Peaks=list(all_pred_bounds_gm12878,
-                                  all_pred_bounds_k562),
-                       NameOfPeaks=c("GM12878", "K562"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- .01
-gp[["SetText"]][["Set2"]]$cex <- .01
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
-
-genomicCorr.jaccard(all_pred_bounds_gm12878,all_pred_bounds_k562)
-
-##peakachu
-
-pred_bound_list <- GRangesList()
-true_bound_list <- GRangesList()
-chrs <- paste0("CHR", c(1:8,10:22))
-for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/GM12878/10kb/results_by_chr/",
-                                    chrs[i],
-                                    "/rus/distance/preciseTAD_holdout_peakachu.rds"))
-  
-  true_bound_list[[i]] <- called_and_pred$CTBP
-  pred_bound_list[[i]] <- called_and_pred$PTBP
-  
-}
-
-all_true_bounds_gm12878 <- do.call("c", true_bound_list)
-all_pred_bounds_gm12878 <- do.call("c", pred_bound_list)
-all_true_bounds_gm12878 <- flank(all_true_bounds_gm12878, 10000, both=TRUE)
-all_pred_bounds_gm12878 <- flank(all_pred_bounds_gm12878, 10000, both=TRUE)
-
-pred_bound_list <- GRangesList()
-true_bound_list <- GRangesList()
-chrs <- paste0("CHR", c(1:8,10:22))
-for(i in 1:length(chrs)){
-  called_and_pred <- readRDS(paste0("Z:/TAD_data_analysis/K562/10kb/results_by_chr/",
-                                    chrs[i],
-                                    "/rus/distance/preciseTAD_holdout_peakachu.rds"))
-  
-  true_bound_list[[i]] <- called_and_pred$CTBP
-  pred_bound_list[[i]] <- called_and_pred$PTBP
-}
-
-all_true_bounds_k562 <- do.call("c", true_bound_list)
-all_pred_bounds_k562 <- do.call("c", pred_bound_list)
-all_true_bounds_k562 <- flank(all_true_bounds_k562, 10000, both=TRUE)
-all_pred_bounds_k562 <- flank(all_pred_bounds_k562, 10000, both=TRUE)
-
-res <- makeVennDiagram(Peaks=list(all_true_bounds_gm12878,
-                                  all_true_bounds_k562),
-                       NameOfPeaks=c("GM12878", "K562"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- .1
-gp[["SetText"]][["Set2"]]$cex <- .1
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
-
-genomicCorr.jaccard(all_true_bounds_gm12878,all_true_bounds_k562)
-
-res <- makeVennDiagram(Peaks=list(all_pred_bounds_gm12878,
-                                  all_pred_bounds_k562),
-                       NameOfPeaks=c("GM12878", "K562"))
-
-venn.pt <- venn_cnt2venn(res$vennCounts)
-venn.pt <- compute.Venn(venn.pt)
-gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-gp[["FaceText"]][["10"]]$cex <- 2
-gp[["FaceText"]][["11"]]$cex <- 2
-gp[["FaceText"]][["01"]]$cex <- 2
-gp[["SetText"]][["Set1"]]$cex <- .1
-gp[["SetText"]][["Set2"]]$cex <- .1
-
-gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
-
-genomicCorr.jaccard(all_pred_bounds_gm12878,all_pred_bounds_k562)
-
-##################################################################################################
 
 #nested within cell line
 
@@ -327,6 +170,8 @@ gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
+genomicCorr.jaccard(all_pred_bounds_gm12878_a,
+                    all_pred_bounds_gm12878_p)
 
 res <- makeVennDiagram(Peaks=list(all_pred_bounds_k562_a,
                                   all_pred_bounds_k562_p),
@@ -344,3 +189,5 @@ gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
+genomicCorr.jaccard(all_pred_bounds_k562_a,
+                    all_pred_bounds_k562_p)

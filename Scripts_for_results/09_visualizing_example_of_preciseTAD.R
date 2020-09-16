@@ -234,6 +234,8 @@ ggplot() +
         axis.title.y = element_text(size = 15),
         #strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
         plot.title = element_text(size=20),
@@ -260,7 +262,7 @@ ggplot() +
   #ptbr
   geom_vline(data=ptbrdf, aes(xintercept=y, 
                               color="yellow"),
-             size=1,
+             size=1.5,
              show.legend = TRUE)+
   xlab("Base Coordinate (mb)") +
   ylab("") +
@@ -283,6 +285,8 @@ ggplot() +
         axis.ticks.y = element_blank(),
         #strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
         legend.text=element_text(size=15),
         legend.title=element_text(size=20),
         plot.title = element_text(size=20),
