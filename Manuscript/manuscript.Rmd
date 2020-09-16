@@ -3,10 +3,16 @@ title: "preciseTAD: A machine learning framework for precise 3D domain boundary 
 csl: styles.ref/genomebiology.csl
 output:
   pdf_document: 
+    extra_dependencies: ["float"]
   word_document:
     reference_docx: styles.doc/NIH_grant_style.docx
 bibliography: References/references.bib
 --- 
+
+```{r}
+knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
+```
+
 
 Spiro C. Stilianoudakis^1^ (stilianoudasc@mymail.vcu.edu), Mikhail G. Dozmorov^1\*^ (mikhail.dozmorov@vcuhealth.org)
 
