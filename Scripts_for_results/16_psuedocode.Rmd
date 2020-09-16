@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 \SetAlgoLined
 1. Consider an optimized RF model (M) built on the set of autosomal chromosomes $\{ k |i \notin k \}$ binned at some resolution $r$
 \BlankLine
-2. \For{each chr $i$ do}{
+2. \For{each chr $i$}{
 \BlankLine
 3.    Construct the base-level resolution predictor space $A_{n \times p}$ where $n$ is the length of chr $i$ and $p$ is the number of predictors\;
 \BlankLine
@@ -50,8 +50,8 @@ knitr::opts_chunk$set(echo = TRUE)
 15.                     \For{each predictor p}{
 \BlankLine
 16.                         Calculate the normalized enrichment (NE) over all predictors
-                            $$NE = \dfrac{1}{p} \left[ \Sigma_{s=1}^{p} \left[ \dfrac{1}{b} \Sigma_{k=1}^{b} e_{ks} \times c_{k} \right] \right]$$
-                            where $e_{ks} = \textbf{I}\{ r_{s} \in (b_{k}-f, b_{k}+f)\}$ is the number of elemental regions $r$ of predictor $p$ that overlap with each flanked boundary and $c_{k} = \dfrac{ \textbf{I}\{ \pi_{n} \ge t_{l} \in w_{k} \} }{w_{k}}$ is the coverage probability of each PTBR\;
+                            $$NE = \dfrac{1}{p} \left[ \Sigma_{s=1}^{p} \left[ \dfrac{1}{b} \Sigma_{k=1}^{b} e_{ks} \right] \right]$$
+                            where $e_{ks} = \textbf{I}\{ r_{s} \in (b_{k}-f, b_{k}+f)\}$ is the number of elemental regions $r$ of predictor $p$ that overlap with each flanked boundary\;
 \BlankLine
 17.                         Determine where $NE$ converges as optimal $\{t,\epsilon\}$ combination\;
 \BlankLine
