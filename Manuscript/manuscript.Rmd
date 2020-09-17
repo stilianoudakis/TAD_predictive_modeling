@@ -9,7 +9,7 @@ output:
 bibliography: References/references.bib
 --- 
 
-```{r}
+```{r echo=FALSE}
 knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
 ```
 
