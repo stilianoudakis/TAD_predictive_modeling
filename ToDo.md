@@ -11,32 +11,11 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-+ make split plots for fig5 C/D
+- Check cross-cell-line testing strategy
+    - Methods, "Evaluating performance across cell lines"
+    - Results, "Training in one cell line accurately predicts boundary regions in other cell lines"
 
-+ supp tables 5 and 6
-
-+ Do we have new figures 5 supplementary?
-+ Do we have new figures 6/7 supplementary?
-
-+ PTBRs, Supplementary Table 4: genomic coordinates of PTBRs, for GM12878 and K562, Arrowhead and Peakachu, hg19
-+ Summary of PTBP location with respect to normalized length of PTBPs
-
-+ Check Figure 6B and the percentages in "preciseTAD boundaries are more conserved across cell lines". The percentages seem wrong, like "26% and 63% for Arrowhead and Peakachu boundaries", should be larger?
-+ Double-check percentages in the "Boundaries predicted by *preciseTAD* models trained on TAD and loop boundaries are highly overlapping" section
-
-+ Add white background to all figs
-
-+ Figure 4D - remove diagonal lines, they tell nothing. Then, enlarge AUC rectangles and font
-
-+ Figure 6A, Supplementary Figure 8 - should have exact p-values, and in text
-
-+ Figure 6B - disambiguate preciseTAD trained on Arrowhead and Peakachu
-
-+ Figure width should be either 7 in (full page width) or 3.5 in (half-page width). Current figures are all over the place.
-
-+ Crop should leave no continuous white spaces, crop by the farthest non-white points
-
-+ refer to supp tables 5 and 6 in discussion when ready. Currently, I commented out this section in Discussion
+- Suppl Fig 3, B, C - add labels "Peakachu GM12878", "Peakachu K562" in the upper left corner of each barplot panel
 
 - Resolution of all figures should be >300dpi. Currently, they are 150dpi
 
