@@ -11,16 +11,17 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-- Address ???
++ Address ???
 
 - Check cross-cell-line testing strategy
     - Methods, "Evaluating performance across cell lines"
     - Results, "Training in one cell line accurately predicts boundary regions in other cell lines"
     - Check Fig 4d mention in "Boundaries predicted by preciseTAD models trained on TAD and loop bound- aries are highly overlapping"
 
-- Suppl Fig 3, B, C - add labels "Peakachu GM12878", "Peakachu K562" in the upper left corner of each barplot panel
++ Suppl Fig 3, B, C - add labels "Peakachu GM12878", "Peakachu K562" in the upper left corner of each barplot panel
 
-- Suppl Figure 2 - shouldn't be additional file instead? it is not figure
+* Suppl Figure 2 - shouldn't be additional file instead? it is not figure
+  - I can change it if it is really necessary, but it will change the numbers of all the subsequent supp figs. Let me know
 
 - Resolution of all figures should be >300dpi. Currently, they are 150dpi
 
