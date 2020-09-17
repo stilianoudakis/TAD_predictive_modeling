@@ -404,402 +404,13 @@ meanroc_g_on_g$sdSpecunder <- arrowhead_g_on_g %>%
   summarize(sdSpec = sd(specificity)) %>% 
   mutate(sdSpec=meanroc_g_on_g$meanSpec-sdSpec) %>% 
   select(sdSpec)
-  
+
 meanroc_g_on_g$sdSpecover <- arrowhead_g_on_g %>% 
   group_by(rep(c(1:502),21)) %>% 
   summarize(sdSpec = sd(specificity)) %>% 
   mutate(sdSpec=meanroc_g_on_g$meanSpec+sdSpec) %>% 
   select(sdSpec)
 
-###g on k
-
-arrowhead_g_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_g_on_k.rds")
-
-for(i in 1:length(arrowhead_g_on_k)){
-  m <- max(unlist(lapply(arrowhead_g_on_k, nrow)))
-  if(nrow(arrowhead_g_on_k[[i]]) != m){
-    d <- m - nrow(arrowhead_g_on_k[[i]])
-    arrowhead_g_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
-                                                         sensitivity=rep(1,d),
-                                                         chr=rep(arrowhead_g_on_k[[i]]$chr[1],d)),
-                                              arrowhead_g_on_k[[i]])
-  }
-}
-
-arrowhead_g_on_k <- do.call("rbind.data.frame",arrowhead_g_on_k)
-meanroc_g_on_k <- arrowhead_g_on_k %>% group_by(rep(c(1:502),21)) %>% 
-  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
-
-meanroc_g_on_k$sdSensunder <- arrowhead_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>% 
-  mutate(sdSens=meanroc_g_on_k$meanSens-sdSens) %>% 
-  select(sdSens)
-
-meanroc_g_on_k$sdSensover <- arrowhead_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>%
-  mutate(sdSens=meanroc_g_on_k$meanSens+sdSens) %>% 
-  select(sdSens)
-
-meanroc_g_on_k$sdSpecunder <- arrowhead_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_g_on_k$meanSpec-sdSpec) %>% 
-  select(sdSpec)
-
-meanroc_g_on_k$sdSpecover <- arrowhead_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_g_on_k$meanSpec+sdSpec) %>% 
-  select(sdSpec)
-
-
-###plotting
-
-ggplot() + 
-  #g on g
-  ##under
-  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
-  #          size=.5,
-  #          #linetype="solid", 
-  #          color="blue") +
-  ##over
-  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
-  #          size=.5,
-  #          #linetype="solid", 
-  #          color="blue") +
-geom_ribbon(data=meanroc_g_on_g, 
-            aes(#ymin=sdSensunder$sdSens,
-              #ymax=sdSensover$sdSens,
-              xmin=1-meanSpec,
-              xmax=1-sdSpecover$sdSpec,
-              x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="blue", alpha=0.2) +
-  geom_ribbon(data=meanroc_g_on_g, 
-              aes(#ymin=sdSensunder$sdSens,
-                #ymax=sdSensover$sdSens,
-                xmin=1-sdSpecunder$sdSpec,
-                xmax=1-meanSpec,
-                x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="blue", alpha=0.2) +
-  geom_ribbon(data=meanroc_g_on_g, 
-              aes(ymin=sdSensunder$sdSens,
-                  ymax=sdSensover$sdSens,
-                  #xmin=1-meanSpec,
-                  #xmax=1-sdSpecunder$sdSpec,
-                  x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="blue", alpha=0.2) +
-  ##mean
-  geom_line(data=meanroc_g_on_g,aes(x=1-meanSpec, y=meanSens),
-            size=1.5,
-            linetype="solid", 
-            color="blue") +
-  #g on k
-  ##under
-  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
-  #          size=.5,
-  #          #linetype="dashed", 
-  #          color="blue") +
-  ##over
-  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
-  #          size=.5,
-  #          #linetype="dashed", 
-  #          color="blue") +
-  geom_ribbon(data=meanroc_g_on_k, 
-            aes(#ymin=sdSensunder$sdSens,
-              #ymax=sdSensover$sdSens,
-              xmin=1-meanSpec,
-              xmax=1-sdSpecover$sdSpec,
-              x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="gray", alpha=0.3) +
-  geom_ribbon(data=meanroc_g_on_k, 
-              aes(#ymin=sdSensunder$sdSens,
-                #ymax=sdSensover$sdSens,
-                xmin=1-sdSpecunder$sdSpec,
-                xmax=1-meanSpec,
-                x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="gray", alpha=0.3) +
-  geom_ribbon(data=meanroc_g_on_k, 
-              aes(ymin=sdSensunder$sdSens,
-                  ymax=sdSensover$sdSens,
-                  #xmin=1-meanSpec,
-                  #xmax=1-sdSpecunder$sdSpec,
-                  x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="gray", alpha=0.3) +
-  ##mean
-  geom_line(data=meanroc_g_on_k,aes(x=1-meanSpec, y=meanSens),
-            size=1.5,
-            linetype="dashed", 
-            color="black") +
-  xlab("1-Specificity") + 
-  ylab("Sensitivity") + 
-  scale_color_manual(name = "Training/Testing",
-                     labels = c("GM on GM",
-                                "GM on K"),
-                     values = c("blue","black")) +
-  theme_minimal() +
-  theme_bw()+
-  theme(axis.text.x = element_text(size = 20),
-        axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 20),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
-        legend.position = "bottom")
-
-
-#########################################################################################
-
-## peakachu
-
-###g on g
-
-peakachu_g_on_g <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_g_on_g.rds")
-
-for(i in 1:length(peakachu_g_on_g)){
-  m <- max(unlist(lapply(peakachu_g_on_g, nrow)))
-  if(nrow(peakachu_g_on_g[[i]]) != m){
-    d <- m - nrow(peakachu_g_on_g[[i]])
-    peakachu_g_on_g[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
-                                                        sensitivity=rep(1,d),
-                                                        chr=rep(peakachu_g_on_g[[i]]$chr[1],d)),
-                                             peakachu_g_on_g[[i]])
-  }
-}
-
-peakachu_g_on_g <- do.call("rbind.data.frame",peakachu_g_on_g)
-meanroc_g_on_g <- peakachu_g_on_g %>% group_by(rep(c(1:502),21)) %>% 
-  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
-
-meanroc_g_on_g$sdSensunder <- peakachu_g_on_g %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>% 
-  mutate(sdSens=meanroc_g_on_g$meanSens-sdSens) %>% 
-  select(sdSens)
-
-meanroc_g_on_g$sdSensover <- peakachu_g_on_g %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>%
-  mutate(sdSens=meanroc_g_on_g$meanSens+sdSens) %>% 
-  select(sdSens)
-
-meanroc_g_on_g$sdSpecunder <- peakachu_g_on_g %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_g_on_g$meanSpec-sdSpec) %>% 
-  select(sdSpec)
-
-meanroc_g_on_g$sdSpecover <- peakachu_g_on_g %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_g_on_g$meanSpec+sdSpec) %>% 
-  select(sdSpec)
-
-
-###g on k
-
-peakachu_g_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_g_on_k.rds")
-
-for(i in 1:length(peakachu_g_on_k)){
-  m <- max(unlist(lapply(peakachu_g_on_k, nrow)))
-  if(nrow(peakachu_g_on_k[[i]]) != m){
-    d <- m - nrow(peakachu_g_on_k[[i]])
-    peakachu_g_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
-                                                        sensitivity=rep(1,d),
-                                                        chr=rep(peakachu_g_on_k[[i]]$chr[1],d)),
-                                             peakachu_g_on_k[[i]])
-  }
-}
-
-peakachu_g_on_k <- do.call("rbind.data.frame",peakachu_g_on_k)
-meanroc_g_on_k <- peakachu_g_on_k %>% group_by(rep(c(1:502),21)) %>% 
-  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
-
-meanroc_g_on_k$sdSensunder <- peakachu_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>% 
-  mutate(sdSens=meanroc_g_on_k$meanSens-sdSens) %>% 
-  select(sdSens)
-
-meanroc_g_on_k$sdSensover <- peakachu_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>%
-  mutate(sdSens=meanroc_g_on_k$meanSens+sdSens) %>% 
-  select(sdSens)
-
-meanroc_g_on_k$sdSpecunder <- peakachu_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_g_on_k$meanSpec-sdSpec) %>% 
-  select(sdSpec)
-
-meanroc_g_on_k$sdSpecover <- peakachu_g_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_g_on_k$meanSpec+sdSpec) %>% 
-  select(sdSpec)
-
-
-###plotting
-
-ggplot() + 
-  #g on g
-  ##under
-  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
-  #          size=.5,
-  #          #linetype="solid", 
-  #          color="red") +
-  ##over
-  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
-  #          size=.5,
-  #          #linetype="solid", 
-  #          color="red") +
-  geom_ribbon(data=meanroc_g_on_g, 
-            aes(#ymin=sdSensunder$sdSens,
-              #ymax=sdSensover$sdSens,
-              xmin=1-meanSpec,
-              xmax=1-sdSpecover$sdSpec,
-              x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="red", alpha=0.2) +
-  geom_ribbon(data=meanroc_g_on_g, 
-              aes(#ymin=sdSensunder$sdSens,
-                #ymax=sdSensover$sdSens,
-                xmin=1-sdSpecunder$sdSpec,
-                xmax=1-meanSpec,
-                x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="red", alpha=0.2) +
-  geom_ribbon(data=meanroc_g_on_g, 
-              aes(ymin=sdSensunder$sdSens,
-                  ymax=sdSensover$sdSens,
-                  #xmin=1-meanSpec,
-                  #xmax=1-sdSpecunder$sdSpec,
-                  x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="red", alpha=0.2) +
-  ##mean
-  geom_line(data=meanroc_g_on_g,aes(x=1-meanSpec, y=meanSens),
-            size=1.5,
-            linetype="solid", 
-            color="red") +
-  #g on k
-  ##under
-  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
-  #          size=.5,
-  #          #linetype="dashed", 
-  #          color="red") +
-  ##over
-  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
-  #          size=.5,
-  #          #linetype="dashed", 
-  #          color="red") +
-  geom_ribbon(data=meanroc_g_on_k, 
-            aes(#ymin=sdSensunder$sdSens,
-              #ymax=sdSensover$sdSens,
-              xmin=1-meanSpec,
-              xmax=1-sdSpecover$sdSpec,
-              x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="gray", alpha=0.3) +
-  geom_ribbon(data=meanroc_g_on_k, 
-              aes(#ymin=sdSensunder$sdSens,
-                #ymax=sdSensover$sdSens,
-                xmin=1-sdSpecunder$sdSpec,
-                xmax=1-meanSpec,
-                x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="gray", alpha=0.3) +
-  geom_ribbon(data=meanroc_g_on_k, 
-              aes(ymin=sdSensunder$sdSens,
-                  ymax=sdSensover$sdSens,
-                  #xmin=1-meanSpec,
-                  #xmax=1-sdSpecunder$sdSpec,
-                  x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="gray", alpha=0.3) +
-  ##mean
-  geom_line(data=meanroc_g_on_k,aes(x=1-meanSpec, y=meanSens),
-            size=1.5,
-            linetype="dashed", 
-            color="black") +
-  xlab("1-Specificity") + 
-  ylab("Sensitivity") + 
-  scale_color_manual(name = "Training/Testing",
-                     labels = c("GM on GM",
-                                "GM on K"),
-                     values = c("red","black")) +
-  theme_minimal() +
-  theme_bw()+
-  theme(axis.text.x = element_text(size = 20),
-        axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 20),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
-        legend.position = "bottom")
-
-fig <- ggarrange(g1,g2,ncol=2)
-
-annotate_figure(fig,
-                bottom = text_grob("1-Specificity", 
-                                   color = "black", 
-                                   face = "bold", 
-                                   size = 15),
-                left = text_grob("Sensitivity", 
-                                 color = "black",
-                                 size = 15,
-                                 rot = 90))
-
-#########################################################################################
-
-##arrowhead
-
-###k on k
-
-arrowhead_k_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_k_on_k.rds")
-
-for(i in 1:length(arrowhead_k_on_k)){
-  m <- max(unlist(lapply(arrowhead_k_on_k, nrow)))
-  if(nrow(arrowhead_k_on_k[[i]]) != m){
-    d <- m - nrow(arrowhead_k_on_k[[i]])
-    arrowhead_k_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
-                                                         sensitivity=rep(1,d),
-                                                         chr=rep(arrowhead_k_on_k[[i]]$chr[1],d)),
-                                              arrowhead_k_on_k[[i]])
-  }
-}
-
-arrowhead_k_on_k <- do.call("rbind.data.frame",arrowhead_k_on_k)
-meanroc_k_on_k <- arrowhead_k_on_k %>% group_by(rep(c(1:502),21)) %>% 
-  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
-
-meanroc_k_on_k$sdSensunder <- arrowhead_k_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>% 
-  mutate(sdSens=meanroc_k_on_k$meanSens-sdSens) %>% 
-  select(sdSens)
-
-meanroc_k_on_k$sdSensover <- arrowhead_k_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSens = sd(sensitivity)) %>%
-  mutate(sdSens=meanroc_k_on_k$meanSens+sdSens) %>% 
-  select(sdSens)
-
-meanroc_k_on_k$sdSpecunder <- arrowhead_k_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_k_on_k$meanSpec-sdSpec) %>% 
-  select(sdSpec)
-
-meanroc_k_on_k$sdSpecover <- arrowhead_k_on_k %>% 
-  group_by(rep(c(1:502),21)) %>% 
-  summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_k_on_k$meanSpec+sdSpec) %>% 
-  select(sdSpec)
 
 ###k on g
 
@@ -847,33 +458,33 @@ meanroc_k_on_g$sdSpecover <- arrowhead_k_on_g %>%
 
 ###plotting
 
-ggplot() + 
+a1 <- ggplot() + 
   #g on g
   ##under
-  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
+  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="solid", 
   #          color="blue") +
   ##over
-  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
+  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="solid", 
   #          color="blue") +
-geom_ribbon(data=meanroc_k_on_k, 
+geom_ribbon(data=meanroc_g_on_g, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
               xmin=1-meanSpec,
               xmax=1-sdSpecover$sdSpec,
               x=1-sdSpecunder$sdSpec,
               y=sdSensover$sdSens), fill="blue", alpha=0.2) +
-  geom_ribbon(data=meanroc_k_on_k, 
+  geom_ribbon(data=meanroc_g_on_g, 
               aes(#ymin=sdSensunder$sdSens,
                 #ymax=sdSensover$sdSens,
                 xmin=1-sdSpecunder$sdSpec,
                 xmax=1-meanSpec,
                 x=1-sdSpecunder$sdSpec,
                 y=sdSensover$sdSens), fill="blue", alpha=0.2) +
-  geom_ribbon(data=meanroc_k_on_k, 
+  geom_ribbon(data=meanroc_g_on_g, 
               aes(ymin=sdSensunder$sdSens,
                   ymax=sdSensover$sdSens,
                   #xmin=1-meanSpec,
@@ -881,11 +492,11 @@ geom_ribbon(data=meanroc_k_on_k,
                   x=1-sdSpecunder$sdSpec,
                   y=sdSensover$sdSens), fill="blue", alpha=0.2) +
   ##mean
-  geom_line(data=meanroc_k_on_k,aes(x=1-meanSpec, y=meanSens),
+  geom_line(data=meanroc_g_on_g,aes(x=1-meanSpec, y=meanSens),
             size=1.5,
             linetype="solid", 
             color="blue") +
-  #g on k
+  #k on g
   ##under
   #geom_line(data=meanroc_k_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
@@ -926,14 +537,20 @@ geom_ribbon(data=meanroc_k_on_g,
   ylab("Sensitivity") + 
   scale_color_manual(name = "Training/Testing",
                      labels = c("GM on GM",
-                                "GM on K"),
+                                "K on GM"),
                      values = c("blue","black")) +
+  scale_x_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
+  scale_y_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
   theme_minimal() +
   theme_bw()+
   theme(axis.text.x = element_text(size = 20),
         axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         strip.text.x = element_text(size = 20),
@@ -943,51 +560,49 @@ geom_ribbon(data=meanroc_k_on_g,
         legend.position = "bottom")
 
 
-#########################################################################################
-
 ##peakachu
 
-###k on k
+###g on g
 
-peakachu_k_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_k_on_k.rds")
+peakachu_g_on_g <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_g_on_g.rds")
 
-for(i in 1:length(peakachu_k_on_k)){
-  m <- max(unlist(lapply(peakachu_k_on_k, nrow)))
-  if(nrow(peakachu_k_on_k[[i]]) != m){
-    d <- m - nrow(peakachu_k_on_k[[i]])
-    peakachu_k_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
+for(i in 1:length(peakachu_g_on_g)){
+  m <- max(unlist(lapply(peakachu_g_on_g, nrow)))
+  if(nrow(peakachu_g_on_g[[i]]) != m){
+    d <- m - nrow(peakachu_g_on_g[[i]])
+    peakachu_g_on_g[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
                                                         sensitivity=rep(1,d),
-                                                        chr=rep(peakachu_k_on_k[[i]]$chr[1],d)),
-                                             peakachu_k_on_k[[i]])
+                                                        chr=rep(peakachu_g_on_g[[i]]$chr[1],d)),
+                                             peakachu_g_on_g[[i]])
   }
 }
 
-peakachu_k_on_k <- do.call("rbind.data.frame",peakachu_k_on_k)
-meanroc_k_on_k <- peakachu_k_on_k %>% group_by(rep(c(1:502),21)) %>% 
+peakachu_g_on_g <- do.call("rbind.data.frame",peakachu_g_on_g)
+meanroc_g_on_g <- peakachu_g_on_g %>% group_by(rep(c(1:502),21)) %>% 
   summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
 
-meanroc_k_on_k$sdSensunder <- peakachu_k_on_k %>% 
+meanroc_g_on_g$sdSensunder <- peakachu_g_on_g %>% 
   group_by(rep(c(1:502),21)) %>% 
   summarize(sdSens = sd(sensitivity)) %>% 
-  mutate(sdSens=meanroc_k_on_k$meanSens-sdSens) %>% 
+  mutate(sdSens=meanroc_g_on_g$meanSens-sdSens) %>% 
   select(sdSens)
 
-meanroc_k_on_k$sdSensover <- peakachu_k_on_k %>% 
+meanroc_g_on_g$sdSensover <- peakachu_g_on_g %>% 
   group_by(rep(c(1:502),21)) %>% 
   summarize(sdSens = sd(sensitivity)) %>%
-  mutate(sdSens=meanroc_k_on_k$meanSens+sdSens) %>% 
+  mutate(sdSens=meanroc_g_on_g$meanSens+sdSens) %>% 
   select(sdSens)
 
-meanroc_k_on_k$sdSpecunder <- peakachu_k_on_k %>% 
+meanroc_g_on_g$sdSpecunder <- peakachu_g_on_g %>% 
   group_by(rep(c(1:502),21)) %>% 
   summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_k_on_k$meanSpec-sdSpec) %>% 
+  mutate(sdSpec=meanroc_g_on_g$meanSpec-sdSpec) %>% 
   select(sdSpec)
 
-meanroc_k_on_k$sdSpecover <- peakachu_k_on_k %>% 
+meanroc_g_on_g$sdSpecover <- peakachu_g_on_g %>% 
   group_by(rep(c(1:502),21)) %>% 
   summarize(sdSpec = sd(specificity)) %>% 
-  mutate(sdSpec=meanroc_k_on_k$meanSpec+sdSpec) %>% 
+  mutate(sdSpec=meanroc_g_on_g$meanSpec+sdSpec) %>% 
   select(sdSpec)
 
 
@@ -1037,33 +652,33 @@ meanroc_k_on_g$sdSpecover <- peakachu_k_on_g %>%
 
 ###plotting
 
-ggplot() + 
+b1 <- ggplot() + 
   #g on g
   ##under
-  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
+  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="solid", 
   #          color="red") +
   ##over
-  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
+  #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="solid", 
   #          color="red") +
-geom_ribbon(data=meanroc_k_on_k, 
+geom_ribbon(data=meanroc_g_on_g, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
               xmin=1-meanSpec,
               xmax=1-sdSpecover$sdSpec,
               x=1-sdSpecunder$sdSpec,
               y=sdSensover$sdSens), fill="red", alpha=0.2) +
-  geom_ribbon(data=meanroc_k_on_k, 
+  geom_ribbon(data=meanroc_g_on_g, 
               aes(#ymin=sdSensunder$sdSens,
                 #ymax=sdSensover$sdSens,
                 xmin=1-sdSpecunder$sdSpec,
                 xmax=1-meanSpec,
                 x=1-sdSpecunder$sdSpec,
                 y=sdSensover$sdSens), fill="red", alpha=0.2) +
-  geom_ribbon(data=meanroc_k_on_k, 
+  geom_ribbon(data=meanroc_g_on_g, 
               aes(ymin=sdSensunder$sdSens,
                   ymax=sdSensover$sdSens,
                   #xmin=1-meanSpec,
@@ -1071,11 +686,11 @@ geom_ribbon(data=meanroc_k_on_k,
                   x=1-sdSpecunder$sdSpec,
                   y=sdSensover$sdSens), fill="red", alpha=0.2) +
   ##mean
-  geom_line(data=meanroc_k_on_k,aes(x=1-meanSpec, y=meanSens),
+  geom_line(data=meanroc_g_on_g,aes(x=1-meanSpec, y=meanSens),
             size=1.5,
             linetype="solid", 
             color="red") +
-  #g on k
+  #k on g
   ##under
   #geom_line(data=meanroc_k_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
@@ -1116,14 +731,20 @@ geom_ribbon(data=meanroc_k_on_g,
   ylab("Sensitivity") + 
   scale_color_manual(name = "Training/Testing",
                      labels = c("GM on GM",
-                                "GM on K"),
+                                "K on GM"),
                      values = c("red","black")) +
+  scale_x_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
+  scale_y_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
   theme_minimal() +
   theme_bw()+
   theme(axis.text.x = element_text(size = 20),
         axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         strip.text.x = element_text(size = 20),
@@ -1133,43 +754,437 @@ geom_ribbon(data=meanroc_k_on_g,
         legend.position = "bottom")
 
 
-fig <- ggarrange(g1,g2,ncol=2)
+f <- ggarrange(a1, b1, ncol = 2)
 
-annotate_figure(fig,
+annotate_figure(f,
                 bottom = text_grob("1-Specificity", 
-                                   color = "black", 
-                                   face = "bold", 
-                                   size = 15),
+                                   color = "black",
+                                   size = 20),
                 left = text_grob("Sensitivity", 
                                  color = "black",
-                                 size = 15,
+                                 size = 20,
                                  rot = 90))
 
 #########################################################################################
 
+##arrowhead
+
+###k on k
+
+arrowhead_k_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_k_on_k.rds")
+
+for(i in 1:length(arrowhead_k_on_k)){
+  m <- max(unlist(lapply(arrowhead_k_on_k, nrow)))
+  if(nrow(arrowhead_k_on_k[[i]]) != m){
+    d <- m - nrow(arrowhead_k_on_k[[i]])
+    arrowhead_k_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
+                                                         sensitivity=rep(1,d),
+                                                         chr=rep(arrowhead_k_on_k[[i]]$chr[1],d)),
+                                              arrowhead_k_on_k[[i]])
+  }
+}
+
+arrowhead_k_on_k <- do.call("rbind.data.frame",arrowhead_k_on_k)
+meanroc_k_on_k <- arrowhead_k_on_k %>% group_by(rep(c(1:502),21)) %>% 
+  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
+
+meanroc_k_on_k$sdSensunder <- arrowhead_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>% 
+  mutate(sdSens=meanroc_k_on_k$meanSens-sdSens) %>% 
+  select(sdSens)
+
+meanroc_k_on_k$sdSensover <- arrowhead_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>%
+  mutate(sdSens=meanroc_k_on_k$meanSens+sdSens) %>% 
+  select(sdSens)
+
+meanroc_k_on_k$sdSpecunder <- arrowhead_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_k_on_k$meanSpec-sdSpec) %>% 
+  select(sdSpec)
+
+meanroc_k_on_k$sdSpecover <- arrowhead_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_k_on_k$meanSpec+sdSpec) %>% 
+  select(sdSpec)
 
 
+###g on k
+
+arrowhead_g_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_g_on_k.rds")
+
+for(i in 1:length(arrowhead_g_on_k)){
+  m <- max(unlist(lapply(arrowhead_g_on_k, nrow)))
+  if(nrow(arrowhead_g_on_k[[i]]) != m){
+    d <- m - nrow(arrowhead_g_on_k[[i]])
+    arrowhead_g_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
+                                                         sensitivity=rep(1,d),
+                                                         chr=rep(arrowhead_g_on_k[[i]]$chr[1],d)),
+                                              arrowhead_g_on_k[[i]])
+  }
+}
+
+arrowhead_g_on_k <- do.call("rbind.data.frame",arrowhead_g_on_k)
+meanroc_g_on_k <- arrowhead_g_on_k %>% group_by(rep(c(1:502),21)) %>% 
+  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
+
+meanroc_g_on_k$sdSensunder <- arrowhead_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>% 
+  mutate(sdSens=meanroc_g_on_k$meanSens-sdSens) %>% 
+  select(sdSens)
+
+meanroc_g_on_k$sdSensover <- arrowhead_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>%
+  mutate(sdSens=meanroc_g_on_k$meanSens+sdSens) %>% 
+  select(sdSens)
+
+meanroc_g_on_k$sdSpecunder <- arrowhead_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_g_on_k$meanSpec-sdSpec) %>% 
+  select(sdSpec)
+
+meanroc_g_on_k$sdSpecover <- arrowhead_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_g_on_k$meanSpec+sdSpec) %>% 
+  select(sdSpec)
+
+
+a2 <- ggplot() + 
+  #k on k
+  ##under
+  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
+  #          size=.5,
+  #          #linetype="solid", 
+  #          color="blue") +
+  ##over
+  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
+  #          size=.5,
+  #          #linetype="solid", 
+  #          color="blue") +
+geom_ribbon(data=meanroc_k_on_k, 
+            aes(#ymin=sdSensunder$sdSens,
+              #ymax=sdSensover$sdSens,
+              xmin=1-meanSpec,
+              xmax=1-sdSpecover$sdSpec,
+              x=1-sdSpecunder$sdSpec,
+              y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+  geom_ribbon(data=meanroc_k_on_k, 
+              aes(#ymin=sdSensunder$sdSens,
+                #ymax=sdSensover$sdSens,
+                xmin=1-sdSpecunder$sdSpec,
+                xmax=1-meanSpec,
+                x=1-sdSpecunder$sdSpec,
+                y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+  geom_ribbon(data=meanroc_k_on_k, 
+              aes(ymin=sdSensunder$sdSens,
+                  ymax=sdSensover$sdSens,
+                  #xmin=1-meanSpec,
+                  #xmax=1-sdSpecunder$sdSpec,
+                  x=1-sdSpecunder$sdSpec,
+                  y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+  ##mean
+  geom_line(data=meanroc_k_on_k,aes(x=1-meanSpec, y=meanSens),
+            size=1.5,
+            linetype="solid", 
+            color="blue") +
+  #g on k
+  ##under
+  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
+  #          size=.5,
+  #          #linetype="dashed", 
+  #          color="blue") +
+  ##over
+  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
+  #          size=.5,
+  #          #linetype="dashed", 
+  #          color="blue") +
+geom_ribbon(data=meanroc_g_on_k, 
+            aes(#ymin=sdSensunder$sdSens,
+              #ymax=sdSensover$sdSens,
+              xmin=1-meanSpec,
+              xmax=1-sdSpecover$sdSpec,
+              x=1-sdSpecunder$sdSpec,
+              y=sdSensover$sdSens), fill="gray", alpha=0.3) +
+  geom_ribbon(data=meanroc_g_on_k, 
+              aes(#ymin=sdSensunder$sdSens,
+                #ymax=sdSensover$sdSens,
+                xmin=1-sdSpecunder$sdSpec,
+                xmax=1-meanSpec,
+                x=1-sdSpecunder$sdSpec,
+                y=sdSensover$sdSens), fill="gray", alpha=0.3) +
+  geom_ribbon(data=meanroc_g_on_k, 
+              aes(ymin=sdSensunder$sdSens,
+                  ymax=sdSensover$sdSens,
+                  #xmin=1-meanSpec,
+                  #xmax=1-sdSpecunder$sdSpec,
+                  x=1-sdSpecunder$sdSpec,
+                  y=sdSensover$sdSens), fill="gray", alpha=0.3) +
+  ##mean
+  geom_line(data=meanroc_g_on_k,aes(x=1-meanSpec, y=meanSens),
+            size=1.5,
+            linetype="dashed", 
+            color="black") +
+  xlab("1-Specificity") + 
+  ylab("Sensitivity") + 
+  scale_color_manual(name = "Training/Testing",
+                     labels = c("K on K",
+                                "GM on K"),
+                     values = c("blue","black")) +
+  scale_x_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
+  scale_y_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.text.x = element_text(size = 20),
+        legend.text=element_text(size=20),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+
+
+##peakachu
+
+###k on k
+
+peakachu_k_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_k_on_k.rds")
+
+for(i in 1:length(peakachu_k_on_k)){
+  m <- max(unlist(lapply(peakachu_k_on_k, nrow)))
+  if(nrow(peakachu_k_on_k[[i]]) != m){
+    d <- m - nrow(peakachu_k_on_k[[i]])
+    peakachu_k_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
+                                                        sensitivity=rep(1,d),
+                                                        chr=rep(peakachu_k_on_k[[i]]$chr[1],d)),
+                                             peakachu_k_on_k[[i]])
+  }
+}
+
+peakachu_k_on_k <- do.call("rbind.data.frame",peakachu_k_on_k)
+meanroc_k_on_k <- peakachu_k_on_k %>% group_by(rep(c(1:502),21)) %>% 
+  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
+
+meanroc_k_on_k$sdSensunder <- peakachu_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>% 
+  mutate(sdSens=meanroc_k_on_k$meanSens-sdSens) %>% 
+  select(sdSens)
+
+meanroc_k_on_k$sdSensover <- peakachu_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>%
+  mutate(sdSens=meanroc_k_on_k$meanSens+sdSens) %>% 
+  select(sdSens)
+
+meanroc_k_on_k$sdSpecunder <- peakachu_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_k_on_k$meanSpec-sdSpec) %>% 
+  select(sdSpec)
+
+meanroc_k_on_k$sdSpecover <- peakachu_k_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_k_on_k$meanSpec+sdSpec) %>% 
+  select(sdSpec)
+
+
+###g on k
+
+peakachu_g_on_k <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_g_on_k.rds")
+
+for(i in 1:length(peakachu_g_on_k)){
+  m <- max(unlist(lapply(peakachu_g_on_k, nrow)))
+  if(nrow(peakachu_g_on_k[[i]]) != m){
+    d <- m - nrow(peakachu_g_on_k[[i]])
+    peakachu_g_on_k[[i]] <- rbind.data.frame(data.frame(specificity=rep(0,d),
+                                                        sensitivity=rep(1,d),
+                                                        chr=rep(peakachu_g_on_k[[i]]$chr[1],d)),
+                                             peakachu_g_on_k[[i]])
+  }
+}
+
+peakachu_g_on_k <- do.call("rbind.data.frame",peakachu_g_on_k)
+meanroc_g_on_k <- peakachu_g_on_k %>% group_by(rep(c(1:502),21)) %>% 
+  summarize(meanSens = mean(sensitivity), meanSpec = mean(specificity))
+
+meanroc_g_on_k$sdSensunder <- peakachu_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>% 
+  mutate(sdSens=meanroc_g_on_k$meanSens-sdSens) %>% 
+  select(sdSens)
+
+meanroc_g_on_k$sdSensover <- peakachu_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSens = sd(sensitivity)) %>%
+  mutate(sdSens=meanroc_g_on_k$meanSens+sdSens) %>% 
+  select(sdSens)
+
+meanroc_g_on_k$sdSpecunder <- peakachu_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_g_on_k$meanSpec-sdSpec) %>% 
+  select(sdSpec)
+
+meanroc_g_on_k$sdSpecover <- peakachu_g_on_k %>% 
+  group_by(rep(c(1:502),21)) %>% 
+  summarize(sdSpec = sd(specificity)) %>% 
+  mutate(sdSpec=meanroc_g_on_k$meanSpec+sdSpec) %>% 
+  select(sdSpec)
+
+
+b2 <- ggplot() + 
+  #k on k
+  ##under
+  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
+  #          size=.5,
+  #          #linetype="solid", 
+  #          color="red") +
+  ##over
+  #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
+  #          size=.5,
+  #          #linetype="solid", 
+  #          color="red") +
+geom_ribbon(data=meanroc_k_on_k, 
+            aes(#ymin=sdSensunder$sdSens,
+              #ymax=sdSensover$sdSens,
+              xmin=1-meanSpec,
+              xmax=1-sdSpecover$sdSpec,
+              x=1-sdSpecunder$sdSpec,
+              y=sdSensover$sdSens), fill="red", alpha=0.2) +
+  geom_ribbon(data=meanroc_k_on_k, 
+              aes(#ymin=sdSensunder$sdSens,
+                #ymax=sdSensover$sdSens,
+                xmin=1-sdSpecunder$sdSpec,
+                xmax=1-meanSpec,
+                x=1-sdSpecunder$sdSpec,
+                y=sdSensover$sdSens), fill="red", alpha=0.2) +
+  geom_ribbon(data=meanroc_k_on_k, 
+              aes(ymin=sdSensunder$sdSens,
+                  ymax=sdSensover$sdSens,
+                  #xmin=1-meanSpec,
+                  #xmax=1-sdSpecunder$sdSpec,
+                  x=1-sdSpecunder$sdSpec,
+                  y=sdSensover$sdSens), fill="red", alpha=0.2) +
+  ##mean
+  geom_line(data=meanroc_k_on_k,aes(x=1-meanSpec, y=meanSens),
+            size=1.5,
+            linetype="solid", 
+            color="red") +
+  #g on k
+  ##under
+  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
+  #          size=.5,
+  #          #linetype="dashed", 
+  #          color="red") +
+  ##over
+  #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
+  #          size=.5,
+  #          #linetype="dashed", 
+  #          color="red") +
+geom_ribbon(data=meanroc_g_on_k, 
+            aes(#ymin=sdSensunder$sdSens,
+              #ymax=sdSensover$sdSens,
+              xmin=1-meanSpec,
+              xmax=1-sdSpecover$sdSpec,
+              x=1-sdSpecunder$sdSpec,
+              y=sdSensover$sdSens), fill="gray", alpha=0.3) +
+  geom_ribbon(data=meanroc_g_on_k, 
+              aes(#ymin=sdSensunder$sdSens,
+                #ymax=sdSensover$sdSens,
+                xmin=1-sdSpecunder$sdSpec,
+                xmax=1-meanSpec,
+                x=1-sdSpecunder$sdSpec,
+                y=sdSensover$sdSens), fill="gray", alpha=0.3) +
+  geom_ribbon(data=meanroc_g_on_k, 
+              aes(ymin=sdSensunder$sdSens,
+                  ymax=sdSensover$sdSens,
+                  #xmin=1-meanSpec,
+                  #xmax=1-sdSpecunder$sdSpec,
+                  x=1-sdSpecunder$sdSpec,
+                  y=sdSensover$sdSens), fill="gray", alpha=0.3) +
+  ##mean
+  geom_line(data=meanroc_g_on_k,aes(x=1-meanSpec, y=meanSens),
+            size=1.5,
+            linetype="dashed", 
+            color="black") +
+  xlab("1-Specificity") + 
+  ylab("Sensitivity") + 
+  scale_color_manual(name = "Training/Testing",
+                     labels = c("K on K",
+                                "GM on K"),
+                     values = c("red","black")) +
+  scale_x_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
+  scale_y_continuous(breaks=c(0, 0.5, 1),
+                     labels=c(0, 0.5, 1),
+                     limits=c(0,1))+
+  theme_minimal() +
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.text.x = element_text(size = 20),
+        legend.text=element_text(size=20),
+        legend.title=element_text(size=20),
+        plot.title = element_text(size=20),
+        legend.position = "bottom")
+
+
+f <- ggarrange(a2, b2, ncol = 2)
+
+annotate_figure(f,
+                bottom = text_grob("1-Specificity", 
+                                   color = "black",
+                                   size = 20),
+                left = text_grob("Sensitivity", 
+                                 color = "black",
+                                 size = 20,
+                                 rot = 90))
+
+#########################################################################################
 
 arrowhead_g_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_g_on_g_auc.rds")
 mean(arrowhead_g_on_g_auc)
-arrowhead_g_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_g_on_k_auc.rds")
-mean(arrowhead_g_on_k_auc)
+arrowhead_k_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_k_on_g_auc.rds")
+mean(arrowhead_k_on_g_auc)
+
 
 peakachu_g_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_g_on_g_auc.rds")
 mean(peakachu_g_on_g_auc)
-peakachu_g_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_g_on_k_auc.rds")
-mean(peakachu_g_on_k_auc)
-
+peakachu_k_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_k_on_g_auc.rds")
+mean(peakachu_k_on_g_auc)
 
 
 arrowhead_k_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_k_on_k_auc.rds")
 mean(arrowhead_k_on_k_auc)
-arrowhead_k_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_k_on_g_auc.rds")
-mean(arrowhead_k_on_g_auc)
+arrowhead_g_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/arrowhead_g_on_k_auc.rds")
+mean(arrowhead_g_on_k_auc)
+
+
 
 peakachu_k_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_k_on_k_auc.rds")
 mean(peakachu_k_on_k_auc)
-peakachu_k_on_g_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_k_on_g_auc.rds")
-mean(peakachu_k_on_g_auc)
-
+peakachu_g_on_k_auc <- readRDS("Z:/TAD_data_analysis/miscellaneous/cross_cell_line_sens_spec/peakachu_g_on_k_auc.rds")
+mean(peakachu_g_on_k_auc)
 
