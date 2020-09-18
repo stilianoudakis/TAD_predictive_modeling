@@ -97,7 +97,7 @@ ggplot(grid_df, aes(x=Epsilon, y=NE, color=Tool, group=Tool)) +
   xlab("Epsilon") + 
   ylab("Normalized Enrichment") + #ylim(-.1,.5) +
   scale_color_manual(name="Ground Truth",
-                       values=c("red","blue"))+
+                       values=c("#00468BFF", "#AD002AFF"))+
   guides(shape=FALSE, linetype=FALSE)+
   theme(axis.text.x = element_text(size=15,
                                    angle = 45, 

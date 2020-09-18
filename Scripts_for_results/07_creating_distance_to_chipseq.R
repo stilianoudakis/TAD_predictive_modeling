@@ -46,6 +46,11 @@ library(Vennerable)
 library(VennDiagram)
 library(ChIPpeakAnno)
 library(EnrichedHeatmap)
+library(ggsci)
+
+scales::show_col(pal_lancet("lanonc")(8))
+mycols = pal_lancet("lanonc")(8)
+
 
 source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
@@ -117,6 +122,8 @@ BoundReg = c(#preciseTAD
 
 pred_v_called_df_a$BoundReg <- factor(pred_v_called_df_a$BoundReg, levels=c("Arrowhead", "preciseTAD"))
 
+
+
 #######################
 
 pred_bound_list <- GRangesList()
@@ -176,73 +183,315 @@ pred_v_called_df_p$BoundReg <- factor(pred_v_called_df_p$BoundReg, levels=c("Pea
 
 #plotting
 
-a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +   
-  stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
-  geom_boxplot(outlier.shape = NA, color="black", size=1.2) +
-  geom_signif(test = "wilcox.test", 
-              comparisons = list(c("preciseTAD","Arrowhead")),
-              vjust = 0,
-              textsize = 5,
-              size = .5,
-              #step_increase = .5,
-              color="black") +
+##CTCF
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
   theme_minimal()+
   theme_bw()+
   ylab("Log2 Distance to CTCF")+
   xlab("") +
-  scale_fill_manual(values=c("blue",
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
                              "forestgreen"))+
-  scale_color_manual(values=c("blue",
+  scale_color_manual(values=c("#00468BFF",
                               "forestgreen")) +
   guides(color=FALSE, fill=FALSE)+
-  theme(axis.text.x = element_text(size=20,
+  theme(axis.text.x = element_text(size=15,
                                    angle = 45,
                                    hjust = 1),
-        axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        strip.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
 
-b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg, color=BoundReg))  +   
-  stat_boxplot(geom ='errorbar', width = 0.2, size=1.2, color="black") + 
-  geom_boxplot(outlier.shape = NA, color="black", size=1.2) +
-  geom_signif(test = "wilcox.test", 
-              comparisons = list(c("preciseTAD","Peakachu")),
-              vjust = 0,
-              textsize = 5,
-              size = .5,
-              #step_increase = .5,
-              color="black") +
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
   theme_minimal()+
   theme_bw()+
   ylab("")+
   xlab("") +
-  scale_fill_manual(values=c("red",
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
                              "forestgreen"))+
-  scale_color_manual(values=c("red",
+  scale_color_manual(values=c("#AD002AFF",
                               "forestgreen")) +
   guides(color=FALSE, fill=FALSE)+
-  theme(axis.text.x = element_text(size=20,
+  theme(axis.text.x = element_text(size=15,
                                    angle = 45,
                                    hjust = 1),
-        axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        strip.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
+
+
+ggarrange(a,b,ncol = 2)
+
+##RAD21
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="RAD21"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to RAD21")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#00468BFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="RAD21"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#AD002AFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+ggarrange(a,b,ncol = 2)
+
+##SMC3
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="SMC3"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to SMC3")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#00468BFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="SMC3"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#AD002AFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+ggarrange(a,b,ncol = 2)
+
+##ZNF143
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="ZNF143"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to ZNF143")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#00468BFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="ZNF143"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#AD002AFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
 
 ggarrange(a,b,ncol = 2)
 
@@ -366,9 +615,12 @@ pred_v_called_df_p$BoundReg <- factor(pred_v_called_df_p$BoundReg, levels=c("Pea
 
 #plotting
 
-a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +   
-  stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
-  geom_boxplot(outlier.shape = NA, color="black", size=1.2) +
+##CTCF
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
   #geom_signif(test = "wilcox.test", 
   #            comparisons = list(c("preciseTAD","Arrowhead")),
   #            vjust = 0,
@@ -378,33 +630,36 @@ a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="CTCF"),], a
   #            color="black") +
   theme_minimal()+
   theme_bw()+
-  ylab("Distance to CTCF")+
-  xlab("") + ylim(0,20) +
-  scale_fill_manual(values=c("blue",
+  ylab("Log2 Distance to CTCF")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
                              "forestgreen"))+
-  scale_color_manual(values=c("blue",
+  scale_color_manual(values=c("#00468BFF",
                               "forestgreen")) +
   guides(color=FALSE, fill=FALSE)+
-  theme(axis.text.x = element_text(size=20,
+  theme(axis.text.x = element_text(size=15,
                                    angle = 45,
                                    hjust = 1),
-        axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        strip.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
 
-b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg, color=BoundReg))  +   
-  stat_boxplot(geom ='errorbar', width = 0.2, size=1.2, color="black") + 
-  geom_boxplot(outlier.shape = NA, color="black", size=1.2) +
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="CTCF"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
   #geom_signif(test = "wilcox.test", 
-  #            comparisons = list(c("preciseTAD","Peakachu")),
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
   #            vjust = 0,
   #            textsize = 5,
   #            size = .5,
@@ -413,25 +668,261 @@ b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="CTCF"),], a
   theme_minimal()+
   theme_bw()+
   ylab("")+
-  xlab("") + ylim(0,20) +
-  scale_fill_manual(values=c("red",
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
                              "forestgreen"))+
-  scale_color_manual(values=c("red",
+  scale_color_manual(values=c("#AD002AFF",
                               "forestgreen")) +
   guides(color=FALSE, fill=FALSE)+
-  theme(axis.text.x = element_text(size=20,
+  theme(axis.text.x = element_text(size=15,
                                    angle = 45,
                                    hjust = 1),
-        axis.text.y = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20),
-        strip.text.x = element_text(size = 20),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
         #panel.spacing = unit(2, "lines"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
+
+
+ggarrange(a,b,ncol = 2)
+
+##RAD21
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="RAD21"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to RAD21")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#00468BFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="RAD21"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#AD002AFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+ggarrange(a,b,ncol = 2)
+
+##SMC3
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="SMC3"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to SMC3")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#00468BFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="SMC3"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#AD002AFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+ggarrange(a,b,ncol = 2)
+
+##ZNF143
+
+a <- ggplot(pred_v_called_df_a[which(pred_v_called_df_a$Annotation=="ZNF143"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("Log2 Distance to ZNF143")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#00468BFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#00468BFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
+
+b <- ggplot(pred_v_called_df_p[which(pred_v_called_df_p$Annotation=="ZNF143"),], aes(x=BoundReg, y = LogDist, fill=BoundReg))  +  
+  geom_violin(color="black", size=1.2) +
+  #stat_boxplot(geom ='errorbar', width = 0.2, size=1.2) + 
+  geom_boxplot(outlier.shape = NA, color="black", size=1.2, width=.1, fill="white") +
+  #geom_signif(test = "wilcox.test", 
+  #            comparisons = list(c("preciseTAD","Arrowhead")),
+  #            vjust = 0,
+  #            textsize = 5,
+  #            size = .5,
+  #            #step_increase = .5,
+  #            color="black") +
+  theme_minimal()+
+  theme_bw()+
+  ylab("")+
+  xlab("") +
+  ylim(0,26) +
+  scale_fill_manual(values=c("#AD002AFF",
+                             "forestgreen"))+
+  scale_color_manual(values=c("#AD002AFF",
+                              "forestgreen")) +
+  guides(color=FALSE, fill=FALSE)+
+  theme(axis.text.x = element_text(size=15,
+                                   angle = 45,
+                                   hjust = 1),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        strip.text.x = element_text(size = 15),
+        #panel.spacing = unit(2, "lines"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+
 
 ggarrange(a,b,ncol = 2)

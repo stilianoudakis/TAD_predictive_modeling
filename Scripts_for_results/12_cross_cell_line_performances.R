@@ -464,49 +464,49 @@ a1 <- ggplot() +
   #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="blue") +
+  #          color="#00468BFF") +
   ##over
   #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="blue") +
+  #          color="#00468BFF") +
 geom_ribbon(data=meanroc_g_on_g, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
               xmin=1-meanSpec,
               xmax=1-sdSpecover$sdSpec,
               x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+              y=sdSensover$sdSens), fill="#00468BFF", alpha=0.2) +
   geom_ribbon(data=meanroc_g_on_g, 
               aes(#ymin=sdSensunder$sdSens,
                 #ymax=sdSensover$sdSens,
                 xmin=1-sdSpecunder$sdSpec,
                 xmax=1-meanSpec,
                 x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+                y=sdSensover$sdSens), fill="#00468BFF", alpha=0.2) +
   geom_ribbon(data=meanroc_g_on_g, 
               aes(ymin=sdSensunder$sdSens,
                   ymax=sdSensover$sdSens,
                   #xmin=1-meanSpec,
                   #xmax=1-sdSpecunder$sdSpec,
                   x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+                  y=sdSensover$sdSens), fill="#00468BFF", alpha=0.2) +
   ##mean
   geom_line(data=meanroc_g_on_g,aes(x=1-meanSpec, y=meanSens),
             size=1.5,
             linetype="solid", 
-            color="blue") +
+            color="#00468BFF") +
   #k on g
   ##under
   #geom_line(data=meanroc_k_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="blue") +
+  #          color="#00468BFF") +
   ##over
   #geom_line(data=meanroc_k_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="blue") +
+  #          color="#00468BFF") +
 geom_ribbon(data=meanroc_k_on_g, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
@@ -538,7 +538,7 @@ geom_ribbon(data=meanroc_k_on_g,
   scale_color_manual(name = "Training/Testing",
                      labels = c("GM on GM",
                                 "K on GM"),
-                     values = c("blue","black")) +
+                     values = c("#00468BFF","black")) +
   scale_x_continuous(breaks=c(0, 0.5, 1),
                      labels=c(0, 0.5, 1),
                      limits=c(0,1))+
@@ -547,16 +547,16 @@ geom_ribbon(data=meanroc_k_on_g,
                      limits=c(0,1))+
   theme_minimal() +
   theme_bw()+
-  theme(axis.text.x = element_text(size = 20),
-        axis.text.y = element_text(size = 20),
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 20),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        strip.text.x = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
 
 
@@ -658,49 +658,49 @@ b1 <- ggplot() +
   #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="red") +
+  #          color="#AD002AFF") +
   ##over
   #geom_line(data=meanroc_g_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="red") +
+  #          color="#AD002AFF") +
 geom_ribbon(data=meanroc_g_on_g, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
               xmin=1-meanSpec,
               xmax=1-sdSpecover$sdSpec,
               x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="red", alpha=0.2) +
+              y=sdSensover$sdSens), fill="#AD002AFF", alpha=0.2) +
   geom_ribbon(data=meanroc_g_on_g, 
               aes(#ymin=sdSensunder$sdSens,
                 #ymax=sdSensover$sdSens,
                 xmin=1-sdSpecunder$sdSpec,
                 xmax=1-meanSpec,
                 x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="red", alpha=0.2) +
+                y=sdSensover$sdSens), fill="#AD002AFF", alpha=0.2) +
   geom_ribbon(data=meanroc_g_on_g, 
               aes(ymin=sdSensunder$sdSens,
                   ymax=sdSensover$sdSens,
                   #xmin=1-meanSpec,
                   #xmax=1-sdSpecunder$sdSpec,
                   x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="red", alpha=0.2) +
+                  y=sdSensover$sdSens), fill="#AD002AFF", alpha=0.2) +
   ##mean
   geom_line(data=meanroc_g_on_g,aes(x=1-meanSpec, y=meanSens),
             size=1.5,
             linetype="solid", 
-            color="red") +
+            color="#AD002AFF") +
   #k on g
   ##under
   #geom_line(data=meanroc_k_on_g,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="red") +
+  #          color="#AD002AFF") +
   ##over
   #geom_line(data=meanroc_k_on_g,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="red") +
+  #          color="#AD002AFF") +
 geom_ribbon(data=meanroc_k_on_g, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
@@ -732,7 +732,7 @@ geom_ribbon(data=meanroc_k_on_g,
   scale_color_manual(name = "Training/Testing",
                      labels = c("GM on GM",
                                 "K on GM"),
-                     values = c("red","black")) +
+                     values = c("#AD002AFF","black")) +
   scale_x_continuous(breaks=c(0, 0.5, 1),
                      labels=c(0, 0.5, 1),
                      limits=c(0,1))+
@@ -741,16 +741,16 @@ geom_ribbon(data=meanroc_k_on_g,
                      limits=c(0,1))+
   theme_minimal() +
   theme_bw()+
-  theme(axis.text.x = element_text(size = 20),
-        axis.text.y = element_text(size = 20),
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 20),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        strip.text.x = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
 
 
@@ -759,10 +759,10 @@ f <- ggarrange(a1, b1, ncol = 2)
 annotate_figure(f,
                 bottom = text_grob("1-Specificity", 
                                    color = "black",
-                                   size = 20),
+                                   size = 15),
                 left = text_grob("Sensitivity", 
                                  color = "black",
-                                 size = 20,
+                                 size = 15,
                                  rot = 90))
 
 #########################################################################################
@@ -856,56 +856,55 @@ meanroc_g_on_k$sdSpecover <- arrowhead_g_on_k %>%
   mutate(sdSpec=meanroc_g_on_k$meanSpec+sdSpec) %>% 
   select(sdSpec)
 
-
 a2 <- ggplot() + 
   #k on k
   ##under
   #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="blue") +
+  #          color="#00468BFF") +
   ##over
   #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="blue") +
+  #          color="#00468BFF") +
 geom_ribbon(data=meanroc_k_on_k, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
               xmin=1-meanSpec,
               xmax=1-sdSpecover$sdSpec,
               x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+              y=sdSensover$sdSens), fill="#00468BFF", alpha=0.2) +
   geom_ribbon(data=meanroc_k_on_k, 
               aes(#ymin=sdSensunder$sdSens,
                 #ymax=sdSensover$sdSens,
                 xmin=1-sdSpecunder$sdSpec,
                 xmax=1-meanSpec,
                 x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+                y=sdSensover$sdSens), fill="#00468BFF", alpha=0.2) +
   geom_ribbon(data=meanroc_k_on_k, 
               aes(ymin=sdSensunder$sdSens,
                   ymax=sdSensover$sdSens,
                   #xmin=1-meanSpec,
                   #xmax=1-sdSpecunder$sdSpec,
                   x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="blue", alpha=0.2) +
+                  y=sdSensover$sdSens), fill="#00468BFF", alpha=0.2) +
   ##mean
   geom_line(data=meanroc_k_on_k,aes(x=1-meanSpec, y=meanSens),
             size=1.5,
             linetype="solid", 
-            color="blue") +
+            color="#00468BFF") +
   #g on k
   ##under
   #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="blue") +
+  #          color="#00468BFF") +
   ##over
   #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="blue") +
+  #          color="#00468BFF") +
 geom_ribbon(data=meanroc_g_on_k, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
@@ -937,7 +936,7 @@ geom_ribbon(data=meanroc_g_on_k,
   scale_color_manual(name = "Training/Testing",
                      labels = c("K on K",
                                 "GM on K"),
-                     values = c("blue","black")) +
+                     values = c("#00468BFF","black")) +
   scale_x_continuous(breaks=c(0, 0.5, 1),
                      labels=c(0, 0.5, 1),
                      limits=c(0,1))+
@@ -946,16 +945,16 @@ geom_ribbon(data=meanroc_g_on_k,
                      limits=c(0,1))+
   theme_minimal() +
   theme_bw()+
-  theme(axis.text.x = element_text(size = 20),
-        axis.text.y = element_text(size = 20),
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 20),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        strip.text.x = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
 
 
@@ -1055,49 +1054,49 @@ b2 <- ggplot() +
   #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="red") +
+  #          color="#AD002AFF") +
   ##over
   #geom_line(data=meanroc_k_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="solid", 
-  #          color="red") +
+  #          color="#AD002AFF") +
 geom_ribbon(data=meanroc_k_on_k, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
               xmin=1-meanSpec,
               xmax=1-sdSpecover$sdSpec,
               x=1-sdSpecunder$sdSpec,
-              y=sdSensover$sdSens), fill="red", alpha=0.2) +
+              y=sdSensover$sdSens), fill="#AD002AFF", alpha=0.2) +
   geom_ribbon(data=meanroc_k_on_k, 
               aes(#ymin=sdSensunder$sdSens,
                 #ymax=sdSensover$sdSens,
                 xmin=1-sdSpecunder$sdSpec,
                 xmax=1-meanSpec,
                 x=1-sdSpecunder$sdSpec,
-                y=sdSensover$sdSens), fill="red", alpha=0.2) +
+                y=sdSensover$sdSens), fill="#AD002AFF", alpha=0.2) +
   geom_ribbon(data=meanroc_k_on_k, 
               aes(ymin=sdSensunder$sdSens,
                   ymax=sdSensover$sdSens,
                   #xmin=1-meanSpec,
                   #xmax=1-sdSpecunder$sdSpec,
                   x=1-sdSpecunder$sdSpec,
-                  y=sdSensover$sdSens), fill="red", alpha=0.2) +
+                  y=sdSensover$sdSens), fill="#AD002AFF", alpha=0.2) +
   ##mean
   geom_line(data=meanroc_k_on_k,aes(x=1-meanSpec, y=meanSens),
             size=1.5,
             linetype="solid", 
-            color="red") +
+            color="#AD002AFF") +
   #g on k
   ##under
   #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecunder$sdSpec, y=sdSensunder$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="red") +
+  #          color="#AD002AFF") +
   ##over
   #geom_line(data=meanroc_g_on_k,aes(x=1-sdSpecover$sdSpec, y=sdSensover$sdSens),
   #          size=.5,
   #          #linetype="dashed", 
-  #          color="red") +
+  #          color="#AD002AFF") +
 geom_ribbon(data=meanroc_g_on_k, 
             aes(#ymin=sdSensunder$sdSens,
               #ymax=sdSensover$sdSens,
@@ -1129,7 +1128,7 @@ geom_ribbon(data=meanroc_g_on_k,
   scale_color_manual(name = "Training/Testing",
                      labels = c("K on K",
                                 "GM on K"),
-                     values = c("red","black")) +
+                     values = c("#AD002AFF","black")) +
   scale_x_continuous(breaks=c(0, 0.5, 1),
                      labels=c(0, 0.5, 1),
                      limits=c(0,1))+
@@ -1138,28 +1137,27 @@ geom_ribbon(data=meanroc_g_on_k,
                      limits=c(0,1))+
   theme_minimal() +
   theme_bw()+
-  theme(axis.text.x = element_text(size = 20),
-        axis.text.y = element_text(size = 20),
+  theme(axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 20),
-        legend.text=element_text(size=20),
-        legend.title=element_text(size=20),
-        plot.title = element_text(size=20),
+        strip.text.x = element_text(size = 15),
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        plot.title = element_text(size=15),
         legend.position = "bottom")
-
 
 f <- ggarrange(a2, b2, ncol = 2)
 
 annotate_figure(f,
                 bottom = text_grob("1-Specificity", 
                                    color = "black",
-                                   size = 20),
+                                   size = 15),
                 left = text_grob("Sensitivity", 
                                  color = "black",
-                                 size = 20,
+                                 size = 15,
                                  rot = 90))
 
 #########################################################################################

@@ -46,6 +46,14 @@ library(Vennerable)
 library(VennDiagram)
 library(ChIPpeakAnno)
 library(EnrichedHeatmap)
+library(ggsci)
+
+scales::show_col(pal_lancet("lanonc")(8))
+mycols = pal_lancet("lanonc")(8)
+
+w <- wes_palette(n=3, "GrandBudapest2")
+w
+str(w)
 
 source("Z:/TAD_data_analysis/functions_for_R_package/preciseTAD.R")
 source("Z:/TAD_data_analysis/functions_for_R_package/TADRF.R")
@@ -156,13 +164,15 @@ all_pred_bounds_k562_p <- flank(all_pred_bounds_k562_p, 10000, both=TRUE)
 
 res <- makeVennDiagram(Peaks=list(all_pred_bounds_gm12878_a,
                                   all_pred_bounds_gm12878_p),
-                       NameOfPeaks=c("preciseTAD", "PEAKACHU"))
+                       NameOfPeaks=c("Arrowhead", "PEAKACHU"))
 venn.pt <- venn_cnt2venn(res$vennCounts)
 venn.pt <- compute.Venn(venn.pt)
 gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "red"
-gp[["Face"]][["10"]]$fill <-  "lightblue"
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
@@ -175,13 +185,15 @@ genomicCorr.jaccard(all_pred_bounds_gm12878_a,
 
 res <- makeVennDiagram(Peaks=list(all_pred_bounds_k562_a,
                                   all_pred_bounds_k562_p),
-                       NameOfPeaks=c("preciseTAD", "PEAKACHU"))
+                       NameOfPeaks=c("Arrowhead", "PEAKACHU"))
 venn.pt <- venn_cnt2venn(res$vennCounts)
 venn.pt <- compute.Venn(venn.pt)
 gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "red"
-gp[["Face"]][["10"]]$fill <-  "lightblue"
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
@@ -191,3 +203,94 @@ gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Uni
 
 genomicCorr.jaccard(all_pred_bounds_k562_a,
                     all_pred_bounds_k562_p)
+
+#across cell line
+
+res <- makeVennDiagram(Peaks=list(all_true_bounds_gm12878_a,
+                                  all_true_bounds_k562_a),
+                       NameOfPeaks=c("ArrowheadGM", "ArrowheadK"))
+venn.pt <- venn_cnt2venn(res$vennCounts)
+venn.pt <- compute.Venn(venn.pt)
+gp <- VennThemes(venn.pt)
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
+
+genomicCorr.jaccard(all_true_bounds_gm12878_a,
+                    all_true_bounds_k562_a)
+
+
+
+res <- makeVennDiagram(Peaks=list(all_pred_bounds_gm12878_a,
+                                  all_pred_bounds_k562_a),
+                       NameOfPeaks=c("preciseTADGM", "preciseTADK"))
+venn.pt <- venn_cnt2venn(res$vennCounts)
+venn.pt <- compute.Venn(venn.pt)
+gp <- VennThemes(venn.pt)
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
+
+genomicCorr.jaccard(all_pred_bounds_gm12878_a,
+                    all_pred_bounds_k562_a)
+
+
+res <- makeVennDiagram(Peaks=list(all_pred_bounds_gm12878_p,
+                                  all_pred_bounds_k562_p),
+                       NameOfPeaks=c("preciseTADGM", "preciseTADK"))
+venn.pt <- venn_cnt2venn(res$vennCounts)
+venn.pt <- compute.Venn(venn.pt)
+gp <- VennThemes(venn.pt)
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
+
+genomicCorr.jaccard(all_pred_bounds_gm12878_p,
+                    all_pred_bounds_k562_p)
+
+
+res <- makeVennDiagram(Peaks=list(all_true_bounds_gm12878_p,
+                                  all_true_bounds_k562_p),
+                       NameOfPeaks=c("PeakachuGM", "PeakachuK"))
+venn.pt <- venn_cnt2venn(res$vennCounts)
+venn.pt <- compute.Venn(venn.pt)
+gp <- VennThemes(venn.pt)
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
+gp[["FaceText"]][["10"]]$cex <- 2
+gp[["FaceText"]][["11"]]$cex <- 2
+gp[["FaceText"]][["01"]]$cex <- 2
+gp[["SetText"]][["Set1"]]$cex <- .1
+gp[["SetText"]][["Set2"]]$cex <- .1
+gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
+
+genomicCorr.jaccard(all_true_bounds_gm12878_p,
+                    all_true_bounds_k562_p)
+
