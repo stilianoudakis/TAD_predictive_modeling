@@ -13,7 +13,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 - Figure 4C - larger font. Can shrink width, but font should be at least comparable with one on panel D
 
-- Check ???
++ Check ???
 
 - Check cross-cell-line testing strategy. Edit text to address these issues
     - Methods, "Evaluating performance across cell lines" - make sure the new framework for Supp Fig 10 is described
