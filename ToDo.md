@@ -11,19 +11,14 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-+ Figure 4C - larger font. Can shrink width, but font should be at least comparable with one on panel D
-
-+ Check ???
-
 - Check cross-cell-line testing strategy. Edit text to address these issues
     - Methods, "Evaluating performance across cell lines" - make sure the new framework for Supp Fig 10 is described
     - Results, "Training in one cell line accurately predicts boundary regions in other cell lines" - - make sure the new framework for Supp Fig 10 is described
     - Check Fig 4d mention in "Boundaries predicted by preciseTAD models trained on TAD and loop bound- aries are highly overlapping"
     - Check Fig 4d legend, unclear which cell line is used where
 
-+ Suppl Fig 3, B, C - add labels "Peakachu GM12878", "Peakachu K562" in the upper left corner of each barplot panel
-
-+ Resolution of all figures should be >300dpi. Some are 150dpi
+- Main figures look marginally blurry. Figure 3 is a good example of high-res 300dpi, the rest is blurry
+- All suppl figures are blurry. They are 300dpi, but blurry 300dpi
 
 - Look into ExperimentalHub
 
