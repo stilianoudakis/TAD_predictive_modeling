@@ -23,7 +23,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 + Suppl Fig 3, B, C - add labels "Peakachu GM12878", "Peakachu K562" in the upper left corner of each barplot panel
 
-- Resolution of all figures should be >300dpi. Some are 150dpi
++ Resolution of all figures should be >300dpi. Some are 150dpi
 
 - Look into ExperimentalHub
 
