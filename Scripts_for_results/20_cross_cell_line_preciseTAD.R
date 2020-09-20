@@ -119,11 +119,11 @@ res <- makeVennDiagram(Peaks=list(g_on_g,
 venn.pt <- venn_cnt2venn(res$vennCounts)
 venn.pt <- compute.Venn(venn.pt)
 gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
-#gp$Set$Set1$col="green"
-#gp$Set$Set2$col="green"
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
@@ -169,9 +169,11 @@ res <- makeVennDiagram(Peaks=list(k_on_k,
 venn.pt <- venn_cnt2venn(res$vennCounts)
 venn.pt <- compute.Venn(venn.pt)
 gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
@@ -220,9 +222,11 @@ res <- makeVennDiagram(Peaks=list(g_on_g,
 venn.pt <- venn_cnt2venn(res$vennCounts)
 venn.pt <- compute.Venn(venn.pt)
 gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
@@ -269,9 +273,11 @@ res <- makeVennDiagram(Peaks=list(k_on_k,
 venn.pt <- venn_cnt2venn(res$vennCounts)
 venn.pt <- compute.Venn(venn.pt)
 gp <- VennThemes(venn.pt)
-gp[["Face"]][["11"]]$fill <-  "purple"
-gp[["Face"]][["01"]]$fill <-  "lightblue"
-gp[["Face"]][["10"]]$fill <-  "red"
+gp[["Face"]][["11"]]$fill <-  "#D8A499"
+gp[["Face"]][["01"]]$fill <-  "#E6A0C4"
+gp[["Face"]][["10"]]$fill <-  "#C6CDF7"
+gp$Set$Set1$col <- "#C6CDF7"
+gp$Set$Set2$col <- "#E6A0C4"
 gp[["FaceText"]][["10"]]$cex <- 2
 gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
