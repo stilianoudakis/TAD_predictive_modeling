@@ -11,7 +11,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-- Figure 4C - larger font. Can shrink width, but font should be at least comparable with one on panel D
++ Figure 4C - larger font. Can shrink width, but font should be at least comparable with one on panel D
 
 + Check ???
 
@@ -21,7 +21,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
     - Check Fig 4d mention in "Boundaries predicted by preciseTAD models trained on TAD and loop bound- aries are highly overlapping"
     - Check Fig 4d legend, unclear which cell line is used where
 
-- Suppl Fig 3, B, C - add labels "Peakachu GM12878", "Peakachu K562" in the upper left corner of each barplot panel
++ Suppl Fig 3, B, C - add labels "Peakachu GM12878", "Peakachu K562" in the upper left corner of each barplot panel
 
 - Resolution of all figures should be >300dpi. Some are 150dpi
 
