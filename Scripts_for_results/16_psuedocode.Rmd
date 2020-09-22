@@ -1,7 +1,7 @@
 ---
-title: "psuedocode"
-author: "Spiro Stilianoudakis"
-date: "9/6/2020"
+#title: "psuedocode"
+#author: "Spiro Stilianoudakis"
+#date: "9/6/2020"
 output: pdf_document
 header-includes:
 - \usepackage{stackengine}
@@ -14,7 +14,6 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# preciseTAD (CV)
 
 \begin{algorithm}[H]
 \DontPrintSemicolon
