@@ -127,7 +127,7 @@ Boundary regions were defined as genomic bins containing a called boundary ($Y =
 |     Arrowhead         |       50   kb     |                         2,349                       |                             4,224                            |                 53,537               |           0.08         |
 |     Arrowhead         |      100   kb     |                         1,031                       |                             1,883                            |                 26,768               |           0.07         |
 |        Peakachu       |       10   kb     |                        16,185                       |                          21,421                              |                267,682               |        0.14            |
-Table: Domain boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on the GM12878 cell line. Class imbalance is calculated as the ratio of total number of unique boundaries to the total number of genomic bins.
+Table: Domain boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on GM12878.
 
 ![**A machine learning framework for building domain boundary region prediction models.** Step 1 employs a range of feature engineering techniques to define the predictor matrix $A_{N \times (p)}$, where $N$ is the number of genomic bins, $p$ is the number of genomic annotations, $i$ is a holdout chromosome. The response vector $Y_N$ is defined as a boundary region ($Y=1$) if it overlaps with a genomic bin (else $Y=0$). Step 2 reserves the predictor-response matrix for the holdout chromosome $i$ as the test data. Step 3 applies a resampling technique to the training data to address the class imbalance. Step 4 trains the random forest model and performs 3-fold cross-validation to tune the mtry parameter. Finally, step 5 validates the model on the separate test data composed of the binned data from the holdout chromosome $i$ and to evaluate model performance using balanced accuracy (BA).](Figures/figure2.png) 
 
@@ -234,7 +234,7 @@ of Enhancer-Promoter Loops"]
 
 **Supplementary Figure 2.** Pseudocode of the *preciseTAD* algorithm.
 
-**Supplementary Table 3.** Domain boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on the K562 cell line. Class imbalance is calculated as the ratio of the total number of unique boundaries to the total number of genomic bins.
+**Supplementary Table 3.** Domain boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on K562. 
 
 **Supplementary Figure 3. Determining optimal data level characteristics for building TAD boundary region prediction models on K562.** (A) Averaged balanced accuracies are compared across resolution, within each predictor-type: Signal, OC, OP, and Distance, and across resampling techniques: no resampling (None; red), random over-sampling (ROS; green), random under-sampling (RUS; blue), and synthetic minority over-sampling (SMOTE; purple) when using Arrowhead ground truth boundaries for K562. (B) Averaged balanced accuracies are compared for GM12878 and (C) K562  within each predictor-type: Signal, OC, OP, and Distance, and across resampling technique: no resampling (None; red), random over-sampling (ROS; green), random under-sampling (RUS; blue), and synthetic minority over-sampling (SMOTE; purple). Error bars indicate standard deviation away from the mean performance across each holdout chromosome used for testing.
 
