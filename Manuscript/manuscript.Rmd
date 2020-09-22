@@ -31,7 +31,7 @@ Our study implements the method and the pre-trained models for precise domain bo
 
 # Keywords
 
-# Introduction
+# Background
 
 The advent of chromosome conformation capture (3C) sequencing technologies, and its successor Hi-C, have revealed a hierarchy of the 3-dimensional (3D) structure of the human genome such as chromatin loops [@rao20143d], Topologically Associating Domains (TADs) [@nora2012spatial;@dixon2012topological], and A/B compartments [@lieberman2009comprehensive]. At the kilobase scale, chromatin loops connect gene promoters with distal enhancers, thereby regulating gene expression [@Lupianez:2015aa; @Franke:2016aa]. At the megabase scale, TADs represent regions on the linear genome, that are highly self-interacting. <!--Emerging evidence has linked TADs to critical roles in cell dynamics and cell differentiation. Studies have shown that TADs themselves are highly conserved across species and cell lines [@dixon2012topological; @krefting2018evolutionary; @nora2012spatial; @dixon2015chromatin; @rao20143d; @Schmitt2016aa].--> Disruption of boundaries demarcating TADs and loops promotes cancer [@hnisz2016activation; @taberlay2016three] and other disorders [@lupianez2016breaking;@Sun:2018aa;@Meaburn:2007aa]. Identifying the precise location of TAD and chromatin loop boundaries remains a top priority in our goal to fully understand the functionality of the human genome.
 
@@ -40,75 +40,6 @@ Several methods have been proposed to identify genomic coordinates of TADs (revi
 Another limitation among domain callers is that they disregard prior knowledge about functional genomic annotations associated with TAD and loop boundaries, referred hereafter as domain boundaries. The insulator binding protein, CTCF, and additional cofactors such as SMC3 and RAD21 have been identified as components of the loop extrusion model<!--, whereby DNA is extruded through cohesin rings forming chromatin loops--> [@hansen2018recent;@sanborn2015chromatin; @fudenberg2016formation; @alipour2012self; @Mirny:2019aa; @Davidson:2019aa]. Furthermore, distinct patterns of histone modifications have also been shown to be present at boundaries<!--including H3K36me3--> [@lieberman2009comprehensive;@dixon2012topological;@libbrecht2015joint]. These genomic annotations are obtained using chromatin immunoprecipitation followed by high-throughput DNA sequencing (ChIP-seq). The resolution of ChIP-seq experiments is typically on the order of tens to hundreds of bases [@mendoza2009genome], well below the resolution of Hi-C data (tens of kilobases; 750 bp is the highest resolution of Hi-C data to date [@bonev2017multiscale]). Therefore, leveraging precisely mapped genomic annotations in a supervised machine learning framework enables more precise prediction of the locations of domain boundaries. 
 
 We present *preciseTAD*, an optimally tuned machine learning framework for precise identification of domain boundaries using genome annotation data. Our method utilizes the random forest (RF) algorithm trained on high-resolution chromatin state (BroadHMM), histone modifications (HM), and transcription factor binding sites (TFBS) data to predict low-resolution boundaries. We introduce a systematic pipeline for building the optimal boundary prediction classifier. We found that spatial associations (linear distance) between boundaries and annotations perform best, transcription factor binding sites improve prediction accuracy, and a simple random undersampling technique effectively addresses the negative effect of class imbalance. Translated from Hi-C data resolution level to base level (annotating each base and predicting its boundary probability), *preciseTAD* employs density-based clustering (DBSCAN) and partitioning around medoids (PAM) to detect genome annotation-guided boundary regions and points at a base-level resolution. This approach circumvents resolution restrictions of Hi-C data, allowing for the precise detection of biologically meaningful boundaries. We demonstrate that *preciseTAD* predictions are more enriched for known molecular drivers of 3D chromatin, including CTCF, RAD21, SMC3, and ZNF143. Further, we show that *preciseTAD*-detected boundaries are more conserved across cell lines, and the model trained in one cell line can predict boundaries in another cell line. This improved precision in the domain boundary location can provide insight into the association between genomic regulators and the 3D genome organization. The *preciseTAD* R package is freely available on https://dozmorovlab.github.io/preciseTAD/ and Bioconductor (submitted).
-
-# Methods
-
-## Data sources
-
-TAD and loop boundaries called by Arrowhead [@durand2016juicebox] and Peakachu [@salameh2019supervised] tools were used for training. The autosomal genomic coordinates in the GRCh37/hg19 human genome assembly were considered. Arrowhead-defined TAD boundaries were called from the GM12878 and K562 cell line Hi-C data (MAPQ>0, 5 kb, 10 kb, 25 kb, 50 kb, and 100 kb resolutions) using the default parameters (Additional File 1). Peakachu chromatin loop boundaries called at 10 kb for the GM12878 and K562 cell lines were downloaded from the Yue lab website (Supplementary Table 1). Unique boundaries were considered as the midpoints within the coordinate of each chromatin loop anchor. Chromosome 9 was excluded from all downstream analyses due to the sparsity of contact matrices at 5 kb and 10 kb resolutions for the K562 cell line. Cell-line-specific genomic annotations (BroadHMM chromatin states (BroadHMM), histone modifications (HM), and transcription factor binding sites (TFBS)) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 2). 
-
-## Shifted-binning for binary classification
-
-In Hi-C, each chromosome is binned into non-overlapping regions of length *r*, typically, 5 kb and above. The *r* parameter defines the resolution of Hi-C data. Here, we designed a strategy called _shifted binning_ that partitions the genome into regions of the same length *r*, but with middle points corresponding to boundaries defined by the original binning. 
-
-To create shifted binning, the first shifted bin was set to start at half of the resolution *r* and continued in intervals of length *r* until the end of the chromosome (*mod r* + *r/2*). The shifted bins, referred hereafter as bins for simplicity, were then defined as boundary-containing regions (*Y = 1*) if they contained a TAD (or loop) boundary, and non-boundary regions (*Y = 0*) otherwise, thus establishing the binary response vector (**Y**) used for classification (Figure 1A).
-
-## Feature engineering
-
-Cell line-specific genomic annotations were used to build the predictor space. Bins were annotated by one of either the average signal strength of the corresponding annotation (*Peak Signal Strength*), the number of overlaps with an annotation (*Overlap Count (OC)*), the percent of overlap between the bin and the total width of genomic annotation regions overlapping it (*Overlap Percent (OP)*), or the distance in bases from the center of the bin to the center of the nearest genomic annotation region (*Distance*) (Figure 1B). A ($log_2 + 1$)-transformation of distance was used to account for the skewness of the distance distributions. Models built using a *Peak Signal Strength* predictor space were only composed of histone modifications and transcription factor binding sites because BroadHMM chromatin states lack signal values (Supplementary Figure 1).
-
-## Addressing class imbalance
-
-To assess the impact of class imbalance (CI), defined as the proportion of boundary regions to non-boundary regions, we evaluated three resampling techniques: *Random Over-Sampling (ROS)*, *Random Under-Sampling (RUS)*, and *Synthetic Minority Over-Sampling Technique (SMOTE)*. For ROS, the minority class was sampled with replacement to obtain the same number of data points in the majority class. For RUS, the majority class was sampled without replacement to obtain the same number of data points in the minority class. For SMOTE, under-sampling was performed without replacement from the majority class, while over-sampling was performed by creating new synthetic observations using the $k=5$ minority class nearest neighbors [@chawla2002smote] (implemented in the `DMwR` v.0.4.1 R package). We restricted the SMOTE algorithm to 100% over-sampling and 200% under-sampling, to create perfectly balanced classes. 
-
-## Establishing optimal data level characteristics for TAD boundary region prediction
-
-Random forest (RF) classification models (the `caret` v.6.0 R package [@kuhn2012caret]) were built to compare model performances between combinations of data resolutions, feature engineering procedures, and resampling techniques. Following recommendations to evaluate the model on unseen data [@schreiber2019pitfall], a *holdout chromosome* technique was used for estimating model's performance. The $i^{th}$ holdout chromosome was identified and a data matrix, $A_{N \times (p+1)}$, was constructed by combining the binned genome from the remaining chromosomes ($1,2,\cdots, i-1,i+1,\cdots,21,22$), where $N=[n_{1} n_{2} \cdots n_{21} n_{22}]'$ and $n_{k}$ is the length of chromosome *k* after being binned into non-overlapping regions of resolution *r*, such that $k \ne i$. $p$, the number of annotations, together with the response vector, **Y**, defined the column-wise dimension of the matrix $A$. Re-sampling was then performed on $A$, and an RF classifier was trained using 3-fold cross-validation to tune for the number of annotations to consider at each node (*mtry*). The number of trees (*ntree*) that were aggregated for each RF model was set to 500. The minimum number of observations per root node (*nodesize*) was set to 0.1% of the rows in the data. The binned data for the holdout chromosome $i$ was reserved for testing. Models were evaluated using Balanced Accuracy (BA), defined as the average of sensitivity and specificity:
-
-$$BA = \dfrac{1}{2}\left( sensitivity + specificity \right) = \dfrac{1}{2}\left( \dfrac{TP}{TP+FN} + \dfrac{TN}{TN+FP} \right)$$
-
-where TP refers to the number of bins correctly identified as containing a boundary (true positives), FP refers to the number of bins incorrectly identified as containing a boundary (false positives), TN refers to the number of bins correctly identified as not containing a boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a boundary (false negatives). Each of these quantities is obtained from the confusion matrix created by validating the model on the test data. The process was repeated for each $i^{th}$ holdout chromosome, and performances were aggregated using mean and standard deviation.
-
-## Feature selection and predictive importance
-
-Many genomic annotations, notably architectural proteins, tend to exhibit an extensive pattern of colocalization (correlation) [@van2014insulator]. To suitably reduce the predictor space and improve computational efficiency, while maintaining optimal performance, we implemented recursive feature elimination (RFE). We estimated the near-optimal number of necessary features, ranging from 2 to the maximum number of features incremented by the power of 2. We then aggregated the predictive importance of the union of the optimal set of features across holdout chromosomes using the mean decrease in node impurity among permuted features in out-of-bag samples to determine the most common and top-ranked annotations for predicting boundary regions. 
-
-## Evaluating performance across cell lines
-
-When evaluating performance across cell lines, we compared the strategy of training and testing binned and annotation data from the same cell line with training and testing across cell lines. To do so, we built a model using binned and annotation data from $n-1$ chromosomes of the other cell line, while maintaining same testing data from the same cell line strategy (i.e. data from the $i^{th}$ holdout chromosome). As before, this process was repeated for each holdout chromosome. To evaluate performance, we constructed receiver operating characteristic (ROC) curves composed of the average sensitivities and specificities at different cutoffs, across each holdout chromosome, and reported the corresponding average area under the curve (AUC).
-
-## Boundary prediction at the base-level resolution using *preciseTAD*
-
-To investigate whether we could alleviate the resolution limitations of conventional domain calling tools, we developed *preciseTAD*. This algorithm leverages a random forest model in conjunction with density-based and partitioning techniques to predict boundaries at base resolution (Supplementary Figure 2). 
-
-A random forest model $(M)$ was built on the optimal combination of predictor type (predictor space), resampling technique (class balancing correction), and top-ranked annotations (most informative genomic elements) for a set of binned chromosomes $\{k | k \ne i \}$ <!--, to maximally accurately predict boundaries at the _Hi-C resolution level_-->. To precisely identify boundary locations, we first constructed a _base-level resolution_ predictor space for the chromosome *i*, $A_{n \times p}$, where $n$ is the length of chromosome $i$ and $p$ is the optimal number of annotations. We then evaluate $M$ on the base-level predictor space to extract the probability vector, $\pi_{n_{i}}$, denoting each base's probability of being a boundary. Here, $n_{i}$ represents the length of chromosome *i*. A threshold $t$ specifies the probability at which a base with $\pi_{n_{i}} \ge t$ is designated as a potential boundary (the default $t=1$). Next, density-based spatial clustering of applications with noise (DBSCAN; version 1.1-5) is applied to the matrix of pairwise genomic distances between boundary-annotated bases, $D$. The minimum and maximum coordinates of each cluster, $k$, of spatially colocalized bases were termed *preciseTAD boundary regions* (PTBR). To precisely identify a single base among each PTBR, *preciseTAD* implements partitioning around medoids (PAM) on the distance matrix, $D_{k}$, derived from each cluster. The corresponding cluster medoid was defined as a *preciseTAD boundary point* (PTBP), making it the most representative base coordinate within each clustered PTBR.
-
-The DBSCAN algorithm has two parameters, *MinPts* and *eps* ($\epsilon$). The *MinPts* parameter was set to the recommended value of 3, representing $1+dim(data)$ [@hahsler2019dbscan]. To decide on the optimal value of $t$ and $\epsilon$ in *preciseTAD*, we considered the normalized enrichment $NE$ of flanked predicted boundaries, defined as
-
-$$NE = \dfrac{1}{p} \left[ \Sigma_{s=1}^{p} \left[ \dfrac{1}{b} \Sigma_{k=1}^{b} e_{ks} \times c_{k} \right] \right]$$
-
-where $e_{ks} = \textbf{I}\{ r_{s} \in (b_{k}-f, b_{k}+f)\}$ is the number of elemental regions $r$ of predictor $p$ that overlap with each flanked boundary. We evaluated $NE$ for combinations of $t=\{0.975, 0.99, 1.0 \}$ and $\epsilon = \{1000, 5000, 10000, 15000, 20000, 25000 \}$. The heuristic of $\epsilon$ is that density-reachable bases with genomic distances less than $\epsilon$ should occupy the same designated cluster. The default combination was set to $t=1.0$ and $\epsilon=10000$ based on our tests (Supplementary Figure 11).
-
-## Predicting boundaries across cell lines
-
-We aimed to extend the strategy of building and comparing boundary region prediction models using same cell line versus across cell line data to predict boundaries at base level resolution across cell lines. To do so, we applied *preciseTAD* on models built using cell line specific annotation data to predict boundaries on base level annotation data from another cell line. As before, this strategy was compared to applying *preciseTAD* on models and base level annotation data from the same cell line.
-
-## Evaluating called and predicted boundary precision
-
-We assessed the biological significance of our predicted boundaries by their association with the signal of CTCF, RAD21, SMC3, and ZNF143 using *deepTools* (version 2.0) [@ramirez2016deeptools] (*computeMatrix*, *plotProfile*, and *plotHeatmap* tools). Additionally, we compared the median $log_2$ genomic distances between TAD boundaries and the same top predictive ChIP-seq annotations using Wilcoxon Rank-Sum tests. Furthermore, we compared the overlap between predicted and called boundaries in GM12878 and K562 cell lines. Boundaries were first flanked by resolution, *r*, and overlaps were visualized using Venn diagrams from the `Vennerable` R package (version 3.1.0). Overlaps were further quantified using the Jaccard index defined as
-
-$$J_{(A,B)} = \dfrac{A \cap B}{A \cup B}$$
-
-where A and B represent genomic regions created by flanked called and predicted boundaries. That is, between cell lines, the number of overlapping flanked boundaries divided by the total number of flanked boundaries. Wilcoxon Rank-Sum tests were used to compare chromosome-specific Jaccard indices across cell lines, between *preciseTAD* boundaries and both Arrowhead and Peakachu boundaries, respectively. All statistical analyses were performed in R version 4.0.1. The significance level was set to 0.05 for all statistical tests.
-
-<!--using the `EnrichedHeatmap` R package (version 1.14.0) [@gu2018enrichedheatmap]. For each boundary (both called and predicted), a 5000 bp flank was created on either side. The flanking was broken up into 50 bp segments, for a total of 100 windows on both sides of a given boundary. A coverage value was generated for each window with respect to a given ChIP-seq annotation, as the mean signal averaged by the width of the window, denoted by,
-
-$$v_{c} = \dfrac{\Sigma_{j}^{m} \Sigma_{i}^{n}x_{ij}w_{ij}}{L}$$
-
-where $x_{ij}$ is the total number of bases of annotation $i$ in window $j$ and $w_{ij}$ is the number of bases that overlap between annotation $i$ and window $j$. The denominator, $L$, is the width of the windows (here, $L=50$). The rows of the heatmaps are ordered by enriched scores. The enriched scores are calculated as the sum of coverage values weighted by the distance to the flanked boundary, denoted by
-
-$$s_{e} = \Sigma_{d=1}^{n_{1}}\left(\dfrac{x_{1d}* d}{n_{1}} \right) + \Sigma_{u=1}^{n_{2}}\left(\dfrac{x_{2u}* (n_{2} - u + 1)}{n_{2}} \right)$$
-where $n_{1}$ and $n_{2}$ represent the number of downstream and upstream coverage values to sum over. Here, $n_{1}=n_{2}=100$.-->
 
 # Results
 
@@ -205,7 +136,78 @@ Another limitation of *preciseTAD* is that it does not distinguish boundary type
 Using the provided pre-trained models, *preciseTAD* is able to identify precise domain boundaries using cell line-specific genome annotation information of only four transcription factors, CTCF, SMC3, RAD21, ZNF143. Although the ENCODE, NIH Roadmap Epigenomics, FANTOM5, BLUEPRINT, and other members of the International Human Epigenome Consortium (IHEC) [@Stunnenberg:2016aa] have been actively cataloging cell line-specific genome annotation datasets, these data remain very sparse. To date (September 2020), the ENCODE project has only five cell lines (GM12878, K562, H1-hESC, HeLa-S3, HepG2) with all four transcription factor genomic annotations. Efforts to <!--systematically catalog chromatin conformation capture data [@Wang:2018ab] and -->impute missing cell line-specific genome annotation information [@Schreiber:2020aa] started to appear. We envision the broader availability of cell line-specific genomic annotations will enable a more systematic analysis of domain boundaries using *preciseTAD*. 
 <!--*preciseTAD* requires both cell line-specific chromatin conformation capture data (Hi-C in the current study) and genome annotation data. Hi-C data provides information about the approximate location of domain boundaries, while genome annotation data is used to train a model that can predict boundaries at the base-level resolution. The diversity of chromatin conformation capture technologies [@Kempfer:2019aa] and analysis methods [@Hansen:2019aa] limits the availability of harmonized cell line-specific domain boundary information.-->
 
+# Conclusion
+
 In summary, we demonstrate that domain boundary prediction is a multi-faceted problem requiring consideration of multiple statistical and biological properties of genomic data. Simply considering the properties of Hi-C contact matrices ignores the fundamental roles of known molecular drivers of the 3D chromatin structures. Instead, we propose *preciseTAD*, a supervised machine learning framework that leverages both Hi-C contact matrix information and genomic annotations. Our method introduces three concepts - *shifted binning*, *distance*-type predictors, and *random undersampling* - which we use to build random forest classification models for predicting boundary regions. Our method can bridge the resolution gap between 1D ChIP-seq annotations and 3D Hi-C sequencing data for more precise and biologically meaningful boundary identification. We introduce *preciseTAD*, an open source R package for leveraging random forests to predict domain boundaries at base-level resolution. We hope that *preciseTAD* will serve as an efficient and easy-to-use tool to further explore the genome's 3D organization.
+
+# Methods
+
+## Data sources
+
+TAD and loop boundaries called by Arrowhead [@durand2016juicebox] and Peakachu [@salameh2019supervised] tools were used for training. The autosomal genomic coordinates in the GRCh37/hg19 human genome assembly were considered. Arrowhead-defined TAD boundaries were called from the GM12878 and K562 cell line Hi-C data (MAPQ>0, 5 kb, 10 kb, 25 kb, 50 kb, and 100 kb resolutions) using the default parameters (Additional File 1). Peakachu chromatin loop boundaries called at 10 kb for the GM12878 and K562 cell lines were downloaded from the Yue lab website (Supplementary Table 1). Unique boundaries were considered as the midpoints within the coordinate of each chromatin loop anchor. Chromosome 9 was excluded from all downstream analyses due to the sparsity of contact matrices at 5 kb and 10 kb resolutions for the K562 cell line. Cell-line-specific genomic annotations (BroadHMM chromatin states (BroadHMM), histone modifications (HM), and transcription factor binding sites (TFBS)) were obtained from the UCSC Genome Browser Database [@Tyner:2017aa] (Supplementary Table 2). 
+
+## Shifted-binning for binary classification
+
+In Hi-C, each chromosome is binned into non-overlapping regions of length *r*, typically, 5 kb and above. The *r* parameter defines the resolution of Hi-C data. Here, we designed a strategy called _shifted binning_ that partitions the genome into regions of the same length *r*, but with middle points corresponding to boundaries defined by the original binning. 
+
+To create shifted binning, the first shifted bin was set to start at half of the resolution *r* and continued in intervals of length *r* until the end of the chromosome (*mod r* + *r/2*). The shifted bins, referred hereafter as bins for simplicity, were then defined as boundary-containing regions (*Y = 1*) if they contained a TAD (or loop) boundary, and non-boundary regions (*Y = 0*) otherwise, thus establishing the binary response vector (**Y**) used for classification (Figure 1A).
+
+## Feature engineering
+
+Cell line-specific genomic annotations were used to build the predictor space. Bins were annotated by one of either the average signal strength of the corresponding annotation (*Peak Signal Strength*), the number of overlaps with an annotation (*Overlap Count (OC)*), the percent of overlap between the bin and the total width of genomic annotation regions overlapping it (*Overlap Percent (OP)*), or the distance in bases from the center of the bin to the center of the nearest genomic annotation region (*Distance*) (Figure 1B). A ($log_2 + 1$)-transformation of distance was used to account for the skewness of the distance distributions. Models built using a *Peak Signal Strength* predictor space were only composed of histone modifications and transcription factor binding sites because BroadHMM chromatin states lack signal values (Supplementary Figure 1).
+
+## Addressing class imbalance
+
+To assess the impact of class imbalance (CI), defined as the proportion of boundary regions to non-boundary regions, we evaluated three resampling techniques: *Random Over-Sampling (ROS)*, *Random Under-Sampling (RUS)*, and *Synthetic Minority Over-Sampling Technique (SMOTE)*. For ROS, the minority class was sampled with replacement to obtain the same number of data points in the majority class. For RUS, the majority class was sampled without replacement to obtain the same number of data points in the minority class. For SMOTE, under-sampling was performed without replacement from the majority class, while over-sampling was performed by creating new synthetic observations using the $k=5$ minority class nearest neighbors [@chawla2002smote] (implemented in the `DMwR` v.0.4.1 R package). We restricted the SMOTE algorithm to 100% over-sampling and 200% under-sampling, to create perfectly balanced classes. 
+
+## Establishing optimal data level characteristics for TAD boundary region prediction
+
+Random forest (RF) classification models (the `caret` v.6.0 R package [@kuhn2012caret]) were built to compare model performances between combinations of data resolutions, feature engineering procedures, and resampling techniques. Following recommendations to evaluate the model on unseen data [@schreiber2019pitfall], a *holdout chromosome* technique was used for estimating model's performance. The $i^{th}$ holdout chromosome was identified and a data matrix, $A_{N \times (p+1)}$, was constructed by combining the binned genome from the remaining chromosomes ($1,2,\cdots, i-1,i+1,\cdots,21,22$), where $N=[n_{1} n_{2} \cdots n_{21} n_{22}]'$ and $n_{k}$ is the length of chromosome *k* after being binned into non-overlapping regions of resolution *r*, such that $k \ne i$. $p$, the number of annotations, together with the response vector, **Y**, defined the column-wise dimension of the matrix $A$. Re-sampling was then performed on $A$, and an RF classifier was trained using 3-fold cross-validation to tune for the number of annotations to consider at each node (*mtry*). The number of trees (*ntree*) that were aggregated for each RF model was set to 500. The minimum number of observations per root node (*nodesize*) was set to 0.1% of the rows in the data. The binned data for the holdout chromosome $i$ was reserved for testing. Models were evaluated using Balanced Accuracy (BA), defined as the average of sensitivity and specificity:
+
+$$BA = \dfrac{1}{2}\left( sensitivity + specificity \right) = \dfrac{1}{2}\left( \dfrac{TP}{TP+FN} + \dfrac{TN}{TN+FP} \right)$$
+
+where TP refers to the number of bins correctly identified as containing a boundary (true positives), FP refers to the number of bins incorrectly identified as containing a boundary (false positives), TN refers to the number of bins correctly identified as not containing a boundary (true negatives), and FN refers to the number of bins incorrectly identified as not containing a boundary (false negatives). Each of these quantities is obtained from the confusion matrix created by validating the model on the test data. The process was repeated for each $i^{th}$ holdout chromosome, and performances were aggregated using mean and standard deviation.
+
+## Feature selection and predictive importance
+
+Many genomic annotations, notably architectural proteins, tend to exhibit an extensive pattern of colocalization (correlation) [@van2014insulator]. To suitably reduce the predictor space and improve computational efficiency, while maintaining optimal performance, we implemented recursive feature elimination (RFE). We estimated the near-optimal number of necessary features, ranging from 2 to the maximum number of features incremented by the power of 2. We then aggregated the predictive importance of the union of the optimal set of features across holdout chromosomes using the mean decrease in node impurity among permuted features in out-of-bag samples to determine the most common and top-ranked annotations for predicting boundary regions. 
+
+## Evaluating performance across cell lines
+
+When evaluating performance across cell lines, we compared the strategy of training and testing binned and annotation data from the same cell line with training and testing across cell lines. To do so, we built a model using binned and annotation data from $n-1$ chromosomes of the other cell line, while maintaining same testing data from the same cell line strategy (i.e. data from the $i^{th}$ holdout chromosome). As before, this process was repeated for each holdout chromosome. To evaluate performance, we constructed receiver operating characteristic (ROC) curves composed of the average sensitivities and specificities at different cutoffs, across each holdout chromosome, and reported the corresponding average area under the curve (AUC).
+
+## Boundary prediction at the base-level resolution using *preciseTAD*
+
+To investigate whether we could alleviate the resolution limitations of conventional domain calling tools, we developed *preciseTAD*. This algorithm leverages a random forest model in conjunction with density-based and partitioning techniques to predict boundaries at base resolution (Supplementary Figure 2). 
+
+A random forest model $(M)$ was built on the optimal combination of predictor type (predictor space), resampling technique (class balancing correction), and top-ranked annotations (most informative genomic elements) for a set of binned chromosomes $\{k | k \ne i \}$ <!--, to maximally accurately predict boundaries at the _Hi-C resolution level_-->. To precisely identify boundary locations, we first constructed a _base-level resolution_ predictor space for the chromosome *i*, $A_{n \times p}$, where $n$ is the length of chromosome $i$ and $p$ is the optimal number of annotations. We then evaluate $M$ on the base-level predictor space to extract the probability vector, $\pi_{n_{i}}$, denoting each base's probability of being a boundary. Here, $n_{i}$ represents the length of chromosome *i*. A threshold $t$ specifies the probability at which a base with $\pi_{n_{i}} \ge t$ is designated as a potential boundary (the default $t=1$). Next, density-based spatial clustering of applications with noise (DBSCAN; version 1.1-5) is applied to the matrix of pairwise genomic distances between boundary-annotated bases, $D$. The minimum and maximum coordinates of each cluster, $k$, of spatially colocalized bases were termed *preciseTAD boundary regions* (PTBR). To precisely identify a single base among each PTBR, *preciseTAD* implements partitioning around medoids (PAM) on the distance matrix, $D_{k}$, derived from each cluster. The corresponding cluster medoid was defined as a *preciseTAD boundary point* (PTBP), making it the most representative base coordinate within each clustered PTBR.
+
+The DBSCAN algorithm has two parameters, *MinPts* and *eps* ($\epsilon$). The *MinPts* parameter was set to the recommended value of 3, representing $1+dim(data)$ [@hahsler2019dbscan]. To decide on the optimal value of $t$ and $\epsilon$ in *preciseTAD*, we considered the normalized enrichment $NE$ of flanked predicted boundaries, defined as
+
+$$NE = \dfrac{1}{p} \left[ \Sigma_{s=1}^{p} \left[ \dfrac{1}{b} \Sigma_{k=1}^{b} e_{ks} \times c_{k} \right] \right]$$
+
+where $e_{ks} = \textbf{I}\{ r_{s} \in (b_{k}-f, b_{k}+f)\}$ is the number of elemental regions $r$ of predictor $p$ that overlap with each flanked boundary. We evaluated $NE$ for combinations of $t=\{0.975, 0.99, 1.0 \}$ and $\epsilon = \{1000, 5000, 10000, 15000, 20000, 25000 \}$. The heuristic of $\epsilon$ is that density-reachable bases with genomic distances less than $\epsilon$ should occupy the same designated cluster. The default combination was set to $t=1.0$ and $\epsilon=10000$ based on our tests (Supplementary Figure 11).
+
+## Predicting boundaries across cell lines
+
+We aimed to extend the strategy of building and comparing boundary region prediction models using same cell line versus across cell line data to predict boundaries at base level resolution across cell lines. To do so, we applied *preciseTAD* on models built using cell line specific annotation data to predict boundaries on base level annotation data from another cell line. As before, this strategy was compared to applying *preciseTAD* on models and base level annotation data from the same cell line.
+
+## Evaluating called and predicted boundary precision
+
+We assessed the biological significance of our predicted boundaries by their association with the signal of CTCF, RAD21, SMC3, and ZNF143 using *deepTools* (version 2.0) [@ramirez2016deeptools] (*computeMatrix*, *plotProfile*, and *plotHeatmap* tools). Additionally, we compared the median $log_2$ genomic distances between TAD boundaries and the same top predictive ChIP-seq annotations using Wilcoxon Rank-Sum tests. Furthermore, we compared the overlap between predicted and called boundaries in GM12878 and K562 cell lines. Boundaries were first flanked by resolution, *r*, and overlaps were visualized using Venn diagrams from the `Vennerable` R package (version 3.1.0). Overlaps were further quantified using the Jaccard index defined as
+
+$$J_{(A,B)} = \dfrac{A \cap B}{A \cup B}$$
+
+where A and B represent genomic regions created by flanked called and predicted boundaries. That is, between cell lines, the number of overlapping flanked boundaries divided by the total number of flanked boundaries. Wilcoxon Rank-Sum tests were used to compare chromosome-specific Jaccard indices across cell lines, between *preciseTAD* boundaries and both Arrowhead and Peakachu boundaries, respectively. All statistical analyses were performed in R version 4.0.1. The significance level was set to 0.05 for all statistical tests.
+
+<!--using the `EnrichedHeatmap` R package (version 1.14.0) [@gu2018enrichedheatmap]. For each boundary (both called and predicted), a 5000 bp flank was created on either side. The flanking was broken up into 50 bp segments, for a total of 100 windows on both sides of a given boundary. A coverage value was generated for each window with respect to a given ChIP-seq annotation, as the mean signal averaged by the width of the window, denoted by,
+
+$$v_{c} = \dfrac{\Sigma_{j}^{m} \Sigma_{i}^{n}x_{ij}w_{ij}}{L}$$
+
+where $x_{ij}$ is the total number of bases of annotation $i$ in window $j$ and $w_{ij}$ is the number of bases that overlap between annotation $i$ and window $j$. The denominator, $L$, is the width of the windows (here, $L=50$). The rows of the heatmaps are ordered by enriched scores. The enriched scores are calculated as the sum of coverage values weighted by the distance to the flanked boundary, denoted by
+
+$$s_{e} = \Sigma_{d=1}^{n_{1}}\left(\dfrac{x_{1d}* d}{n_{1}} \right) + \Sigma_{u=1}^{n_{2}}\left(\dfrac{x_{2u}* (n_{2} - u + 1)}{n_{2}} \right)$$
+where $n_{1}$ and $n_{2}$ represent the number of downstream and upstream coverage values to sum over. Here, $n_{1}=n_{2}=100$.-->
 
 
 <!--
@@ -266,11 +268,33 @@ of Enhancer-Promoter Loops"]
 
 AUC - Area Under the Curve; BA - Balanced Accuracy; bp - base pair; BroadHMM - BroadHMM chromatin state data; ChIP-seq - Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI - Class Imbalance; DBSCAN - Density-Based Spatial Clustering of Applications with Noise; FN - False Negatives; FP - False Positives; Hi-C - High-throughput chromosome conformation capture technology; HM - Histone Modifications; kb - kilobase; ML - Machine Learning; OC - Overlap Counts; OP - Overlap Percents; PAM - Partitioning Around Medoids; PTBP - preciseTAD Boundary Point; PTBR - preciseTAD Boundary Region; RF - Random Forest; RFE - Recursive Feature Elimination; ROC - Receiver Operating Characteristic; ROS - Random Over-Sampling; RUS	Random Under-Sampling; SMOTE - Synthetic Minority Over-sampling Technique; TAD - Topologically Associating Domains; TFBS - Transcription Factor Binding Sites; TN - True Negatives; TP - True Positives
 
-# Acknowledgements
+# Declarations
 
-_Conflict of Interest._ None.
+## Ethics approval and consent to participate
 
-<!-- # Funding -->
+Not applicable
+
+## Consent for publication
+
+Not applicable
+
+## Availability of data and materials
+
+All data generated or analysed during this study are included in this published article [and its supplementary information files].
+
+## Competing interests
+
+Not applicable
+
+## Funding
+
+## Authors' contributions
+
+## Acknowledgements
+
+## Authors' information (optional)
+
+
 
 # References
 
