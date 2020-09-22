@@ -224,8 +224,6 @@ of Enhancer-Promoter Loops"]
 
 # Supplementary Legends
 
-**Additional File 1**. An example script for applying Arrowhead to in situ Hi-C data (HIC001-HIC018) to obtain chromosome-specific TAD boundaries on the GM12878 cell line at 5kb, 10kb, 25kb, 50kb, 100kb resolutions. An example of deepTools commands to generate plotProfiels and plotHeatmaps is also provided. 
-
 **Supplementary Table 1.** Data sources for Hi-C matrices used to call topologically associating domains with Arrowhead, as well as loop boundaries obtained by Peakachu.
 
 **Supplementary Table 2.** A complete list of genomic annotations used to build the predictor space for all downstream models. The GRCh37/hg19 human genome assembly was used. "Genomic Class" - broad category of genomic features, "Element" - names of genomic features, "Cell line-Specific Source" - download URL specific to the cell line (not all annotations were provided by the same institutions).
@@ -258,6 +256,9 @@ of Enhancer-Promoter Loops"]
 
 **Supplementary Table 5.** Additional performance metrics when implementing a random forest using Arrowhead/Peakachu ground truth TAD/loop boundaries. Performances are averaged across each holdout chromosome that was reserved for testing.
 
+# Additional File Legends
+
+**Additional File 1**. An example script for applying Arrowhead to in situ Hi-C data (HIC001-HIC018) to obtain chromosome-specific TAD boundaries on the GM12878 cell line at 5kb, 10kb, 25kb, 50kb, 100kb resolutions. An example of deepTools commands to generate plotProfiles and plotHeatmaps is also provided. 
 
 # Abbreviations
 
