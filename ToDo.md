@@ -11,14 +11,11 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-- Check cross-cell-line testing strategy. Edit text to address these issues
-    - Methods, "Evaluating performance across cell lines" - make sure the new framework for Supp Fig 10 is described
-    - Results, "Training in one cell line accurately predicts boundary regions in other cell lines" - - make sure the new framework for Supp Fig 10 is described
-    - Check Fig 4d mention in "Boundaries predicted by preciseTAD models trained on TAD and loop bound- aries are highly overlapping"
-    - Check Fig 4d legend, unclear which cell line is used where
+- Fig 1 -269dpi, marginally OK, but redo if possible
+- Fig 4, 5, 6 - 150dpi, redo
 
-- Main figures look marginally blurry. Figure 3 is a good example of high-res 300dpi, the rest is blurry
-- All suppl figures are blurry. They are 300dpi, but blurry 300dpi
+- Suppl Fig 1 - 150dpi, redo
+- Suppl Fig 3, 6, 7, 8, 9, 10, 11 - 300dpi but extremely blurry. redo
 
 - Look into ExperimentalHub
 
