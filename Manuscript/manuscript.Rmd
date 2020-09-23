@@ -188,9 +188,11 @@ $$NE = \dfrac{1}{p} \left[ \Sigma_{s=1}^{p} \left[ \dfrac{1}{b} \Sigma_{k=1}^{b}
 
 where $e_{ks} = \textbf{I}\{ r_{s} \in (b_{k}-f, b_{k}+f)\}$ is the number of elemental regions $r$ of predictor $p$ that overlap with each flanked boundary. We evaluated $NE$ for combinations of $t=\{0.975, 0.99, 1.0 \}$ and $\epsilon = \{1000, 5000, 10000, 15000, 20000, 25000 \}$. The heuristic of $\epsilon$ is that density-reachable bases with genomic distances less than $\epsilon$ should occupy the same designated cluster. The default combination was set to $t=1.0$ and $\epsilon=10000$ based on our tests (Supplementary Figure 11).
 
+<!--
 ## Predicting boundaries across cell lines
 
 We aimed to extend the strategy of building and comparing boundary region prediction models using same cell line versus across cell line data to predict boundaries at base level resolution across cell lines. To do so, we applied *preciseTAD* on models built using cell line specific annotation data to predict boundaries on base level annotation data from another cell line. As before, this strategy was compared to applying *preciseTAD* on models and base level annotation data from the same cell line.
+-->
 
 ## Evaluating called and predicted boundary precision
 
