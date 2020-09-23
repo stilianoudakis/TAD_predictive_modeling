@@ -17,7 +17,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 - 6 - 150dpi, redo
 
 + Suppl Fig 1 - 150dpi, redo
-- Suppl Fig 3, 
++ Suppl Fig 3, 
 + Suppl Fig 4, 
 + 6, 
 + 7, 
