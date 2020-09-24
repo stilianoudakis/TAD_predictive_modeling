@@ -11,16 +11,11 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-- Fig 1 -269dpi, marginally OK, but redo if possible
-+ Fig 4, 
+- Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
 - 5, 
 - 6 - 150dpi, redo
 
-+ Suppl Fig 1 - 150dpi, redo
-+ Suppl Fig 3, 
-+ Suppl Fig 4, 
-+ 6, 
-+ 7, 
+- Suppl Fig
 - 8, 
 - 9, 
 - 10, 
