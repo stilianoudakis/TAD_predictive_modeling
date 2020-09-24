@@ -178,6 +178,8 @@ gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
 gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
+gp$SetText$Set1$col <- "white"
+gp$SetText$Set2$col <- "white"
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
 genomicCorr.jaccard(all_pred_bounds_gm12878_a,
@@ -199,6 +201,8 @@ gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
 gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
+gp$SetText$Set1$col <- "white"
+gp$SetText$Set2$col <- "white"
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
 genomicCorr.jaccard(all_pred_bounds_k562_a,
@@ -222,6 +226,8 @@ gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
 gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
+gp$SetText$Set1$col <- "white"
+gp$SetText$Set2$col <- "white"
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
 genomicCorr.jaccard(all_true_bounds_gm12878_a,
@@ -245,6 +251,8 @@ gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
 gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
+gp$SetText$Set1$col <- "white"
+gp$SetText$Set2$col <- "white"
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
 genomicCorr.jaccard(all_pred_bounds_gm12878_a,
@@ -267,6 +275,8 @@ gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
 gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
+gp$SetText$Set1$col <- "white"
+gp$SetText$Set2$col <- "white"
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
 genomicCorr.jaccard(all_pred_bounds_gm12878_p,
@@ -289,6 +299,8 @@ gp[["FaceText"]][["11"]]$cex <- 2
 gp[["FaceText"]][["01"]]$cex <- 2
 gp[["SetText"]][["Set1"]]$cex <- .1
 gp[["SetText"]][["Set2"]]$cex <- .1
+gp$SetText$Set1$col <- "white"
+gp$SetText$Set2$col <- "white"
 gridExtra::grid.arrange(grid::grid.grabExpr(plot(venn.pt, gp = gp, show=list(Universe=FALSE))), top=textGrob("", gp=gpar(fontsize=50)))
 
 genomicCorr.jaccard(all_true_bounds_gm12878_p,

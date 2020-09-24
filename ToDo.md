@@ -13,13 +13,13 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 - Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
 - 5, 
-- 6 - 150dpi, redo
++ 6 - 150dpi, redo
 
-- Suppl Fig
-- 8, 
-- 9, 
-- 10, 
-- 11 - 300dpi but extremely blurry. redo
+Suppl Fig
++ 8, 
++ 9, 
++ 10, 
++ 11 - 300dpi but extremely blurry. redo
 
 - Look into ExperimentalHub
 
