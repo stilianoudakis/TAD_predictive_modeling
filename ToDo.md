@@ -11,15 +11,16 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-- Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
-- 5, 
-+ 6 - 150dpi, redo
+- Fig 5
 
-Suppl Fig
-+ 8, 
-+ 9, 
-+ 10, 
-+ 11 - 300dpi but extremely blurry. redo
+- Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
+    - The order and naming of the manuscript's sections, position of legends, naming of tables/figures
+    - Reference format
+    - Length limitations
+    - File names
+    - Any other instructions
+
+- Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
 
 - Look into ExperimentalHub
 
