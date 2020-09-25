@@ -11,7 +11,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-- Fig 5
++ Fig 5
 
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
     - The order and naming of the manuscript's sections, position of legends, naming of tables/figures
