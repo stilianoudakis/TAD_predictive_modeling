@@ -260,6 +260,8 @@ The authors declare that they have no competing interests.
 
 ## Authors' contributions
 
+SS and MD conceived and designed the research behind this project. SS and MD wrote the manuscript. SS and MD wrote the software associated with the R package. SS performed the analysis for the final results. The authors read and approved the final manuscript.
+
 ## Acknowledgements
 
 ## Authors' information (optional)
