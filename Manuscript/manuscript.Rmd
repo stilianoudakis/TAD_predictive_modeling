@@ -22,7 +22,7 @@ Spiro C. Stilianoudakis^1^ (stilianoudasc@mymail.vcu.edu), Mikhail G. Dozmorov^1
 # Abstract
 
 <!-- 100 words abstract start -->
-The low resolution of high-throughput chromosome conformation capture data limits the precise mapping of boundaries of topologically associating domains and chromatin loops. We developed preciseTAD, an optimized random forest model trained on high-resolution genome annotation data (e.g., CTCF ChIP-seq) to predicts the location of domain boundaries at base-level resolution. Distance between boundaries and annotations, random under-sampling, and transcription factor binding sites resulted in best model performance. preciseTAD boundaries were more enriched for CTCF, RAD21, SMC3, and ZNF143, conserved across cell lines. Using genome annotations, the pre-trained models can detect boundaries in cells without Hi-C data. preciseTAD is available at https://bioconductor.org/packages/preciseTAD
+The low resolution of high-throughput chromatin conformation capture data limits the precise mapping of boundaries of topologically associating domains and chromatin loops. We developed preciseTAD, an optimized random forest model trained on high-resolution genome annotation data (e.g., CTCF ChIP-seq) to predicts the location of domain boundaries at base-level resolution. Distance between boundaries and annotations, random under-sampling, and transcription factor binding sites resulted in best model performance. preciseTAD boundaries were more enriched for CTCF, RAD21, SMC3, and ZNF143, conserved across cell lines. Using genome annotations, the pre-trained models can detect boundaries in cells without Hi-C data. preciseTAD is available at https://bioconductor.org/packages/preciseTAD
 <!-- 100 words abstract end -->
 
 <!--
@@ -37,7 +37,7 @@ Our study implements the method and the pre-trained models for precise domain bo
 
 # Keywords
 
-Hi-C sequencing, TADs, high resolution, machine learning, random forest, spatial clustering
+Hi-C, TAD, chromatin, machine learning, random forest, spatial clustering
 
 # Background
 
@@ -234,9 +234,11 @@ dysregulation in cancer. ["YY1 Is a Structural Regulator
 of Enhancer-Promoter Loops"]
 -->
 
+<!--
 # Abbreviations
 
 AUC - Area Under the Curve; BA - Balanced Accuracy; bp - base pair; BroadHMM - BroadHMM chromatin state data; ChIP-seq - Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI - Class Imbalance; DBSCAN - Density-Based Spatial Clustering of Applications with Noise; FN - False Negatives; FP - False Positives; Hi-C - High-throughput chromosome conformation capture technology; HM - Histone Modifications; kb - kilobase; ML - Machine Learning; OC - Overlap Counts; OP - Overlap Percents; PAM - Partitioning Around Medoids; PTBP - preciseTAD Boundary Point; PTBR - preciseTAD Boundary Region; RF - Random Forest; RFE - Recursive Feature Elimination; ROC - Receiver Operating Characteristic; ROS - Random Over-Sampling; RUS	Random Under-Sampling; SMOTE - Synthetic Minority Over-sampling Technique; TAD - Topologically Associating Domains; TFBS - Transcription Factor Binding Sites; TN - True Negatives; TP - True Positives
+-->
 
 # Declarations
 
@@ -250,7 +252,7 @@ Not applicable
 
 ## Availability of data and materials
 
-All data generated or analysed during this study are included in this published article [and its supplementary information files]. The source code of *preciseTAD* version 0.99.6 used in the experiments is available on github at https://github.com/dozmorovlab/preciseTAD.
+All data generated or analyzed during this study are included in this published article [and its supplementary information files]. The source code of *preciseTAD* version 0.99.6 used in the experiments is available on github at https://github.com/dozmorovlab/preciseTAD.
 
 ## Competing interests
 
@@ -260,14 +262,16 @@ The authors declare that they have no competing interests.
 
 ## Authors' contributions
 
-SS and MD conceived and designed the research behind this project. SS and MD wrote the manuscript. SS and MD wrote the software associated with the R package. SS performed the analysis for the final results. The authors read and approved the final manuscript.
+MD conceptualized and supervised the study. MD and SS wrote the manuscript. SS and MD wrote the software associated with the R package. SS performed the analysis for the final results. The authors read and approved the final manuscript.
 
 ## Acknowledgements
 
+<!--
 ## Authors' information (optional)
 
 ^1^ Dept. of Biostatistics, Virginia Commonwealth University, Richmond, VA, 23298, USA  
 ^\*^ To whom correspondence should be addressed: Virginia Commonwealth University, Richmond, VA, 23298, 804-827-2055, mikhail.dozmorov@vcuhealth.org
+-->
 
 # References
 
