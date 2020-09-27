@@ -1,0 +1,20 @@
+
+##################################################################################################
+#Script for applying ARROWHEAD to in situ Hi-C data (HIC001-HIC018) for resolutions              #
+#5kb,10kb,25kb,50kb,100kb to obtain chromosome-specific TAD boundaries on the GM12878 cell line  #   
+##################################################################################################
+
+
+for i in 5000 10000 25000 50000 100000;
+	do 
+		echo $i.kb
+			for j in {1..22};
+				do
+				echo chr$j
+				java -jar juicebox_tools_7.5.jar arrowhead -c $j -r $i ~/GSE63525_GM12878_insitu_primary.hic ~/arrowhead_output/GM12878/$i.b/chr$j
+			done;
+	done;
+
+
+
+	
