@@ -14,10 +14,13 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 + Fig 5
 
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
-    - The order and naming of the manuscript's sections, position of legends, naming of tables/figures
-    - Reference format
-    - Length limitations
-    - File names
+    + The order and naming of the manuscript's sections, position of legends, naming of tables/figures
+    * Reference format
+      -we are using genomebiology.csl so this should be good right?
+    * Length limitations
+      -no specification
+    * File names
+      - sent an email to 
     - Any other instructions
 
 - Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
