@@ -16,7 +16,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
     - MD rewrite "Availability of data and materials"
 
-- Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
++ Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
 
 - Look into ExperimentalHub
 
