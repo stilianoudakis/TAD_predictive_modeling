@@ -11,11 +11,12 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-- ALL additional files should be numbered. This "Additional file: Arrowhead Script, Additional file: Table S1" is unacceptable, need exact numbers for each Additional File. 
-    - They MUST be in chronological order
++ ALL additional files should be numbered. This "Additional file: Arrowhead Script, Additional file: Table S1" is unacceptable, need exact numbers for each Additional File. 
+    + They MUST be in chronological order
 
-- Provide your thoughts on cover letter. You need to understand how to write one, and complement ideas that I forgot.
-
++ Provide your thoughts on cover letter. You need to understand how to write one, and complement ideas that I forgot.
+    - added additional bullet pt under main finding to echo main highlight
+    
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
     - MD rewrite "Availability of data and materials"
 
