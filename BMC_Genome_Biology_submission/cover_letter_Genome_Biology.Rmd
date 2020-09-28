@@ -26,6 +26,7 @@ The main findings of our work are:
 
 - Biological properties of predicted domain boundaries include the highest genomic signal of CTCF and other transcription factors, more conservation across cell lines, closer proximity to other genomic signatures.
 
+- We provide genomic coordinates of the predicted TAD/loop boundaries for GM12878 and K562 cell lines.
 
 In summary, our systematic machine learning framework evaluates previously overlooked properties of 3D and 1D data, linking them into the most optimal model for domain boundary predictions. Our framework, implemented in the *preciseTAD* R package, and the pre-trained models enable leveraging widely available 1D genomic annotation data to predict the location of domain boundaries in cells without relatively rare 3D data. This improved precision in the domain boundary location can provide deeper insight into the association between genomic regulators and the 3D genome organization across cell lines.
 
@@ -35,7 +36,7 @@ With our best regards,
 On behalf of all authors,
 
 Mikhail Dozmorov, Ph.D., Blick scholar  
-Assistant Professor,  Department of Biostatistics 
+Associate Professor,  Department of Biostatistics 
 Affiliate, Department of Pathology  
 Virginia Commonwealth University  
 One Capitol Square, room 738  

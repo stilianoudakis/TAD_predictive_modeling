@@ -11,12 +11,14 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 
 ## For publication
 
-+ Fig 5
+- ALL additional files should be numbered. This "Additional file: Arrowhead Script, Additional file: Table S1" is unacceptable, need exact numbers for each Additional File. 
+    - They MUST be in chronological order
+
+- Provide your thoughts on cover letter. You need to understand how to write one, and complement ideas that I forgot.
 
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
     - MD rewrite "Availability of data and materials"
 
-+ Fig 1 - 269dpi, marginally OK, but redo if possible (priority - low, after preparing full submission material)
 
 - Look into ExperimentalHub
 

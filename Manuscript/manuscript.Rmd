@@ -37,7 +37,7 @@ Our study implements the method and the pre-trained models for precise domain bo
 
 # Keywords
 
-Hi-C, TAD, chromatin, machine learning, random forest, spatial clustering
+Hi-C, TAD, machine learning, random forest, DBSCAN
 
 # Background
 
