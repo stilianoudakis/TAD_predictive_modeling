@@ -6,39 +6,44 @@ output:
     reference_docx: ../Manuscript/styles.doc/NSF_grant_style.docx
 ---
 
-Dear Editor,
+To the Editor of the "Regulatory Elements" special issue
 
-We are submitting our manuscript "preciseTAD: A machine learning framework for precise 3D domain boundary prediction at base-level resolution" to be considered for publication in _Genome Biology_. This manuscript will be of interest to the community studying the three-dimensional (3D) structure of the genome.
+Dear Dr. Sands,
 
-The main highlights of the software are:
+We are submitting our manuscript "preciseTAD: A machine learning framework for precise 3D domain boundary prediction at base-level resolution" to be considered for the special issue "Regulatory Elements" in _Genome Biology_. This manuscript will be of interest to the community studying the regulatory associations within the three-dimensional (3D) genome structure.
 
-- An R package implementing a comprehensive machine learning framework for predicting boundaries of 3D domains (topologically associating domains, chromatin loops) using one-dimensional (1D) genomic annotation data (e.g., ChIP-seq from ENCODE).
+Our manuscript is submitted for the "Software" section. The main highlights of the software are:
 
-- Models pre-trained on Arrowhead-called TAD boundaries and Peakachu-called loop boundaries can predict domain boundaries in cells without Hi-C data using only genomic annotation data.
+- A Bioconductor R package *preciseTAD* implementing a comprehensive machine learning framework for predicting boundaries of 3D domains (topologically associating domains (TADs), chromatin loops) using one-dimensional (1D) regulatory genomic annotation data (e.g., ChIP-seq from ENCODE).
+
+- *preciseTAD* can be used to refine the location of domain boundaries and identify de novo boundaries missed by conventional TAD/loop callers.
+
+- *preciseTAD* prioritizes genomic signatures associated with domain boundaries. Trained on any 3D genomic features (e.g., besides TAD/loop boundaries, regions of A/B compartment switching, frequently interacting regions (FIREs), differentially interacting chromatin regions, etc.), *preciseTAD* defines (epi)genomic signatures most predictive of those features.
+
+- The provided models pre-trained on Arrowhead-called TAD boundaries and Peakachu-called loop boundaries can predict domain boundaries in cells without Hi-C data using only genomic annotation data.
 
 The main findings of our work are:
 
-- Transcription factors, spatial relationships (distance within the linear genome) between them and boundaries, random under-sampling are the necessary features for accurate boundary predictions.
+- Transcription factors, spatial relationships (distance within the linear genome) between them and boundaries, random under-sampling are the critical features needed for accurate boundary predictions.
 
-- Only four transcription factors, CTCF, RAD21, SMC3, ZNF143, are necessary and sufficient for domain boundary predictions.
+- Only four transcription factors, CTCF, RAD21, SMC3, ZNF143, are sufficient for domain boundary predictions.
 
-- Boundaries of TADs and loops are associated with the same genome annotation signatures.
+- Boundaries of TADs and loops are associated with the same genome annotation signatures, suggesting similar mechanisms of their formation.
 
 - Biological properties of domain boundaries predicted using *preciseTAD* include the highest genomic signal of CTCF and other transcription factors, closer proximity to other genomic signatures, and more conservation across cell lines.
 
 - We provide genomic coordinates of the predicted TAD/loop boundaries for GM12878 and K562 cell lines.
 
-- Across cell-line prediction results in similar boundary location as same cell-line prediction, giving rise to the possibility of predicting boundaries for cell-lines of which Hi-C data is currently unavailable.
 
-In summary, our systematic machine learning framework evaluates previously overlooked properties of 3D and 1D data, linking them into the most optimal model for domain boundary predictions. Our framework, implemented in the *preciseTAD* R package, and the pre-trained models enable leveraging widely available 1D genomic annotation data to predict the location of domain boundaries in cells without relatively rare 3D data. This improved precision in the domain boundary location can provide deeper insight into the association between genomic regulators and the 3D genome organization across cell lines.
+In summary, our systematic machine learning framework evaluates previously overlooked properties of 3D interactions and 1D regulatory data, linking them into the most optimal model for domain boundary predictions. This improved precision in the domain boundary location can provide deeper insight into the association between genomic regulators and the 3D genome organization.
 
-The *preciseTAD* R package has been accepted to Bioconductor, https://bioconductor.org/packages/preciseTAD. Its source code is available on GitHub https://dozmorovlab.github.io/preciseTAD/. All data needed to reproduce our results are available from public repositories and publications. We also want to assure that this manuscript is not being considered for publication elsewhere.
+The *preciseTAD* R package is available on Bioconductor, https://bioconductor.org/packages/preciseTAD. Its source code is freely available on GitHub https://dozmorovlab.github.io/preciseTAD/. All data needed to reproduce our results are available from public repositories and publications. We also want to assure that this manuscript is not being considered for publication elsewhere.
 
 With our best regards,  
 On behalf of all authors,
 
 Mikhail Dozmorov, Ph.D., Blick scholar  
-Associate Professor,  Department of Biostatistics 
+Associate Professor,  Department of Biostatistics  
 Affiliate, Department of Pathology  
 Virginia Commonwealth University  
 One Capitol Square, room 738  
