@@ -14,11 +14,13 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
     - MD rewrite "Availability of data and materials"
 
-- Check ???
++ Check ???
 - Figure 4D and S3D - lines around "Ave AUC" are too thick, should be hair thin
 
 
 - Look into ExperimentalHub
+
+- look up “calibration curve machine learning” and think if/how we can apply it
 
 - Need either repo or all scripts generating all figures, like https://www.biorxiv.org/content/10.1101/2020.08.17.254615v1.supplementary-material. For preprint, Additional file will suffice
     - Add README.md. For each script, specify input, what it does, what is the output
