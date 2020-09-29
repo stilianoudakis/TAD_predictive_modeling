@@ -2,10 +2,10 @@
 title: "preciseTAD: A machine learning framework for precise 3D domain boundary prediction at base-level resolution"
 csl: styles.ref/genomebiology.csl
 output:
-  word_document:
-    reference_docx: styles.doc/Arial_11_double_space_normal_margins.docx
   pdf_document: 
     extra_dependencies: ["float"]
+  word_document:
+    reference_docx: styles.doc/Arial_11_double_space_normal_margins.docx
 bibliography: References/references.bib
 --- 
 
@@ -54,30 +54,29 @@ We present *preciseTAD*, an optimally tuned machine learning framework for preci
 
 We developed a machine learning (ML) framework for determining the optimal set of data level characteristics to predict boundary regions of Topologically Associating Domains (TADs) and chromatin loops, collectively referred to as domain boundaries. We chose the random forest (RF) algorithm as our binary classification tool. The reason for it is two-fold: (1) to devise a tunable prediction rule in a supervised learning framework that is both robust to overfitting and able to handle multiple correlated predictors, and (2) to allow for an interpretable ranking of predictors [@boulesteix2012overview]. We used Arrowhead-called TAD boundaries [@durand2016juicer] and published Peakachu-predicted loop boundaries [@salameh2019supervised] as ground truth. Data from GM12878 and K562 cell lines at 5-100 kb resolution (Arrowhead) and 10 kb resolution (Peakachu) were used (Additional file 1: Arrowhead Script, Additional file 2: Table S1<!--Supplementary Table 1-->). We next developed *preciseTAD*, an R package that leverages an optimally built RF to precisely predict genomic coordinates of TAD and loop boundaries at base-level resolution from cell line-specific genome annotation data.
 
-<!--
+
 ![**Resolution-specific data construction and feature engineering for random forest modeling.** (A) The linear genome was binned into non-overlapping resolution-specific intervals using *shifted binning* (see Methods). The response vector **Y** was defined as 1/0 if a genomic bin overlapped/did not overlap with a TAD (or loop) boundary. (B) Four types of associations between bins (blue dashed lines) and genomic annotations (green shapes) were considered to build the predictor space including Average Peak Signal (Signal), Overlap Counts (OC), Overlap Percent (OP), and $log_{2}$ distance (Distance).](Figures/figure1.png)
--->
+
 
 Boundary regions were defined as genomic bins containing a called boundary ($Y = 1$), while non-boundary regions were defined as bins that did not contain a called boundary ($Y = 0$) (Figure 1A, see Methods). The total number of called TADs, their unique boundaries, and the number of genomic bins expectedly decreased with the decreased resolution of Hi-C data (Table 1, Additional file 3: Table S2<!--Supplementary Table 3-->). The number of non-boundary regions highly outnumbered boundary regions. Such a disproportional presence of examples in one class is known as a "class imbalance" problem that negatively affects predictive modeling [@prati2011survey; @wei2013role]. To address the class imbalance, we evaluated the effect of three resampling techniques. *Random over-sampling* (ROS) was defined as sampling with replacement from the minority class (boundary regions). *Random under-sampling* (RUS) was defined as sampling with replacement from the majority class (non-boundary regions). Lastly, we tested *Synthetic minority over-sampling technique* (SMOTE), which is a combination of both random over- and under-sampling to create balanced classes [@chawla2002smote] (see Methods). 
 
 
 |          Tool         |     Resolution    |     Total number of called TADs/chromatin loops    |     Total number of unique TAD/chromatin loop boundaries    |     Total number of genomic bins    |     Class imbalance    |
 |:---------------------:|:-----------------:|:--------------------------------------------------:|:-----------------------------------------------------------:|:-----------------------------------:|:----------------------:|
-|        Arrowhead      |       5   kb      |                         8,052                       |                             15,468                           |                535,363               |           0.03         |
-|     Arrowhead         |       10   kb     |                         7,676                       |                             14,253                           |                267,682               |           0.05         |
-|     Arrowhead         |       25   kb     |                         4,670                       |                             8,363                            |                107,073               |           0.08         |
-|     Arrowhead         |       50   kb     |                         2,349                       |                             4,224                            |                 53,537               |           0.08         |
-|     Arrowhead         |      100   kb     |                         1,031                       |                             1,883                            |                 26,768               |           0.07         |
-|        Peakachu       |       10   kb     |                        16,185                       |                          21,421                              |                267,682               |        0.14            |
+|        Arrowhead      |       5   kb      |                         8052                       |                             15468                           |                535363               |           0.03         |
+|     Arrowhead         |       10   kb     |                         7676                       |                             14253                           |                267682               |           0.05         |
+|     Arrowhead         |       25   kb     |                         4670                       |                             8363                            |                107073               |           0.08         |
+|     Arrowhead         |       50   kb     |                         2349                       |                             4224                            |                 53537               |           0.08         |
+|     Arrowhead         |      100   kb     |                         1031                       |                             1883                            |                 26768               |           0.07         |
+|        Peakachu       |       10   kb     |                        16185                       |                          21421                              |                267682               |        0.14            |
 Table: Domain boundary data and class imbalance summaries across resolutions for Arrowhead and Peakachu on GM12878.
 
 A total of 77 cell line-specific genomic annotations were used to build the predictor space. These included BroadHMM chromatin state data, histone modifications (HM), and transcription factor binding sites (TFBS) (Additional file 4: Table S3<!--Supplementary Table 2-->). Four feature engineering procedures were developed to quantify the association between genomic annotations and bins (Figure 1B). These included signal strength association (Signal), direct (OC), proportional (OP), and spatial ($log_2 + 1$ Distance) relationships (see Methods, Additional file 5: Figure S1<!--Supplementary Figure 1-->). 
 
 In total, we considered combinations of data from two cell lines *L = {GM12878, K562}*, five resolution *R = {5 kb, 10 kb, 25 kb, 50 kb, 100 kb}*, four types of predictor spaces *P = {Signal, OC, OP, Distance}*, and three re-sampling techniques *S = {None, RUS, ROS, SMOTE}* (Figure 2). Once the model inputs were established, a random forest classifier was trained on $n-1$ autosomal chromosomes, while reserving the $i^{th}$ chromosome for testing. Three-fold cross-validation was used to tune the *mtry* hyperparameter, while *ntree* and *nodesize* were fixed at 500 and at 0.1% of the rows in the training data, respectively. Model performance was evaluated by aggregating the mean balanced accuracy (BA) across each holdout chromosome (see Methods). These strategies allowed us to select the best performing model in an unbiased manner.
 
-<!--
+
 ![**A machine learning framework for building domain boundary region prediction models.** Step 1 employs a range of feature engineering techniques to define the predictor matrix $A_{N \times (p)}$, where $N$ is the number of genomic bins, $p$ is the number of genomic annotations, $i$ is a holdout chromosome. The response vector $Y_N$ is defined as a boundary region ($Y=1$) if it overlaps with a genomic bin (else $Y=0$). Step 2 reserves the predictor-response matrix for the holdout chromosome $i$ as the test data. Step 3 applies a resampling technique to the training data to address the class imbalance. Step 4 trains the random forest model and performs 3-fold cross-validation to tune the mtry parameter. Finally, step 5 validates the model on the separate test data composed of the binned data from the holdout chromosome $i$ and to evaluate model performance using balanced accuracy (BA).](Figures/figure2.png) 
--->
 
 
 ## Random under-sampling, distance-based predictors, and high-resolution Hi-C data provide optimal performance for boundary prediction
@@ -86,18 +85,17 @@ Expectedly, when using data with class imbalance present, that is, no resampling
 
 Additionally, we found that using a distance-type predictor space yielded substantially higher balanced accuracies compared to the peak signal strength, overlap count, and overlap percent predictor types. As with class balancing techniques, this improvement was less evident at lower resolutions, with results consistent for K562 (Additional file 6: Figure S2A<!--Supplementary Figure 3A-->). Furthermore, 5 kb resolution genomic bins led to the optimal prediction for TAD boundary regions, on both cell lines. Random forest models built on Peakachu-defined loop boundary regions yielded optimal prediction performance when using a distance-type predictor space, with SMOTE resampling only marginally outperforming RUS, for both cell lines (Additional file 6: Figure S2B, S2C<!--Supplementary Figure 3B,3C-->). Our results indicate that random under-sampling, distance-type predictors, and high-resolution Hi-C data provide the optimal set of data level characteristics for both TAD and chromatin loop boundary prediction.
 
-<!--
+
 ![**Determining optimal data level characteristics for building TAD boundary region prediction models on GM12878.** Averaged balanced accuracies are compared across resolution, within each predictor-type: Signal, OC, OP, and Distance, and across resampling techniques: no resampling (None; red), random over-sampling (ROS; green), random under-sampling (RUS; blue), and synthetic minority over-sampling (SMOTE; purple). Error bars indicate standard deviation from the mean performance across each holdout chromosome used for testing.](Figures/figure3.png)
--->
 
 
 ## Transcription factor binding sites outperform histone- and chromatin state-specific models
 
 We hypothesized that the type of genomic annotations may also affect predictive performance. Using the established optimal settings (RUS, Distance, 5 kb/10 kb (Arrowhead/Peakachu ground truth) genomic bins), we built separate random forest models using histone modifications (HM), BroadHMM chromatin states (BroadHMM), and transcription factor binding sites (TFBS). We found that models built on TFBSs outperformed other annotation-specific models, with results consistent for loop boundaries, on both cell lines (Figure 4A; Additional file 7: Figure S3A<!--Supplementary Figures 4A-->). These results suggest that TFBS are the primary drivers of TAD and loop boundary formation in both GM12878 and K562. 
 
-<!--
+
 ![**SMC3, RAD21, CTCF, and ZNF143 transcription factors accurately predict TAD and loop boundaries in GM12878.** (A) Barplots comparing performances of TAD (Arrowhead) and loop (Peakachu) boundary prediction models using histone modifications (HM), chromatin states (BroadHMM), transcription factor binding sites (TFBS), in addition to a model containing all three classes (ALL). (B) Recursive feature elimination (RFE) analysis used to select the optimal number of predictors. Error bars represent 1 standard deviation from the mean cross-validated accuracy across each holdout chromosome. (C) Clustered heatmap of the predictive importance for the union of the top 8 most predictive chromosome-specific TFBSs. The columns represent the holdout chromosome excluded from the training data. (D) Receiver operating characteristic (ROC) curves and the corresponding average area under the curves (AUCs) when training and testing on GM12878 data (blue, Arrowhead ground truth; red, Peakachu ground truth) versus training on K562 and testing on GM12878 data (black, dashed). The curves represent the average sensitivities and specificities across each holdout chromosome. The shaded areas around each curve represent 1 standard deviation from the average.](Figures/figure4.png)
--->
+
 
 ## Predictive importances confirmed the biological role of CTCF, RAD21, SMC3, and ZNF143 for boundary formation
 
@@ -113,9 +111,9 @@ Using our optimally built random forest model trained on Arrowhead/Peakachu boun
 
 When trained using Arrowhead and Peakachu ground truth boundaries at 5 kb and 10 kb, respectively, the *preciseTAD* model predicted a total of 12,258 TAD and 15,707 chromatin loop boundaries in GM12878, as well as 9,603 TAD and 11,154 chromatin loop boundaries in K562 cell line (Additional file 9: Table S4<!--Supplementary Table 4-->). We reported less predicted TAD boundaries at 5 kb than Arrowhead on both cell lines (Table 1, Additional file 3: Table S2<!--Supplementary Table 3-->). This can be attributed to Arrowhead's inflation of called TADs at 5 kb, that, when visualized, often do not correspond to domains enriched in internal interactions (Figure 5A) and signal of known drivers of domain boundaries (Figure 5B). *preciseTAD* also predicted fewer chromatin loop boundaries than Peakachu (Table 1, Additional file 3: Table S2<!--Supplementary Table 3-->). This can be attributed to Peakachu's use of only CTCF sites to call boundaries, while *preciseTAD* leverages four known drivers of 3D chromatin, including CTCF, RAD21, SMC3, and ZNF143. These results suggest that genome annotation-driven predicted boundaries may be more biologically relevant than those detected from Hi-C data alone.
 
-<!--
+
 ![**preciseTAD boundaries are enriched for known molecular drivers of 3D chromatin.** (A) The location of Arrowhead-called TAD boundaries (blue) vs. *preciseTAD*-predicted TAD boundaries (green) on GM12878 data (chr14:50085000-50800000). The black line represents the predicted probability of each base being a TAD boundary. (B) A zoomed-in portion of the genome shows the preciseTAD boundary region (PTBR, highlighted yellow), a cluster of bases with high probability of being a boundary, and the corresponding signal profiles of CTCF, RAD21, SMC3, and ZNF143. (C, D) Signal profile plots comparing the strength of CTCF, RAD21, SMC3, and ZNF143 binding around Arrowhead-called boundaries (blue, C), Peakachu loop boundaries (red, D) vs. *preciseTAD*-predicted boundaries (green).](Figures/figure5.png) 
--->
+
 
 Next, we evaluated the biological significance of *preciseTAD* boundary points. The signal of four known molecular drivers of 3D chromatin (CTCF, RAD21, SMC3, and ZNF143) colocalized more frequently around *preciseTAD*-predicted boundary points, as compared to Arrowhead-called TAD and Peakachu loop boundaries, respectively (Figure 5C, 5D; Additional file 10: Figure S5A, S5B<!--Supplementary Figure 5A, 5B-->). Surprised by the poor signal distribution around Arrowhead boundaries, we compared signals centered on boundaries called by Arrowhead, Peakachu, and our SpectralTAD [@Cresswell:2020ab] TAD caller. We confirmed the poor signal distribution around Arrowhead boundaries, in contrast to the relatively well-performing Peakachu- and SpectralTAD-called boundaries (Additional file 10: Figure S5C, S5D<!--Supplementary Figure 5C, D-->). Signal enrichment heatmaps confirmed that *preciseTAD*-predicted boundaries were more enriched for the same genomic annotations than either Arrowhead or Peakachu boundaries alone (Additional file 11-12: Figure S6-S7<!--Supplementary Figures 6-7-->). *preciseTAD* boundaries were statistically significantly closer to the top-ranked TFBS (Wilcoxon p-value < 0.001 versus Arrowhead and Peakachu boundaries, respectively, Figure 6A, Additional file 13: Figure S8<!--Supplementary Figure 8-->). These results indicate that *preciseTAD*-predicted boundaries better reflected the known biology of boundary formation.
 
@@ -123,9 +121,8 @@ Next, we evaluated the biological significance of *preciseTAD* boundary points. 
 
 Previous studies suggest that TAD boundaries are conserved across cell lines [@dixon2012topological; @krefting2018evolutionary; @nora2012spatial; @sexton2012three]. To assess the level of cross-cell-line conservation, we evaluated the overlap between cell line-specific boundaries detected by *preciseTAD*, Arrowhead, and Peakachu. Only 26% and 49% of boundaries were conserved between cell lines for Arrowhead and Peakachu boundaries (J=0.186 and J=0.388), respectively (Figure 6B, 6D). However, 45%/56% of *preciseTAD*-predicted domain boundaries were conserved between GM12878 and K562 cell lines when using models trained on Arrowhead/Peakachu data (J=0.383 and J=0.444, respectively, Figure 6C, 6E). The better conservation of *preciseTAD*-predicted boundaries further supports the notion of their higher biological relevance.
 
-<!--
+
 ![**preciseTAD-predicted boundaries are closer to CTCF sites and more conserved across cell lines**. (A) Log2 genomic distance distribution from called and predicted boundaries to nearest CTCF sites. The p-values are from the Wilcoxon Rank Sum test. (B-E) Venn diagrams illustrating the levels of conservation (overlap) between domain boundaries for GM12878 (red) and K562 (blue) cell lines identified by Arrowhead (B), Peakachu (D), *preciseTAD*-predicted boundaries using Arrowhead- and Peakachu-trained models () Arrowhead-trained *preciseTAD* models (C), Peakachu boundaries themselves (C, E, respectively). Boundaries involving Arrowhead/Peakachu were flanked by 5 kb/10 kb, respectively.](Figures/figure6.png) 
--->
 
 ## Boundaries predicted by *preciseTAD* models trained on TAD and loop boundaries are highly overlapping
 
@@ -250,6 +247,7 @@ of Enhancer-Promoter Loops"]
 AUC - Area Under the Curve; BA - Balanced Accuracy; bp - base pair; BroadHMM - BroadHMM chromatin state data; ChIP-seq - Chromatin Immunoprecipitation followed by high-throughput DNA sequencing; CI - Class Imbalance; DBSCAN - Density-Based Spatial Clustering of Applications with Noise; FN - False Negatives; FP - False Positives; Hi-C - High-throughput chromosome conformation capture technology; HM - Histone Modifications; kb - kilobase; ML - Machine Learning; OC - Overlap Counts; OP - Overlap Percents; PAM - Partitioning Around Medoids; PTBP - preciseTAD Boundary Point; PTBR - preciseTAD Boundary Region; RF - Random Forest; RFE - Recursive Feature Elimination; ROC - Receiver Operating Characteristic; ROS - Random Over-Sampling; RUS	Random Under-Sampling; SMOTE - Synthetic Minority Over-sampling Technique; TAD - Topologically Associating Domains; TFBS - Transcription Factor Binding Sites; TN - True Negatives; TP - True Positives
 -->
 
+<!--
 # Figure legends
 
 **Figure 1. Resolution-specific data construction and feature engineering for random forest modeling.** (A) The linear genome was binned into non-overlapping resolution-specific intervals using *shifted binning* (see Methods). The response vector **Y** was defined as 1/0 if a genomic bin overlapped/did not overlap with a TAD (or loop) boundary. (B) Four types of associations between bins (blue dashed lines) and genomic annotations (green shapes) were considered to build the predictor space including Average Peak Signal (Signal), Overlap Counts (OC), Overlap Percent (OP), and $log_{2}$ distance (Distance).
@@ -263,6 +261,7 @@ AUC - Area Under the Curve; BA - Balanced Accuracy; bp - base pair; BroadHMM - B
 **Figure 5. preciseTAD boundaries are enriched for known molecular drivers of 3D chromatin.** (A) The location of Arrowhead-called TAD boundaries (blue) vs. *preciseTAD*-predicted TAD boundaries (green) on GM12878 data (chr14:50085000-50800000). The black line represents the predicted probability of each base being a TAD boundary. (B) A zoomed-in portion of the genome shows the preciseTAD boundary region (PTBR, highlighted yellow), a cluster of bases with high probability of being a boundary, and the corresponding signal profiles of CTCF, RAD21, SMC3, and ZNF143. (C, D) Signal profile plots comparing the strength of CTCF, RAD21, SMC3, and ZNF143 binding around Arrowhead-called boundaries (blue, C), Peakachu loop boundaries (red, D) vs. *preciseTAD*-predicted boundaries (green).
 
 **Figure 6. preciseTAD-predicted boundaries are closer to CTCF sites and more conserved across cell lines**. (A) $log_{2}$ genomic distance distribution from called and predicted boundaries to nearest CTCF sites. The p-values are from the Wilcoxon Rank Sum test. (B-E) Venn diagrams illustrating the levels of conservation (overlap) between domain boundaries for GM12878 (red) and K562 (blue) cell lines identified by Arrowhead (B), Peakachu (D), and *preciseTAD*-predicted boundaries using (C) Arrowhead- and (E) Peakachu-trained models. Boundaries involving Arrowhead/Peakachu were flanked by 5 kb/10 kb, respectively.
+-->
 
 # Additional file legends
 
