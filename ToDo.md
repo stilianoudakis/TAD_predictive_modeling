@@ -15,7 +15,7 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
     - MD rewrite "Availability of data and materials"
 
 + Check ???
-- Figure 4D and S3D - lines around "Ave AUC" are too thick, should be hair thin
++ Figure 4D and S3D - lines around "Ave AUC" are too thick, should be hair thin
 
 
 - Look into ExperimentalHub
