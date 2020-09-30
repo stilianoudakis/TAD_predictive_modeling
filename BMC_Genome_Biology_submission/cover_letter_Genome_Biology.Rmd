@@ -6,6 +6,8 @@ output:
   pdf_document: default
 ---
 
+September 30, 2020
+
 To the Editor of the "Regulatory Elements" special issue
 
 Dear Dr. Sands,
@@ -51,4 +53,34 @@ Richmond,  Virginia  23298
 e-mail:  mikhail.dozmorov@vcuhealth.org  
 Phone: 804-827-2055  
 
+
 09/30/2020
+
+From: "BioMed Central Editorial Office" <em@editorialmanager.com>
+Subject: [EXTERNAL] Confirmation of your submission to Genome Biology GBIO-D-20-01545
+Date: September 30, 2020 at 9:04:06 AM EDT
+To: "Mikhail G Dozmorov" <mikhail.dozmorov@vcuhealth.org>
+Reply-To: "BioMed Central Editorial Office" <editorial@genomebiology.com>
+
+GBIO-D-20-01545 
+preciseTAD: A machine learning framework for precise 3D domain boundary prediction at base-level resolution
+Spiro Stilianoudakis; Mikhail G Dozmorov, Ph.D.
+Genome Biology
+
+Dear Dr. Dozmorov,
+
+Thank you for submitting your manuscript 'preciseTAD: A machine learning framework for precise 3D domain boundary prediction at base-level resolution' to Genome Biology.
+
+The submission id is: GBIO-D-20-01545
+Please refer to this number in any future correspondence.
+
+During the review process, you can keep track of the status of your manuscript by accessing the following website:
+
+https://urldefense.com/v3/__https://www.editorialmanager.com/gbio/__;!!JqxBPMk!xwmo-1zdQADscZxt7BYRNTr10BgiwyWHUtyM5IrjPB7IhwenePPD6G33cjdQIs2vUCjOuw$ 
+
+If you have forgotten your username or password please use the "Send Login Details" link to get your login information. For security reasons, your password will be reset.
+
+Best wishes,
+
+Editorial Office
+BioMed Central
