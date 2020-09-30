@@ -1,9 +1,9 @@
 ---
 output:
-  pdf_document: default
-  html_document: default
   word_document:
     reference_docx: ../Manuscript/styles.doc/NSF_grant_style.docx
+  html_document: default
+  pdf_document: default
 ---
 
 To the Editor of the "Regulatory Elements" special issue
