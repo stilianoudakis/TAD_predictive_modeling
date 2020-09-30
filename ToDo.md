@@ -14,10 +14,11 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
     - Submitting to special issue: https://genomebiology.biomedcentral.com/regulatory-elements
     - Suggested reviewers:
+        + Mattia Forcato mattia.forcato@unimore.it
+        + Kadir Akdemir, kcakedemir@mdanderson.org
+        + Geoff Fudenberg, geoff.fudenberg@gladstone.ucsf.edu
         - Kazuhiro Maeshima kmaeshim@nig.ac.jp
-        - Mattia Forcato mattia.forcato@unimore.it
-        - Kadir Akdemir, kcakedemir@mdanderson.org
-        - Geoff Fudenberg, geoff.fudenberg@gladstone.ucsf.edu
+        - Biola M. Javierre bmjavierre@carrerasresearch.org
         - Anton Goloborodko, goloborodko.anton@gmail.com
     
 - New experiment, priority on par with ExpermentalHub
