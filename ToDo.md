@@ -12,11 +12,19 @@ The error is in `preciseTAD()` function, when the `parallel` argument is a numbe
 ## For publication
 
 - Prepare submission material folder, [Genome Biology](https://genomebiology.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software). Check:
-    - MD rewrite "Availability of data and materials"
-
-+ Check ???
-+ Figure 4D and S3D - lines around "Ave AUC" are too thick, should be hair thin
-
+    - Submitting to special issue: https://genomebiology.biomedcentral.com/regulatory-elements
+    - Suggested reviewers:
+        - Kazuhiro Maeshima kmaeshim@nig.ac.jp
+        - Mattia Forcato mattia.forcato@unimore.it
+        - Kadir Akdemir, kcakedemir@mdanderson.org
+        - Geoff Fudenberg, geoff.fudenberg@gladstone.ucsf.edu
+        - Anton Goloborodko, goloborodko.anton@gmail.com
+    
+- New experiment, priority on par with ExpermentalHub
+    - Gene expression for boundary prediction. 
+        - Start of a gene +/-500bp defines feature
+        - Gene expression defines signal
+        - Same questions - whether overlap count, overlap percent, signal, and distance are predictive of TAD/loop boundaries
 
 - Look into ExperimentalHub
 
