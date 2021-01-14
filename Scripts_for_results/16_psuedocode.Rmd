@@ -28,43 +28,41 @@ knitr::opts_chunk$set(echo = TRUE)
 \BlankLine
 5.    \eIf{$|t| > 1$ or $|\epsilon| > 1$}{
 \BlankLine
-6.          Assign grid $(g)$ of combinations of $t$ and $\epsilon$ \;
 \BlankLine
-7.               \For{each combination $l$ in g}{
+6.               \For{each combination (l) of t and $\epsilon$}{
 \BlankLine
-8.                  Evaluate M on $A_{n \times p}$ to get the probability of each genomic coordinate as being a domain boundary $\pi_{n}$\;
+7.                  Evaluate M on $A_{n \times p}$ to get the probability of each genomic coordinate as being a domain boundary $\pi_{n}$\;
 \BlankLine
-9.                  Subset $\{\pi_{n} | \pi_{n} \ge t_{l} \}$\;
+8.                  Subset $\{\pi_{n} | \pi_{n} \ge t_{l} \}$\;
 \BlankLine
-10.                 Construct the pairwise distance matrix $D$ between genomic coordinates where $\pi_{n} \ge t_{l}$\;
+9.                 Construct the pairwise distance matrix $D$ between genomic coordinates where $\pi_{n} \ge t_{l}$\;
 \BlankLine
-11.                 Apply DBSCAN on $D$ with $MinPts=3$ and $\epsilon=\epsilon_{l}$\;
+10.                 Apply DBSCAN on $D$ with $MinPts=3$ and $eps=\epsilon_{l}$\;
 \BlankLine
-12.                 \For{each cluster $k$ identified by DBSCAN}{
+11.                 \For{each cluster $k$ identified by DBSCAN}{
 \BlankLine
-13.                     Assign $w_{k}$ as the number of coordinates that span each cluster of bases in $k$ (PTBR)\;
+12.                     Assign $w_{k}$ as the number of coordinates that span each cluster of bases in $k$ (PTBR)\;
 \BlankLine
-14.                     Perform PAM on the sub-distance matrix $D_{k}$ to extract the cluster medoid $b_{k}$ (PTBP)\;
+13.                     Perform PAM on the sub-distance matrix $D_{k}$ to extract the cluster medoid $b_{k}$ (PTBP)\;
 \BlankLine
-15.                     \For{each predictor p}{
+14.                     \For{each predictor p}{
 \BlankLine
-16.                         Calculate the normalized enrichment (NE) over all predictors
+15.                         Calculate the normalized enrichment (NE) over all predictors
                             $$NE = \dfrac{1}{p} \left[ \Sigma_{s=1}^{p} \left[ \dfrac{1}{b} \Sigma_{k=1}^{b} e_{ks} \right] \right]$$
                             where $e_{ks} = \textbf{I}\{ r_{s} \in (b_{k}-f, b_{k}+f)\}$ is the number of elemental regions $r$ of predictor $p$ that overlap with each flanked boundary\;
 \BlankLine
-17.                         Determine where $NE$ converges as optimal $\{t,\epsilon\}$ combination\;
-\BlankLine
-18.                         Repeat steps 12-18 on $A_{nxp}$ with optimal $\{t,\epsilon\}$\;
+16.                         Determine where $NE$ converges as optimal $\{t,\epsilon\}$ combination\;
 \BlankLine
                      }
 \BlankLine
                  }
 \BlankLine
               }
+17.                         Repeat steps 7-14 on $A_{nxp}$ with optimal $\{t,\epsilon\}$\;
 \BlankLine
    }{
 \BlankLine
-19.  Perform steps 12-18 on $A_{nxp}$ such that $t=t_{0}$ and $\epsilon=\epsilon_{0}$\;
+18.  Perform steps 7-14 on $A_{nxp}$ such that $t=t_{0}$ and $eps=\epsilon_{0}$\;
 \BlankLine
    }
 \BlankLine
