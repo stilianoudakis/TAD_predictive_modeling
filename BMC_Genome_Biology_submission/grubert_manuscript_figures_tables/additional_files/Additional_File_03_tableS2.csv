@@ -1,0 +1,8 @@
+Tool,Resolution/Bin size,Total number of called TADs/chromatin loops,Total number of unique TAD/chromatin loop boundaries,Total number of genomic bins,Class Imbalance
+Arrowhead,5 kb,4751,9316,535363,0.02
+Arrowhead,10 kb,5828,10945,267682,0.04
+Arrowhead,25 kb,3935,7015,107073,0.07
+Arrowhead,50 kb,2115,3808,53537,0.07
+Arrowhead,100 kb,945,1759,26768,0.07
+Peakachu,10 kb,15651,22073,267682,0.14
+Grubert,5 kb,12266,14325,535363,0.05
