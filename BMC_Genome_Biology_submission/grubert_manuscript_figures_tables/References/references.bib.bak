@@ -1435,4 +1435,26 @@ CONCLUSIONS: This study provides a reference for the analysis of chromatin domai
 	Volume = {44},
 	Year = {2016}}
 
+@Article{grubert2020landscape,
+  author    = {Grubert, Fabian and Srivas, Rohith and Spacek, Damek V and Kasowski, Maya and Ruiz-Velasco, Mariana and Sinnott-Armstrong, Nasa and Greenside, Peyton and Narasimha, Anil and Liu, Qing and Geller, Benjamin and others},
+  title     = {Landscape of cohesin-mediated chromatin loops in the human genome},
+  journal   = {Nature},
+  year      = {2020},
+  volume    = {583},
+  number    = {7818},
+  pages     = {737--743},
+  publisher = {Nature Publishing Group},
+}
+
+@Article{davis2018encyclopedia,
+  author    = {Davis, Carrie A and Hitz, Benjamin C and Sloan, Cricket A and Chan, Esther T and Davidson, Jean M and Gabdank, Idan and Hilton, Jason A and Jain, Kriti and Baymuradov, Ulugbek K and Narayanan, Aditi K and others},
+  title     = {The Encyclopedia of DNA elements (ENCODE): data portal update},
+  journal   = {Nucleic acids research},
+  year      = {2018},
+  volume    = {46},
+  number    = {D1},
+  pages     = {D794--D801},
+  publisher = {Oxford University Press},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
