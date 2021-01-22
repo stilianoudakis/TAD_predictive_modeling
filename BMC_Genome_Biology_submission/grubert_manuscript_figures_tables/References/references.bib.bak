@@ -1457,4 +1457,15 @@ CONCLUSIONS: This study provides a reference for the analysis of chromatin domai
   publisher = {Oxford University Press},
 }
 
+@Article{encode2004encode,
+  author    = {ENCODE Project Consortium and others},
+  title     = {The ENCODE (ENCyclopedia of DNA elements) project},
+  journal   = {Science},
+  year      = {2004},
+  volume    = {306},
+  number    = {5696},
+  pages     = {636--640},
+  publisher = {American Association for the Advancement of Science},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
