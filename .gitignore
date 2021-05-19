@@ -4,6 +4,7 @@ Presentation
 *.pptx
 *.pdf
 *.zip
+misc
 .local
 .rstudio
 # History files
