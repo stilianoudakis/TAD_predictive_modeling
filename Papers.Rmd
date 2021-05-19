@@ -131,6 +131,9 @@ Many other in my `Zotero/Genome/Sequencing/Epigenomics/machine learning` collect
 
 ## Misc
 
+- Why R? 2019 | Marvin N. Wright: Random forests - the first-choice method for every data analysis?, https://youtu.be/iVmsJJYjgNs
+    - "RF is the algorithm with the smallest tunability." Probst et al. 2019. Compared ranger, glmnet, kknn, SVM, xgbools
+
 - Extra recipes steps for dealing with unbalanced data. https://github.com/EmilHvitfeldt/themis 
 
 - Check your (Mixed) Model for Multicollinearity with ‘performance’, https://www.r-bloggers.com/check-your-mixed-model-for-multicollinearity-with-performance/
