@@ -1,3 +1,11 @@
+kellen
+Presentation
+*.docx
+*.pptx
+*.pdf
+*.zip
+.local
+.rstudio
 # History files
 .Rhistory
 .Rapp.history

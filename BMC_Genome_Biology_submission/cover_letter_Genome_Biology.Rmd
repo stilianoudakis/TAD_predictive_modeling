@@ -6,6 +6,13 @@ output:
   pdf_document: default
 ---
 
+Dear Dr. Sands,
+
+Our manuscript was submitted five months ago and has been under review for the last four months. Would it be possible to get any updates on the timeline?
+
+Sincerely,
+Mikhail Dozmorov
+
 September 30, 2020
 
 To the Editor of the "Regulatory Elements" special issue
