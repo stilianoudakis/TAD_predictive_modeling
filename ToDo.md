@@ -30,7 +30,7 @@ Most peak loci encompass a unique DNA site containing a CTCF-binding motif, to w
 
 Although CTCF and cohesin binding tend to colocalize, cohesin peaks are slightly shifted to the 3' ends of convergently oriented motifs [@Tang:2015aa][@Fudenberg:2016aa].
 
-The seminal model of ‘loop extrusion’ asserts that molecular motors loaded on the genome could track along the DNA sequence, thereby ‘extruding’ the intervening DNA in the process [@Alipour:2012aa][@Fudenberg:2016aa][@Goloborodko:2016vz].
+
 
 Heidari et al. identified cohesin, CTCF, and ZNF143 as key components of the 3D chromatin structure [@Heidari:2014wr]. ZNF143 [@Bailey2015]. Boundaries of TADs were found to be enriched in architectural factors such as CTCF, RAD21, SMC3, YY1, and ZNF143 [@Dixon:2012aa; @Rao:2014aa; @Phillips-Cremins2013:aa; @Corces:2016aa]
 
@@ -38,6 +38,14 @@ subTAD boundaries exhibit weaker insulation strength, as evidenced by their rela
 
 Cohesin translocation extrudes DnA in an ATP-dependent manner into long-range looping interactions that form the topological basis for TAD and subTAD loop domains.
 
+##### Reviewer's suggestion
+
+- Doug Phanstiel
+- Yun Li
+- Ferhat Ay
+- Sushmita Roy
+- Sunduz Keles
+- Anthony Schmidt
 
 ## For Package
 
