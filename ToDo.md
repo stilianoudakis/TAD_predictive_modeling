@@ -1,3 +1,43 @@
+## For Grubert results 
+
+### Spiro
+
+- Merlot, data/code for preciseTAD project. Link or copy to /home/sequencing/juicer folder. Create 'Spiro' subfolder.
+- Figure 5, panel A - make more editable, remove boundaries from the Hi-C triangle, ungroup vertical lines on the base-level probability panel.
+- Compare model performance using CTCF/RAD21/SMC3/ZNF143 and CTCF/RAD21/SMC3 annotations. How worse is omitting ZNF143? Needed for predicting boundaries in all cell types. `26_dnase_vs_topTFBS.R` - keep transcription factor only, all combinations of them.
+
+### MD
+
+- Figure 1 - make new (MD)
+- What is the resolution (width) of Grubert peaks? All genomic annotation data? BroadHMM in particular (MD/Maggie, Spiro?)
+    - How Grubert peaks overlap with CTCF, RAD21 (native Chia-PET factor), SMC3? Jaccard matrix.
+- Jaccard overlap between Arrowhead/Peakachu boundaries and Grubert peaks? Venn diagram. (MD/Maggie, Spiro?)
+- To Be Decided. Train the model using Grubert boundaries and Grubert as ground truth, using CTCF/RAD21/SMC3/ZNF143.
+    - What's the order of feature importance for those?
+- Figure 5B - colocalization with CTCF etc. peaks is not intuitive.
+
+- Update Spiro on 1) Avocado predictions (Maggie) and 2) base-level predictions
+
+### MD notes
+
+Grubert et al. generated cell line-specific ChIA-PET chromatin interaction maps at single-cohesin peak resolution (about 2kb??). They chose the RAD21 subunit of the cohesin complex, which facilitates physical contacts between genes and enhancers, and CTCF binding sites [@Heidari:2014wr]. Their loops are similar in size to those identified by Rao et al. 2014. 
+
+The increasingly complex definitions of TADs, compartments, and loops indicate that distinct classes of chromatin domains overlap and share some functional, mechanistic, and structural properties (see Beagan & Phillips-Cremins [@Beagan:2020wz] for an excellent review of the current knowledge about chromatin compartments).
+
+Rao et al. 2014 detected "contact domains" of median length 185kb [@Rao:2014aa], 3-5 times smaller than the 1Mb "Topologically Associated Domains" detected by Dixon et al. 2012. They are similar in size to "physical domains" detected in Drosophila [@Sexton:2012aa] and "topologically constrained domains" in structural studies of human chromatin [@Cook:1975ve][@Vogelstein:1980uf]. Boundaries of those contact domains were enriched in loops, suggesting they are "loop domains" following the definition of Beagan & Phillips-Cremins (A contact domain formed via loop-extrusion mechanisms and often but not always having a dot at the corner (corner-dot domain), owing to the transient nature of extrusion (non-compartment or non-corner-dot domain)) [@Beagan:2020wz].
+
+Most peak loci encompass a unique DNA site containing a CTCF-binding motif, to which all three proteins (CTCF, SMC3, and RAD21) were bound (5-fold enrichment) [@Rao:2014aa].
+
+Although CTCF and cohesin binding tend to colocalize, cohesin peaks are slightly shifted to the 3' ends of convergently oriented motifs [@Tang:2015aa][@Fudenberg:2016aa].
+
+The seminal model of ‘loop extrusion’ asserts that molecular motors loaded on the genome could track along the DNA sequence, thereby ‘extruding’ the intervening DNA in the process [@Alipour:2012aa][@Fudenberg:2016aa][@Goloborodko:2016vz].
+
+Heidari et al. identified cohesin, CTCF, and ZNF143 as key components of the 3D chromatin structure [@Heidari:2014wr]. ZNF143 [@Bailey2015]. Boundaries of TADs were found to be enriched in architectural factors such as CTCF, RAD21, SMC3, YY1, and ZNF143 [@Dixon:2012aa; @Rao:2014aa; @Phillips-Cremins2013:aa; @Corces:2016aa]
+
+subTAD boundaries exhibit weaker insulation strength, as evidenced by their relatively lower capacity to attenuate long-range contacts between domains, and they are also significantly more likely than TADs to exhibit cell-type-dynamic folding properties [@Dixon:2012aa][@Phillips-Cremins2013:aa][@Norton:2018aa].
+
+Cohesin translocation extrudes DnA in an ATP-dependent manner into long-range looping interactions that form the topological basis for TAD and subTAD loop domains.
+
 
 ## For Package
 
