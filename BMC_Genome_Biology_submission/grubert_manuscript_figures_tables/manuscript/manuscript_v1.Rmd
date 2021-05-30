@@ -48,8 +48,15 @@ TAD and loop boundaries are not mutually exclusive. Rao et al. demonstrated that
 
 The low-resolution of Hi-C data is a primary limitation for precise boundary detection. Resolution refers to the size of genomic regions (bins) used to segment the linear genome [@li2019comparison]. Because increasing resolution of Hi-C data requires a quadratic increase in the total sequencing depth [@schmitt2016genome] and the associated costs, most available Hi-C datasets have relatively low resolution, ranging from 5 kb to 100 kb.<!--While these low-resolution Hi-C datasets can be used to probe higher-order genomic patterns such as A/B compartments, more refined resolutions are necessary to accurately define TAD and loop boundaries [@fudenberg2016formation].--> Lower resolution corresponding to larger bin sizes leads to increased uncertainty in boundary location.
 
-In contrast to low-resolution Hi-C data, functional/regulatory genome annotations (histone modifications, DNAse I hypersensitive sites, DNA methylation, and transcription factor binding sites (TFBSs)) assembled by the ENCODE and other consortia have been profiled at relatively high resolution (10-300bp). The association of domain boundaries with CTCF and other architectural proteins [@rao20143d; @Tang:2015aa; @Phillips:2009aa] holds promise that these high-resolution marks may inform the more precise location of domain boundaries. Indeed, methods like Lollipop
+In contrast to low-resolution Hi-C data, functional/regulatory genome annotations (histone modifications, DNAse I hypersensitive sites, DNA methylation, and transcription factor binding sites (TFBSs)) assembled by the ENCODE [@ENCODE-Project-Consortium:2012aa] and other consortia have been profiled at relatively high resolution (10-300bp). The association of domain boundaries with CTCF and other architectural proteins [@rao20143d; @Tang:2015aa; @Phillips:2009aa] holds promise that these high-resolution marks may inform the more precise location of domain boundaries. Methods like Lollipop used 
 
+GM12878 (lympho-blastoid), K562 (chronic myelogenous leukemia)
+
+Random forest has been used in multiple methods (Lollipop, 3dEpiLoop, Peakachu)
+
+RAD21 signal was the most predictive feature, followed by CTCF (Lollipop)
+
+Lollipop used motif strength, orientation, loop size, average sequence conservation, in-between features, gene expression.
 
 The ENCODE, NIH Roadmap Epigenomics, FANTOM5, BLUEPRINT, and other members of the International Human Epigenome Consortium (IHEC) [@Stunnenberg:2016aa] have been actively cataloging functional/regulatory genome annotation datasets, such as cell type- and tissue-specific histone modifications, DNAse I hypersensitive sites, DNA methylation, and transcription factor binding sites (TFBSs). 
 
