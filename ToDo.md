@@ -30,13 +30,16 @@ Most peak loci encompass a unique DNA site containing a CTCF-binding motif, to w
 
 Although CTCF and cohesin binding tend to colocalize, cohesin peaks are slightly shifted to the 3' ends of convergently oriented motifs [@Tang:2015aa][@Fudenberg:2016aa].
 
-
+Numerous studies demonstrated the association of domain boundaries with genomic annotations [@Dixon:2015aa; @Whalen:2016aa; @Dekker:2016aa; @Bonev:2016aa; @Wang:2016ab].
 
 Heidari et al. identified cohesin, CTCF, and ZNF143 as key components of the 3D chromatin structure [@Heidari:2014wr]. ZNF143 [@Bailey2015]. Boundaries of TADs were found to be enriched in architectural factors such as CTCF, RAD21, SMC3, YY1, and ZNF143 [@Dixon:2012aa; @Rao:2014aa; @Phillips-Cremins2013:aa; @Corces:2016aa]
 
 subTAD boundaries exhibit weaker insulation strength, as evidenced by their relatively lower capacity to attenuate long-range contacts between domains, and they are also significantly more likely than TADs to exhibit cell-type-dynamic folding properties [@Dixon:2012aa][@Phillips-Cremins2013:aa][@Norton:2018aa].
 
 Cohesin translocation extrudes DnA in an ATP-dependent manner into long-range looping interactions that form the topological basis for TAD and subTAD loop domains.
+
+Boundaries of TADs were found to be enriched in architectural factors such as CTCF, RAD21, SMC3, YY1, and ZNF143 [@Dixon:2012aa; @Rao:2014aa; @Phillips-Cremins2013:aa; @Corces:2016aa], and boundary strength correlates with their occupancy [@Van-Bortle:2014aa; @Fudenberg:2019ab]. Strong and weak boundary concept [@Chang:2020vw].
+
 
 ##### Reviewer's suggestion
 
