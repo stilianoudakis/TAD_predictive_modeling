@@ -2,9 +2,24 @@
 
 ### Spiro
 
-- Merlot, data/code for preciseTAD project. Link or copy to /home/sequencing/juicer folder. Create 'Spiro' subfolder.
+- Tables with all performance metrics. Do we have them?
+
+- Table with performance metrics of other machine learning methods (SVM, XGBoost, etc.)
+
+- Per chromosome model performance. Do we have them?
+
+- **Additional File 11: Figure S6. Comparing enrichment levels between TAD/chromatin loop calling tools.** Signal profile plots comparing the binding strength of top TFBS around flanked Arrowhead called TAD boundaries (blue), Peakachu chromatin loop boundaries, Grubert chromatin loop boundaries (purple), and SpectralTAD called TAD boundaries (green) on (A) GM12878 and (B) on K562.
+    - Are you using midpoints of boundaries? Important because it is a very strong statement.
+
+- **Additional File 17: Figure S12. *preciseTAD* trained on Arrowhead accurately predicts boundaries on cell lines using annotation data only.** Venn diagrams and signal profile plots comparing flanked predicted boundaries using Arrowhead trained models. (A) Models trained on GM12878 and predicted on GM12878 (red, GM on GM) vs. models trained on K562 and predicted on GM12878 (blue, K on GM). (B) Models trained on K562 and predicted on K562 (red, K on K) vs. models trained on GM12878 and predicted on K562 (blue, GM on K). Boundaries were flanked by 5 kb.
+    - Need BED files for PTBRs from "K on G" and "G on K" predictions.
+    - Same for **Additional File 18: Figure S13. *preciseTAD* trained on Peakachu accurately predicts boundaries on cell lines using annotation data only.**
+
+- Figure 6, Additional_File_10_figureS5 - get rid of panel C; instead, add Grubert signal (original midpoints of Grubert anchors) to each plot on panels A and B
+
 - Figure 5, panel A - make more editable, remove boundaries from the Hi-C triangle, ungroup vertical lines on the base-level probability panel.
-- Compare model performance using CTCF/RAD21/SMC3/ZNF143 and CTCF/RAD21/SMC3 annotations. How worse is omitting ZNF143? Needed for predicting boundaries in all cell types. `26_dnase_vs_topTFBS.R` - keep transcription factor only, all combinations of them.
+
+- Figure that compares model performance using combinations of annotations. Needed for predicting boundaries in all cell types. `26_dnase_vs_topTFBS.R` - keep transcription factor only, all combinations of them.
 
 ### MD
 
@@ -17,6 +32,13 @@
 - Figure 5B - colocalization with CTCF etc. peaks is not intuitive.
 
 - Update Spiro on 1) Avocado predictions (Maggie) and 2) base-level predictions
+
+- Remove:
+    - Additional_File_12_figureS7.png
+    - Additional_File_13_figureS8.png
+    - Additional_File_14_figureS9.png
+    
+
 
 ### MD notes
 
