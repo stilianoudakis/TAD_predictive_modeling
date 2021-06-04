@@ -48,7 +48,7 @@ TAD and loop boundaries are not mutually exclusive. Rao et al. demonstrated that
 
 The low-resolution of Hi-C data is a primary limitation for precise boundary detection. Resolution refers to the size of genomic regions (bins) used to segment the linear genome [@li2019comparison]. Because increasing resolution of Hi-C data requires a quadratic increase in the total sequencing depth [@schmitt2016genome] and the associated costs, most available Hi-C datasets have relatively low resolution, ranging from 5 kb to 100 kb.<!--While these low-resolution Hi-C datasets can be used to probe higher-order genomic patterns such as A/B compartments, more refined resolutions are necessary to accurately define TAD and loop boundaries [@fudenberg2016formation].--> Lower resolution corresponding to larger bin sizes leads to increased uncertainty in boundary location.
 
-In contrast to low-resolution Hi-C data, functional/regulatory genome annotations (histone modifications, DNAse I hypersensitive sites, DNA methylation, and transcription factor binding sites (TFBSs)) assembled by the ENCODE [@ENCODE-Project-Consortium:2012aa] and other consortia have been profiled at relatively high resolution (10-300bp) [@Dozmorov:2017aa]. The one-dimensional genome annotation data has been used to predict functional chromatin contacts (e.g., HiC-Reg [@Zhang:2019aa]), boundaries of chromatin domains (e.g., Lollipop [@Kai:2018aa], 3DEpiLoop [@Al-Bkhetan:2018aa]), with 48 methods recently reviewed by Tao et al. [@Tao:2021uc]. The association of domain boundaries with CTCF and other genomic annotations [@dixon2012topological; @rao20143d; @Tang:2015aa; @Phillips:2009aa; @phillips2013architectural] holds promise that these high-resolution marks may inform the more precise location of domain boundaries. 
+In contrast to low-resolution Hi-C data, functional/regulatory genome annotations (histone modifications, DNAse I hypersensitive sites, DNA methylation, and transcription factor binding sites (TFBSs)) assembled by the ENCODE [@ENCODE-Project-Consortium:2012aa] and other consortia have been profiled at relatively high resolution (10-300bp) [@Dozmorov:2017aa]. The one-dimensional sequence- and genome annotation data has been used to predict functional chromatin contacts (e.g., HubPredictor [@huang2015predicting], HiC-Reg [@Zhang:2019aa]), boundaries of chromatin domains (e.g., Lollipop [@Kai:2018aa], 3DEpiLoop [@Al-Bkhetan:2018aa]), with 48 methods recently reviewed by Tao et al. [@Tao:2021uc]. The association of domain boundaries with CTCF and other genomic annotations [@dixon2012topological; @rao20143d; @Tang:2015aa; @Phillips:2009aa; @phillips2013architectural] holds promise that these high-resolution marks may inform the more precise location of domain boundaries. 
 
 
 
@@ -63,8 +63,9 @@ RAD21 signal was the most predictive feature, followed by CTCF (Lollipop)
 
 Lollipop used motif strength, orientation, loop size, average sequence conservation, in-between features, gene expression. HiC-Reg uses histone marks, TFBSs, variants of genomic distance (loop size), multi-cell line features.
 
+HubPredictor used histone marks and transcription factors [@huang2015predicting].
 
-
+pTADs uses chromatin states, histones, TFBSs. Sequence properties - DNA shape (minor groove width, propeller twist, Roll, helix twist, calculated by DNAshape program, further transformed into seven statistical values like mean, RMSE, median, min/max, SD, population deviation), DNA properties (di-/trinucleotides etc. 139 properties total), TFBS motif occurrences (1442 PWMs), conservation score (PhastCons 46-way).
 
 
 Several methods have been proposed to identify genomic coordinates of TADs (reviewed in [@Zufferey:2018aa; @forcato2017comparison]), and chromatin loops [@rao20143d; @Ay:2014aa; @Heinz:2010aa; @salameh2019supervised]. However, a key limitation of them is that they depend on Hi-C data *resolution*. 
